@@ -7,6 +7,7 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <button onClick={handlePlay}>Play</button>
+                <button onClick={handleStop}>Stop</button>
             </header>
         </div>
     );
@@ -16,12 +17,20 @@ function App() {
 // #region Private Functions
 // -----------------------------------------------------------------------------------------
 
-const handlePlay = () => {
-    //create a synth and connect it to the main output (your speakers)
-    const synth = new Tone.Synth().toDestination();
+const handlePlay = async () => {
+    const hiHat = new Tone.Player(
+        `${process.env.PUBLIC_URL}/samples/samplified-nostalgia/hi-hats/closed/1.wav`
+    ).toDestination();
+    await Tone.loaded();
+    const hiHatLoop = new Tone.Loop((time) => {
+        hiHat.start(time);
+    }, "4n").start(0);
 
-    //play a middle 'C' for the duration of an 8th note
-    synth.triggerAttackRelease("C4", "8n");
+    Tone.Transport.start();
+};
+
+const handleStop = () => {
+    Tone.Transport.stop();
 };
 
 // #endregion Private Functions
