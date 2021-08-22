@@ -32,6 +32,19 @@ class DrumSamplePack implements DrumSamplePackInterface {
         await Tone.loaded();
     }
 
+    public getPlayers(samples?: Partial<Record<DrumType, number>>) {
+        return {
+            closedHiHat: this.getPlayer(
+                DrumType.ClosedHiHat,
+                samples?.CLOSED_HI_HAT
+            ),
+            openHiHat: this.getPlayer(DrumType.OpenHiHat, samples?.OPEN_HI_HAT),
+            kick: this.getPlayer(DrumType.Kick, samples?.KICK),
+            snare: this.getPlayer(DrumType.Snare, samples?.SNARE),
+            shaker: this.getPlayer(DrumType.Shaker, samples?.SHAKER),
+        };
+    }
+
     public getPlayer(drumType: DrumType, sampleNumber?: number): Player {
         sampleNumber =
             sampleNumber ?? CoreUtils.randomInt(1, this.count[drumType]);

@@ -11,16 +11,18 @@ const simpleHipHop1 = () => {
         return;
     }
 
-    const closedHat = SamplifiedNostalgia.getPlayer(DrumType.ClosedHiHat, 4);
-    const openHat = SamplifiedNostalgia.getPlayer(DrumType.OpenHiHat);
-    const kick = SamplifiedNostalgia.getPlayer(DrumType.Kick, 4);
-    const snare = SamplifiedNostalgia.getPlayer(DrumType.Snare, 3);
+    const { closedHiHat, openHiHat, kick, snare } =
+        SamplifiedNostalgia.getPlayers({
+            [DrumType.ClosedHiHat]: 4,
+            [DrumType.Kick]: 4,
+            [DrumType.Snare]: 3,
+        });
 
     Tone.Transport.bpm.value = CoreUtils.randomInt(75, 85);
     Tone.Transport.swing = CoreUtils.randomFloat(0.25, 0.3);
 
-    new Loop((time) => closedHat.start(time), "8n").start();
-    new Loop((time) => openHat.start(time), "1m").start("0:7");
+    new Loop((time) => closedHiHat.start(time), "8n").start();
+    new Loop((time) => openHiHat.start(time), "1m").start("0:7");
     new Loop((time) => kick.start(time), "1m").start();
     new Loop((time) => kick.start(time), "1m").start("0:5");
     new Loop((time) => snare.start(time), "2n").start("4n");
