@@ -1,6 +1,6 @@
-import React from "react";
 import "./app.css";
 import * as Tone from "tone";
+import { simpleHipHop1 } from "utils/loops/drums/simple-hip-hop-1";
 
 function App() {
     return (
@@ -13,26 +13,14 @@ function App() {
     );
 }
 
-// -----------------------------------------------------------------------------------------
-// #region Private Functions
-// -----------------------------------------------------------------------------------------
-
 const handlePlay = async () => {
-    const hiHat = new Tone.Player(
-        `${process.env.PUBLIC_URL}/samples/samplified-nostalgia/hi-hats/closed/1.wav`
-    ).toDestination();
-    await Tone.loaded();
-    const hiHatLoop = new Tone.Loop((time) => {
-        hiHat.start(time);
-    }, "4n").start(0);
-
+    simpleHipHop1();
+    await Tone.start();
     Tone.Transport.start();
 };
 
 const handleStop = () => {
     Tone.Transport.stop();
 };
-
-// #endregion Private Functions
 
 export default App;
