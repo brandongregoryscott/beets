@@ -1,10 +1,10 @@
+import { EditableParagraph } from "components/editable-paragraph";
 import {
     Card,
     IconButton,
     majorScale,
     minorScale,
     Pane,
-    Paragraph,
     PropertiesIcon,
     PropertyIcon,
     RemoveIcon,
@@ -20,7 +20,7 @@ interface TrackProps extends TrackInterface {
 
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { id, name, mute, solo } = props;
-    const { remove, toggleMute, toggleSolo } = useTrackAtom(id);
+    const { remove, setName, toggleMute, toggleSolo } = useTrackAtom(id);
     return (
         <Card
             display="flex"
@@ -30,7 +30,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
             maxWidth="50%"
             margin={majorScale(1)}
             padding={majorScale(1)}>
-            <Paragraph>{name}</Paragraph>
+            <EditableParagraph onChange={setName} value={name} />
             <Pane display="flex" flexDirection="row">
                 <IconButton
                     icon={mute ? VolumeOffIcon : VolumeUpIcon}

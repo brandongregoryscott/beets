@@ -1,5 +1,4 @@
 import { Track } from "interfaces/track";
-import _ from "lodash";
 import { useCallback, useMemo } from "react";
 import { useTracksAtom } from "utils/hooks/use-tracks-atom";
 
