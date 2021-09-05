@@ -11,20 +11,16 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import { useBoolean } from "utils/hooks/use-boolean";
-import { useTracksAtom } from "utils/hooks/use-tracks-atom";
 import { Track as TrackInterface } from "interfaces/track";
+import { useTrackAtom } from "utils/hooks/use-track-atom";
 
 interface TrackProps extends TrackInterface {
     index: number;
 }
 
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
-    const { id, name } = props;
-    const { value: mute, toggle: toggleMute } = useBoolean(false);
-    const { value: solo, toggle: toggleSolo } = useBoolean(false);
-    const { removeById } = useTracksAtom();
-    const remove = () => removeById(id);
+    const { id, name, mute, solo } = props;
+    const { remove, toggleMute, toggleSolo } = useTrackAtom(id);
     return (
         <Card
             display="flex"
