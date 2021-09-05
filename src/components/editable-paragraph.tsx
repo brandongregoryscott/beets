@@ -1,5 +1,5 @@
 import { majorScale, minorScale, Paragraph, TextInput } from "evergreen-ui";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useOutsideClick, useKey } from "rooks";
 
@@ -26,6 +26,11 @@ const EditableParagraph: React.FC<EditableParagraphProps> = (
         [onChange]
     );
 
+    const cancelEditing = useCallback(() => {
+        onChange?.(initialValue);
+        setIsEditingFalse();
+    }, [onChange, setIsEditingFalse]);
+
     const startEditing = useCallback(() => {
         setInitialValue(value);
         setIsEditingTrue();
@@ -40,12 +45,21 @@ const EditableParagraph: React.FC<EditableParagraphProps> = (
     }, [initialValue, onChange, setIsEditingFalse, value]);
 
     useOutsideClick(textInputRef, stopEditingOrDefault);
-    useKey(["Escape", "Enter"], stopEditingOrDefault);
+    useKey(["Enter"], stopEditingOrDefault);
+    useKey(["Escape"], cancelEditing);
+
+    useEffect(() => {
+        if (isEditing) {
+            textInputRef.current?.focus();
+        }
+    }, [isEditing, textInputRef]);
 
     if (isEditing) {
         return (
             <TextInput
                 marginBottom={majorScale(1)}
+                maxWidth={majorScale(14)}
+                onBlur={stopEditingOrDefault}
                 onChange={handleChange}
                 ref={textInputRef}
                 value={value}

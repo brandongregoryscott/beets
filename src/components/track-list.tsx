@@ -22,7 +22,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
             </Pane>
             <Pane display="flex" flexDirection="column">
                 {tracks.map((track, index) => (
-                    <Track {...track} index={index} />
+                    <Track {...track} index={index} key={track.id} />
                 ))}
             </Pane>
         </Pane>
