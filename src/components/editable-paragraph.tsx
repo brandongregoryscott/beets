@@ -29,7 +29,7 @@ const EditableParagraph: React.FC<EditableParagraphProps> = (
     const cancelEditing = useCallback(() => {
         onChange?.(initialValue);
         setIsEditingFalse();
-    }, [onChange, setIsEditingFalse]);
+    }, [initialValue, onChange, setIsEditingFalse]);
 
     const startEditing = useCallback(() => {
         setInitialValue(value);
@@ -45,8 +45,8 @@ const EditableParagraph: React.FC<EditableParagraphProps> = (
     }, [initialValue, onChange, setIsEditingFalse, value]);
 
     useOutsideClick(textInputRef, stopEditingOrDefault);
-    useKey(["Enter"], stopEditingOrDefault);
-    useKey(["Escape"], cancelEditing);
+    useKey(["Enter"], stopEditingOrDefault, { target: textInputRef });
+    useKey(["Escape"], cancelEditing, { target: textInputRef });
 
     useEffect(() => {
         if (isEditing) {
