@@ -1,7 +1,6 @@
-import { Pane, IconButton, PlusIcon, majorScale } from "evergreen-ui";
+import { Pane, IconButton, PlusIcon } from "evergreen-ui";
 import { Track } from "components/track";
 import { useTracksAtom } from "utils/hooks/use-tracks-atom";
-import { BeatGrid } from "components/beat-grid";
 
 interface TrackListProps {}
 
