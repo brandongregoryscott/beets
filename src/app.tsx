@@ -1,10 +1,13 @@
 import "./app.css";
 import { TrackList } from "components/track-list";
+import { ThemeConsumer, ThemeProvider, defaultTheme } from "evergreen-ui";
 
 function App() {
     return (
         <div className="App">
-            <TrackList />
+            <ThemeProvider value={defaultTheme}>
+                <TrackList />
+            </ThemeProvider>
         </div>
     );
 }
