@@ -28,7 +28,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
             alignItems="flex-start"
             background="gray200"
             maxWidth="50%"
-            margin={majorScale(1)}
+            marginY={majorScale(1)}
             padding={majorScale(1)}>
             <EditableParagraph onChange={setName} value={name} />
             <Pane display="flex" flexDirection="row">
