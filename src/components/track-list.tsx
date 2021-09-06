@@ -1,4 +1,4 @@
-import { Pane, IconButton, PlusIcon } from "evergreen-ui";
+import { Pane, IconButton, PlusIcon, minorScale } from "evergreen-ui";
 import { Track } from "components/track";
 import { useTracksAtom } from "utils/hooks/use-tracks-atom";
 
@@ -14,7 +14,11 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                 ))}
             </Pane>
             <Pane display="flex" flexDirection="row" marginRight="auto">
-                <IconButton icon={PlusIcon} onClick={add} />
+                <IconButton
+                    icon={PlusIcon}
+                    marginTop={minorScale(2)}
+                    onClick={add}
+                />
             </Pane>
         </Pane>
     );

@@ -3,7 +3,8 @@ import { useCallback, useMemo } from "react";
 import { useTracksAtom } from "utils/hooks/use-tracks-atom";
 
 const useTrackAtom = (id: string) => {
-    const { removeById, updateById } = useTracksAtom();
+    const { findById, removeById, updateById } = useTracksAtom();
+    const track = findById(id);
 
     const remove = useCallback(() => {
         removeById(id);
@@ -24,7 +25,7 @@ const useTrackAtom = (id: string) => {
         update((prev: Track) => ({ ...prev, solo: !prev.solo }));
     }, [update]);
 
-    return { remove, update, setName, toggleMute, toggleSolo };
+    return { ...track, remove, update, setName, toggleMute, toggleSolo };
 };
 
 export { useTrackAtom };

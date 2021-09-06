@@ -1,11 +1,11 @@
 import { majorScale, Pane, useTheme, Text } from "evergreen-ui";
 import _ from "lodash";
 
-interface BeatGridProps {
+interface TimeGridProps {
     count: number;
 }
 
-const BeatGrid: React.FC<BeatGridProps> = (props: BeatGridProps) => {
+const TimeGrid: React.FC<TimeGridProps> = (props: TimeGridProps) => {
     const { count } = props;
     const theme: any = useTheme();
     console.log(theme);
@@ -35,4 +35,4 @@ const BeatGrid: React.FC<BeatGridProps> = (props: BeatGridProps) => {
     );
 };
 
-export { BeatGrid };
+export { TimeGrid };
