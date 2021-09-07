@@ -9,7 +9,7 @@ interface SequencerStepProps {
 const SequencerStep: React.FC<SequencerStepProps> = (
     props: SequencerStepProps
 ) => {
-    const { index, isChecked = false } = props;
+    const { isChecked = false } = props;
     const theme: any = useTheme();
     const checkedColor = theme.colors.gray600;
     const uncheckedColor = theme.colors.dark;

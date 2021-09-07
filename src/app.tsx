@@ -1,19 +1,33 @@
 import "./app.css";
-import { TrackList } from "components/track-list";
-import { ThemeProvider, defaultTheme, Pane, majorScale } from "evergreen-ui";
-import { Song } from "components/song";
+import {
+    ThemeProvider,
+    defaultTheme,
+    Pane,
+    majorScale,
+    Tab,
+} from "evergreen-ui";
+import { BrowserRouter, Switch, NavLink } from "react-router-dom";
+import { renderRoutes } from "react-router-config";
+import { Routes } from "routes";
+import { Sitemap } from "sitemap";
 
 function App() {
     return (
-        <div className="App">
+        <BrowserRouter>
             <ThemeProvider value={defaultTheme}>
                 <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
-                    <Song>
-                        <TrackList />
-                    </Song>
+                    <Pane marginBottom={majorScale(2)}>
+                        <Tab is={NavLink} to={Sitemap.home} exact={true}>
+                            Workstation
+                        </Tab>
+                        <Tab is={NavLink} to={Sitemap.library} exact={true}>
+                            Library
+                        </Tab>
+                    </Pane>
+                    <Switch>{renderRoutes(Routes)}</Switch>
                 </Pane>
             </ThemeProvider>
-        </div>
+        </BrowserRouter>
     );
 }
 

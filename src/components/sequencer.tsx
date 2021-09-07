@@ -10,7 +10,7 @@ interface SequencerProps {
 
 const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
     const { trackId } = props;
-    const {} = useTrackAtom(trackId);
+    useTrackAtom(trackId);
     const [stepCount] = useState(16);
     return (
         <Pane
