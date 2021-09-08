@@ -35,7 +35,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
             flexDirection="column"
             alignItems="flex-start"
             background="gray200"
-            width={majorScale(22)}
+            width={majorScale(21)}
             marginY={majorScale(1)}
             padding={majorScale(1)}>
             <EditableParagraph onChange={setName} value={name} />
