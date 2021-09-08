@@ -5,8 +5,8 @@ import { definitions } from "types/supabase";
 const useDatabase = () => {
     const { supabase } = useSupabase();
     const from = useCallback(
-        <T extends keyof definitions>(tableName: T) =>
-            supabase.from<T>(tableName),
+        <TTableName extends keyof definitions>(tableName: TTableName) =>
+            supabase.from<definitions[typeof tableName]>(tableName),
         [supabase]
     );
 

@@ -5,11 +5,26 @@ import { useMutation, useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/use-storage-provider";
 import { QueryKeyUtils } from "utils/query-key-utils";
+import { definitions } from "types/supabase";
+import { useDatabase } from "utils/hooks/use-database";
 
 const useUploadFile = (bucketName: BucketName) => {
-    const { from } = useStorageProvider();
+    const { from: fromBucket } = useStorageProvider();
+    const { from: fromTable } = useDatabase();
     const queryClient = useQueryClient();
-    const bucket = from(bucketName);
+    const fileTable = fromTable("Files");
+    const bucket = fromBucket(bucketName);
+
+    const toFileEntity = (
+        file: File,
+        storageProviderFile: StorageProviderFile
+    ): Partial<definitions["Files"]> => ({
+        name: storageProviderFile.name,
+        storageProviderPath: [bucketName, storageProviderFile.name].join("/"),
+        storageProviderId: storageProviderFile.id,
+        size: file.size,
+        type: file.type,
+    });
 
     const upload = async (file: File) => {
         const slug = `${_.now()}-${slugify(file.name)}`;
@@ -38,7 +53,14 @@ const useUploadFile = (bucketName: BucketName) => {
             );
         }
 
-        return storageProviderFile;
+        const { data: fileEntity, error: fileEntityError } =
+            await fileTable.insert(toFileEntity(file, storageProviderFile));
+
+        if (fileEntityError != null) {
+            throw fileEntityError;
+        }
+
+        return fileEntity![0];
     };
 
     const uploadMutation = useMutation(upload, {
