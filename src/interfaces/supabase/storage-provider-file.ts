@@ -1,4 +1,4 @@
-import { Bucket } from "interfaces/bucket";
+import { Bucket } from "interfaces/supabase/bucket";
 
 interface StorageProviderFile {
     bucket_id: string;

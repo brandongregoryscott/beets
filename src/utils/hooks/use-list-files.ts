@@ -1,6 +1,6 @@
 import { BucketName } from "enums/bucket-name";
 import { SortOptions } from "interfaces/sort-options";
-import { StorageProviderFile } from "interfaces/storage-provider-file";
+import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 import { useQuery } from "react-query";
 import { useStorageProvider } from "utils/hooks/use-storage-provider";
 import { QueryKeyUtils } from "utils/query-key-utils";

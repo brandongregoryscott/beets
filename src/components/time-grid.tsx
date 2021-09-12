@@ -8,7 +8,6 @@ interface TimeGridProps {
 const TimeGrid: React.FC<TimeGridProps> = (props: TimeGridProps) => {
     const { count } = props;
     const theme: any = useTheme();
-    console.log(theme);
     return (
         <Pane display="flex" flexDirection="row" marginBottom={majorScale(1)}>
             {_.range(0, count * 4).map((beat: number) => {

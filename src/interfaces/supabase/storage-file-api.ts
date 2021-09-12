@@ -1,6 +1,6 @@
 import { PagingOptions } from "interfaces/paging-options";
 import { SearchOptions } from "interfaces/search-options";
-import { StorageProviderFile } from "interfaces/storage-provider-file";
+import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 import { StorageProviderResult } from "types/storage-provider-result";
 
 interface FetchParameters {

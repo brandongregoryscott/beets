@@ -1,5 +1,5 @@
 import { BucketName } from "enums/bucket-name";
-import { StorageProviderFile } from "interfaces/storage-provider-file";
+import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "react-query";
 import slugify from "slugify";
@@ -12,16 +12,16 @@ const useUploadFile = (bucketName: BucketName) => {
     const { from: fromBucket } = useStorageProvider();
     const { from: fromTable } = useDatabase();
     const queryClient = useQueryClient();
-    const fileTable = fromTable("Files");
+    const fileTable = fromTable("files");
     const bucket = fromBucket(bucketName);
 
     const toFileEntity = (
         file: File,
         storageProviderFile: StorageProviderFile
-    ): Partial<definitions["Files"]> => ({
+    ): Partial<definitions["files"]> => ({
         name: storageProviderFile.name,
-        storageProviderPath: [bucketName, storageProviderFile.name].join("/"),
-        storageProviderId: storageProviderFile.id,
+        path: storageProviderFile.name,
+        id: storageProviderFile.id,
         size: file.size,
         type: file.type,
     });

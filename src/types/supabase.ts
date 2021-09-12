@@ -12,20 +12,22 @@ export interface paths {
       };
     };
   };
-  "/Files": {
+  "/files": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.Files.id"];
-          createdOn?: parameters["rowFilter.Files.createdOn"];
-          updatedOn?: parameters["rowFilter.Files.updatedOn"];
-          deletedOn?: parameters["rowFilter.Files.deletedOn"];
-          name?: parameters["rowFilter.Files.name"];
-          storageProviderId?: parameters["rowFilter.Files.storageProviderId"];
-          storageProviderPath?: parameters["rowFilter.Files.storageProviderPath"];
-          type?: parameters["rowFilter.Files.type"];
-          size?: parameters["rowFilter.Files.size"];
-          description?: parameters["rowFilter.Files.description"];
+          id?: parameters["rowFilter.files.id"];
+          createdon?: parameters["rowFilter.files.createdon"];
+          createdbyid?: parameters["rowFilter.files.createdbyid"];
+          deletedon?: parameters["rowFilter.files.deletedon"];
+          deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+          description?: parameters["rowFilter.files.description"];
+          name?: parameters["rowFilter.files.name"];
+          path?: parameters["rowFilter.files.path"];
+          size?: parameters["rowFilter.files.size"];
+          type?: parameters["rowFilter.files.type"];
+          updatedon?: parameters["rowFilter.files.updatedon"];
+          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -47,7 +49,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["Files"][];
+          schema: definitions["files"][];
         };
         /** Partial Content */
         206: unknown;
@@ -56,8 +58,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** Files */
-          Files?: definitions["Files"];
+          /** files */
+          files?: definitions["files"];
         };
         query: {
           /** Filtering Columns */
@@ -76,16 +78,18 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.Files.id"];
-          createdOn?: parameters["rowFilter.Files.createdOn"];
-          updatedOn?: parameters["rowFilter.Files.updatedOn"];
-          deletedOn?: parameters["rowFilter.Files.deletedOn"];
-          name?: parameters["rowFilter.Files.name"];
-          storageProviderId?: parameters["rowFilter.Files.storageProviderId"];
-          storageProviderPath?: parameters["rowFilter.Files.storageProviderPath"];
-          type?: parameters["rowFilter.Files.type"];
-          size?: parameters["rowFilter.Files.size"];
-          description?: parameters["rowFilter.Files.description"];
+          id?: parameters["rowFilter.files.id"];
+          createdon?: parameters["rowFilter.files.createdon"];
+          createdbyid?: parameters["rowFilter.files.createdbyid"];
+          deletedon?: parameters["rowFilter.files.deletedon"];
+          deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+          description?: parameters["rowFilter.files.description"];
+          name?: parameters["rowFilter.files.name"];
+          path?: parameters["rowFilter.files.path"];
+          size?: parameters["rowFilter.files.size"];
+          type?: parameters["rowFilter.files.type"];
+          updatedon?: parameters["rowFilter.files.updatedon"];
+          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
         };
         header: {
           /** Preference */
@@ -100,20 +104,130 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.Files.id"];
-          createdOn?: parameters["rowFilter.Files.createdOn"];
-          updatedOn?: parameters["rowFilter.Files.updatedOn"];
-          deletedOn?: parameters["rowFilter.Files.deletedOn"];
-          name?: parameters["rowFilter.Files.name"];
-          storageProviderId?: parameters["rowFilter.Files.storageProviderId"];
-          storageProviderPath?: parameters["rowFilter.Files.storageProviderPath"];
-          type?: parameters["rowFilter.Files.type"];
-          size?: parameters["rowFilter.Files.size"];
-          description?: parameters["rowFilter.Files.description"];
+          id?: parameters["rowFilter.files.id"];
+          createdon?: parameters["rowFilter.files.createdon"];
+          createdbyid?: parameters["rowFilter.files.createdbyid"];
+          deletedon?: parameters["rowFilter.files.deletedon"];
+          deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+          description?: parameters["rowFilter.files.description"];
+          name?: parameters["rowFilter.files.name"];
+          path?: parameters["rowFilter.files.path"];
+          size?: parameters["rowFilter.files.size"];
+          type?: parameters["rowFilter.files.type"];
+          updatedon?: parameters["rowFilter.files.updatedon"];
+          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
         };
         body: {
-          /** Files */
-          Files?: definitions["Files"];
+          /** files */
+          files?: definitions["files"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/users": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.users.id"];
+          createdon?: parameters["rowFilter.users.createdon"];
+          createdbyid?: parameters["rowFilter.users.createdbyid"];
+          deletedon?: parameters["rowFilter.users.deletedon"];
+          deletedbyid?: parameters["rowFilter.users.deletedbyid"];
+          email?: parameters["rowFilter.users.email"];
+          updatedon?: parameters["rowFilter.users.updatedon"];
+          updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["users"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** users */
+          users?: definitions["users"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.users.id"];
+          createdon?: parameters["rowFilter.users.createdon"];
+          createdbyid?: parameters["rowFilter.users.createdbyid"];
+          deletedon?: parameters["rowFilter.users.deletedon"];
+          deletedbyid?: parameters["rowFilter.users.deletedbyid"];
+          email?: parameters["rowFilter.users.email"];
+          updatedon?: parameters["rowFilter.users.updatedon"];
+          updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.users.id"];
+          createdon?: parameters["rowFilter.users.createdon"];
+          createdbyid?: parameters["rowFilter.users.createdbyid"];
+          deletedon?: parameters["rowFilter.users.deletedon"];
+          deletedbyid?: parameters["rowFilter.users.deletedbyid"];
+          email?: parameters["rowFilter.users.email"];
+          updatedon?: parameters["rowFilter.users.updatedon"];
+          updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+        };
+        body: {
+          /** users */
+          users?: definitions["users"];
         };
         header: {
           /** Preference */
@@ -129,21 +243,38 @@ export interface paths {
 }
 
 export interface definitions {
-  Files: {
+  files: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `objects.id`.<fk table='objects' column='id'/>
+     */
+    id: string;
+    createdon?: string;
+    createdbyid?: string;
+    deletedon?: string;
+    deletedbyid?: string;
+    description?: string;
+    name: string;
+    path: string;
+    size?: number;
+    type: string;
+    updatedon?: string;
+    updatedbyid?: string;
+  };
+  users: {
     /**
      * Note:
      * This is a Primary Key.<pk/>
      */
-    id: number;
-    createdOn?: string;
-    updatedOn?: string;
-    deletedOn?: string;
-    name?: string;
-    storageProviderId: string;
-    storageProviderPath: string;
-    type?: string;
-    size?: number;
-    description?: string;
+    id: string;
+    createdon?: string;
+    createdbyid?: string;
+    deletedon?: string;
+    deletedbyid?: string;
+    email: string;
+    updatedon?: string;
+    updatedbyid?: string;
   };
 }
 
@@ -168,18 +299,30 @@ export interface parameters {
   offset: string;
   /** Limiting and Pagination */
   limit: string;
-  /** Files */
-  "body.Files": definitions["Files"];
-  "rowFilter.Files.id": string;
-  "rowFilter.Files.createdOn": string;
-  "rowFilter.Files.updatedOn": string;
-  "rowFilter.Files.deletedOn": string;
-  "rowFilter.Files.name": string;
-  "rowFilter.Files.storageProviderId": string;
-  "rowFilter.Files.storageProviderPath": string;
-  "rowFilter.Files.type": string;
-  "rowFilter.Files.size": string;
-  "rowFilter.Files.description": string;
+  /** files */
+  "body.files": definitions["files"];
+  "rowFilter.files.id": string;
+  "rowFilter.files.createdon": string;
+  "rowFilter.files.createdbyid": string;
+  "rowFilter.files.deletedon": string;
+  "rowFilter.files.deletedbyid": string;
+  "rowFilter.files.description": string;
+  "rowFilter.files.name": string;
+  "rowFilter.files.path": string;
+  "rowFilter.files.size": string;
+  "rowFilter.files.type": string;
+  "rowFilter.files.updatedon": string;
+  "rowFilter.files.updatedbyid": string;
+  /** users */
+  "body.users": definitions["users"];
+  "rowFilter.users.id": string;
+  "rowFilter.users.createdon": string;
+  "rowFilter.users.createdbyid": string;
+  "rowFilter.users.deletedon": string;
+  "rowFilter.users.deletedbyid": string;
+  "rowFilter.users.email": string;
+  "rowFilter.users.updatedon": string;
+  "rowFilter.users.updatedbyid": string;
 }
 
 export interface operations {}

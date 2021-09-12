@@ -3,9 +3,9 @@ import { BucketName } from "enums/bucket-name";
 import { majorScale, Pane } from "evergreen-ui";
 import { FileList } from "components/file-list";
 
-interface LibraryProps {}
+interface LibraryPageProps {}
 
-const Library: React.FC<LibraryProps> = (props: LibraryProps) => {
+const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
     return (
         <Pane>
             Library
@@ -19,4 +19,4 @@ const Library: React.FC<LibraryProps> = (props: LibraryProps) => {
     );
 };
 
-export { Library };
+export { LibraryPage };

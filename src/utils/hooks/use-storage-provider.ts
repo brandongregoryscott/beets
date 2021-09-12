@@ -1,5 +1,5 @@
 import { BucketName } from "enums/bucket-name";
-import { StorageFileApi } from "interfaces/storage-file-api";
+import { StorageFileApi } from "interfaces/supabase/storage-file-api";
 import { useCallback } from "react";
 import { useSupabase } from "utils/hooks/use-supabase";
 

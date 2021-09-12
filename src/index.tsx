@@ -3,10 +3,21 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./app";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ThemeProvider, defaultTheme } from "evergreen-ui";
+
+const queryClient = new QueryClient();
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <ThemeProvider value={defaultTheme}>
+                    <App />
+                </ThemeProvider>
+            </QueryClientProvider>
+        </BrowserRouter>
     </React.StrictMode>,
     document.getElementById("root")
 );

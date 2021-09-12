@@ -1,9 +1,11 @@
 import { Song } from "components/song";
 import { TrackList } from "components/track-list";
 
-interface WorkstationProps {}
+interface WorkstationPageProps {}
 
-const Workstation: React.FC<WorkstationProps> = (props: WorkstationProps) => {
+const WorkstationPage: React.FC<WorkstationPageProps> = (
+    props: WorkstationPageProps
+) => {
     return (
         <Song>
             <TrackList />
@@ -11,4 +13,4 @@ const Workstation: React.FC<WorkstationProps> = (props: WorkstationProps) => {
     );
 };
 
-export { Workstation };
+export { WorkstationPage };

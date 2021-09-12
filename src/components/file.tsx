@@ -5,7 +5,7 @@ import {
     Pane,
     TextInput,
 } from "evergreen-ui";
-import { StorageProviderFile } from "interfaces/storage-provider-file";
+import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 
 interface FileListItemProps {
     storageProviderFile: StorageProviderFile;
