@@ -33,12 +33,14 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
         useBoolean(false);
     const {
         mutate: register,
+        reset: resetRegister,
         isLoading: isRegisterLoading,
         isSuccess: isRegisterSuccess,
         error: registerError,
     } = useRegister();
     const {
         mutate: login,
+        reset: resetLogin,
         isLoading: isLoginLoading,
         isSuccess: isLoginSuccess,
         error: loginError,
@@ -46,6 +48,9 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
 
     const error = loginError ?? registerError;
 
+    const renderError =
+        (showRegister && registerError != null) ||
+        (!showRegister && loginError != null);
     const buttonText = showRegister ? "Register" : "Login";
     const toggleLinkText = showRegister
         ? "Already have an account? Login here"
@@ -83,6 +88,12 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
 
     const handleSubmit = showRegister ? handleRegister : handleLogin;
 
+    const toggleAndReset = () => {
+        toggleShowRegister();
+        resetLogin();
+        resetRegister();
+    };
+
     return (
         <Pane display="flex" flexDirection="column" maxWidth={majorScale(30)}>
             <TextInputField
@@ -110,14 +121,14 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
                 onClick={handleSubmit}>
                 {buttonText}
             </Button>
-            <Link marginBottom={marginBottom} onClick={toggleShowRegister}>
+            <Link marginBottom={marginBottom} onClick={toggleAndReset}>
                 {toggleLinkText}
             </Link>
-            {error != null && <Alert intent="danger">{error.message}</Alert>}
-            {isLoginSuccess && (
+            {renderError && <Alert intent="danger">{error?.message}</Alert>}
+            {isLoginSuccess && !showRegister && (
                 <Alert intent="success">Login successful!</Alert>
             )}
-            {isRegisterSuccess && (
+            {isRegisterSuccess && showRegister && (
                 <Alert intent="success">
                     Account successfully created. Check your email for a
                     confirmation link to sign in.
