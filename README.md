@@ -12,3 +12,4 @@ states of development and non-functional. This document will be updated with any
 -   [Tone.js](https://github.com/Tonejs/Tone.js)
 -   [reactronica](https://github.com/unkleho/reactronica)
 -   [Evergreen](https://github.com/segmentio/evergreen)
+-   [Supabase](https://github.com/supabase/supabase)
