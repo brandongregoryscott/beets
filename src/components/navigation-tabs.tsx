@@ -1,4 +1,4 @@
-import { Tab } from "evergreen-ui";
+import { majorScale, Pane, Tab } from "evergreen-ui";
 import { Fragment } from "react";
 import { RouteConfig } from "react-router-config";
 import { NavLink } from "react-router-dom";
@@ -26,7 +26,7 @@ const NavigationTabs: React.FC<NavigationTabsProps> = (
     const registerRoute = getRouteBySitemap("register");
 
     return (
-        <Fragment>
+        <Pane display="flex" flexDirection="row">
             {Routes.filter(isNotAuthenticationRoute).map((route) => (
                 <Tab
                     exact={true}
@@ -37,21 +37,28 @@ const NavigationTabs: React.FC<NavigationTabsProps> = (
                 </Tab>
             ))}
 
-            {!globalState.isAuthenticated() && (
-                <Fragment>
-                    <Tab exact={true} is={NavLink} to={Sitemap.login}>
-                        {loginRoute?.name}
-                    </Tab>
-                    <Tab exact={true} is={NavLink} to={Sitemap.register}>
-                        {registerRoute?.name}
-                    </Tab>
-                </Fragment>
-            )}
-
-            {globalState.isAuthenticated() && (
-                <Tab onSelect={logout}>Log out</Tab>
-            )}
-        </Fragment>
+            <Pane
+                display="flex"
+                flexDirection="row"
+                justifyContent="flex-end"
+                flexGrow={1}>
+                {!globalState.isAuthenticated() && (
+                    <Fragment>
+                        <Tab exact={true} is={NavLink} to={Sitemap.login}>
+                            {loginRoute?.name}
+                        </Tab>
+                        <Tab exact={true} is={NavLink} to={Sitemap.register}>
+                            {registerRoute?.name}
+                        </Tab>
+                    </Fragment>
+                )}
+                {globalState.isAuthenticated() && (
+                    <Fragment>
+                        <Tab onSelect={logout}>Log out</Tab>
+                    </Fragment>
+                )}
+            </Pane>
+        </Pane>
     );
 };
 

@@ -9,8 +9,8 @@ import { useSubscribeToAuthStatus } from "utils/hooks/use-subscribe-to-auth-stat
 const App: React.FC = () => {
     useSubscribeToAuthStatus();
     return (
-        <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
-            <Pane marginBottom={majorScale(2)}>
+        <Pane height="100vh" overflowY="hidden">
+            <Pane marginY={majorScale(2)} marginX={majorScale(2)}>
                 <NavigationTabs />
             </Pane>
             <Switch>{renderRoutes(Routes)}</Switch>

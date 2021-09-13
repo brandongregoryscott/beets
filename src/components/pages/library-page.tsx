@@ -7,7 +7,7 @@ interface LibraryPageProps {}
 
 const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
     return (
-        <Pane>
+        <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
             Library
             <Pane marginTop={majorScale(1)}>
                 <FileList bucketName={BucketName.Samples} />
