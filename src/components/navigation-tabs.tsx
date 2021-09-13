@@ -1,4 +1,4 @@
-import { majorScale, Pane, Tab } from "evergreen-ui";
+import { Pane, Tab } from "evergreen-ui";
 import { Fragment } from "react";
 import { RouteConfig } from "react-router-config";
 import { NavLink } from "react-router-dom";
