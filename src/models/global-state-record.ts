@@ -8,7 +8,7 @@ const defaultValues: GlobalState = {
 
 class GlobalStateRecord extends Record(defaultValues) implements GlobalState {
     public isAuthenticated(): boolean {
-        return this.supabaseUser != null && this.user != null;
+        return this.supabaseUser != null;
     }
 
     public with(values: Partial<GlobalState>): GlobalStateRecord {

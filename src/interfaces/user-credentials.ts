@@ -1,7 +1,7 @@
-interface CreateUserDto {
+interface UserCredentials {
     email: string;
     password: string;
     redirectTo?: string;
 }
 
-export type { CreateUserDto };
+export type { UserCredentials };

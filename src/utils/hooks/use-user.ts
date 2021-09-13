@@ -13,6 +13,7 @@ const useUser = (
         fn: async () => {
             const { data, error } = await userTable
                 .select("*")
+                .eq("id", id)
                 .limit(1)
                 .single();
 

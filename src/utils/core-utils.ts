@@ -1,3 +1,5 @@
+import { nil } from "types/nil";
+
 const CoreUtils = {
     randomFloat(min: number, max: number): number {
         return Math.random() * (max - min) + min;
@@ -7,4 +9,16 @@ const CoreUtils = {
     },
 };
 
-export { CoreUtils };
+const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
+    if (typeof value === "string") {
+        return value.trim().length === 0;
+    }
+
+    if (Array.isArray(value)) {
+        return value.length === 0;
+    }
+
+    return value == null;
+};
+
+export { CoreUtils, isNilOrEmpty };
