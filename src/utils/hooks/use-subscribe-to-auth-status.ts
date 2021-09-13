@@ -92,10 +92,15 @@ const useSubscribeToAuthStatus = () => {
         }
 
         setGlobalState((prev: GlobalStateRecord) => {
-            const {
-                currentSession: { user: supabaseUser },
-            } = session;
             let updated = prev;
+
+            const { currentSession } = session;
+            if (currentSession?.user == null) {
+                return prev;
+            }
+
+            const { user: supabaseUser } = currentSession;
+
             if (prev.supabaseUser != null && supabaseUser == null) {
                 updated = updated.with({ supabaseUser: undefined });
             }

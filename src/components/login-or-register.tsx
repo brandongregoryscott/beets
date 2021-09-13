@@ -42,7 +42,6 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
         mutate: login,
         reset: resetLogin,
         isLoading: isLoginLoading,
-        isSuccess: isLoginSuccess,
         error: loginError,
     } = useLogin();
 
@@ -125,9 +124,6 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
                 {toggleLinkText}
             </Link>
             {renderError && <Alert intent="danger">{error?.message}</Alert>}
-            {isLoginSuccess && !showRegister && (
-                <Alert intent="success">Login successful!</Alert>
-            )}
             {isRegisterSuccess && showRegister && (
                 <Alert intent="success">
                     Account successfully created. Check your email for a
