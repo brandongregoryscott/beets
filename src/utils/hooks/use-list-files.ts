@@ -1,26 +1,26 @@
-import { BucketName } from "enums/bucket-name";
-import { SortOptions } from "interfaces/sort-options";
-import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
-import { useQuery } from "react-query";
-import { useStorageProvider } from "utils/hooks/use-storage-provider";
-import { QueryKeyUtils } from "utils/query-key-utils";
+import { FileRecord } from "models/file-record";
+import { useDatabase } from "utils/hooks/use-database";
+import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import { File } from "types/file";
 
-interface UseListFilesOptions {
-    bucketName: BucketName;
-    path?: string;
-    sortBy?: SortOptions<StorageProviderFile>;
-}
+interface UseListFilesOptions {}
 
-const useListFiles = (options: UseListFilesOptions) => {
-    const { bucketName, path, sortBy } = options;
-    const { storage } = useStorageProvider();
-    const bucket = storage.from(bucketName);
-    const listQuery = useQuery<{
-        data: StorageProviderFile[] | null;
-        error: Error | null;
-    }>({
-        queryKey: QueryKeyUtils.listFilesByBucket(bucketName),
-        queryFn: () => bucket.list(path, { sortBy }),
+const useListFiles = (
+    options?: UseListFilesOptions
+): UseQueryResult<FileRecord[], Error> => {
+    const { from } = useDatabase();
+    const fileTable = from("files");
+    const listQuery = useQuery<FileRecord[], Error>({
+        key: "",
+        fn: async () => {
+            const result = await fileTable.select("*");
+            const { data, error } = result;
+            if (error != null) {
+                throw error;
+            }
+
+            return data?.map((file: File) => new FileRecord(file)) ?? [];
+        },
     });
 
     return { ...listQuery };

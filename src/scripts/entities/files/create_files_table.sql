@@ -1,8 +1,8 @@
 create table files (
     id uuid references storage.objects not null,
-    bucketid uuid not null,
+    bucketid text references storage.buckets not null,
     createdon timestamptz DEFAULT timezone('utc' :: text, now()) null,
-    createdbyid uuid null,
+    createdbyid uuid DEFAULT auth.uid() null,
     deletedon timestamptz null,
     deletedbyid uuid null,
     description text null,
@@ -12,9 +12,16 @@ create table files (
     type text not null,
     updatedon timestamptz null,
     updatedbyid uuid null,
-    foreign key (bucketid),
     primary key (id)
 );
 
 alter table
     files enable row level security;
+
+create policy "Authenticated users can create records." on files for
+insert
+    with check (auth.role() = 'authenticated');
+
+create policy "Users can read their own records." on files for
+select
+    using (auth.uid() = createdbyid);

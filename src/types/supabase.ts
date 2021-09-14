@@ -17,6 +17,7 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.files.id"];
+          bucketid?: parameters["rowFilter.files.bucketid"];
           createdon?: parameters["rowFilter.files.createdon"];
           createdbyid?: parameters["rowFilter.files.createdbyid"];
           deletedon?: parameters["rowFilter.files.deletedon"];
@@ -79,6 +80,7 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.files.id"];
+          bucketid?: parameters["rowFilter.files.bucketid"];
           createdon?: parameters["rowFilter.files.createdon"];
           createdbyid?: parameters["rowFilter.files.createdbyid"];
           deletedon?: parameters["rowFilter.files.deletedon"];
@@ -105,6 +107,7 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.files.id"];
+          bucketid?: parameters["rowFilter.files.bucketid"];
           createdon?: parameters["rowFilter.files.createdon"];
           createdbyid?: parameters["rowFilter.files.createdbyid"];
           deletedon?: parameters["rowFilter.files.deletedon"];
@@ -250,6 +253,11 @@ export interface definitions {
      * This is a Foreign Key to `objects.id`.<fk table='objects' column='id'/>
      */
     id: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
+     */
+    bucketid: string;
     createdon?: string;
     createdbyid?: string;
     deletedon?: string;
@@ -302,6 +310,7 @@ export interface parameters {
   /** files */
   "body.files": definitions["files"];
   "rowFilter.files.id": string;
+  "rowFilter.files.bucketid": string;
   "rowFilter.files.createdon": string;
   "rowFilter.files.createdbyid": string;
   "rowFilter.files.deletedon": string;

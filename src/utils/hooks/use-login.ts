@@ -8,10 +8,11 @@ import { ErrorMessages } from "constants/error-messages";
 const useLogin = () => {
     const auth = useAuth();
     const { from } = useDatabase();
-    const userTable = from("users");
 
     const result = useMutation<UserRecord, Error, UserCredentials>({
         fn: async (credentials: UserCredentials) => {
+            const userTable = from("users");
+
             const { email, password, redirectTo } = credentials;
             const loginResult = await auth.signIn(
                 { email, password },
@@ -31,6 +32,9 @@ const useLogin = () => {
                 throw loginError;
             }
 
+            console.log("auth.user().id", auth.user()?.id);
+
+            console.log("supabaseUser?.id", supabaseUser?.id);
             const existingUserResult = await userTable
                 .select("*")
                 .eq("id", supabaseUser?.id)

@@ -4,7 +4,7 @@ import _ from "lodash";
 import { useMutation, useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/use-storage-provider";
-import { QueryKeyUtils } from "utils/query-key-utils";
+import { filesByBucketKey } from "utils/query-key-utils";
 import { definitions } from "types/supabase";
 import { useDatabase } from "utils/hooks/use-database";
 
@@ -65,9 +65,7 @@ const useUploadFile = (bucketName: BucketName) => {
 
     const uploadMutation = useMutation(upload, {
         onSettled: () =>
-            queryClient.invalidateQueries(
-                QueryKeyUtils.listFilesByBucket(bucketName)
-            ),
+            queryClient.invalidateQueries(filesByBucketKey(bucketName)),
     });
 
     return { ...uploadMutation };

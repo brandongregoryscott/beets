@@ -1,7 +1,7 @@
 import { BucketName } from "enums/bucket-name";
 import { SortOrder } from "enums/sort-order";
 import { Pane } from "evergreen-ui";
-import { useListFiles } from "utils/hooks/use-list-files";
+import { useListStorageProviderFiles } from "utils/hooks/use-list-storage-provider-files";
 import { FileListItem } from "components/file";
 
 interface FileListProps {
@@ -10,7 +10,7 @@ interface FileListProps {
 
 const FileList: React.FC<FileListProps> = (props: FileListProps) => {
     const { bucketName } = props;
-    const { data: listFilesResult } = useListFiles({
+    const { data: listFilesResult } = useListStorageProviderFiles({
         bucketName,
         sortBy: {
             column: "created_at",
