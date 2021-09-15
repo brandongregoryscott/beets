@@ -2,6 +2,7 @@ import { FileRecord } from "models/file-record";
 import { useDatabase } from "utils/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { File } from "types/file";
+import { filesKey } from "utils/query-key-utils";
 
 interface UseListFilesOptions {}
 
@@ -11,7 +12,7 @@ const useListFiles = (
     const { from } = useDatabase();
     const fileTable = from("files");
     const listQuery = useQuery<FileRecord[], Error>({
-        key: "",
+        key: filesKey(),
         fn: async () => {
             const result = await fileTable.select("*");
             const { data, error } = result;

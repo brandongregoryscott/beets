@@ -16,7 +16,6 @@ interface LibraryPageProps {}
 const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
     const { globalState } = useGlobalState();
     const theme: any = useTheme();
-    console.log(theme);
     return (
         <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
             Library

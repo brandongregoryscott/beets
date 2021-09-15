@@ -11,6 +11,10 @@ class GlobalStateRecord extends Record(defaultValues) implements GlobalState {
         return this.supabaseUser != null && this.user != null;
     }
 
+    public userId(): string | undefined {
+        return this.supabaseUser?.id;
+    }
+
     public with(values: Partial<GlobalState>): GlobalStateRecord {
         return new GlobalStateRecord(Object.assign(this.toJS(), values));
     }
