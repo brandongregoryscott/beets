@@ -15,6 +15,10 @@ const defaultValues: File = {
     updatedon: undefined,
 };
 
-class FileRecord extends Record(defaultValues) implements File {}
+class FileRecord extends Record(defaultValues) implements File {
+    public getPath(): string {
+        return `${this.createdbyid}/${this.name}`;
+    }
+}
 
 export { FileRecord };

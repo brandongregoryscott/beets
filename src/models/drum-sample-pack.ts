@@ -5,7 +5,7 @@ import { DrumType } from "enums/drum-type";
 import { DrumSamplePack as DrumSamplePackInterface } from "interfaces/drum-sample-pack";
 import { SamplePaths } from "constants/sample-paths";
 import upath from "upath";
-import { CoreUtils } from "utils/core-utils";
+import { randomInt } from "utils/core-utils";
 
 class DrumSamplePack implements DrumSamplePackInterface {
     public count: Record<DrumType, number>;
@@ -46,8 +46,7 @@ class DrumSamplePack implements DrumSamplePackInterface {
     }
 
     public getPlayer(drumType: DrumType, sampleNumber?: number): Player {
-        sampleNumber =
-            sampleNumber ?? CoreUtils.randomInt(1, this.count[drumType]);
+        sampleNumber = sampleNumber ?? randomInt(1, this.count[drumType]);
 
         const existingPlayer = (this._players[drumType] ?? [])[
             sampleNumber - 1

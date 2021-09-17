@@ -1,7 +1,7 @@
 import { DrumType } from "enums/drum-type";
 import { Loop } from "tone";
 import * as Tone from "tone";
-import { CoreUtils } from "utils/core-utils";
+import { randomInt, randomFloat } from "utils/core-utils";
 import { SamplifiedNostalgia } from "utils/sample-packs/samplified-nostalgia";
 
 let _loaded = false;
@@ -18,8 +18,8 @@ const simpleHipHop1 = () => {
             [DrumType.Snare]: 3,
         });
 
-    Tone.Transport.bpm.value = CoreUtils.randomInt(75, 85);
-    Tone.Transport.swing = CoreUtils.randomFloat(0.25, 0.3);
+    Tone.Transport.bpm.value = randomInt(75, 85);
+    Tone.Transport.swing = randomFloat(0.25, 0.3);
 
     new Loop((time) => closedHiHat.start(time), "8n").start();
     new Loop((time) => openHiHat.start(time), "1m").start("0:7");
