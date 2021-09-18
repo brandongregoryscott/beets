@@ -10,8 +10,8 @@ import {
 import _ from "lodash";
 import { useInput } from "rooks";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { useLogin } from "utils/hooks/use-login";
-import { useRegister } from "utils/hooks/use-register";
+import { useLogin } from "utils/hooks/supabase/use-login";
+import { useRegister } from "utils/hooks/supabase/use-register";
 
 interface LoginOrRegisterProps {
     initialShowRegister: boolean;

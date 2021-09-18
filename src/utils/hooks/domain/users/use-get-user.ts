@@ -1,8 +1,8 @@
 import { UserRecord } from "models/user-record";
-import { useDatabase } from "utils/hooks/use-database";
+import { useDatabase } from "utils/hooks/supabase/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
-const useUser = (
+const useGetUser = (
     id?: string
 ): UseQueryResult<UserRecord | undefined, Error> => {
     const { from } = useDatabase();
@@ -32,4 +32,4 @@ const useUser = (
     return result;
 };
 
-export { useUser };
+export { useGetUser };

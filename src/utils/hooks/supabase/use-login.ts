@@ -1,7 +1,7 @@
 import { UserCredentials } from "interfaces/user-credentials";
-import { useAuth } from "utils/hooks/use-auth";
+import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
-import { useDatabase } from "utils/hooks/use-database";
+import { useDatabase } from "utils/hooks/supabase/use-database";
 import { UserRecord } from "models/user-record";
 import { ErrorMessages } from "constants/error-messages";
 

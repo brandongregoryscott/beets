@@ -5,8 +5,8 @@ import _ from "lodash";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { isNilOrEmpty, mapTo } from "utils/core-utils";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
-import { useStorageProvider } from "utils/hooks/use-storage-provider";
-import { filesByBucketKey } from "utils/query-key-utils";
+import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
+import { storageProviderFilesKey } from "utils/query-key-utils";
 
 interface UseListStorageProviderFilesOptions {
     bucketName: BucketName;
@@ -22,7 +22,7 @@ const useListStorageProviderFiles = (
     const { storage } = useStorageProvider();
     const bucket = storage.from(bucketName);
     const listQuery = useQuery<StorageProviderFileRecord[], Error>({
-        key: filesByBucketKey(bucketName),
+        key: storageProviderFilesKey(),
         fn: async () => {
             const listResult = await bucket.list(path, {
                 sortBy,

@@ -1,11 +1,7 @@
-import { BucketName } from "enums/bucket-name";
 import { QueryKey } from "react-query";
 
-const filesByBucketKey = (bucketName: BucketName): QueryKey => [
-    "storageProviderFiles",
-    bucketName,
-];
+const storageProviderFilesKey = (): QueryKey => "storageProviderFiles";
 
 const filesKey = (): QueryKey => "files";
 
-export { filesKey, filesByBucketKey };
+export { filesKey, storageProviderFilesKey };

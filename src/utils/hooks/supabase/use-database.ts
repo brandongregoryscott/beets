@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useSupabase } from "utils/hooks/use-supabase";
+import { useSupabase } from "utils/hooks/supabase/use-supabase";
 import { definitions } from "types/supabase";
 
 const useDatabase = () => {

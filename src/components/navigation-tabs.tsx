@@ -6,7 +6,7 @@ import { Routes } from "routes";
 import { Sitemap } from "sitemap";
 import { isNilOrEmpty } from "utils/core-utils";
 import { useGlobalState } from "utils/hooks/use-global-state";
-import { useLogout } from "utils/hooks/use-logout";
+import { useLogout } from "utils/hooks/supabase/use-logout";
 import { getRouteBySitemap } from "utils/route-utils";
 
 interface NavigationTabsProps {}

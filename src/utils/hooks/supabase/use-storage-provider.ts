@@ -1,7 +1,7 @@
 import { BucketName } from "enums/bucket-name";
 import { StorageFileApi } from "interfaces/supabase/storage-file-api";
 import { useCallback } from "react";
-import { useSupabase } from "utils/hooks/use-supabase";
+import { useSupabase } from "utils/hooks/supabase/use-supabase";
 
 const useStorageProvider = () => {
     const { supabase } = useSupabase();

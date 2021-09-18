@@ -5,10 +5,10 @@ import { useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { SupabaseUser } from "types/supabase-user";
-import { useAuth } from "utils/hooks/use-auth";
+import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useLocalstorage } from "utils/hooks/use-local-storage";
-import { useUser } from "utils/hooks/use-user";
+import { useGetUser } from "utils/hooks/domain/users/use-get-user";
 
 interface LocalStorageSession {
     currentSession: {
@@ -28,7 +28,7 @@ const useSubscribeToAuthStatus = () => {
     const [session] = useLocalstorage<LocalStorageSession>(
         "supabase.auth.token"
     );
-    const { resultObject: user } = useUser(globalState.supabaseUser?.id);
+    const { resultObject: user } = useGetUser(globalState.supabaseUser?.id);
     const history = useHistory();
 
     const handleAuthStateChange = useCallback(

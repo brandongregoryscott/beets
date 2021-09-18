@@ -18,9 +18,16 @@ create table files (
 alter table
     files enable row level security;
 
+-- create unique index id_deletedon on files (id, deletedon)
+-- where
+--     deletedon IS NULL;
 create policy "Authenticated users can create records." on files for
 insert
     with check (auth.role() = 'authenticated');
+
+create policy "Users can update their own records." on files for
+update
+    using (auth.uid() = createdbyid);
 
 create policy "Users can read their own records." on files for
 select

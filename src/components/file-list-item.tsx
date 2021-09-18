@@ -1,4 +1,5 @@
 import {
+    DeleteIcon,
     DocumentOpenIcon,
     EditIcon,
     IconButton,
@@ -11,6 +12,8 @@ import { FileRecord } from "models/file-record";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { FileDialog } from "components/file-dialog";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import { useDeleteFile } from "utils/hooks/domain/files/use-delete-file";
+import { useCallback } from "react";
 
 interface FileListItemProps {
     file: FileRecord;
@@ -28,6 +31,8 @@ const FileListItem: React.FC<FileListItemProps> = (
         setTrue: handleOpenDialog,
         setFalse: handleCloseDialog,
     } = useBoolean(false);
+    const { mutate } = useDeleteFile();
+    const handleDelete = useCallback(() => mutate(file.id), [mutate, file.id]);
     return (
         <Pane display="flex">
             <TextInput
@@ -45,7 +50,11 @@ const FileListItem: React.FC<FileListItemProps> = (
                 icon={EditIcon}
                 onClick={handleOpenDialog}
             />
-
+            <IconButton
+                height={height}
+                icon={DeleteIcon}
+                onClick={handleDelete}
+            />
             {storageProviderFile.signedURL != null && (
                 <Link href={storageProviderFile.signedURL} target="_blank">
                     <IconButton height={height} icon={DocumentOpenIcon} />

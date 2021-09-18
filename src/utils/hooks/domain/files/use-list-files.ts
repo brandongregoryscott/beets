@@ -1,5 +1,5 @@
 import { FileRecord } from "models/file-record";
-import { useDatabase } from "utils/hooks/use-database";
+import { useDatabase } from "utils/hooks/supabase/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { File } from "types/file";
 import { filesKey } from "utils/query-key-utils";

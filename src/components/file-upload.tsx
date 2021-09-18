@@ -9,7 +9,7 @@ import {
     DeleteIcon,
 } from "evergreen-ui";
 import { Fragment, useState } from "react";
-import { useUploadFile } from "utils/hooks/use-upload-file";
+import { useCreateFile } from "utils/hooks/domain/files/use-create-file";
 import * as uuid from "uuid";
 
 interface FileUploadProps {
@@ -25,7 +25,7 @@ const height = majorScale(3);
 
 const FileUpload: React.FC<FileUploadProps> = (props: FileUploadProps) => {
     const { bucketName } = props;
-    const { mutate: uploadFiles, isLoading } = useUploadFile(bucketName);
+    const { mutate: uploadFiles, isLoading } = useCreateFile(bucketName);
     const [filePickers, setFilePickers] = useState([newFilePickerState()]);
     const updateById = (id: string) => (fileList: FileList) =>
         setFilePickers((prev: FilePickerState[]) => {
