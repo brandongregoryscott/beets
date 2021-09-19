@@ -1,8 +1,11 @@
 /// <reference types="node-pg-migrate" />
 const { q } = require("./quote");
 
+const notDeleted = "deletedon is null";
+
 const authenticatedCreatePolicy =
     /** @param {import("node-pg-migrate").MigrationBuilder} pgm */
+
 
         (pgm) =>
         /** @param {import("node-pg-migrate").Name} tableName */
@@ -26,7 +29,7 @@ const readAnyRecordPolicy =
         (tableName) =>
         () =>
             pgm.createPolicy(tableName, q("Users can read any record."), {
-                using: "true",
+                using: notDeleted,
                 command: "SELECT",
             });
 
@@ -42,7 +45,7 @@ const readOwnRecordPolicy =
                 tableName,
                 q("Users can read their own records."),
                 {
-                    using: "auth.uid() = createdbyid",
+                    using: `auth.uid() = createdbyid AND ${notDeleted}`,
                     command: "SELECT",
                 }
             );
@@ -94,7 +97,7 @@ const uniqueNonDeletedIndex =
 
             pgm.addIndex(tableName, [column, "deletedon"], {
                 unique: true,
-                where: "deletedon is null",
+                where: notDeleted,
             });
         };
 
@@ -132,6 +135,7 @@ const configure = (options) => {
 module.exports = {
     authenticatedCreatePolicy,
     configure,
+    notDeleted,
     readAnyRecordPolicy,
     readOwnRecordPolicy,
     rowLevelSecurity,
