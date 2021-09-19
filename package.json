@@ -58,7 +58,7 @@
     "scripts": {
         "build": "react-scripts build",
         "eject": "react-scripts eject",
-        "migrate": "npx node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations --quote-escape false",
+        "migrate": "npx node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.js --quote-escape false",
         "start": "react-scripts start",
         "test": "react-scripts test",
         "update-supabase-types": "source .env && npx openapi-typescript $REACT_APP_SUPABASE_URL/rest/v1/?apikey=$REACT_APP_SUPABASE_ANON_KEY --output src/types/supabase.ts"
