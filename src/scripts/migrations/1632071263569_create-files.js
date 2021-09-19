@@ -1,10 +1,4 @@
-const {
-    uniqueNonDeletedIndex,
-    rowLevelSecurity,
-    authenticatedCreatePolicy,
-    updateOwnRecordPolicy,
-    readOwnRecordPolicy,
-} = require("./utils/utils");
+const { configure } = require("./utils/pgm-utils");
 const { auditableColumns } = require("./utils/auditable-columns");
 
 const files = "files";
@@ -13,6 +7,14 @@ const files = "files";
  * @param {import("node-pg-migrate").MigrationBuilder} pgm
  */
 const up = (pgm) => {
+    const {
+        uniqueNonDeletedIndex,
+        rowLevelSecurity,
+        authenticatedCreatePolicy,
+        updateOwnRecordPolicy,
+        readOwnRecordPolicy,
+    } = configure({ pgm, tableName: files });
+
     pgm.createTable(files, {
         ...auditableColumns(pgm),
         id: {
@@ -45,15 +47,13 @@ const up = (pgm) => {
         },
     });
 
-    uniqueNonDeletedIndex(pgm, files, "id");
+    uniqueNonDeletedIndex("id");
 
-    rowLevelSecurity(pgm, files);
+    rowLevelSecurity();
 
-    authenticatedCreatePolicy(pgm, files);
-
-    updateOwnRecordPolicy(pgm, files);
-
-    readOwnRecordPolicy(pgm, files);
+    authenticatedCreatePolicy();
+    updateOwnRecordPolicy();
+    readOwnRecordPolicy();
 };
 
 /**

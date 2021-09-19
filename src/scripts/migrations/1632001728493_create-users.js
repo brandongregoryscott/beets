@@ -1,9 +1,4 @@
-const {
-    authenticatedCreatePolicy,
-    readAnyRecordPolicy,
-    uniqueNonDeletedIndex,
-    rowLevelSecurity,
-} = require("./utils/utils");
+const { configure } = require("./utils/pgm-utils");
 const { auditableColumns } = require("./utils/auditable-columns");
 
 const users = "users";
@@ -12,6 +7,13 @@ const users = "users";
  * @param {import("node-pg-migrate").MigrationBuilder} pgm
  */
 module.exports.up = (pgm) => {
+    const {
+        authenticatedCreatePolicy,
+        readAnyRecordPolicy,
+        uniqueNonDeletedIndex,
+        rowLevelSecurity,
+    } = configure({ pgm, tableName: users });
+
     pgm.createTable(users, {
         id: {
             type: "uuid",
@@ -26,12 +28,12 @@ module.exports.up = (pgm) => {
         ...auditableColumns(pgm),
     });
 
-    uniqueNonDeletedIndex(pgm, users, "id");
+    uniqueNonDeletedIndex("id");
 
-    rowLevelSecurity(pgm, users);
+    rowLevelSecurity();
 
-    authenticatedCreatePolicy(pgm, users);
-    readAnyRecordPolicy(pgm, users);
+    authenticatedCreatePolicy();
+    readAnyRecordPolicy();
 };
 
 /**
