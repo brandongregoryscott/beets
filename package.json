@@ -40,6 +40,7 @@
         "@types/jest": "26.0.24",
         "@types/lodash": "4.14.172",
         "@types/node": "12.20.19",
+        "@types/node-pg-migrate": "2.3.1",
         "@types/react": "17.0.18",
         "@types/react-dom": "17.0.9",
         "@types/react-router-config": "5.0.3",
@@ -57,6 +58,7 @@
     "scripts": {
         "build": "react-scripts build",
         "eject": "react-scripts eject",
+        "migrate": "npx node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations --quote-escape false",
         "start": "react-scripts start",
         "test": "react-scripts test",
         "update-supabase-types": "source .env && npx openapi-typescript $REACT_APP_SUPABASE_URL/rest/v1/?apikey=$REACT_APP_SUPABASE_ANON_KEY --output src/types/supabase.ts"
