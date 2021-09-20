@@ -16,19 +16,19 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.files.id"];
-          bucketid?: parameters["rowFilter.files.bucketid"];
           createdon?: parameters["rowFilter.files.createdon"];
           createdbyid?: parameters["rowFilter.files.createdbyid"];
           deletedon?: parameters["rowFilter.files.deletedon"];
           deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+          updatedon?: parameters["rowFilter.files.updatedon"];
+          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+          id?: parameters["rowFilter.files.id"];
+          bucketid?: parameters["rowFilter.files.bucketid"];
           description?: parameters["rowFilter.files.description"];
           name?: parameters["rowFilter.files.name"];
           path?: parameters["rowFilter.files.path"];
           size?: parameters["rowFilter.files.size"];
           type?: parameters["rowFilter.files.type"];
-          updatedon?: parameters["rowFilter.files.updatedon"];
-          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -79,19 +79,19 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.files.id"];
-          bucketid?: parameters["rowFilter.files.bucketid"];
           createdon?: parameters["rowFilter.files.createdon"];
           createdbyid?: parameters["rowFilter.files.createdbyid"];
           deletedon?: parameters["rowFilter.files.deletedon"];
           deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+          updatedon?: parameters["rowFilter.files.updatedon"];
+          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+          id?: parameters["rowFilter.files.id"];
+          bucketid?: parameters["rowFilter.files.bucketid"];
           description?: parameters["rowFilter.files.description"];
           name?: parameters["rowFilter.files.name"];
           path?: parameters["rowFilter.files.path"];
           size?: parameters["rowFilter.files.size"];
           type?: parameters["rowFilter.files.type"];
-          updatedon?: parameters["rowFilter.files.updatedon"];
-          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
         };
         header: {
           /** Preference */
@@ -106,23 +106,116 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.files.id"];
-          bucketid?: parameters["rowFilter.files.bucketid"];
           createdon?: parameters["rowFilter.files.createdon"];
           createdbyid?: parameters["rowFilter.files.createdbyid"];
           deletedon?: parameters["rowFilter.files.deletedon"];
           deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+          updatedon?: parameters["rowFilter.files.updatedon"];
+          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+          id?: parameters["rowFilter.files.id"];
+          bucketid?: parameters["rowFilter.files.bucketid"];
           description?: parameters["rowFilter.files.description"];
           name?: parameters["rowFilter.files.name"];
           path?: parameters["rowFilter.files.path"];
           size?: parameters["rowFilter.files.size"];
           type?: parameters["rowFilter.files.type"];
-          updatedon?: parameters["rowFilter.files.updatedon"];
-          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
         };
         body: {
           /** files */
           files?: definitions["files"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/pgmigrations": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pgmigrations.id"];
+          name?: parameters["rowFilter.pgmigrations.name"];
+          run_on?: parameters["rowFilter.pgmigrations.run_on"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["pgmigrations"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** pgmigrations */
+          pgmigrations?: definitions["pgmigrations"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pgmigrations.id"];
+          name?: parameters["rowFilter.pgmigrations.name"];
+          run_on?: parameters["rowFilter.pgmigrations.run_on"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pgmigrations.id"];
+          name?: parameters["rowFilter.pgmigrations.name"];
+          run_on?: parameters["rowFilter.pgmigrations.run_on"];
+        };
+        body: {
+          /** pgmigrations */
+          pgmigrations?: definitions["pgmigrations"];
         };
         header: {
           /** Preference */
@@ -140,11 +233,11 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.users.id"];
+          email?: parameters["rowFilter.users.email"];
           createdon?: parameters["rowFilter.users.createdon"];
           createdbyid?: parameters["rowFilter.users.createdbyid"];
           deletedon?: parameters["rowFilter.users.deletedon"];
           deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-          email?: parameters["rowFilter.users.email"];
           updatedon?: parameters["rowFilter.users.updatedon"];
           updatedbyid?: parameters["rowFilter.users.updatedbyid"];
           /** Filtering Columns */
@@ -198,11 +291,11 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.users.id"];
+          email?: parameters["rowFilter.users.email"];
           createdon?: parameters["rowFilter.users.createdon"];
           createdbyid?: parameters["rowFilter.users.createdbyid"];
           deletedon?: parameters["rowFilter.users.deletedon"];
           deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-          email?: parameters["rowFilter.users.email"];
           updatedon?: parameters["rowFilter.users.updatedon"];
           updatedbyid?: parameters["rowFilter.users.updatedbyid"];
         };
@@ -220,11 +313,11 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.users.id"];
+          email?: parameters["rowFilter.users.email"];
           createdon?: parameters["rowFilter.users.createdon"];
           createdbyid?: parameters["rowFilter.users.createdbyid"];
           deletedon?: parameters["rowFilter.users.deletedon"];
           deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-          email?: parameters["rowFilter.users.email"];
           updatedon?: parameters["rowFilter.users.updatedon"];
           updatedbyid?: parameters["rowFilter.users.updatedbyid"];
         };
@@ -247,28 +340,32 @@ export interface paths {
 
 export interface definitions {
   files: {
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     * This is a Foreign Key to `objects.id`.<fk table='objects' column='id'/>
-     */
+    createdon?: string;
+    createdbyid?: string;
+    deletedon?: string;
+    deletedbyid?: string;
+    updatedon?: string;
+    updatedbyid?: string;
     id: string;
     /**
      * Note:
      * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
      */
     bucketid: string;
-    createdon?: string;
-    createdbyid?: string;
-    deletedon?: string;
-    deletedbyid?: string;
     description?: string;
     name: string;
     path: string;
     size?: number;
     type: string;
-    updatedon?: string;
-    updatedbyid?: string;
+  };
+  pgmigrations: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    name: string;
+    run_on: string;
   };
   users: {
     /**
@@ -276,11 +373,11 @@ export interface definitions {
      * This is a Primary Key.<pk/>
      */
     id: string;
+    email: string;
     createdon?: string;
     createdbyid?: string;
     deletedon?: string;
     deletedbyid?: string;
-    email: string;
     updatedon?: string;
     updatedbyid?: string;
   };
@@ -309,27 +406,32 @@ export interface parameters {
   limit: string;
   /** files */
   "body.files": definitions["files"];
-  "rowFilter.files.id": string;
-  "rowFilter.files.bucketid": string;
   "rowFilter.files.createdon": string;
   "rowFilter.files.createdbyid": string;
   "rowFilter.files.deletedon": string;
   "rowFilter.files.deletedbyid": string;
+  "rowFilter.files.updatedon": string;
+  "rowFilter.files.updatedbyid": string;
+  "rowFilter.files.id": string;
+  "rowFilter.files.bucketid": string;
   "rowFilter.files.description": string;
   "rowFilter.files.name": string;
   "rowFilter.files.path": string;
   "rowFilter.files.size": string;
   "rowFilter.files.type": string;
-  "rowFilter.files.updatedon": string;
-  "rowFilter.files.updatedbyid": string;
+  /** pgmigrations */
+  "body.pgmigrations": definitions["pgmigrations"];
+  "rowFilter.pgmigrations.id": string;
+  "rowFilter.pgmigrations.name": string;
+  "rowFilter.pgmigrations.run_on": string;
   /** users */
   "body.users": definitions["users"];
   "rowFilter.users.id": string;
+  "rowFilter.users.email": string;
   "rowFilter.users.createdon": string;
   "rowFilter.users.createdbyid": string;
   "rowFilter.users.deletedon": string;
   "rowFilter.users.deletedbyid": string;
-  "rowFilter.users.email": string;
   "rowFilter.users.updatedon": string;
   "rowFilter.users.updatedbyid": string;
 }

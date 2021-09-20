@@ -32,9 +32,6 @@ const useLogin = () => {
                 throw loginError;
             }
 
-            console.log("auth.user().id", auth.user()?.id);
-
-            console.log("supabaseUser?.id", supabaseUser?.id);
             const existingUserResult = await userTable
                 .select("*")
                 .eq("id", supabaseUser?.id)
