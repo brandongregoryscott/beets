@@ -1,32 +1,38 @@
 import { Dialog, DialogProps, Link, TextInputField } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
-import { ChangeEvent, useState } from "react";
+import { useState, ChangeEvent } from "react";
+import { useUpdateFile } from "utils/hooks/domain/files/use-update-file";
 
 interface FileDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
     file: FileRecord;
-    isEditing?: boolean;
     storageProviderFile: StorageProviderFileRecord;
 }
 
 const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
-    const {
-        isEditing = false,
-        isShown,
-        onCloseComplete,
-        file: initialFile,
-        storageProviderFile,
-    } = props;
-    const title = isEditing ? "Edit File" : "View File";
+    const { isShown, onCloseComplete, file: initialFile } = props;
+    const title = "Edit File";
     const [file, setFile] = useState<FileRecord>(initialFile);
+    const { mutate: updateFile, isLoading } = useUpdateFile({
+        onSettled: onCloseComplete,
+    });
+
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
         setFile((prev) => prev.set("name", event.target.value));
 
+    const handleSave = () => {
+        updateFile(file);
+    };
+
     return (
         <Dialog
+            confirmLabel="Save"
+            isConfirmLoading={isLoading}
             isShown={isShown}
+            onConfirm={handleSave}
             onCloseComplete={onCloseComplete}
+            shouldCloseOnOverlayClick={false}
             title={title}>
             <TextInputField
                 label="Name"
@@ -49,10 +55,10 @@ const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
                 label="Size"
                 disabled={true}
                 readOnly={true}
-                value={file.size}
+                value={`${file.size} bytes`}
             />
-            {storageProviderFile?.signedURL != null && (
-                <Link href={storageProviderFile.signedURL}>View File</Link>
+            {file.getPublicUrl() != null && (
+                <Link href={file.getPublicUrl()}>View File</Link>
             )}
         </Dialog>
     );

@@ -10,6 +10,7 @@ import {
 } from "evergreen-ui";
 import { Fragment, useState } from "react";
 import { useCreateFile } from "utils/hooks/domain/files/use-create-file";
+import { useGlobalState } from "utils/hooks/use-global-state";
 import * as uuid from "uuid";
 
 interface FileUploadProps {
@@ -25,8 +26,14 @@ const height = majorScale(3);
 
 const FileUpload: React.FC<FileUploadProps> = (props: FileUploadProps) => {
     const { bucketName } = props;
+    const { globalState } = useGlobalState();
     const { mutate: uploadFiles, isLoading } = useCreateFile(bucketName);
     const [filePickers, setFilePickers] = useState([newFilePickerState()]);
+
+    if (!globalState.isAuthenticated()) {
+        return null;
+    }
+
     const updateById = (id: string) => (fileList: FileList) =>
         setFilePickers((prev: FilePickerState[]) => {
             const index = prev.findIndex((filePicker) => filePicker.id === id);

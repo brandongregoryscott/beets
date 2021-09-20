@@ -17,7 +17,6 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
     const { resultObject: storageProviderFiles } = useListStorageProviderFiles({
         bucketName,
         path: globalState.supabaseUser?.id,
-        includeSignedUrl: true,
         sortBy: {
             column: "created_at",
             order: SortOrder.DESC,

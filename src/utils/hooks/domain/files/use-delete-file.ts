@@ -24,18 +24,20 @@ const useDeleteFile = (): UseMutationResult<void, Error, string> => {
 
         const file = new FileRecord(data);
 
-        const { error: deletionError } = await fileTable.update({
-            id,
-            deletedon: new Date().toISOString(),
-        });
-
-        if (deletionError != null) {
-            throw deletionError;
-        }
+        const { error: deletionError } = await fileTable
+            .update({
+                id,
+                deletedon: new Date().toISOString(),
+            })
+            .eq("id", id);
 
         const { error: storageProviderError } = await storage
             .from(file.bucketid)
             .remove([file.getPath()]);
+
+        if (deletionError != null) {
+            throw deletionError;
+        }
 
         if (storageProviderError != null) {
             throw storageProviderError;
