@@ -1,4 +1,5 @@
-import { Card, majorScale, useTheme } from "evergreen-ui";
+import { Card, majorScale } from "evergreen-ui";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface SequencerStepProps {
     index: number;
@@ -9,10 +10,11 @@ interface SequencerStepProps {
 const SequencerStep: React.FC<SequencerStepProps> = (
     props: SequencerStepProps
 ) => {
-    const { isChecked = false } = props;
-    const theme: any = useTheme();
+    const { index, isChecked = false, onClick } = props;
+    const theme = useTheme();
     const checkedColor = theme.colors.gray600;
     const uncheckedColor = theme.colors.dark;
+    const handleClick = () => onClick(index);
     return (
         <Card
             backgroundColor={isChecked ? checkedColor : undefined}
@@ -21,6 +23,7 @@ const SequencerStep: React.FC<SequencerStepProps> = (
             height={majorScale(12)}
             hoverElevation={1}
             margin={majorScale(1)}
+            onClick={handleClick}
             width={majorScale(12)}
         />
     );

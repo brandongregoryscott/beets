@@ -1,16 +1,19 @@
 import { Sequencer } from "components/sequencer";
 import { Dialog } from "evergreen-ui";
 import { useTrackAtom } from "utils/hooks/use-track-atom";
+import { List } from "immutable";
 
 interface SequencerDialogProps {
+    onChange: (index: number) => void;
     onClose: () => void;
     trackId: string;
+    value: List<string | null>;
 }
 
 const SequencerDialog: React.FC<SequencerDialogProps> = (
     props: SequencerDialogProps
 ) => {
-    const { onClose, trackId } = props;
+    const { onChange, onClose, trackId, value } = props;
     const { name } = useTrackAtom(trackId);
     return (
         <Dialog
@@ -18,7 +21,7 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
             isShown={true}
             onCloseComplete={onClose}
             title={`Sequencer for ${name}`}>
-            <Sequencer trackId={trackId} />
+            <Sequencer onChange={onChange} trackId={trackId} value={value} />
         </Dialog>
     );
 };

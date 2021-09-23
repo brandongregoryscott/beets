@@ -1,17 +1,18 @@
 import { SequencerStep } from "components/sequencer-step";
 import { Pane } from "evergreen-ui";
 import _ from "lodash";
-import { useState } from "react";
 import { useTrackAtom } from "utils/hooks/use-track-atom";
+import { List } from "immutable";
 
 interface SequencerProps {
+    onChange: (index: number) => void;
     trackId: string;
+    value: List<string | null>;
 }
 
 const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
-    const { trackId } = props;
+    const { onChange, trackId, value } = props;
     useTrackAtom(trackId);
-    const [stepCount] = useState(16);
     return (
         <Pane
             marginX="auto"
@@ -19,8 +20,13 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
             flexDirection="row"
             flexWrap="wrap"
             justifyContent="center">
-            {_.range(0, stepCount).map((step: number) => (
-                <SequencerStep index={step} isChecked={true} onClick={_.noop} />
+            {_.range(0, value.count()).map((step: number) => (
+                <SequencerStep
+                    key={step}
+                    index={step}
+                    isChecked={value.get(step) != null}
+                    onClick={onChange}
+                />
             ))}
         </Pane>
     );
