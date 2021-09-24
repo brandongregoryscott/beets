@@ -23,7 +23,7 @@ const useCreateFile = (bucketName: BucketName) => {
         storageProviderFile: StorageProviderFile
     ): Partial<definitions["files"]> => ({
         bucketid: bucketName,
-        name: storageProviderFile.name,
+        name: storageProviderFile.name.replace(/[0-9]+\-/, ""), // Strip the generated timestamp off
         path: storageProviderFile.name,
         id: storageProviderFile.id,
         size: file.size,

@@ -20,8 +20,8 @@ const groupBy = <TLeft, TRight>(
     right: TRight[] | undefined,
     comparator: (left: TLeft, right: TRight) => boolean
 ): Array<Grouping<TLeft, TRight>> => {
-    left = left ?? [];
-    right = right ?? [];
+    left = (left ?? []).sort();
+    right = (right ?? []).sort();
 
     const zipped = _.zipWith(
         left,
