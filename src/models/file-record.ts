@@ -1,13 +1,16 @@
 import { Record } from "immutable";
 import { File } from "types/file";
+import { makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
+import { BaseRecord } from "models/base-record";
 
-const defaultValues: File = {
+const defaultValues = makeDefaultValues<File>({
     bucketid: "",
     createdbyid: undefined,
     createdon: undefined,
     deletedbyid: undefined,
     deletedon: undefined,
+    description: "",
     id: "",
     name: "",
     path: "",
@@ -15,9 +18,9 @@ const defaultValues: File = {
     type: "",
     updatedbyid: undefined,
     updatedon: undefined,
-};
+});
 
-class FileRecord extends Record(defaultValues) implements File {
+class FileRecord extends BaseRecord(Record(defaultValues)) implements File {
     public getPath(): string {
         return `${this.createdbyid}/${this.path}`;
     }
@@ -29,10 +32,6 @@ class FileRecord extends Record(defaultValues) implements File {
         }
 
         return `${publicUrl}/${this.bucketid}/${this.getPath()}`;
-    }
-
-    public toPOJO(): File {
-        return this.toJS() as File;
     }
 }
 

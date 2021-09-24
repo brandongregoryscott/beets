@@ -1,8 +1,10 @@
 import { Track } from "interfaces/track";
 import * as uuid from "uuid";
 import { Record } from "immutable";
+import { BaseRecord } from "models/base-record";
+import { makeDefaultValues } from "utils/core-utils";
 
-const defaultValues: Track = {
+const defaultValues = makeDefaultValues<Track>({
     get id() {
         return uuid.v4();
     },
@@ -11,21 +13,11 @@ const defaultValues: Track = {
     solo: false,
     pan: 0,
     volume: 0,
-};
+});
 
-class TrackRecord extends Record(defaultValues) implements Track {
+class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
     constructor(values?: Partial<Track>) {
-        values = values ?? { ...defaultValues };
-
-        super(values);
-    }
-
-    public toPOJO(): Track {
-        return this.toJS() as Track;
-    }
-
-    public with(values: Partial<Track>): TrackRecord {
-        return new TrackRecord(Object.assign(this.toJS(), values));
+        super(values ?? defaultValues);
     }
 }
 

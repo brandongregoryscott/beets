@@ -1,7 +1,9 @@
 import { Record } from "immutable";
+import { BaseRecord } from "models/base-record";
 import { User } from "types/user";
+import { makeDefaultValues } from "utils/core-utils";
 
-const defaultValues: User = {
+const defaultValues = makeDefaultValues<User>({
     id: "",
     createdon: undefined,
     createdbyid: undefined,
@@ -10,8 +12,12 @@ const defaultValues: User = {
     email: "",
     updatedon: undefined,
     updatedbyid: undefined,
-};
+});
 
-class UserRecord extends Record(defaultValues) implements User {}
+class UserRecord extends BaseRecord(Record(defaultValues)) implements User {
+    constructor(values?: Partial<User>) {
+        super(values ?? defaultValues);
+    }
+}
 
 export { UserRecord };

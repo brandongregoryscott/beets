@@ -1,7 +1,9 @@
 import { Record } from "immutable";
+import { BaseRecord } from "models/base-record";
 import { SupabaseUser } from "types/supabase-user";
+import { makeDefaultValues } from "utils/core-utils";
 
-const defaultValues: SupabaseUser = {
+const defaultValues = makeDefaultValues<SupabaseUser>({
     id: "",
     app_metadata: {
         provider: undefined,
@@ -20,10 +22,10 @@ const defaultValues: SupabaseUser = {
     last_sign_in_at: undefined,
     role: undefined,
     updated_at: undefined,
-};
+});
 
 class SupabaseUserRecord
-    extends Record(defaultValues)
+    extends BaseRecord(Record(defaultValues))
     implements SupabaseUser {}
 
 export { SupabaseUserRecord };

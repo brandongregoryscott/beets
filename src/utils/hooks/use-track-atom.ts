@@ -13,16 +13,16 @@ const useTrackAtom = (id: string) => {
     const update = useMemo(() => updateById(id), [id, updateById]);
 
     const setName = useCallback(
-        (name: string) => update((prev) => prev.with({ name })),
+        (name: string) => update((prev) => prev.merge({ name })),
         [update]
     );
 
     const toggleMute = useCallback(() => {
-        update((prev: TrackRecord) => prev.with({ mute: !prev.mute }));
+        update((prev: TrackRecord) => prev.merge({ mute: !prev.mute }));
     }, [update]);
 
     const toggleSolo = useCallback(() => {
-        update((prev: TrackRecord) => prev.with({ solo: !prev.solo }));
+        update((prev: TrackRecord) => prev.merge({ solo: !prev.solo }));
     }, [update]);
 
     return { ...track, remove, update, setName, toggleMute, toggleSolo };

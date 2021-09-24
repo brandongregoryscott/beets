@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
+import { RequiredOrUndefined } from "types/required-or-undefined";
 
 const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
     if (typeof value === "string") {
@@ -52,4 +53,14 @@ const randomFloat = (min: number, max: number): number =>
 const randomInt = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
-export { isNilOrEmpty, groupBy, mapTo, randomFloat, randomInt };
+const makeDefaultValues = <T>(defaultValues: RequiredOrUndefined<T>): T =>
+    defaultValues as T;
+
+export {
+    isNilOrEmpty,
+    groupBy,
+    mapTo,
+    randomFloat,
+    randomInt,
+    makeDefaultValues,
+};

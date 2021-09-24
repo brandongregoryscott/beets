@@ -39,7 +39,7 @@ const useSubscribeToAuthStatus = () => {
 
             if (event === "SIGNED_OUT") {
                 setGlobalState((prev) =>
-                    prev.with({ supabaseUser: undefined, user: undefined })
+                    prev.merge({ supabaseUser: undefined, user: undefined })
                 );
                 history.push(Sitemap.home);
                 return;
@@ -51,7 +51,7 @@ const useSubscribeToAuthStatus = () => {
 
             const { user } = session;
             setGlobalState((prev: GlobalStateRecord) =>
-                prev.with({
+                prev.merge({
                     supabaseUser: new SupabaseUserRecord(user),
                 })
             );
@@ -72,11 +72,11 @@ const useSubscribeToAuthStatus = () => {
         setGlobalState((prev: GlobalStateRecord) => {
             let updated = prev;
             if (prev.user != null && user == null) {
-                updated = updated.with({ user: undefined });
+                updated = updated.merge({ user: undefined });
             }
 
             if (prev.user == null && user != null) {
-                updated = updated.with({ user });
+                updated = updated.merge({ user });
             }
 
             return updated;
@@ -86,7 +86,7 @@ const useSubscribeToAuthStatus = () => {
     useEffect(() => {
         if (session == null) {
             setGlobalState((prev: GlobalStateRecord) =>
-                prev.with({ supabaseUser: undefined, user: undefined })
+                prev.merge({ supabaseUser: undefined, user: undefined })
             );
             return;
         }
@@ -102,11 +102,11 @@ const useSubscribeToAuthStatus = () => {
             const { user: supabaseUser } = currentSession;
 
             if (prev.supabaseUser != null && supabaseUser == null) {
-                updated = updated.with({ supabaseUser: undefined });
+                updated = updated.merge({ supabaseUser: undefined });
             }
 
             if (prev.supabaseUser == null && supabaseUser != null) {
-                updated = updated.with({
+                updated = updated.merge({
                     supabaseUser: new SupabaseUserRecord(supabaseUser),
                 });
             }
