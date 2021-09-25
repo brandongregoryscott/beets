@@ -1,5 +1,5 @@
 import { EditableParagraph } from "components/editable-paragraph";
-import { SequencerDialog } from "components/sequencer-dialog";
+import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
     Card,
     DeleteIcon,
@@ -23,6 +23,7 @@ import { useTrackAtom } from "utils/hooks/use-track-atom";
 import { List } from "immutable";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { initializeList } from "utils/core-utils";
+import { Tooltip } from "components/tooltip";
 
 interface TrackProps extends TrackInterface {
     index: number;
@@ -40,9 +41,9 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
         setFalse: handleCloseSequencerDialog,
     } = useBoolean(false);
     const { resultObject: files } = useListFiles();
-    const [fileSteps, setFileSteps] = useState<List<List<FileRecord>>>(
-        initializeList(16, List())
-    );
+    const [sequencerValue, setSequencerValue] = useState<
+        List<List<FileRecord>>
+    >(initializeList(16, List()));
     const options: Array<SelectMenuItem<FileRecord>> = useMemo(
         () => FileRecord.toSelectMenuItems(files),
         [files]
@@ -53,9 +54,6 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
 
     const handleFileSelect = (option: SelectMenuItem<FileRecord>) =>
         addFile(option.value);
-
-    const handleSequencerChange = (index: number, value: List<FileRecord>) =>
-        setFileSteps((prev) => prev.set(index, value));
 
     return (
         <Card
@@ -68,16 +66,20 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
             padding={majorScale(1)}>
             <EditableParagraph onChange={setName} value={name} />
             <Pane display="flex" flexDirection="row">
-                <IconButton
-                    icon={mute ? VolumeOffIcon : VolumeUpIcon}
-                    marginRight={iconMarginRight}
-                    onClick={toggleMute}
-                />
-                <IconButton
-                    icon={solo ? PropertyIcon : PropertiesIcon}
-                    marginRight={iconMarginRight}
-                    onClick={toggleSolo}
-                />
+                <Tooltip content="Mute Track">
+                    <IconButton
+                        icon={mute ? VolumeOffIcon : VolumeUpIcon}
+                        marginRight={iconMarginRight}
+                        onClick={toggleMute}
+                    />
+                </Tooltip>
+                <Tooltip content="Solo Track">
+                    <IconButton
+                        icon={solo ? PropertyIcon : PropertiesIcon}
+                        marginRight={iconMarginRight}
+                        onClick={toggleSolo}
+                    />
+                </Tooltip>
                 <SelectMenu
                     isMultiSelect={true}
                     options={options}
@@ -85,32 +87,38 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                     onSelect={handleFileSelect}
                     selected={sampleFiles}
                     title="Select samples">
-                    <IconButton
-                        icon={MusicIcon}
-                        marginRight={iconMarginRight}
-                    />
+                    <Tooltip content="Track Samples">
+                        <IconButton
+                            icon={MusicIcon}
+                            marginRight={iconMarginRight}
+                        />
+                    </Tooltip>
                 </SelectMenu>
-                <IconButton
-                    icon={HeatGridIcon}
-                    marginRight={iconMarginRight}
-                    onClick={handleOpenSequencerDialog}
-                />
-                <IconButton
-                    icon={DeleteIcon}
-                    intent="danger"
-                    marginRight={iconMarginRight}
-                    onClick={remove}
-                />
+                <Tooltip content="Sequencer">
+                    <IconButton
+                        icon={HeatGridIcon}
+                        marginRight={iconMarginRight}
+                        onClick={handleOpenSequencerDialog}
+                    />
+                </Tooltip>
+                <Tooltip content="Remove Track">
+                    <IconButton
+                        icon={DeleteIcon}
+                        intent="danger"
+                        marginRight={iconMarginRight}
+                        onClick={remove}
+                    />
+                </Tooltip>
             </Pane>
             {sequencerDialogOpen && (
                 <SequencerDialog
-                    onChange={handleSequencerChange}
+                    onChange={setSequencerValue}
                     onClose={handleCloseSequencerDialog}
                     sampleOptions={FileRecord.toSelectMenuItems(
                         sampleFiles.toArray()
                     )}
                     trackId={id}
-                    value={fileSteps}
+                    value={sequencerValue}
                 />
             )}
             {/* <ReactronicaTrack

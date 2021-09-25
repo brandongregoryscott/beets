@@ -1,4 +1,4 @@
-import { SequencerStep } from "components/sequencer-step";
+import { SequencerStep } from "components/sequencer/sequencer-step";
 import { Button, Pane } from "evergreen-ui";
 import _ from "lodash";
 import { useTrackAtom } from "utils/hooks/use-track-atom";
@@ -52,7 +52,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     <SequencerStep
                         index={index}
                         key={index}
-                        onClick={onChange}
+                        onChange={onChange}
                         selected={selected}
                         value={value.get(index, List())}
                     />
