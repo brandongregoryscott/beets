@@ -3,6 +3,7 @@ import {
     SelectMenuItem as EvergreenSelectMenuItem,
     SelectMenuProps as EvergreenSelectMenuProps,
 } from "evergreen-ui";
+import { List } from "immutable";
 import _ from "lodash";
 import { useCallback, useMemo } from "react";
 
@@ -19,7 +20,7 @@ interface SelectMenuProps<T>
     onDeselect?: (item: SelectMenuItem<T>) => void;
     onSelect?: (item: SelectMenuItem<T>) => void;
     options?: Array<SelectMenuItem<T>>;
-    selected?: T | T[];
+    selected?: T | T[] | List<T>;
 }
 
 const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
@@ -46,10 +47,16 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     );
 
     const selected = useMemo(() => {
-        if (_.isArray(selectedValues)) {
+        let _selectedValues = selectedValues;
+
+        if (List.isList(_selectedValues)) {
+            _selectedValues = _selectedValues.toArray();
+        }
+
+        if (_.isArray(_selectedValues)) {
             return _.intersectionWith(
                 optionValues,
-                selectedValues,
+                _selectedValues,
                 (option, selected) => option.value === selected
             ).map((selected) => selected.id);
         }

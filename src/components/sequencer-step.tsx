@@ -1,20 +1,24 @@
 import { Card, majorScale } from "evergreen-ui";
+import { List } from "immutable";
+import { FileRecord } from "models/file-record";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface SequencerStepProps {
     index: number;
-    isChecked?: boolean;
-    onClick: (index: number) => void;
+    selected: List<FileRecord>;
+    value: List<FileRecord>;
+    onClick: (index: number, files: List<FileRecord>) => void;
 }
 
 const SequencerStep: React.FC<SequencerStepProps> = (
     props: SequencerStepProps
 ) => {
-    const { index, isChecked = false, onClick } = props;
+    const { index, onClick, selected, value } = props;
     const theme = useTheme();
     const checkedColor = theme.colors.gray600;
     const uncheckedColor = theme.colors.dark;
-    const handleClick = () => onClick(index);
+    const isChecked = !value.isEmpty();
+    const handleClick = () => onClick(index, selected); // This might need to be 'updated', not just selected
     return (
         <Card
             backgroundColor={isChecked ? checkedColor : undefined}
@@ -24,8 +28,9 @@ const SequencerStep: React.FC<SequencerStepProps> = (
             hoverElevation={1}
             margin={majorScale(1)}
             onClick={handleClick}
-            width={majorScale(12)}
-        />
+            width={majorScale(12)}>
+            {value.map((file) => file.name).join(", ")}
+        </Card>
     );
 };
 

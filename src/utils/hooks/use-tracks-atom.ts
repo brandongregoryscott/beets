@@ -1,10 +1,13 @@
-import { useAtom } from "jotai";
+import { useAtom, SetStateAction } from "jotai";
 import { TrackRecord } from "models/track-record";
 import { useCallback } from "react";
 import { TracksAtom } from "utils/atoms/tracks-atom";
 
 const useTracksAtom = () => {
-    const [tracks, setTracks] = useAtom(TracksAtom);
+    const [tracks, setTracks] = useAtom<
+        Array<TrackRecord>,
+        SetStateAction<Array<TrackRecord>>
+    >(TracksAtom);
 
     const add = useCallback(() => {
         setTracks((prev) => [...prev, new TrackRecord()]);

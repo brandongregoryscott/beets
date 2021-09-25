@@ -16,14 +16,13 @@ import {
 } from "evergreen-ui";
 import { Track as TrackInterface } from "interfaces/track";
 import { FileRecord } from "models/file-record";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useTrackAtom } from "utils/hooks/use-track-atom";
-import { Instrument, Track as ReactronicaTrack } from "reactronica";
 import { List } from "immutable";
-import _ from "lodash";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { initializeList } from "utils/core-utils";
 
 interface TrackProps extends TrackInterface {
     index: number;
@@ -32,50 +31,31 @@ interface TrackProps extends TrackInterface {
 const iconMarginRight = minorScale(2);
 
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
-    const { id, name, mute, solo } = props;
-    const { remove, setName, toggleMute, toggleSolo } = useTrackAtom(id);
+    const { id, name, mute, solo, files: sampleFiles } = props;
+    const { addFile, remove, removeFile, setName, toggleMute, toggleSolo } =
+        useTrackAtom(id);
     const {
         value: sequencerDialogOpen,
         setTrue: handleOpenSequencerDialog,
         setFalse: handleCloseSequencerDialog,
     } = useBoolean(false);
     const { resultObject: files } = useListFiles();
-    const [selectedFile, setSelectedFile] = useState<FileRecord | undefined>();
-    const [sampleObject, setSampleObject] = useState<
-        Record<string, string> | undefined
-    >(fileToSampleObject(selectedFile));
-    const [steps, setSteps] = useState<List<string | null>>(
-        List(_.fill(new Array(16), null))
+    const [fileSteps, setFileSteps] = useState<List<List<FileRecord>>>(
+        initializeList(16, List())
     );
-
     const options: Array<SelectMenuItem<FileRecord>> = useMemo(
-        () =>
-            files?.map((file) => ({
-                label: file.name,
-                id: file.id,
-                value: file,
-            })) ?? [],
+        () => FileRecord.toSelectMenuItems(files),
         [files]
     );
 
     const handleFileDeselect = (option: SelectMenuItem<FileRecord>) =>
-        setSelectedFile(undefined);
+        removeFile(option.value);
 
     const handleFileSelect = (option: SelectMenuItem<FileRecord>) =>
-        setSelectedFile(option.value);
+        addFile(option.value);
 
-    const handleSequencerChange = (index: number) => {
-        if (steps.get(index) == null) {
-            setSteps((prev) => prev.set(index, selectedFile?.id ?? null));
-            return;
-        }
-
-        setSteps((prev) => prev.set(index, null));
-    };
-
-    useEffect(() => {
-        setSampleObject(fileToSampleObject(selectedFile));
-    }, [selectedFile, setSampleObject]);
+    const handleSequencerChange = (index: number, value: List<FileRecord>) =>
+        setFileSteps((prev) => prev.set(index, value));
 
     return (
         <Card
@@ -103,7 +83,8 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                     options={options}
                     onDeselect={handleFileDeselect}
                     onSelect={handleFileSelect}
-                    selected={selectedFile}>
+                    selected={sampleFiles}
+                    title="Select samples">
                     <IconButton
                         icon={MusicIcon}
                         marginRight={iconMarginRight}
@@ -125,39 +106,24 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                 <SequencerDialog
                     onChange={handleSequencerChange}
                     onClose={handleCloseSequencerDialog}
+                    sampleOptions={FileRecord.toSelectMenuItems(
+                        sampleFiles.toArray()
+                    )}
                     trackId={id}
-                    value={steps}
+                    value={fileSteps}
                 />
             )}
-            <ReactronicaTrack
+            {/* <ReactronicaTrack
                 steps={stepsToStepNoteTypes(steps)}
                 subdivision="4n"
                 onStepPlay={(stepNotes, index) => {
                     console.log(`playing ${index}`, stepNotes);
                 }}>
                 <Instrument samples={sampleObject} type="sampler" />
-            </ReactronicaTrack>
+            </ReactronicaTrack> */}
         </Card>
     );
 };
-
-const fileToSampleObject = (file?: FileRecord) =>
-    file == null
-        ? undefined
-        : {
-              C4: file.getPublicUrl()!,
-          };
-
-const stepsToStepNoteTypes = (steps: List<string | null>) =>
-    steps
-        .map((step) => {
-            if (step == null) {
-                return null;
-            }
-
-            return "C4";
-        })
-        .toArray() as string[];
 
 export { Track };
 export type { TrackProps };
