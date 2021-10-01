@@ -1,9 +1,11 @@
-import { Record } from "immutable";
+import { List, Set, Record as ImmutableRecord, Map } from "immutable";
 import { File } from "types/file";
-import { makeDefaultValues } from "utils/core-utils";
+import { initializeList, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
 import { BaseRecord } from "models/base-record";
 import { SelectMenuItem } from "components/select-menu";
+import { MidiNote, StepType } from "reactronica";
+import { MidiNotes } from "constants/midi-notes";
 
 const defaultValues = makeDefaultValues<File>({
     bucketid: "",
@@ -21,7 +23,23 @@ const defaultValues = makeDefaultValues<File>({
     updatedon: undefined,
 });
 
-class FileRecord extends BaseRecord(Record(defaultValues)) implements File {
+class FileRecord
+    extends BaseRecord(ImmutableRecord(defaultValues))
+    implements File
+{
+    public static toMidiNoteMap(
+        files: List<FileRecord>
+    ): Record<MidiNote, string> {
+        const fileMap = mapFilesToNotes(files);
+
+        const midiNoteMap: Record<string, string> = {};
+        Object.entries(fileMap).forEach(([note, file]) => {
+            midiNoteMap[note] = file.getPublicUrl();
+        });
+
+        return midiNoteMap;
+    }
+
     public static toSelectMenuItems(
         files?: Array<FileRecord>
     ): Array<SelectMenuItem<FileRecord>> {
@@ -34,18 +52,50 @@ class FileRecord extends BaseRecord(Record(defaultValues)) implements File {
         );
     }
 
+    public static toStepTypes(files: List<List<FileRecord>>): Array<StepType> {
+        const fileMap = Map(
+            mapFilesToNotes(Set(files.flatMap((list) => list)).toList())
+        );
+
+        let steps = initializeList<StepType>(files.count(), []);
+        files.forEach((fileList, index) => {
+            if (fileList.isEmpty()) {
+                return;
+            }
+
+            const stepNotes = fileList
+                .map((file) => ({
+                    name: fileMap.keyOf(file)!,
+                }))
+                .toArray() as StepType;
+
+            steps = steps.set(index, stepNotes);
+        });
+
+        return steps.toArray();
+    }
+
     public getPath(): string {
         return `${this.createdbyid}/${this.path}`;
     }
 
-    public getPublicUrl(): string | undefined {
+    public getPublicUrl(): string {
         const { REACT_APP_SUPABASE_STORAGE_PUBLIC_URL: publicUrl } = env;
-        if (publicUrl == null) {
-            return undefined;
-        }
-
         return `${publicUrl}/${this.bucketid}/${this.getPath()}`;
     }
 }
+
+const mapFilesToNotes = (
+    files: List<FileRecord>
+): Record<string, FileRecord> => {
+    const map: Record<string, FileRecord> = {};
+    files
+        .sortBy((file) => file.id)
+        .forEach((file, index) => {
+            map[MidiNotes[index]] = file;
+        });
+
+    return map;
+};
 
 export { FileRecord };

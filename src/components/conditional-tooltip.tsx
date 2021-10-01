@@ -8,7 +8,7 @@ interface TooltipProps extends EvergreenTooltipProps {
     shouldRender?: boolean;
 }
 
-const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = (
+const ConditionalTooltip: React.FC<PropsWithChildren<TooltipProps>> = (
     props: PropsWithChildren<TooltipProps>
 ) => {
     const { shouldRender = true, showDelay = 500, ...tooltipProps } = props;
@@ -17,7 +17,11 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = (
         return <Fragment>{props.children}</Fragment>;
     }
 
-    return <EvergreenTooltip {...tooltipProps} showDelay={showDelay} />;
+    return (
+        <EvergreenTooltip {...tooltipProps} showDelay={showDelay}>
+            {props.children}
+        </EvergreenTooltip>
+    );
 };
 
-export { Tooltip };
+export { ConditionalTooltip };

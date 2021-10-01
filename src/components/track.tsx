@@ -11,19 +11,21 @@ import {
     Pane,
     PropertiesIcon,
     PropertyIcon,
+    Tooltip,
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
 import { Track as TrackInterface } from "interfaces/track";
 import { FileRecord } from "models/file-record";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useTrackAtom } from "utils/hooks/use-track-atom";
 import { List } from "immutable";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { initializeList } from "utils/core-utils";
-import { Tooltip } from "components/tooltip";
+import { Track as ReactronicaTrack, Instrument } from "reactronica";
+import { ToneAudioBuffer } from "tone";
 
 interface TrackProps extends TrackInterface {
     index: number;
@@ -54,6 +56,9 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
 
     const handleFileSelect = (option: SelectMenuItem<FileRecord>) =>
         addFile(option.value);
+
+    const handleSamplesLoaded = useCallback((_buffers: ToneAudioBuffer[]) => {},
+    []);
 
     return (
         <Card
@@ -121,14 +126,13 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                     value={sequencerValue}
                 />
             )}
-            {/* <ReactronicaTrack
-                steps={stepsToStepNoteTypes(steps)}
-                subdivision="4n"
-                onStepPlay={(stepNotes, index) => {
-                    console.log(`playing ${index}`, stepNotes);
-                }}>
-                <Instrument samples={sampleObject} type="sampler" />
-            </ReactronicaTrack> */}
+            <ReactronicaTrack steps={FileRecord.toStepTypes(sequencerValue)}>
+                <Instrument
+                    onLoad={handleSamplesLoaded}
+                    samples={FileRecord.toMidiNoteMap(sampleFiles)}
+                    type="sampler"
+                />
+            </ReactronicaTrack>
         </Card>
     );
 };

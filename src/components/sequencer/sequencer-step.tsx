@@ -1,5 +1,5 @@
 import { SequencerStepRow } from "components/sequencer/sequencer-step-row";
-import { Tooltip } from "components/tooltip";
+import { ConditionalTooltip } from "components/conditional-tooltip";
 import { Card, majorScale } from "evergreen-ui";
 import { List, Set } from "immutable";
 import { FileRecord } from "models/file-record";
@@ -38,7 +38,7 @@ const SequencerStep: React.FC<SequencerStepProps> = (
     };
 
     return (
-        <Tooltip
+        <ConditionalTooltip
             content="Select one or more samples to drop in"
             shouldRender={!hasSamples && value.isEmpty()}>
             <Card
@@ -53,11 +53,12 @@ const SequencerStep: React.FC<SequencerStepProps> = (
                     <SequencerStepRow
                         file={file}
                         files={value}
+                        key={file.id}
                         onClick={handleRemove}
                     />
                 ))}
             </Card>
-        </Tooltip>
+        </ConditionalTooltip>
     );
 };
 

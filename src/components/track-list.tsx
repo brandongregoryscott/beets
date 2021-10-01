@@ -1,7 +1,6 @@
-import { Pane, IconButton, PlusIcon, minorScale } from "evergreen-ui";
+import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
 import { Track } from "components/track";
 import { useTracksAtom } from "utils/hooks/use-tracks-atom";
-import { Tooltip } from "components/tooltip";
 
 interface TrackListProps {}
 
