@@ -13,11 +13,11 @@ class GlobalStateRecord
     implements GlobalState
 {
     public isAuthenticated(): boolean {
-        return this.supabaseUser != null && this.user != null;
+        return this.supabaseUser != null || this.user != null;
     }
 
     public userId(): string | undefined {
-        return this.supabaseUser?.id;
+        return this.supabaseUser?.id ?? this.user?.id;
     }
 }
 

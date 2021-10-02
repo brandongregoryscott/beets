@@ -1,29 +1,43 @@
+const auditableColumns = {
+    createdon: "createdon",
+    createdbyid: "createdbyid",
+    deletedon: "deletedon",
+    deletedbyid: "deletedbyid",
+    updatedon: "updatedon",
+    updatedbyid: "updatedbyid",
+};
+
 /**
  * @param {import("node-pg-migrate").MigrationBuilder} pgm
  */
-module.exports.auditableColumns = (pgm) => ({
-    createdon: {
+const makeAuditableColumns = (pgm) => ({
+    [auditableColumns.createdon]: {
         type: "timestamptz",
         default: pgm.func("current_timestamp"),
     },
-    createdbyid: {
+    [auditableColumns.createdbyid]: {
         type: "uuid",
         default: pgm.func("auth.uid()"),
     },
-    deletedon: {
+    [auditableColumns.deletedon]: {
         type: "timestamptz",
         default: null,
     },
-    deletedbyid: {
+    [auditableColumns.deletedbyid]: {
         type: "uuid",
         default: null,
     },
-    updatedon: {
+    [auditableColumns.updatedon]: {
         type: "timestamptz",
         default: null,
     },
-    updatedbyid: {
+    [auditableColumns.updatedbyid]: {
         type: "uuid",
         default: null,
     },
 });
+
+module.exports = {
+    auditableColumns,
+    makeAuditableColumns,
+};

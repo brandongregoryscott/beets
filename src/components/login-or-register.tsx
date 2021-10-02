@@ -94,7 +94,12 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
     };
 
     return (
-        <Pane display="flex" flexDirection="column" width={majorScale(30)}>
+        <Pane
+            is="form"
+            display="flex"
+            flexDirection="column"
+            onSubmit={handleSubmit}
+            width={majorScale(30)}>
             <TextInputField
                 disabled={showRegister ? isRegisterLoading : isLoginLoading}
                 label="Email"

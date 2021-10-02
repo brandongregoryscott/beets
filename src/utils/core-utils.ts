@@ -24,8 +24,13 @@ const groupBy = <TLeft, TRight>(
     right: TRight[] | undefined,
     comparator: (left: TLeft, right: TRight) => boolean
 ): Array<Grouping<TLeft, TRight>> => {
-    left = (left ?? []).sort();
-    right = (right ?? []).sort();
+    left = left ?? [];
+    right = right ?? [];
+
+    left = _.intersectionWith(left, right, comparator).sort();
+    right = _.intersectionWith(right, left, (right, left) =>
+        comparator(left, right)
+    ).sort();
 
     const zipped = _.zipWith(
         left,
