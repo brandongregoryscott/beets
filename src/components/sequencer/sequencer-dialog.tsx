@@ -2,14 +2,13 @@ import { Sequencer } from "components/sequencer/sequencer";
 import { Dialog } from "evergreen-ui";
 import { useTrackAtom } from "utils/hooks/use-track-atom";
 import { List } from "immutable";
-import { SelectMenuItem } from "components/select-menu";
 import { FileRecord } from "models/file-record";
 import { useState } from "react";
 
 interface SequencerDialogProps {
+    files: Array<FileRecord>;
     onChange: (value: List<List<FileRecord>>) => void;
     onClose: () => void;
-    sampleOptions: Array<SelectMenuItem<FileRecord>>;
     trackId: string;
     value: List<List<FileRecord>>;
 }
@@ -17,13 +16,7 @@ interface SequencerDialogProps {
 const SequencerDialog: React.FC<SequencerDialogProps> = (
     props: SequencerDialogProps
 ) => {
-    const {
-        onChange,
-        onClose,
-        sampleOptions,
-        trackId,
-        value: initialValue,
-    } = props;
+    const { onChange, onClose, files, trackId, value: initialValue } = props;
     const { name } = useTrackAtom(trackId);
     const [value, setValue] = useState<List<List<FileRecord>>>(initialValue);
 
@@ -43,8 +36,8 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
             onConfirm={handleConfirm}
             title={`Sequencer for ${name}`}>
             <Sequencer
+                files={files}
                 onChange={handleChange}
-                options={sampleOptions}
                 trackId={trackId}
                 value={value}
             />
