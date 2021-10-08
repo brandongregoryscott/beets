@@ -1,7 +1,9 @@
 import { Record } from "immutable";
 import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
+import { BaseRecord } from "models/base-record";
+import { makeDefaultValues } from "utils/core-utils";
 
-const defaultValues: StorageProviderFile = {
+const defaultValues = makeDefaultValues<StorageProviderFile>({
     bucket_id: "",
     buckets: undefined,
     created_at: "",
@@ -12,10 +14,10 @@ const defaultValues: StorageProviderFile = {
     owner: "",
     updated_at: "",
     signedURL: undefined,
-};
+});
 
 class StorageProviderFileRecord
-    extends Record(defaultValues)
+    extends BaseRecord(Record(defaultValues))
     implements StorageProviderFile {}
 
 export { StorageProviderFileRecord };

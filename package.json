@@ -24,7 +24,7 @@
         "react-router-config": "5.1.1",
         "react-router-dom": "5.3.0",
         "react-scripts": "4.0.3",
-        "reactronica": "0.5.3",
+        "reactronica": "0.6.0",
         "rooks": "5.7.0",
         "slugify": "1.6.0",
         "tone": "14.7.77",
@@ -34,7 +34,6 @@
         "web-vitals": "1.1.2"
     },
     "devDependencies": {
-        "node-pg-migrate": "5.10.0",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/react": "11.2.7",
         "@testing-library/user-event": "12.8.3",
@@ -45,7 +44,8 @@
         "@types/react-dom": "17.0.9",
         "@types/react-router-config": "5.0.3",
         "@types/react-router-dom": "5.1.8",
-        "@types/uuid": "8.3.1"
+        "@types/uuid": "8.3.1",
+        "node-pg-migrate": "5.10.0"
     },
     "eslintConfig": {
         "extends": [

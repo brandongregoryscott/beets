@@ -25,11 +25,8 @@ const useDeleteFile = (): UseMutationResult<void, Error, string> => {
         const file = new FileRecord(data);
 
         const { error: deletionError } = await fileTable
-            .update({
-                id,
-                deletedon: new Date().toISOString(),
-            })
-            .eq("id", id);
+            .delete()
+            .eq("id", file.id);
 
         const { error: storageProviderError } = await storage
             .from(file.bucketid)

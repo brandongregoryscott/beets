@@ -1,14 +1,16 @@
-import { Track } from "interfaces/track";
-import { useAtom } from "jotai";
+import { useAtom, SetStateAction } from "jotai";
+import { TrackRecord } from "models/track-record";
 import { useCallback } from "react";
 import { TracksAtom } from "utils/atoms/tracks-atom";
-import { newTrack } from "utils/new-track";
 
 const useTracksAtom = () => {
-    const [tracks, setTracks] = useAtom(TracksAtom);
+    const [tracks, setTracks] = useAtom<
+        Array<TrackRecord>,
+        SetStateAction<Array<TrackRecord>>
+    >(TracksAtom);
 
     const add = useCallback(() => {
-        setTracks((prev) => [...prev, newTrack()]);
+        setTracks((prev) => [...prev, new TrackRecord()]);
     }, [setTracks]);
 
     const findById = useCallback(
@@ -24,13 +26,13 @@ const useTracksAtom = () => {
     );
 
     const updateById = useCallback(
-        (id: string) => (updateCallback: (prev: Track) => Track) => {
+        (id: string) => (updateCallback: (prev: TrackRecord) => TrackRecord) => {
             const track = findById(id);
             if (track == null) {
                 return;
             }
 
-            setTracks((prev: Array<Track>) => {
+            setTracks((prev: Array<TrackRecord>) => {
                 const index = prev.findIndex((track) => track.id === id);
                 const updatedTracks = prev.filter((track) => track.id !== id);
                 updatedTracks.splice(index, 0, updateCallback(track));

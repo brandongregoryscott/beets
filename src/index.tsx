@@ -8,7 +8,13 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 ReactDOM.render(
     <React.StrictMode>

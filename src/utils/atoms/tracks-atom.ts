@@ -1,7 +1,8 @@
-import { Track } from "interfaces/track";
-import { atom } from "jotai";
-import { newTrack } from "utils/new-track";
+import { atom, PrimitiveAtom } from "jotai";
+import { TrackRecord } from "models/track-record";
 
-const TracksAtom = atom<Array<Track>>([newTrack()]);
+const TracksAtom: PrimitiveAtom<Array<TrackRecord>> = atom<Array<TrackRecord>>([
+    new TrackRecord(),
+]);
 
 export { TracksAtom };

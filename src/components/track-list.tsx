@@ -1,4 +1,4 @@
-import { Pane, IconButton, PlusIcon, minorScale } from "evergreen-ui";
+import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
 import { Track } from "components/track";
 import { useTracksAtom } from "utils/hooks/use-tracks-atom";
 
@@ -10,15 +10,22 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         <Pane>
             <Pane display="flex" flexDirection="column">
                 {tracks.map((track, index) => (
-                    <Track {...track} index={index} key={track.id} />
+                    <Track
+                        {...track.toPOJO()}
+                        files={track.files}
+                        index={index}
+                        key={track.id}
+                    />
                 ))}
             </Pane>
             <Pane display="flex" flexDirection="row" marginRight="auto">
-                <IconButton
-                    icon={PlusIcon}
-                    marginTop={minorScale(2)}
-                    onClick={add}
-                />
+                <Tooltip content="Add Track">
+                    <IconButton
+                        icon={PlusIcon}
+                        marginTop={minorScale(2)}
+                        onClick={add}
+                    />
+                </Tooltip>
             </Pane>
         </Pane>
     );

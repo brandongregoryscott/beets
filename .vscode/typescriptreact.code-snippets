@@ -20,5 +20,26 @@
 			""
 		],
 		"description": "New Functional Component"
+	},
+	"New Immutable Record": {
+		"prefix": "nir",
+		"body": [
+			"import { Record } from \"immutable\";",
+			"import { BaseRecord } from \"models/base-record\";",
+			"import { makeDefaultValues } from \"utils/core-utils\";",
+			"",
+			"const defaultValues = makeDefaultValues<$1>({",
+			"});",
+			"",
+			"class $1Record extends BaseRecord(Record(defaultValues)) implements $1 {",
+			"    constructor(values?: Partial<$1>) {",
+			"        super(values ?? defaultValues);",
+			"    }",
+			"}",
+			"",
+			"export { $1Record };",
+			""
+		],
+		"description": "New Immutable Record"
 	}
 }

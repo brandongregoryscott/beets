@@ -1,4 +1,5 @@
 /// <reference types="node-pg-migrate" />
+const { auditableColumns } = require("./auditable-columns");
 const { q } = require("./quote");
 
 const notDeleted = "deletedon is null";
@@ -17,6 +18,23 @@ const authenticatedCreatePolicy =
                 {
                     check: `auth.role() = 'authenticated'`,
                     command: "INSERT",
+                }
+            );
+
+const deleteOwnRecordPolicy =
+    /** @param {import("node-pg-migrate").MigrationBuilder} pgm */
+
+
+        (pgm) =>
+        /** @param {import("node-pg-migrate").Name} tableName */
+        (tableName) =>
+        () =>
+            pgm.createPolicy(
+                tableName,
+                q("Users can delete their own records."),
+                {
+                    using: `auth.uid() = ${auditableColumns.createdbyid}`,
+                    command: "DELETE",
                 }
             );
 
@@ -45,7 +63,7 @@ const readOwnRecordPolicy =
                 tableName,
                 q("Users can read their own records."),
                 {
-                    using: `auth.uid() = createdbyid AND ${notDeleted}`,
+                    using: `auth.uid() = ${auditableColumns.createdbyid} AND ${notDeleted}`,
                     command: "SELECT",
                 }
             );
@@ -62,6 +80,18 @@ const rowLevelSecurity =
                 levelSecurity: "ENABLE",
             });
 
+const softDeleteRule =
+    /** @param {import("node-pg-migrate").MigrationBuilder} pgm */
+
+
+        (pgm) =>
+        /** @param {import("node-pg-migrate").Name} tableName */
+        (tableName) =>
+        () =>
+            pgm.sql(
+                `CREATE RULE "SOFT DELETE" AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${auditableColumns.deletedon} = current_timestamp, ${auditableColumns.deletedbyid} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
+            );
+
 const updateOwnRecordPolicy =
     /** @param {import("node-pg-migrate").MigrationBuilder} pgm */
 
@@ -74,7 +104,7 @@ const updateOwnRecordPolicy =
                 tableName,
                 q("Users can update their own records."),
                 {
-                    using: "auth.uid() = createdbyid",
+                    using: `auth.uid() = ${auditableColumns.createdbyid}`,
                     command: "UPDATE",
                 }
             );
@@ -95,7 +125,7 @@ const uniqueNonDeletedIndex =
                 pgm.dropConstraint(tableName, `${tableName}_${column}_fkey`);
             }
 
-            pgm.addIndex(tableName, [column, "deletedon"], {
+            pgm.addIndex(tableName, [column, auditableColumns.deletedon], {
                 unique: true,
                 where: notDeleted,
             });
@@ -113,32 +143,28 @@ const uniqueNonDeletedIndex =
 const configure = (options) => {
     const { pgm, tableName } = options;
     if (pgm == null) {
-        throw new Error("'pgm' parameter must be set to use pgmUtilsWith!");
+        throw new Error("'pgm' parameter must be set to use configure()!");
     }
 
     if (tableName == null) {
         throw new Error(
-            "'tableName' parameter must be set to use pgmUtilsWith!"
+            "'tableName' parameter must be set to use configure()!"
         );
     }
 
     return {
         authenticatedCreatePolicy: authenticatedCreatePolicy(pgm)(tableName),
+        deleteOwnRecordPolicy: deleteOwnRecordPolicy(pgm)(tableName),
         readAnyRecordPolicy: readAnyRecordPolicy(pgm)(tableName),
         readOwnRecordPolicy: readOwnRecordPolicy(pgm)(tableName),
         rowLevelSecurity: rowLevelSecurity(pgm)(tableName),
+        softDeleteRule: softDeleteRule(pgm)(tableName),
         updateOwnRecordPolicy: updateOwnRecordPolicy(pgm)(tableName),
         uniqueNonDeletedIndex: uniqueNonDeletedIndex(pgm)(tableName),
     };
 };
 
 module.exports = {
-    authenticatedCreatePolicy,
     configure,
     notDeleted,
-    readAnyRecordPolicy,
-    readOwnRecordPolicy,
-    rowLevelSecurity,
-    updateOwnRecordPolicy,
-    uniqueNonDeletedIndex,
 };
