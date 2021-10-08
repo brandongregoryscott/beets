@@ -4,6 +4,17 @@ import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";
 
+const hash = (value: string): number => {
+    let hash = 5381;
+    let i = value.length;
+
+    while (i > 0) {
+        hash = (hash * 33) ^ value.charCodeAt(--i);
+    }
+
+    return hash >>> 0;
+};
+
 const initializeList = <T>(count: number, value: T): List<T> =>
     List(_.fill(new Array(count), value));
 
@@ -66,6 +77,7 @@ const randomInt = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
 export {
+    hash,
     initializeList,
     isNilOrEmpty,
     groupBy,

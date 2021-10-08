@@ -1,6 +1,6 @@
 import { List, Set, Record as ImmutableRecord, Map } from "immutable";
 import { File } from "types/file";
-import { initializeList, makeDefaultValues } from "utils/core-utils";
+import { hash, initializeList, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
 import { BaseRecord } from "models/base-record";
 import { SelectMenuItem } from "components/select-menu";
@@ -75,6 +75,12 @@ class FileRecord
         return steps.toArray();
     }
 
+    public getMidiNote(): MidiNote {
+        const hashedId = hash(this.id);
+        const { length } = MidiNotes;
+        return MidiNotes[hashedId % length];
+    }
+
     public getPath(): string {
         return `${this.createdbyid}/${this.path}`;
     }
@@ -85,17 +91,9 @@ class FileRecord
     }
 }
 
-const mapFilesToNotes = (
-    files: List<FileRecord>
-): Record<string, FileRecord> => {
-    const map: Record<string, FileRecord> = {};
-    files
-        .sortBy((file) => file.id)
-        .forEach((file, index) => {
-            map[MidiNotes[index]] = file;
-        });
-
-    return map;
-};
+const mapFilesToNotes = (files: List<FileRecord>): Record<string, FileRecord> =>
+    Map<string, FileRecord>(
+        files.map((file) => [file.getMidiNote(), file])
+    ).toJSON();
 
 export { FileRecord };
