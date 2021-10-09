@@ -22,29 +22,7 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
     constructor(values?: Partial<Track>) {
         values = values ?? defaultValues;
 
-        if (values.files != null) {
-            values.files = List(values.files);
-        }
-
         super(values);
-    }
-
-    public addFile(file: FileRecord): TrackRecord {
-        if (this.files.includes(file)) {
-            return this;
-        }
-
-        return this.merge({ files: this.files.push(file) });
-    }
-
-    public removeFile(file: FileRecord): TrackRecord {
-        if (!this.files.includes(file)) {
-            return this;
-        }
-
-        return this.merge({
-            files: this.files.remove(this.files.indexOf(file)),
-        });
     }
 }
 
