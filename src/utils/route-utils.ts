@@ -1,10 +1,10 @@
 import { Routes } from "routes";
 import { Sitemap } from "sitemap";
-import { RouteConfig } from "react-router-config";
+import { RouteDefinition } from "interfaces/route-definition";
 
 const getRouteBySitemap = (
     key: keyof typeof Sitemap
-): RouteConfig | undefined =>
+): RouteDefinition | undefined =>
     Routes.find((route) => route.path === Sitemap[key]);
 
 export { getRouteBySitemap };

@@ -6,19 +6,18 @@ import {
     Icon,
     majorScale,
     Pane,
-    useTheme,
 } from "evergreen-ui";
 import { FileList } from "components/file-list";
 import { useGlobalState } from "utils/hooks/use-global-state";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface LibraryPageProps {}
 
 const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
     const { globalState } = useGlobalState();
-    const theme: any = useTheme();
+    const theme = useTheme();
     return (
         <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
-            Library
             <Pane marginTop={majorScale(1)}>
                 <FileList bucketName={BucketName.Samples} />
             </Pane>
