@@ -1,7 +1,7 @@
 import { SidebarNavigation } from "components/sidebar/sidebar-navigation";
 import { Pane } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
-import { renderRoutes } from "react-router-config";
+import { renderRoutes } from "utils/route-utils";
 
 interface ApplicationLayoutProps extends RouteProps {}
 

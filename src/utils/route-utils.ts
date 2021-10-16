@@ -1,10 +1,16 @@
-import { Routes } from "routes";
-import { Sitemap } from "sitemap";
-import { RouteDefinition } from "interfaces/route-definition";
+import {
+    renderRoutes as reactRouterRenderRoutes,
+    RouteConfig,
+} from "react-router-config";
+import { RouteMap } from "interfaces/route-map";
 
-const getRouteBySitemap = (
-    key: keyof typeof Sitemap
-): RouteDefinition | undefined =>
-    Routes.find((route) => route.path === Sitemap[key]);
+const renderRoutes = (routes?: RouteMap): JSX.Element | null => {
+    if (routes == null) {
+        return null;
+    }
 
-export { getRouteBySitemap };
+    const flattenedRoutes = Object.keys(routes).map((key) => routes[key]);
+    return reactRouterRenderRoutes(flattenedRoutes as RouteConfig[]);
+};
+
+export { renderRoutes };
