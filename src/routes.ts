@@ -18,13 +18,13 @@ const Routes = {
             workstation: {
                 component: WorkstationLayout,
                 exact: false,
+                icon: HomeIcon,
                 name: "WorkstationLayout",
                 path: Sitemap.home,
                 routes: {
                     workstation: {
                         component: WorkstationPage,
                         exact: true,
-                        icon: HomeIcon,
                         name: "Workstation",
                         path: Sitemap.home,
                     },

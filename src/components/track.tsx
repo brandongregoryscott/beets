@@ -52,6 +52,9 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
 
     useEffect(() => {
+        if (sequencerValue.flatten().isEmpty()) {
+            return;
+        }
         setLoadingSamplesTrue();
     }, [sequencerValue, setLoadingSamplesTrue]);
 
