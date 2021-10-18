@@ -1,15 +1,11 @@
 import { Menu } from "components/menu/menu";
-import { Button, Popover, Position, Text } from "evergreen-ui";
-import { useState } from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { Button, Popover, Position } from "evergreen-ui";
 
 interface WorkstationTabProps {}
 
 const WorkstationTab: React.FC<WorkstationTabProps> = (
     props: WorkstationTabProps
 ) => {
-    const theme = useTheme();
-    const [isSaving, setIsSaving] = useState(false);
     return (
         <Popover
             content={({ close }) => (
@@ -19,10 +15,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 </Menu>
             )}
             position={Position.TOP_RIGHT}>
-            <Button
-                appearance={"tab" as any}
-                intent="none"
-                isLoading={isSaving}>
+            <Button appearance={"tab" as any} intent="none">
                 File
             </Button>
         </Popover>

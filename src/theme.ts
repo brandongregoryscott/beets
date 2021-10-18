@@ -1,4 +1,4 @@
-import { defaultTheme as _defaultTheme, Theme } from "evergreen-ui";
+import { defaultTheme as _defaultTheme } from "evergreen-ui";
 import { DefaultEvergreenTheme } from "utils/hooks/use-theme";
 import _ from "lodash";
 
