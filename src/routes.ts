@@ -15,21 +15,6 @@ const Routes = {
         name: "ApplicationLayout",
         path: Sitemap.home,
         routes: {
-            workstation: {
-                component: WorkstationLayout,
-                exact: false,
-                icon: HomeIcon,
-                name: "WorkstationLayout",
-                path: Sitemap.home,
-                routes: {
-                    workstation: {
-                        component: WorkstationPage,
-                        exact: true,
-                        name: "Workstation",
-                        path: Sitemap.home,
-                    },
-                },
-            },
             library: {
                 component: LibraryPage,
                 exact: true,
@@ -56,6 +41,21 @@ const Routes = {
                 exact: true,
                 name: "Register",
                 path: Sitemap.register,
+            },
+            workstation: {
+                component: WorkstationLayout,
+                exact: false,
+                icon: HomeIcon,
+                name: "WorkstationLayout",
+                path: Sitemap.home,
+                routes: {
+                    workstation: {
+                        component: WorkstationPage,
+                        exact: true,
+                        name: "Workstation",
+                        path: Sitemap.home,
+                    },
+                },
             },
         },
     },
