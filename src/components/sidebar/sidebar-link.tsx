@@ -15,7 +15,7 @@ const SidebarLink: React.FC<PropsWithChildren<SidebarLinkProps>> = (
     const theme = useTheme();
     const match = useRouteMatch(route.path);
     const background =
-        match?.isExact === true ? theme.colors.gray300 : undefined;
+        match?.isExact === true ? theme.colors.gray300 : theme.colors.gray100;
     return (
         <Card
             background={background}

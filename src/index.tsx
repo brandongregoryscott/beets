@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";
+import "./index.css";
 
 const queryClient = new QueryClient({
     defaultOptions: {

@@ -15,7 +15,7 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
         <Pane
             display="flex"
             flexDirection="column"
-            background={theme.colors.gray75}
+            background={theme.colors.gray100}
             height="100vh">
             <SidebarLink route={Routes.root.routes.workstation} />
             <SidebarLink route={Routes.root.routes.library} />
