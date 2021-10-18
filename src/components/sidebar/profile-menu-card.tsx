@@ -20,20 +20,20 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     const { globalState } = useGlobalState();
     const {
         value: isOpen,
-        setTrue: setIsOpenTrue,
-        setFalse: setIsOpenFalse,
+        setTrue: handleOpen,
+        setFalse: handleClose,
     } = useBoolean(false);
-    const background = isOpen ? theme.colors.gray300 : undefined;
+    const background = isOpen ? theme.colors.gray300 : theme.colors.gray100;
     return (
         <Popover
-            content={({ close }) => (
+            content={({ close: handleClosePopover }) => (
                 <ProfileMenu
                     isAuthenticated={globalState.isAuthenticated()}
-                    onClose={close}
+                    onClose={handleClosePopover}
                 />
             )}
-            onClose={setIsOpenFalse}
-            onOpen={setIsOpenTrue}
+            onClose={handleClose}
+            onOpen={handleOpen}
             position={Position.RIGHT}>
             <Card
                 background={background}

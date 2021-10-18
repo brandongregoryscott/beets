@@ -1,4 +1,5 @@
-import { LogInIcon, LogOutIcon, Menu, NewPersonIcon } from "evergreen-ui";
+import { Menu } from "components/menu/menu";
+import { LogInIcon, LogOutIcon, NewPersonIcon } from "evergreen-ui";
 import { Fragment, useCallback } from "react";
 import { useHistory } from "react-router";
 import { Sitemap } from "sitemap";
@@ -31,28 +32,23 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
 
     return (
         <Menu>
-            <Menu.Divider />
-            <Menu.Group>
-                {isAuthenticated && (
-                    <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>
-                        Logout
+            {isAuthenticated && (
+                <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>
+                    Logout
+                </Menu.Item>
+            )}
+            {!isAuthenticated && (
+                <Fragment>
+                    <Menu.Item icon={LogInIcon} onSelect={handleLoginSelect}>
+                        Login
                     </Menu.Item>
-                )}
-                {!isAuthenticated && (
-                    <Fragment>
-                        <Menu.Item
-                            icon={LogInIcon}
-                            onSelect={handleLoginSelect}>
-                            Login
-                        </Menu.Item>
-                        <Menu.Item
-                            icon={NewPersonIcon}
-                            onSelect={handleRegisterSelect}>
-                            Register
-                        </Menu.Item>
-                    </Fragment>
-                )}
-            </Menu.Group>
+                    <Menu.Item
+                        icon={NewPersonIcon}
+                        onSelect={handleRegisterSelect}>
+                        Register
+                    </Menu.Item>
+                </Fragment>
+            )}
         </Menu>
     );
 };
