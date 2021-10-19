@@ -57,8 +57,12 @@
     "private": true,
     "scripts": {
         "build": "react-scripts build",
+        "build:migrations": "echo Building src/scripts/migrations && echo Using TypeScript && tsc -v && tsc --project src/scripts/migrations",
         "eject": "react-scripts eject",
-        "migrate": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.js --quote-escape false",
+        "premigrations:create": "npm run build:migrations",
+        "premigrations:run": "npm run build:migrations",
+        "migrations:create": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env  --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts --quote-escape false create",
+        "migrations:run": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations/dist --quote-escape false",
         "start": "react-scripts start",
         "test": "react-scripts test",
         "update-supabase-types": "source .env && npx openapi-typescript $REACT_APP_SUPABASE_URL/rest/v1/?apikey=$REACT_APP_SUPABASE_ANON_KEY --output src/types/supabase.ts"

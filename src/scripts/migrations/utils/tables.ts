@@ -3,4 +3,4 @@ const tables = {
     users: "users",
 };
 
-module.exports = { tables };
+export { tables };
