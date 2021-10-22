@@ -6,13 +6,13 @@
       "forceConsistentCasingInFileNames": true,
       "isolatedModules": true,
       "lib": ["esnext"],
-      "module": "esnext",
+      "module": "CommonJS",
       "moduleResolution": "node",
       "noFallthroughCasesInSwitch": true,
       "outDir": "dist",
       "resolveJsonModule": true,
       "skipLibCheck": true,
       "strict": true,
-      "target": "esnext"
+      "target": "es5"
   },
 }

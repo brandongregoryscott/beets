@@ -58,7 +58,9 @@
     "scripts": {
         "build": "react-scripts build",
         "build:migrations": "echo Building src/scripts/migrations && echo Using TypeScript && tsc -v && tsc --project src/scripts/migrations",
+        "clean:migrations": "rm -rf src/scripts/migrations/dist",
         "eject": "react-scripts eject",
+        "prebuild:migrations": "npm run clean:migrations",
         "premigrations:create": "npm run build:migrations",
         "premigrations:run": "npm run build:migrations",
         "migrations:create": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env  --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts --quote-escape false create",

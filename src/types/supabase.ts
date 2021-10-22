@@ -228,18 +228,126 @@ export interface paths {
       };
     };
   };
+  "/projects": {
+    get: {
+      parameters: {
+        query: {
+          createdon?: parameters["rowFilter.projects.createdon"];
+          createdbyid?: parameters["rowFilter.projects.createdbyid"];
+          deletedon?: parameters["rowFilter.projects.deletedon"];
+          deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
+          updatedon?: parameters["rowFilter.projects.updatedon"];
+          updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+          id?: parameters["rowFilter.projects.id"];
+          name?: parameters["rowFilter.projects.name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["projects"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** projects */
+          projects?: definitions["projects"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          createdon?: parameters["rowFilter.projects.createdon"];
+          createdbyid?: parameters["rowFilter.projects.createdbyid"];
+          deletedon?: parameters["rowFilter.projects.deletedon"];
+          deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
+          updatedon?: parameters["rowFilter.projects.updatedon"];
+          updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+          id?: parameters["rowFilter.projects.id"];
+          name?: parameters["rowFilter.projects.name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          createdon?: parameters["rowFilter.projects.createdon"];
+          createdbyid?: parameters["rowFilter.projects.createdbyid"];
+          deletedon?: parameters["rowFilter.projects.deletedon"];
+          deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
+          updatedon?: parameters["rowFilter.projects.updatedon"];
+          updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+          id?: parameters["rowFilter.projects.id"];
+          name?: parameters["rowFilter.projects.name"];
+        };
+        body: {
+          /** projects */
+          projects?: definitions["projects"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/users": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.users.id"];
-          email?: parameters["rowFilter.users.email"];
           createdon?: parameters["rowFilter.users.createdon"];
           createdbyid?: parameters["rowFilter.users.createdbyid"];
           deletedon?: parameters["rowFilter.users.deletedon"];
           deletedbyid?: parameters["rowFilter.users.deletedbyid"];
           updatedon?: parameters["rowFilter.users.updatedon"];
           updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+          id?: parameters["rowFilter.users.id"];
+          email?: parameters["rowFilter.users.email"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -290,14 +398,14 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.users.id"];
-          email?: parameters["rowFilter.users.email"];
           createdon?: parameters["rowFilter.users.createdon"];
           createdbyid?: parameters["rowFilter.users.createdbyid"];
           deletedon?: parameters["rowFilter.users.deletedon"];
           deletedbyid?: parameters["rowFilter.users.deletedbyid"];
           updatedon?: parameters["rowFilter.users.updatedon"];
           updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+          id?: parameters["rowFilter.users.id"];
+          email?: parameters["rowFilter.users.email"];
         };
         header: {
           /** Preference */
@@ -312,14 +420,14 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.users.id"];
-          email?: parameters["rowFilter.users.email"];
           createdon?: parameters["rowFilter.users.createdon"];
           createdbyid?: parameters["rowFilter.users.createdbyid"];
           deletedon?: parameters["rowFilter.users.deletedon"];
           deletedbyid?: parameters["rowFilter.users.deletedbyid"];
           updatedon?: parameters["rowFilter.users.updatedon"];
           updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+          id?: parameters["rowFilter.users.id"];
+          email?: parameters["rowFilter.users.email"];
         };
         body: {
           /** users */
@@ -367,19 +475,33 @@ export interface definitions {
     name: string;
     run_on: string;
   };
-  users: {
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: string;
-    email: string;
+  projects: {
     createdon?: string;
     createdbyid?: string;
     deletedon?: string;
     deletedbyid?: string;
     updatedon?: string;
     updatedbyid?: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    name: string;
+  };
+  users: {
+    createdon?: string;
+    createdbyid?: string;
+    deletedon?: string;
+    deletedbyid?: string;
+    updatedon?: string;
+    updatedbyid?: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    email: string;
   };
 }
 
@@ -424,16 +546,26 @@ export interface parameters {
   "rowFilter.pgmigrations.id": string;
   "rowFilter.pgmigrations.name": string;
   "rowFilter.pgmigrations.run_on": string;
+  /** projects */
+  "body.projects": definitions["projects"];
+  "rowFilter.projects.createdon": string;
+  "rowFilter.projects.createdbyid": string;
+  "rowFilter.projects.deletedon": string;
+  "rowFilter.projects.deletedbyid": string;
+  "rowFilter.projects.updatedon": string;
+  "rowFilter.projects.updatedbyid": string;
+  "rowFilter.projects.id": string;
+  "rowFilter.projects.name": string;
   /** users */
   "body.users": definitions["users"];
-  "rowFilter.users.id": string;
-  "rowFilter.users.email": string;
   "rowFilter.users.createdon": string;
   "rowFilter.users.createdbyid": string;
   "rowFilter.users.deletedon": string;
   "rowFilter.users.deletedbyid": string;
   "rowFilter.users.updatedon": string;
   "rowFilter.users.updatedbyid": string;
+  "rowFilter.users.id": string;
+  "rowFilter.users.email": string;
 }
 
 export interface operations {}
