@@ -65,7 +65,7 @@
         "clean:generated": "rm -rf src/interfaces/generated",
         "clean:migrations": "rm -rf src/scripts/migrations/dist",
         "eject": "react-scripts eject",
-        "extract-types": "ts-node src/scripts/extract-types.ts",
+        "extract-types": "ts-node src/scripts/codegen/extract-types.ts",
         "prebuild:migrations": "npm run clean:migrations",
         "preextract-types": "npm run clean:generated && npm run update-supabase-types",
         "premigrations:create": "npm run build:migrations",
