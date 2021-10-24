@@ -23,3 +23,5 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+src/interfaces/generated/supabase.ts

@@ -40,12 +40,16 @@
         "@types/jest": "26.0.24",
         "@types/lodash": "4.14.172",
         "@types/node": "12.20.19",
+        "@types/pluralize": "0.0.29",
         "@types/react": "17.0.18",
         "@types/react-dom": "17.0.9",
         "@types/react-router-config": "5.0.3",
         "@types/react-router-dom": "5.1.8",
         "@types/uuid": "8.3.1",
-        "node-pg-migrate": "5.10.0"
+        "node-pg-migrate": "5.10.0",
+        "pluralize": "8.0.0",
+        "ts-morph": "12.0.0",
+        "ts-node": "10.3.1"
     },
     "eslintConfig": {
         "extends": [
@@ -58,16 +62,19 @@
     "scripts": {
         "build": "react-scripts build",
         "build:migrations": "echo Building src/scripts/migrations && echo Using TypeScript && tsc -v && tsc --project src/scripts/migrations",
+        "clean:generated": "rm -rf src/interfaces/generated",
         "clean:migrations": "rm -rf src/scripts/migrations/dist",
         "eject": "react-scripts eject",
+        "extract-types": "ts-node src/scripts/extract-types.ts",
         "prebuild:migrations": "npm run clean:migrations",
+        "preextract-types": "npm run clean:generated && npm run update-supabase-types",
         "premigrations:create": "npm run build:migrations",
         "premigrations:run": "npm run build:migrations",
         "migrations:create": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env  --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts --quote-escape false create",
         "migrations:run": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations/dist --quote-escape false",
         "start": "react-scripts start",
         "test": "react-scripts test",
-        "update-supabase-types": "source .env && npx openapi-typescript $REACT_APP_SUPABASE_URL/rest/v1/?apikey=$REACT_APP_SUPABASE_ANON_KEY --output src/types/supabase.ts"
+        "update-supabase-types": "source .env && npx openapi-typescript $REACT_APP_SUPABASE_URL/rest/v1/?apikey=$REACT_APP_SUPABASE_ANON_KEY --output src/interfaces/generated/supabase.ts"
     },
     "version": "0.1.0"
 }
