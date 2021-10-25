@@ -1,6 +1,6 @@
+import { definitions } from "generated/supabase";
 import { useCallback } from "react";
 import { useSupabase } from "utils/hooks/supabase/use-supabase";
-import { definitions } from "types/supabase";
 
 const useDatabase = () => {
     const { supabase } = useSupabase();

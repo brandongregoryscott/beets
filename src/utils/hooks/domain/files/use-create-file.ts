@@ -5,8 +5,8 @@ import { useMutation, useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { filesKey, storageProviderFilesKey } from "utils/query-key-utils";
-import { definitions } from "types/supabase";
 import { useDatabase } from "utils/hooks/supabase/use-database";
+import { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
 
 const useCreateFile = (bucketName: BucketName) => {
@@ -21,7 +21,7 @@ const useCreateFile = (bucketName: BucketName) => {
     const toFileEntity = (
         file: File,
         storageProviderFile: StorageProviderFile
-    ): Partial<definitions["files"]> => ({
+    ): Partial<FileEntity> => ({
         bucketid: bucketName,
         name: storageProviderFile.name.replace(/[0-9]+-/, ""), // Strip the generated timestamp off
         path: storageProviderFile.name,

@@ -1,5 +1,5 @@
 import { List, Set, Record as ImmutableRecord, Map } from "immutable";
-import { File } from "types/file";
+import { File } from "generated/interfaces/file";
 import { hash, initializeList, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
 import { BaseRecord } from "models/base-record";

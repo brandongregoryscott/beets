@@ -1,6 +1,6 @@
+import { User } from "generated/interfaces/user";
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
-import { User } from "types/user";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<User>({
