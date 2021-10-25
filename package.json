@@ -37,6 +37,8 @@
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/react": "11.2.7",
         "@testing-library/user-event": "12.8.3",
+        "@types/chalk": "2.2.0",
+        "@types/dotenv": "8.2.0",
         "@types/jest": "26.0.24",
         "@types/lodash": "4.14.172",
         "@types/node": "12.20.19",
@@ -46,7 +48,10 @@
         "@types/react-router-config": "5.0.3",
         "@types/react-router-dom": "5.1.8",
         "@types/uuid": "8.3.1",
+        "chalk": "4.1.2",
+        "dotenv": "10.0.0",
         "node-pg-migrate": "5.10.0",
+        "openapi-typescript": "4.4.0",
         "pluralize": "8.0.0",
         "ts-morph": "12.0.0",
         "ts-node": "10.3.1"
@@ -67,14 +72,13 @@
         "eject": "react-scripts eject",
         "extract-types": "ts-node src/scripts/codegen/extract-types.ts",
         "prebuild:migrations": "npm run clean:migrations",
-        "preextract-types": "npm run clean:generated && npm run update-supabase-types",
+        "preextract-types": "npm run clean:generated",
         "premigrations:create": "npm run build:migrations",
         "premigrations:run": "npm run build:migrations",
         "migrations:create": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env  --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts --quote-escape false create",
         "migrations:run": "source .env && echo Using node-pg-migrate from && which node-pg-migrate && node-pg-migrate --envPath .env --migrations-dir src/scripts/migrations/dist --quote-escape false",
         "start": "react-scripts start",
-        "test": "react-scripts test",
-        "update-supabase-types": "source .env && npx openapi-typescript $REACT_APP_SUPABASE_URL/rest/v1/?apikey=$REACT_APP_SUPABASE_ANON_KEY --output src/interfaces/generated/supabase.ts"
+        "test": "react-scripts test"
     },
     "version": "0.1.0"
 }

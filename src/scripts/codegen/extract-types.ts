@@ -1,17 +1,25 @@
 import { Project, SyntaxKind } from "ts-morph";
 import _ from "lodash";
 import pluralize from "pluralize";
+import openapi from "openapi-typescript";
+import { env } from "../../utils/env";
 
 const basePath = "src/interfaces/generated";
+const project = new Project({
+    tsConfigFilePath: "tsconfig.json",
+});
+
+const createSupabaseTypesFile = async () => {
+    const output = await openapi(
+        `${env.REACT_APP_SUPABASE_URL}/rest/v1/?apikey=${env.REACT_APP_SUPABASE_ANON_KEY}`
+    );
+
+    return project.createSourceFile(`${basePath}/supabase.ts`, output);
+};
 
 const main = async () => {
-    const project = new Project({
-        tsConfigFilePath: "tsconfig.json",
-    });
+    const supabaseFile = await createSupabaseTypesFile();
 
-    const supabaseFile = project.getSourceFileOrThrow(
-        `${basePath}/supabase.ts`
-    );
     const types =
         supabaseFile?.getInterfaceOrThrow("definitions")?.getProperties() ?? [];
 
