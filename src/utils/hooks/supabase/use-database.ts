@@ -1,3 +1,4 @@
+import { Tables } from "generated/enums/tables";
 import { definitions } from "generated/supabase";
 import { useCallback } from "react";
 import { useSupabase } from "utils/hooks/supabase/use-supabase";
@@ -5,7 +6,7 @@ import { useSupabase } from "utils/hooks/supabase/use-supabase";
 const useDatabase = () => {
     const { supabase } = useSupabase();
     const from = useCallback(
-        <TTableName extends keyof definitions>(tableName: TTableName) =>
+        (tableName: Tables) =>
             supabase.from<definitions[typeof tableName]>(tableName),
         [supabase]
     );
