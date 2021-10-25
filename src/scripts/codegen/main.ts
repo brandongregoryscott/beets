@@ -3,6 +3,7 @@ import _ from "lodash";
 import { log } from "./log";
 import { generateInterface } from "./generate-interface";
 import { generateSupabase } from "./generate-supabase";
+import { generateEnum } from "./generate-enum";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -17,6 +18,8 @@ const main = async () => {
         log.error("Found no properties on 'definitions' interface, exiting.");
         process.exit(1);
     }
+
+    generateEnum(project, properties);
 
     properties.forEach((property) => {
         generateInterface(project, property);
