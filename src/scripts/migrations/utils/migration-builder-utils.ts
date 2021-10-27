@@ -76,9 +76,6 @@ interface MigrationBuilderUtilsOptions {
     tableName: Name;
 }
 
-/**
- * @param {PgmUtilsOptions} options
- */
 const configure = (options: MigrationBuilderUtilsOptions) => {
     const { pgm, tableName } = options;
     if (pgm == null) {

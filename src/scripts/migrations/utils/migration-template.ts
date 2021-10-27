@@ -5,13 +5,7 @@ import { auditableColumns } from "./auditable-columns";
 const tableName = "";
 
 const up = (pgm: MigrationBuilder) => {
-    const {
-        uniqueNonDeletedIndex,
-        rowLevelSecurity,
-        authenticatedCreatePolicy,
-        updateOwnRecordPolicy,
-        readOwnRecordPolicy,
-    } = configure({ pgm, tableName });
+    const config = configure({ pgm, tableName });
 };
 
 const down = (pgm: MigrationBuilder) => {};

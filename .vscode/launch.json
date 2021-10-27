@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "script: extract-types",
+            "name": "npm run codegen",
             "request": "launch",
             "runtimeArgs": [
                 "run-script",
-                "extract-types"
+                "codegen"
             ],
             "runtimeExecutable": "npm",
             "skipFiles": [
