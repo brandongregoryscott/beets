@@ -4,568 +4,568 @@
  */
 
 export interface paths {
-  "/": {
-    get: {
-      responses: {
-        /** OK */
-        200: unknown;
-      };
+    "/": {
+        get: {
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
     };
-  };
-  "/files": {
-    get: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.files.createdon"];
-          createdbyid?: parameters["rowFilter.files.createdbyid"];
-          deletedon?: parameters["rowFilter.files.deletedon"];
-          deletedbyid?: parameters["rowFilter.files.deletedbyid"];
-          updatedon?: parameters["rowFilter.files.updatedon"];
-          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
-          id?: parameters["rowFilter.files.id"];
-          bucketid?: parameters["rowFilter.files.bucketid"];
-          description?: parameters["rowFilter.files.description"];
-          name?: parameters["rowFilter.files.name"];
-          path?: parameters["rowFilter.files.path"];
-          size?: parameters["rowFilter.files.size"];
-          type?: parameters["rowFilter.files.type"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
+    "/files": {
+        get: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.files.createdon"];
+                    createdbyid?: parameters["rowFilter.files.createdbyid"];
+                    deletedon?: parameters["rowFilter.files.deletedon"];
+                    deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+                    updatedon?: parameters["rowFilter.files.updatedon"];
+                    updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+                    id?: parameters["rowFilter.files.id"];
+                    bucketid?: parameters["rowFilter.files.bucketid"];
+                    description?: parameters["rowFilter.files.description"];
+                    name?: parameters["rowFilter.files.name"];
+                    path?: parameters["rowFilter.files.path"];
+                    size?: parameters["rowFilter.files.size"];
+                    type?: parameters["rowFilter.files.type"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["files"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
         };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
+        post: {
+            parameters: {
+                body: {
+                    /** files */
+                    files?: definitions["files"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
         };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["files"][];
+        delete: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.files.createdon"];
+                    createdbyid?: parameters["rowFilter.files.createdbyid"];
+                    deletedon?: parameters["rowFilter.files.deletedon"];
+                    deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+                    updatedon?: parameters["rowFilter.files.updatedon"];
+                    updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+                    id?: parameters["rowFilter.files.id"];
+                    bucketid?: parameters["rowFilter.files.bucketid"];
+                    description?: parameters["rowFilter.files.description"];
+                    name?: parameters["rowFilter.files.name"];
+                    path?: parameters["rowFilter.files.path"];
+                    size?: parameters["rowFilter.files.size"];
+                    type?: parameters["rowFilter.files.type"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
         };
-        /** Partial Content */
-        206: unknown;
-      };
+        patch: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.files.createdon"];
+                    createdbyid?: parameters["rowFilter.files.createdbyid"];
+                    deletedon?: parameters["rowFilter.files.deletedon"];
+                    deletedbyid?: parameters["rowFilter.files.deletedbyid"];
+                    updatedon?: parameters["rowFilter.files.updatedon"];
+                    updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+                    id?: parameters["rowFilter.files.id"];
+                    bucketid?: parameters["rowFilter.files.bucketid"];
+                    description?: parameters["rowFilter.files.description"];
+                    name?: parameters["rowFilter.files.name"];
+                    path?: parameters["rowFilter.files.path"];
+                    size?: parameters["rowFilter.files.size"];
+                    type?: parameters["rowFilter.files.type"];
+                };
+                body: {
+                    /** files */
+                    files?: definitions["files"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
     };
-    post: {
-      parameters: {
-        body: {
-          /** files */
-          files?: definitions["files"];
+    "/pgmigrations": {
+        get: {
+            parameters: {
+                query: {
+                    id?: parameters["rowFilter.pgmigrations.id"];
+                    name?: parameters["rowFilter.pgmigrations.name"];
+                    run_on?: parameters["rowFilter.pgmigrations.run_on"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["pgmigrations"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
         };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
+        post: {
+            parameters: {
+                body: {
+                    /** pgmigrations */
+                    pgmigrations?: definitions["pgmigrations"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
         };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
+        delete: {
+            parameters: {
+                query: {
+                    id?: parameters["rowFilter.pgmigrations.id"];
+                    name?: parameters["rowFilter.pgmigrations.name"];
+                    run_on?: parameters["rowFilter.pgmigrations.run_on"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
         };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
+        patch: {
+            parameters: {
+                query: {
+                    id?: parameters["rowFilter.pgmigrations.id"];
+                    name?: parameters["rowFilter.pgmigrations.name"];
+                    run_on?: parameters["rowFilter.pgmigrations.run_on"];
+                };
+                body: {
+                    /** pgmigrations */
+                    pgmigrations?: definitions["pgmigrations"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
     };
-    delete: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.files.createdon"];
-          createdbyid?: parameters["rowFilter.files.createdbyid"];
-          deletedon?: parameters["rowFilter.files.deletedon"];
-          deletedbyid?: parameters["rowFilter.files.deletedbyid"];
-          updatedon?: parameters["rowFilter.files.updatedon"];
-          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
-          id?: parameters["rowFilter.files.id"];
-          bucketid?: parameters["rowFilter.files.bucketid"];
-          description?: parameters["rowFilter.files.description"];
-          name?: parameters["rowFilter.files.name"];
-          path?: parameters["rowFilter.files.path"];
-          size?: parameters["rowFilter.files.size"];
-          type?: parameters["rowFilter.files.type"];
+    "/projects": {
+        get: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.projects.createdon"];
+                    createdbyid?: parameters["rowFilter.projects.createdbyid"];
+                    deletedon?: parameters["rowFilter.projects.deletedon"];
+                    deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
+                    updatedon?: parameters["rowFilter.projects.updatedon"];
+                    updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+                    id?: parameters["rowFilter.projects.id"];
+                    name?: parameters["rowFilter.projects.name"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["projects"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
         };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
+        post: {
+            parameters: {
+                body: {
+                    /** projects */
+                    projects?: definitions["projects"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
         };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
+        delete: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.projects.createdon"];
+                    createdbyid?: parameters["rowFilter.projects.createdbyid"];
+                    deletedon?: parameters["rowFilter.projects.deletedon"];
+                    deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
+                    updatedon?: parameters["rowFilter.projects.updatedon"];
+                    updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+                    id?: parameters["rowFilter.projects.id"];
+                    name?: parameters["rowFilter.projects.name"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+        patch: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.projects.createdon"];
+                    createdbyid?: parameters["rowFilter.projects.createdbyid"];
+                    deletedon?: parameters["rowFilter.projects.deletedon"];
+                    deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
+                    updatedon?: parameters["rowFilter.projects.updatedon"];
+                    updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+                    id?: parameters["rowFilter.projects.id"];
+                    name?: parameters["rowFilter.projects.name"];
+                };
+                body: {
+                    /** projects */
+                    projects?: definitions["projects"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
     };
-    patch: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.files.createdon"];
-          createdbyid?: parameters["rowFilter.files.createdbyid"];
-          deletedon?: parameters["rowFilter.files.deletedon"];
-          deletedbyid?: parameters["rowFilter.files.deletedbyid"];
-          updatedon?: parameters["rowFilter.files.updatedon"];
-          updatedbyid?: parameters["rowFilter.files.updatedbyid"];
-          id?: parameters["rowFilter.files.id"];
-          bucketid?: parameters["rowFilter.files.bucketid"];
-          description?: parameters["rowFilter.files.description"];
-          name?: parameters["rowFilter.files.name"];
-          path?: parameters["rowFilter.files.path"];
-          size?: parameters["rowFilter.files.size"];
-          type?: parameters["rowFilter.files.type"];
+    "/users": {
+        get: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.users.createdon"];
+                    createdbyid?: parameters["rowFilter.users.createdbyid"];
+                    deletedon?: parameters["rowFilter.users.deletedon"];
+                    deletedbyid?: parameters["rowFilter.users.deletedbyid"];
+                    updatedon?: parameters["rowFilter.users.updatedon"];
+                    updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+                    id?: parameters["rowFilter.users.id"];
+                    email?: parameters["rowFilter.users.email"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["users"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
         };
-        body: {
-          /** files */
-          files?: definitions["files"];
+        post: {
+            parameters: {
+                body: {
+                    /** users */
+                    users?: definitions["users"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
         };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
+        delete: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.users.createdon"];
+                    createdbyid?: parameters["rowFilter.users.createdbyid"];
+                    deletedon?: parameters["rowFilter.users.deletedon"];
+                    deletedbyid?: parameters["rowFilter.users.deletedbyid"];
+                    updatedon?: parameters["rowFilter.users.updatedon"];
+                    updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+                    id?: parameters["rowFilter.users.id"];
+                    email?: parameters["rowFilter.users.email"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
         };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
+        patch: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.users.createdon"];
+                    createdbyid?: parameters["rowFilter.users.createdbyid"];
+                    deletedon?: parameters["rowFilter.users.deletedon"];
+                    deletedbyid?: parameters["rowFilter.users.deletedbyid"];
+                    updatedon?: parameters["rowFilter.users.updatedon"];
+                    updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+                    id?: parameters["rowFilter.users.id"];
+                    email?: parameters["rowFilter.users.email"];
+                };
+                body: {
+                    /** users */
+                    users?: definitions["users"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
     };
-  };
-  "/pgmigrations": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.pgmigrations.id"];
-          name?: parameters["rowFilter.pgmigrations.name"];
-          run_on?: parameters["rowFilter.pgmigrations.run_on"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["pgmigrations"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** pgmigrations */
-          pgmigrations?: definitions["pgmigrations"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.pgmigrations.id"];
-          name?: parameters["rowFilter.pgmigrations.name"];
-          run_on?: parameters["rowFilter.pgmigrations.run_on"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.pgmigrations.id"];
-          name?: parameters["rowFilter.pgmigrations.name"];
-          run_on?: parameters["rowFilter.pgmigrations.run_on"];
-        };
-        body: {
-          /** pgmigrations */
-          pgmigrations?: definitions["pgmigrations"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
-  "/projects": {
-    get: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.projects.createdon"];
-          createdbyid?: parameters["rowFilter.projects.createdbyid"];
-          deletedon?: parameters["rowFilter.projects.deletedon"];
-          deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
-          updatedon?: parameters["rowFilter.projects.updatedon"];
-          updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
-          id?: parameters["rowFilter.projects.id"];
-          name?: parameters["rowFilter.projects.name"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["projects"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** projects */
-          projects?: definitions["projects"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.projects.createdon"];
-          createdbyid?: parameters["rowFilter.projects.createdbyid"];
-          deletedon?: parameters["rowFilter.projects.deletedon"];
-          deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
-          updatedon?: parameters["rowFilter.projects.updatedon"];
-          updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
-          id?: parameters["rowFilter.projects.id"];
-          name?: parameters["rowFilter.projects.name"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.projects.createdon"];
-          createdbyid?: parameters["rowFilter.projects.createdbyid"];
-          deletedon?: parameters["rowFilter.projects.deletedon"];
-          deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
-          updatedon?: parameters["rowFilter.projects.updatedon"];
-          updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
-          id?: parameters["rowFilter.projects.id"];
-          name?: parameters["rowFilter.projects.name"];
-        };
-        body: {
-          /** projects */
-          projects?: definitions["projects"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
-  "/users": {
-    get: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.users.createdon"];
-          createdbyid?: parameters["rowFilter.users.createdbyid"];
-          deletedon?: parameters["rowFilter.users.deletedon"];
-          deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-          updatedon?: parameters["rowFilter.users.updatedon"];
-          updatedbyid?: parameters["rowFilter.users.updatedbyid"];
-          id?: parameters["rowFilter.users.id"];
-          email?: parameters["rowFilter.users.email"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["users"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** users */
-          users?: definitions["users"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.users.createdon"];
-          createdbyid?: parameters["rowFilter.users.createdbyid"];
-          deletedon?: parameters["rowFilter.users.deletedon"];
-          deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-          updatedon?: parameters["rowFilter.users.updatedon"];
-          updatedbyid?: parameters["rowFilter.users.updatedbyid"];
-          id?: parameters["rowFilter.users.id"];
-          email?: parameters["rowFilter.users.email"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          createdon?: parameters["rowFilter.users.createdon"];
-          createdbyid?: parameters["rowFilter.users.createdbyid"];
-          deletedon?: parameters["rowFilter.users.deletedon"];
-          deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-          updatedon?: parameters["rowFilter.users.updatedon"];
-          updatedbyid?: parameters["rowFilter.users.updatedbyid"];
-          id?: parameters["rowFilter.users.id"];
-          email?: parameters["rowFilter.users.email"];
-        };
-        body: {
-          /** users */
-          users?: definitions["users"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
 }
 
 export interface definitions {
-  files: {
-    createdon?: string;
-    createdbyid?: string;
-    deletedon?: string;
-    deletedbyid?: string;
-    updatedon?: string;
-    updatedbyid?: string;
-    id: string;
-    /**
-     * Note:
-     * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
-     */
-    bucketid: string;
-    description?: string;
-    name: string;
-    path: string;
-    size?: number;
-    type: string;
-  };
-  pgmigrations: {
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    name: string;
-    run_on: string;
-  };
-  projects: {
-    createdon?: string;
-    createdbyid?: string;
-    deletedon?: string;
-    deletedbyid?: string;
-    updatedon?: string;
-    updatedbyid?: string;
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: string;
-    name: string;
-  };
-  users: {
-    createdon?: string;
-    createdbyid?: string;
-    deletedon?: string;
-    deletedbyid?: string;
-    updatedon?: string;
-    updatedbyid?: string;
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: string;
-    email: string;
-  };
+    files: {
+        createdon?: string;
+        createdbyid?: string;
+        deletedon?: string;
+        deletedbyid?: string;
+        updatedon?: string;
+        updatedbyid?: string;
+        id: string;
+        /**
+         * Note:
+         * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
+         */
+        bucketid: string;
+        description?: string;
+        name: string;
+        path: string;
+        size?: number;
+        type: string;
+    };
+    pgmigrations: {
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
+        id: number;
+        name: string;
+        run_on: string;
+    };
+    projects: {
+        createdon?: string;
+        createdbyid?: string;
+        deletedon?: string;
+        deletedbyid?: string;
+        updatedon?: string;
+        updatedbyid?: string;
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
+        id: string;
+        name: string;
+    };
+    users: {
+        createdon?: string;
+        createdbyid?: string;
+        deletedon?: string;
+        deletedbyid?: string;
+        updatedon?: string;
+        updatedbyid?: string;
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
+        id: string;
+        email: string;
+    };
 }
 
 export interface parameters {
-  /** Preference */
-  preferParams: "params=single-object";
-  /** Preference */
-  preferReturn: "return=representation" | "return=minimal" | "return=none";
-  /** Preference */
-  preferCount: "count=none";
-  /** Filtering Columns */
-  select: string;
-  /** On Conflict */
-  on_conflict: string;
-  /** Ordering */
-  order: string;
-  /** Limiting and Pagination */
-  range: string;
-  /** Limiting and Pagination */
-  rangeUnit: string;
-  /** Limiting and Pagination */
-  offset: string;
-  /** Limiting and Pagination */
-  limit: string;
-  /** files */
-  "body.files": definitions["files"];
-  "rowFilter.files.createdon": string;
-  "rowFilter.files.createdbyid": string;
-  "rowFilter.files.deletedon": string;
-  "rowFilter.files.deletedbyid": string;
-  "rowFilter.files.updatedon": string;
-  "rowFilter.files.updatedbyid": string;
-  "rowFilter.files.id": string;
-  "rowFilter.files.bucketid": string;
-  "rowFilter.files.description": string;
-  "rowFilter.files.name": string;
-  "rowFilter.files.path": string;
-  "rowFilter.files.size": string;
-  "rowFilter.files.type": string;
-  /** pgmigrations */
-  "body.pgmigrations": definitions["pgmigrations"];
-  "rowFilter.pgmigrations.id": string;
-  "rowFilter.pgmigrations.name": string;
-  "rowFilter.pgmigrations.run_on": string;
-  /** projects */
-  "body.projects": definitions["projects"];
-  "rowFilter.projects.createdon": string;
-  "rowFilter.projects.createdbyid": string;
-  "rowFilter.projects.deletedon": string;
-  "rowFilter.projects.deletedbyid": string;
-  "rowFilter.projects.updatedon": string;
-  "rowFilter.projects.updatedbyid": string;
-  "rowFilter.projects.id": string;
-  "rowFilter.projects.name": string;
-  /** users */
-  "body.users": definitions["users"];
-  "rowFilter.users.createdon": string;
-  "rowFilter.users.createdbyid": string;
-  "rowFilter.users.deletedon": string;
-  "rowFilter.users.deletedbyid": string;
-  "rowFilter.users.updatedon": string;
-  "rowFilter.users.updatedbyid": string;
-  "rowFilter.users.id": string;
-  "rowFilter.users.email": string;
+    /** Preference */
+    preferParams: "params=single-object";
+    /** Preference */
+    preferReturn: "return=representation" | "return=minimal" | "return=none";
+    /** Preference */
+    preferCount: "count=none";
+    /** Filtering Columns */
+    select: string;
+    /** On Conflict */
+    on_conflict: string;
+    /** Ordering */
+    order: string;
+    /** Limiting and Pagination */
+    range: string;
+    /** Limiting and Pagination */
+    rangeUnit: string;
+    /** Limiting and Pagination */
+    offset: string;
+    /** Limiting and Pagination */
+    limit: string;
+    /** files */
+    "body.files": definitions["files"];
+    "rowFilter.files.createdon": string;
+    "rowFilter.files.createdbyid": string;
+    "rowFilter.files.deletedon": string;
+    "rowFilter.files.deletedbyid": string;
+    "rowFilter.files.updatedon": string;
+    "rowFilter.files.updatedbyid": string;
+    "rowFilter.files.id": string;
+    "rowFilter.files.bucketid": string;
+    "rowFilter.files.description": string;
+    "rowFilter.files.name": string;
+    "rowFilter.files.path": string;
+    "rowFilter.files.size": string;
+    "rowFilter.files.type": string;
+    /** pgmigrations */
+    "body.pgmigrations": definitions["pgmigrations"];
+    "rowFilter.pgmigrations.id": string;
+    "rowFilter.pgmigrations.name": string;
+    "rowFilter.pgmigrations.run_on": string;
+    /** projects */
+    "body.projects": definitions["projects"];
+    "rowFilter.projects.createdon": string;
+    "rowFilter.projects.createdbyid": string;
+    "rowFilter.projects.deletedon": string;
+    "rowFilter.projects.deletedbyid": string;
+    "rowFilter.projects.updatedon": string;
+    "rowFilter.projects.updatedbyid": string;
+    "rowFilter.projects.id": string;
+    "rowFilter.projects.name": string;
+    /** users */
+    "body.users": definitions["users"];
+    "rowFilter.users.createdon": string;
+    "rowFilter.users.createdbyid": string;
+    "rowFilter.users.deletedon": string;
+    "rowFilter.users.deletedbyid": string;
+    "rowFilter.users.updatedon": string;
+    "rowFilter.users.updatedbyid": string;
+    "rowFilter.users.id": string;
+    "rowFilter.users.email": string;
 }
 
 export interface operations {}

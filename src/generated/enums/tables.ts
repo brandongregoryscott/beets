@@ -2,7 +2,7 @@ enum Tables {
     Files = "files",
     Pgmigrations = "pgmigrations",
     Projects = "projects",
-    Users = "users"
+    Users = "users",
 }
 
 export { Tables };

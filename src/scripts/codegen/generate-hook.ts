@@ -1,11 +1,6 @@
 import _ from "lodash";
-import {
-    Project,
-    PropertySignature,
-    VariableDeclarationKind,
-    VariableStatement,
-} from "ts-morph";
-import { BASE_PATH } from "./constants";
+import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
+import { BASE_IMPORT_PATH, BASE_PATH } from "./constants";
 import { log } from "./log";
 import { getInterfaceName, getInterfaceImportPath } from "./utils";
 
@@ -36,12 +31,17 @@ const generateHook = (project: Project, properties: PropertySignature[]) => {
         moduleSpecifier: "utils/hooks/supabase/use-supabase",
     });
 
-    const useDatabase = file.addVariableStatement({
+    file.addImportDeclaration({
+        namedImports: ["Tables"],
+        moduleSpecifier: `${BASE_IMPORT_PATH}/enums/tables`,
+    });
+
+    file.addVariableStatement({
         declarationKind: VariableDeclarationKind.Const,
         declarations: [
             {
                 name: "useDatabase",
-                initializer: useDatabaseInitializer,
+                initializer: useDatabaseInitializer(properties),
             },
         ],
     });
@@ -51,12 +51,27 @@ const generateHook = (project: Project, properties: PropertySignature[]) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useDatabaseInitializer = `() => {
-    useCallback(
-        (tableName: Tables) =>
-            supabase.from<definitions[typeof tableName]>(tableName),
-        [supabase]
-    )
+const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
+    const { supabase } = useSupabase();
+
+    ${properties.map((property) => {
+        const interfaceName = getInterfaceName(property);
+        return `
+        const ${getFromFunctionName(property)} = useCallback(() =>
+            supabase.from<${interfaceName}>(Tables.${getTableName(property)}),
+            [supabase]
+        )
+
+        `;
+    })}
+
+    return { ${properties.map(getFromFunctionName).join(", ")} };
 }`;
+
+const getFromFunctionName = (property: PropertySignature): string =>
+    `from${getTableName(property)}`;
+
+const getTableName = (property: PropertySignature): string =>
+    _.capitalize(property.getName());
 
 export { generateHook };
