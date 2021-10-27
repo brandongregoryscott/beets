@@ -54,16 +54,18 @@ const generateHook = (project: Project, properties: PropertySignature[]) => {
 const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
     const { supabase } = useSupabase();
 
-    ${properties.map((property) => {
-        const interfaceName = getInterfaceName(property);
-        return `
-        const ${getFromFunctionName(property)} = useCallback(() =>
-            supabase.from<${interfaceName}>(Tables.${getTableName(property)}),
-            [supabase]
-        )
+    ${properties.map(
+        (property) =>
+            `
+    const ${getFromFunctionName(property)} = useCallback(() =>
+        supabase.from<${getInterfaceName(property)}>(Tables.${getTableName(
+                property
+            )}),
+        [supabase]
+    )
 
-        `;
-    })}
+    `
+    )}
 
     return { ${properties.map(getFromFunctionName).join(", ")} };
 }`;

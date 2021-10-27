@@ -1,9 +1,8 @@
 import { FileRecord } from "models/file-record";
-import { useDatabase } from "utils/hooks/supabase/use-database";
 import { filesKey } from "utils/query-key-utils";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { useQueryClient } from "react-query";
-import { Tables } from "generated/enums/tables";
+import { useDatabase } from "generated/hooks/use-database";
 
 interface UseUpdateFilesOptions {
     onSettled?: () => void;
@@ -13,11 +12,10 @@ const useUpdateFile = (
     options?: UseUpdateFilesOptions
 ): UseMutationResult<FileRecord, Error, FileRecord> => {
     const queryClient = useQueryClient();
-    const { from } = useDatabase();
-    const fileTable = from(Tables.Files);
+    const { fromFiles } = useDatabase();
 
     const updateFile = async (file: FileRecord) => {
-        const { error: updateError, data: updatedFile } = await fileTable
+        const { error: updateError, data: updatedFile } = await fromFiles()
             .update(file.toPOJO())
             .eq("id", file.id)
             .single();

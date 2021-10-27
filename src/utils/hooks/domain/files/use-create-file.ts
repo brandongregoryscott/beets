@@ -5,18 +5,16 @@ import { useMutation, useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { filesKey, storageProviderFilesKey } from "utils/query-key-utils";
-import { useDatabase } from "utils/hooks/supabase/use-database";
 import { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
-import { Tables } from "generated/enums/tables";
+import { useDatabase } from "generated/hooks/use-database";
 
 const useCreateFile = (bucketName: BucketName) => {
     const { globalState } = useGlobalState();
     const userId = globalState.userId();
     const { from: fromBucket } = useStorageProvider();
-    const { from: fromTable } = useDatabase();
+    const { fromFiles } = useDatabase();
     const queryClient = useQueryClient();
-    const fileTable = fromTable(Tables.Files);
     const bucket = fromBucket(bucketName);
 
     const toFileEntity = (
@@ -64,7 +62,7 @@ const useCreateFile = (bucketName: BucketName) => {
         }
 
         const { data: fileEntity, error: fileEntityError } =
-            await fileTable.insert(toFileEntity(file, storageProviderFile));
+            await fromFiles().insert(toFileEntity(file, storageProviderFile));
 
         if (fileEntityError != null) {
             throw fileEntityError;

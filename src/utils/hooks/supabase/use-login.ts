@@ -1,19 +1,16 @@
 import { UserCredentials } from "interfaces/user-credentials";
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
-import { useDatabase } from "utils/hooks/supabase/use-database";
 import { UserRecord } from "models/user-record";
 import { ErrorMessages } from "constants/error-messages";
-import { Tables } from "generated/enums/tables";
+import { useDatabase } from "generated/hooks/use-database";
 
 const useLogin = () => {
     const auth = useAuth();
-    const { from } = useDatabase();
+    const { fromUsers } = useDatabase();
 
     const result = useMutation<UserRecord, Error, UserCredentials>({
         fn: async (credentials: UserCredentials) => {
-            const userTable = from(Tables.Users);
-
             const { email, password, redirectTo } = credentials;
             const loginResult = await auth.signIn(
                 { email, password },
@@ -33,7 +30,7 @@ const useLogin = () => {
                 throw loginError;
             }
 
-            const existingUserResult = await userTable
+            const existingUserResult = await fromUsers()
                 .select("*")
                 .eq("id", supabaseUser?.id)
                 .limit(1)
@@ -45,7 +42,7 @@ const useLogin = () => {
                 return new UserRecord(existingUser);
             }
 
-            const createUserResult = await userTable.insert({
+            const createUserResult = await fromUsers().insert({
                 id: supabaseUser?.id,
                 email: supabaseUser?.email,
             });

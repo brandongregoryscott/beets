@@ -1,21 +1,19 @@
 import { FileRecord } from "models/file-record";
-import { useDatabase } from "utils/hooks/supabase/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { filesKey } from "utils/query-key-utils";
 import { File } from "generated/interfaces/file";
-import { Tables } from "generated/enums/tables";
+import { useDatabase } from "generated/hooks/use-database";
 
 interface UseListFilesOptions {}
 
 const useListFiles = (
     options?: UseListFilesOptions
 ): UseQueryResult<FileRecord[], Error> => {
-    const { from } = useDatabase();
-    const fileTable = from(Tables.Files);
+    const { fromFiles } = useDatabase();
     const listQuery = useQuery<FileRecord[], Error>({
         key: filesKey(),
         fn: async () => {
-            const result = await fileTable.select("*");
+            const result = await fromFiles().select("*");
             const { data, error } = result;
             if (error != null) {
                 throw error;
