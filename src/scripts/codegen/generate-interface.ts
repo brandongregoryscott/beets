@@ -1,15 +1,13 @@
 import _ from "lodash";
-import pluralize from "pluralize";
 import { Project, PropertySignature, SyntaxKind } from "ts-morph";
-import { BASE_PATH } from "./constants";
 import { log } from "./log";
+import { getInterfaceName, getInterfacePath } from "./utils";
 
 const generateInterface = (project: Project, property: PropertySignature) => {
-    const name = _.capitalize(pluralize(property.getName(), 1));
-    const filename = `${name.toLowerCase()}.ts`;
+    const name = getInterfaceName(property);
 
     const file = project.createSourceFile(
-        `${BASE_PATH}/interfaces/${filename}`,
+        getInterfacePath(property),
         undefined,
         { overwrite: true }
     );

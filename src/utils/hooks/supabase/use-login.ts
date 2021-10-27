@@ -4,6 +4,7 @@ import { useMutation } from "utils/hooks/use-mutation";
 import { useDatabase } from "utils/hooks/supabase/use-database";
 import { UserRecord } from "models/user-record";
 import { ErrorMessages } from "constants/error-messages";
+import { Tables } from "generated/enums/tables";
 
 const useLogin = () => {
     const auth = useAuth();
@@ -11,7 +12,7 @@ const useLogin = () => {
 
     const result = useMutation<UserRecord, Error, UserCredentials>({
         fn: async (credentials: UserCredentials) => {
-            const userTable = from("users");
+            const userTable = from(Tables.Users);
 
             const { email, password, redirectTo } = credentials;
             const loginResult = await auth.signIn(

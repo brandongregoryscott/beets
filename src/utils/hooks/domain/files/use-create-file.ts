@@ -8,6 +8,7 @@ import { filesKey, storageProviderFilesKey } from "utils/query-key-utils";
 import { useDatabase } from "utils/hooks/supabase/use-database";
 import { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
+import { Tables } from "generated/enums/tables";
 
 const useCreateFile = (bucketName: BucketName) => {
     const { globalState } = useGlobalState();
@@ -15,7 +16,7 @@ const useCreateFile = (bucketName: BucketName) => {
     const { from: fromBucket } = useStorageProvider();
     const { from: fromTable } = useDatabase();
     const queryClient = useQueryClient();
-    const fileTable = fromTable("files");
+    const fileTable = fromTable(Tables.Files);
     const bucket = fromBucket(bucketName);
 
     const toFileEntity = (

@@ -1,3 +1,4 @@
+import { Tables } from "generated/enums/tables";
 import { UserRecord } from "models/user-record";
 import { useDatabase } from "utils/hooks/supabase/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
@@ -6,7 +7,7 @@ const useGetUser = (
     id?: string
 ): UseQueryResult<UserRecord | undefined, Error> => {
     const { from } = useDatabase();
-    const userTable = from("users");
+    const userTable = from(Tables.Users);
 
     const result = useQuery<UserRecord | undefined, Error>({
         enabled: id != null,
