@@ -5,23 +5,22 @@ import { useMutation, useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { filesKey, storageProviderFilesKey } from "utils/query-key-utils";
-import { definitions } from "types/supabase";
-import { useDatabase } from "utils/hooks/supabase/use-database";
+import { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
+import { useDatabase } from "generated/hooks/use-database";
 
 const useCreateFile = (bucketName: BucketName) => {
     const { globalState } = useGlobalState();
     const userId = globalState.userId();
     const { from: fromBucket } = useStorageProvider();
-    const { from: fromTable } = useDatabase();
+    const { fromFiles } = useDatabase();
     const queryClient = useQueryClient();
-    const fileTable = fromTable("files");
     const bucket = fromBucket(bucketName);
 
     const toFileEntity = (
         file: File,
         storageProviderFile: StorageProviderFile
-    ): Partial<definitions["files"]> => ({
+    ): Partial<FileEntity> => ({
         bucketid: bucketName,
         name: storageProviderFile.name.replace(/[0-9]+-/, ""), // Strip the generated timestamp off
         path: storageProviderFile.name,
@@ -63,7 +62,7 @@ const useCreateFile = (bucketName: BucketName) => {
         }
 
         const { data: fileEntity, error: fileEntityError } =
-            await fileTable.insert(toFileEntity(file, storageProviderFile));
+            await fromFiles().insert(toFileEntity(file, storageProviderFile));
 
         if (fileEntityError != null) {
             throw fileEntityError;

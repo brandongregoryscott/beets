@@ -1,3 +1,5 @@
+import { MigrationBuilder } from "node-pg-migrate";
+
 const auditableColumns = {
     createdon: "createdon",
     createdbyid: "createdbyid",
@@ -7,10 +9,7 @@ const auditableColumns = {
     updatedbyid: "updatedbyid",
 };
 
-/**
- * @param {import("node-pg-migrate").MigrationBuilder} pgm
- */
-const makeAuditableColumns = (pgm) => ({
+const makeAuditableColumns = (pgm: MigrationBuilder) => ({
     [auditableColumns.createdon]: {
         type: "timestamptz",
         default: pgm.func("current_timestamp"),
@@ -37,7 +36,4 @@ const makeAuditableColumns = (pgm) => ({
     },
 });
 
-module.exports = {
-    auditableColumns,
-    makeAuditableColumns,
-};
+export { auditableColumns, makeAuditableColumns };

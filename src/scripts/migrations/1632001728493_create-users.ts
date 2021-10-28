@@ -1,11 +1,9 @@
-const { configure } = require("./utils/pgm-utils");
-const { makeAuditableColumns } = require("./utils/auditable-columns");
-const { tables } = require("./utils/tables");
+import { MigrationBuilder } from "node-pg-migrate";
+import { makeAuditableColumns } from "./utils/auditable-columns";
+import { configure } from "./utils/migration-builder-utils";
+import { tables } from "./utils/tables";
 
-/**
- * @param {import("node-pg-migrate").MigrationBuilder} pgm
- */
-module.exports.up = (pgm) => {
+const up = (pgm: MigrationBuilder) => {
     const {
         authenticatedCreatePolicy,
         readAnyRecordPolicy,
@@ -39,9 +37,8 @@ module.exports.up = (pgm) => {
     readAnyRecordPolicy();
 };
 
-/**
- * @param {import("node-pg-migrate").MigrationBuilder} pgm
- */
-module.exports.down = (pgm) => {
+const down = (pgm: MigrationBuilder) => {
     pgm.dropTable(tables.users);
 };
+
+export { down, up };

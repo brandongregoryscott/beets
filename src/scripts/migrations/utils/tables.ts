@@ -1,6 +1,7 @@
 const tables = {
     files: "files",
+    projects: "projects",
     users: "users",
 };
 
-module.exports = { tables };
+export { tables };

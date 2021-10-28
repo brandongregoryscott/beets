@@ -1,18 +1,17 @@
 import { FileRecord } from "models/file-record";
-import { useDatabase } from "utils/hooks/supabase/use-database";
 import { storageProviderFilesKey, filesKey } from "utils/query-key-utils";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { useQueryClient } from "react-query";
+import { useDatabase } from "generated/hooks/use-database";
 
 const useDeleteFile = (): UseMutationResult<void, Error, string> => {
     const queryClient = useQueryClient();
     const { storage } = useStorageProvider();
-    const { from } = useDatabase();
-    const fileTable = from("files");
+    const { fromFiles } = useDatabase();
 
     const deleteFile = async (id: string) => {
-        const fileResult = await fileTable.select("*").eq("id", id).single();
+        const fileResult = await fromFiles().select("*").eq("id", id).single();
         const { data, error } = fileResult;
         if (error != null) {
             throw error;
@@ -24,7 +23,7 @@ const useDeleteFile = (): UseMutationResult<void, Error, string> => {
 
         const file = new FileRecord(data);
 
-        const { error: deletionError } = await fileTable
+        const { error: deletionError } = await fromFiles()
             .delete()
             .eq("id", file.id);
 

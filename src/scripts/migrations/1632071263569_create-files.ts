@@ -1,11 +1,9 @@
-const { configure } = require("./utils/pgm-utils");
-const { makeAuditableColumns } = require("./utils/auditable-columns");
-const { tables } = require("./utils/tables");
+import { MigrationBuilder } from "node-pg-migrate";
+import { makeAuditableColumns } from "./utils/auditable-columns";
+import { configure } from "./utils/migration-builder-utils";
+import { tables } from "./utils/tables";
 
-/**
- * @param {import("node-pg-migrate").MigrationBuilder} pgm
- */
-const up = (pgm) => {
+const up = (pgm: MigrationBuilder) => {
     const {
         deleteOwnRecordPolicy,
         softDeleteRule,
@@ -59,14 +57,8 @@ const up = (pgm) => {
     readOwnRecordPolicy();
 };
 
-/**
- * @param {import("node-pg-migrate").MigrationBuilder} pgm
- */
-const down = (pgm) => {
+const down = (pgm: MigrationBuilder) => {
     pgm.dropTable(tables.files);
 };
 
-module.exports = {
-    up,
-    down,
-};
+export { up, down };
