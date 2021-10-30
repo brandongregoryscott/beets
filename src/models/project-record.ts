@@ -2,6 +2,7 @@ import { Record as ImmutableRecord } from "immutable";
 import { makeDefaultValues } from "utils/core-utils";
 import { BaseRecord } from "models/base-record";
 import { Project } from "generated/interfaces/project";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<Project>({
     createdbyid: undefined,
@@ -15,7 +16,7 @@ const defaultValues = makeDefaultValues<Project>({
 });
 
 class ProjectRecord
-    extends BaseRecord(ImmutableRecord(defaultValues))
+    extends AuditableRecord(BaseRecord(ImmutableRecord(defaultValues)))
     implements Project {}
 
 export { ProjectRecord };
