@@ -1,6 +1,7 @@
-import { Dialog, DialogProps, Table } from "evergreen-ui";
+import { Dialog, DialogProps, Spinner, Table } from "evergreen-ui";
 import { ProjectRecord } from "models/project-record";
 import { useCallback, useState } from "react";
+import { formatUpdatedOn } from "utils/date-utils";
 import { useListProjects } from "utils/hooks/domain/projects/use-list-projects";
 
 interface OpenProjectDialogProps
@@ -34,18 +35,23 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                     <Table.TextHeaderCell>Name</Table.TextHeaderCell>
                     <Table.TextHeaderCell>Updated On</Table.TextHeaderCell>
                 </Table.Head>
-                {projects?.map((project) => (
-                    <Table.Row
-                        isSelectable={true}
-                        isSelected={selected === project}
-                        onDeselect={handleDeselect}
-                        onSelect={() => setSelected(project)}>
-                        <Table.TextCell>{project.name}</Table.TextCell>
-                        <Table.TextCell>
-                            {project.getUpdatedOn()}
-                        </Table.TextCell>
-                    </Table.Row>
-                ))}
+                {isLoading && <Spinner />}
+                {!isLoading && (
+                    <Table.Body>
+                        {projects?.map((project) => (
+                            <Table.Row
+                                isSelectable={true}
+                                isSelected={selected === project}
+                                onDeselect={handleDeselect}
+                                onSelect={() => setSelected(project)}>
+                                <Table.TextCell>{project.name}</Table.TextCell>
+                                <Table.TextCell>
+                                    {formatUpdatedOn(project.getUpdatedOn())}
+                                </Table.TextCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                )}
             </Table>
         </Dialog>
     );

@@ -1,4 +1,11 @@
-import { Alert, Dialog, DialogProps, TextInputField } from "evergreen-ui";
+import {
+    Alert,
+    Dialog,
+    DialogProps,
+    TextInputField,
+    toaster,
+} from "evergreen-ui";
+import { Project } from "generated/interfaces/project";
 import { ProjectRecord } from "models/project-record";
 import React, { useState } from "react";
 import { useInput } from "rooks";
@@ -21,9 +28,15 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     const [validationMessage, setValidationMessage] = useState<
         string | undefined
     >(undefined);
+
+    const handleSuccess = (project: Project) => {
+        toaster.success(`Successfully created Project '${project.name}'`);
+        onCloseComplete?.();
+    };
+
     const { mutate, isLoading } = useCreateProject({
         onError: setError,
-        onSuccess: onCloseComplete,
+        onSuccess: handleSuccess,
     });
 
     const validate = (): boolean => {
