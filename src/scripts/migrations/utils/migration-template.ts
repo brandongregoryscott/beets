@@ -1,6 +1,6 @@
 import { MigrationBuilder } from "node-pg-migrate";
-import { configure } from "./migration-builder-utils";
-import { auditableColumns } from "./auditable-columns";
+import { configure } from "./utils/migration-builder-utils";
+import { auditableColumns } from "./utils/auditable-columns";
 
 const tableName = "";
 

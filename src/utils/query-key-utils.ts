@@ -1,7 +1,9 @@
 import { QueryKey } from "react-query";
 
-const storageProviderFilesKey = (): QueryKey => "storageProviderFiles";
-
 const filesKey = (): QueryKey => "files";
 
-export { filesKey, storageProviderFilesKey };
+const projectsKey = (): QueryKey => "projects";
+
+const storageProviderFilesKey = (): QueryKey => "storageProviderFiles";
+
+export { filesKey, projectsKey, storageProviderFilesKey };
