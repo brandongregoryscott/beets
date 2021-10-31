@@ -1,5 +1,5 @@
 import { Record as ImmutableRecord } from "immutable";
-import { makeDefaultValues } from "utils/core-utils";
+import { isNilOrEmpty, makeDefaultValues } from "utils/core-utils";
 import { BaseRecord } from "models/base-record";
 import { Project } from "generated/interfaces/project";
 import { AuditableRecord } from "models/auditable-record";
@@ -17,6 +17,11 @@ const defaultValues = makeDefaultValues<Project>({
 
 class ProjectRecord
     extends AuditableRecord(BaseRecord(ImmutableRecord(defaultValues)))
-    implements Project {}
+    implements Project
+{
+    public isPersisted(): boolean {
+        return !isNilOrEmpty(this.id);
+    }
+}
 
 export { ProjectRecord };

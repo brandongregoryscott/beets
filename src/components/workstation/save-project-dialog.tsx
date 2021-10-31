@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useInput } from "rooks";
 import { isNilOrEmpty } from "utils/core-utils";
 import { useCreateProject } from "utils/hooks/domain/projects/use-create-project";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface SaveProjectDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
@@ -21,7 +22,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     props: SaveProjectDialogProps
 ) => {
     const { isShown, onCloseComplete } = props;
-
+    const { setState } = useWorkstationState();
     const title = "New Project";
     const { value, onChange } = useInput();
     const [error, setError] = useState<Error | undefined>(undefined);
@@ -31,6 +32,10 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
 
     const handleSuccess = (project: Project) => {
         toaster.success(`Successfully created Project '${project.name}'`);
+        const record = new ProjectRecord(project);
+        setState((prev) =>
+            prev.merge({ initialProject: record, currentProject: record })
+        );
         onCloseComplete?.();
     };
 
