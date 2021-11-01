@@ -25,7 +25,6 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     const { setState } = useWorkstationState();
     const title = "New Project";
     const { value, onChange } = useInput();
-    const [error, setError] = useState<Error | undefined>(undefined);
     const [validationMessage, setValidationMessage] = useState<
         string | undefined
     >(undefined);
@@ -39,8 +38,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
         onCloseComplete?.();
     };
 
-    const { mutate, isLoading } = useCreateProject({
-        onError: setError,
+    const { mutate, isLoading, error } = useCreateProject({
         onSuccess: handleSuccess,
     });
 
