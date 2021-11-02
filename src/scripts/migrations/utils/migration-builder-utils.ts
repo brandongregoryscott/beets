@@ -23,7 +23,7 @@ const authenticatedCreatePolicy =
 const deleteOwnRecordPolicy =
     (pgm: MigrationBuilder) => (tableName: Name) => () =>
         pgm.createPolicy(tableName, q("Users can delete their own records."), {
-            using: `auth.uid() = ${auditableColumns.createdbyid}`,
+            using: `auth.uid() = ${auditableColumns.created_by_id}`,
             command: "DELETE",
         });
 
@@ -37,7 +37,7 @@ const readAnyRecordPolicy =
 const readOwnRecordPolicy =
     (pgm: MigrationBuilder) => (tableName: Name) => () =>
         pgm.createPolicy(tableName, q("Users can read their own records."), {
-            using: `auth.uid() = ${auditableColumns.createdbyid} AND ${notDeleted}`,
+            using: `auth.uid() = ${auditableColumns.created_by_id} AND ${notDeleted}`,
             command: "SELECT",
         });
 
@@ -48,13 +48,13 @@ const rowLevelSecurity = (pgm: MigrationBuilder) => (tableName: Name) => () =>
 
 const softDeleteRule = (pgm: MigrationBuilder) => (tableName: Name) => () =>
     pgm.sql(
-        `CREATE RULE "SOFT DELETE" AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${auditableColumns.deletedon} = current_timestamp, ${auditableColumns.deletedbyid} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
+        `CREATE RULE "SOFT DELETE" AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${auditableColumns.deleted_on} = current_timestamp, ${auditableColumns.deleted_by_id} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
     );
 
 const updateOwnRecordPolicy =
     (pgm: MigrationBuilder) => (tableName: Name) => () =>
         pgm.createPolicy(tableName, q("Users can update their own records."), {
-            using: `auth.uid() = ${auditableColumns.createdbyid}`,
+            using: `auth.uid() = ${auditableColumns.created_by_id}`,
             command: "UPDATE",
         });
 
@@ -70,7 +70,7 @@ const uniqueNonDeletedIndex =
             pgm.dropConstraint(tableName, `${tableName}_${column}_fkey`);
         }
 
-        pgm.addIndex(tableName, [column, auditableColumns.deletedon], {
+        pgm.addIndex(tableName, [column, auditableColumns.deleted_on], {
             unique: true,
             where: notDeleted,
         });
@@ -78,15 +78,6 @@ const uniqueNonDeletedIndex =
 
 const configure = (options: MigrationBuilderUtilsOptions) => {
     const { pgm, tableName } = options;
-    if (pgm == null) {
-        throw new Error("'pgm' parameter must be set to use configure()!");
-    }
-
-    if (tableName == null) {
-        throw new Error(
-            "'tableName' parameter must be set to use configure()!"
-        );
-    }
 
     return {
         authenticatedCreatePolicy: authenticatedCreatePolicy(pgm)(tableName),

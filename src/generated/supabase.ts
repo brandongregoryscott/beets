@@ -16,12 +16,12 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.files.createdon"];
-                    createdbyid?: parameters["rowFilter.files.createdbyid"];
-                    deletedon?: parameters["rowFilter.files.deletedon"];
-                    deletedbyid?: parameters["rowFilter.files.deletedbyid"];
-                    updatedon?: parameters["rowFilter.files.updatedon"];
-                    updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+                    created_on?: parameters["rowFilter.files.created_on"];
+                    created_by_id?: parameters["rowFilter.files.created_by_id"];
+                    deleted_on?: parameters["rowFilter.files.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.files.updated_on"];
+                    updated_by_id?: parameters["rowFilter.files.updated_by_id"];
                     id?: parameters["rowFilter.files.id"];
                     bucketid?: parameters["rowFilter.files.bucketid"];
                     description?: parameters["rowFilter.files.description"];
@@ -79,12 +79,12 @@ export interface paths {
         delete: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.files.createdon"];
-                    createdbyid?: parameters["rowFilter.files.createdbyid"];
-                    deletedon?: parameters["rowFilter.files.deletedon"];
-                    deletedbyid?: parameters["rowFilter.files.deletedbyid"];
-                    updatedon?: parameters["rowFilter.files.updatedon"];
-                    updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+                    created_on?: parameters["rowFilter.files.created_on"];
+                    created_by_id?: parameters["rowFilter.files.created_by_id"];
+                    deleted_on?: parameters["rowFilter.files.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.files.updated_on"];
+                    updated_by_id?: parameters["rowFilter.files.updated_by_id"];
                     id?: parameters["rowFilter.files.id"];
                     bucketid?: parameters["rowFilter.files.bucketid"];
                     description?: parameters["rowFilter.files.description"];
@@ -106,12 +106,12 @@ export interface paths {
         patch: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.files.createdon"];
-                    createdbyid?: parameters["rowFilter.files.createdbyid"];
-                    deletedon?: parameters["rowFilter.files.deletedon"];
-                    deletedbyid?: parameters["rowFilter.files.deletedbyid"];
-                    updatedon?: parameters["rowFilter.files.updatedon"];
-                    updatedbyid?: parameters["rowFilter.files.updatedbyid"];
+                    created_on?: parameters["rowFilter.files.created_on"];
+                    created_by_id?: parameters["rowFilter.files.created_by_id"];
+                    deleted_on?: parameters["rowFilter.files.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.files.updated_on"];
+                    updated_by_id?: parameters["rowFilter.files.updated_by_id"];
                     id?: parameters["rowFilter.files.id"];
                     bucketid?: parameters["rowFilter.files.bucketid"];
                     description?: parameters["rowFilter.files.description"];
@@ -232,12 +232,12 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.projects.createdon"];
-                    createdbyid?: parameters["rowFilter.projects.createdbyid"];
-                    deletedon?: parameters["rowFilter.projects.deletedon"];
-                    deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
-                    updatedon?: parameters["rowFilter.projects.updatedon"];
-                    updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+                    created_on?: parameters["rowFilter.projects.created_on"];
+                    created_by_id?: parameters["rowFilter.projects.created_by_id"];
+                    deleted_on?: parameters["rowFilter.projects.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.projects.updated_on"];
+                    updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
                     id?: parameters["rowFilter.projects.id"];
                     name?: parameters["rowFilter.projects.name"];
                     /** Filtering Columns */
@@ -290,12 +290,12 @@ export interface paths {
         delete: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.projects.createdon"];
-                    createdbyid?: parameters["rowFilter.projects.createdbyid"];
-                    deletedon?: parameters["rowFilter.projects.deletedon"];
-                    deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
-                    updatedon?: parameters["rowFilter.projects.updatedon"];
-                    updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+                    created_on?: parameters["rowFilter.projects.created_on"];
+                    created_by_id?: parameters["rowFilter.projects.created_by_id"];
+                    deleted_on?: parameters["rowFilter.projects.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.projects.updated_on"];
+                    updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
                     id?: parameters["rowFilter.projects.id"];
                     name?: parameters["rowFilter.projects.name"];
                 };
@@ -312,12 +312,12 @@ export interface paths {
         patch: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.projects.createdon"];
-                    createdbyid?: parameters["rowFilter.projects.createdbyid"];
-                    deletedon?: parameters["rowFilter.projects.deletedon"];
-                    deletedbyid?: parameters["rowFilter.projects.deletedbyid"];
-                    updatedon?: parameters["rowFilter.projects.updatedon"];
-                    updatedbyid?: parameters["rowFilter.projects.updatedbyid"];
+                    created_on?: parameters["rowFilter.projects.created_on"];
+                    created_by_id?: parameters["rowFilter.projects.created_by_id"];
+                    deleted_on?: parameters["rowFilter.projects.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.projects.updated_on"];
+                    updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
                     id?: parameters["rowFilter.projects.id"];
                     name?: parameters["rowFilter.projects.name"];
                 };
@@ -340,12 +340,12 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.tracks.createdon"];
-                    createdbyid?: parameters["rowFilter.tracks.createdbyid"];
-                    deletedon?: parameters["rowFilter.tracks.deletedon"];
-                    deletedbyid?: parameters["rowFilter.tracks.deletedbyid"];
-                    updatedon?: parameters["rowFilter.tracks.updatedon"];
-                    updatedbyid?: parameters["rowFilter.tracks.updatedbyid"];
+                    created_on?: parameters["rowFilter.tracks.created_on"];
+                    created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+                    deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.tracks.updated_on"];
+                    updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
                     id?: parameters["rowFilter.tracks.id"];
                     name?: parameters["rowFilter.tracks.name"];
                     mute?: parameters["rowFilter.tracks.mute"];
@@ -402,12 +402,12 @@ export interface paths {
         delete: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.tracks.createdon"];
-                    createdbyid?: parameters["rowFilter.tracks.createdbyid"];
-                    deletedon?: parameters["rowFilter.tracks.deletedon"];
-                    deletedbyid?: parameters["rowFilter.tracks.deletedbyid"];
-                    updatedon?: parameters["rowFilter.tracks.updatedon"];
-                    updatedbyid?: parameters["rowFilter.tracks.updatedbyid"];
+                    created_on?: parameters["rowFilter.tracks.created_on"];
+                    created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+                    deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.tracks.updated_on"];
+                    updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
                     id?: parameters["rowFilter.tracks.id"];
                     name?: parameters["rowFilter.tracks.name"];
                     mute?: parameters["rowFilter.tracks.mute"];
@@ -428,12 +428,12 @@ export interface paths {
         patch: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.tracks.createdon"];
-                    createdbyid?: parameters["rowFilter.tracks.createdbyid"];
-                    deletedon?: parameters["rowFilter.tracks.deletedon"];
-                    deletedbyid?: parameters["rowFilter.tracks.deletedbyid"];
-                    updatedon?: parameters["rowFilter.tracks.updatedon"];
-                    updatedbyid?: parameters["rowFilter.tracks.updatedbyid"];
+                    created_on?: parameters["rowFilter.tracks.created_on"];
+                    created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+                    deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.tracks.updated_on"];
+                    updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
                     id?: parameters["rowFilter.tracks.id"];
                     name?: parameters["rowFilter.tracks.name"];
                     mute?: parameters["rowFilter.tracks.mute"];
@@ -460,12 +460,12 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.users.createdon"];
-                    createdbyid?: parameters["rowFilter.users.createdbyid"];
-                    deletedon?: parameters["rowFilter.users.deletedon"];
-                    deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-                    updatedon?: parameters["rowFilter.users.updatedon"];
-                    updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+                    created_on?: parameters["rowFilter.users.created_on"];
+                    created_by_id?: parameters["rowFilter.users.created_by_id"];
+                    deleted_on?: parameters["rowFilter.users.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.users.updated_on"];
+                    updated_by_id?: parameters["rowFilter.users.updated_by_id"];
                     id?: parameters["rowFilter.users.id"];
                     email?: parameters["rowFilter.users.email"];
                     /** Filtering Columns */
@@ -518,12 +518,12 @@ export interface paths {
         delete: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.users.createdon"];
-                    createdbyid?: parameters["rowFilter.users.createdbyid"];
-                    deletedon?: parameters["rowFilter.users.deletedon"];
-                    deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-                    updatedon?: parameters["rowFilter.users.updatedon"];
-                    updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+                    created_on?: parameters["rowFilter.users.created_on"];
+                    created_by_id?: parameters["rowFilter.users.created_by_id"];
+                    deleted_on?: parameters["rowFilter.users.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.users.updated_on"];
+                    updated_by_id?: parameters["rowFilter.users.updated_by_id"];
                     id?: parameters["rowFilter.users.id"];
                     email?: parameters["rowFilter.users.email"];
                 };
@@ -540,12 +540,12 @@ export interface paths {
         patch: {
             parameters: {
                 query: {
-                    createdon?: parameters["rowFilter.users.createdon"];
-                    createdbyid?: parameters["rowFilter.users.createdbyid"];
-                    deletedon?: parameters["rowFilter.users.deletedon"];
-                    deletedbyid?: parameters["rowFilter.users.deletedbyid"];
-                    updatedon?: parameters["rowFilter.users.updatedon"];
-                    updatedbyid?: parameters["rowFilter.users.updatedbyid"];
+                    created_on?: parameters["rowFilter.users.created_on"];
+                    created_by_id?: parameters["rowFilter.users.created_by_id"];
+                    deleted_on?: parameters["rowFilter.users.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.users.updated_on"];
+                    updated_by_id?: parameters["rowFilter.users.updated_by_id"];
                     id?: parameters["rowFilter.users.id"];
                     email?: parameters["rowFilter.users.email"];
                 };
@@ -568,12 +568,12 @@ export interface paths {
 
 export interface definitions {
     files: {
-        createdon?: string;
-        createdbyid?: string;
-        deletedon?: string;
-        deletedbyid?: string;
-        updatedon?: string;
-        updatedbyid?: string;
+        created_on?: string;
+        created_by_id?: string;
+        deleted_on?: string;
+        deleted_by_id?: string;
+        updated_on?: string;
+        updated_by_id?: string;
         id: string;
         /**
          * Note:
@@ -596,12 +596,12 @@ export interface definitions {
         run_on: string;
     };
     projects: {
-        createdon?: string;
-        createdbyid?: string;
-        deletedon?: string;
-        deletedbyid?: string;
-        updatedon?: string;
-        updatedbyid?: string;
+        created_on?: string;
+        created_by_id?: string;
+        deleted_on?: string;
+        deleted_by_id?: string;
+        updated_on?: string;
+        updated_by_id?: string;
         /**
          * Note:
          * This is a Primary Key.<pk/>
@@ -610,12 +610,12 @@ export interface definitions {
         name: string;
     };
     tracks: {
-        createdon?: string;
-        createdbyid?: string;
-        deletedon?: string;
-        deletedbyid?: string;
-        updatedon?: string;
-        updatedbyid?: string;
+        created_on?: string;
+        created_by_id?: string;
+        deleted_on?: string;
+        deleted_by_id?: string;
+        updated_on?: string;
+        updated_by_id?: string;
         /**
          * Note:
          * This is a Primary Key.<pk/>
@@ -632,12 +632,12 @@ export interface definitions {
         project_id: string;
     };
     users: {
-        createdon?: string;
-        createdbyid?: string;
-        deletedon?: string;
-        deletedbyid?: string;
-        updatedon?: string;
-        updatedbyid?: string;
+        created_on?: string;
+        created_by_id?: string;
+        deleted_on?: string;
+        deleted_by_id?: string;
+        updated_on?: string;
+        updated_by_id?: string;
         /**
          * Note:
          * This is a Primary Key.<pk/>
@@ -670,12 +670,12 @@ export interface parameters {
     limit: string;
     /** files */
     "body.files": definitions["files"];
-    "rowFilter.files.createdon": string;
-    "rowFilter.files.createdbyid": string;
-    "rowFilter.files.deletedon": string;
-    "rowFilter.files.deletedbyid": string;
-    "rowFilter.files.updatedon": string;
-    "rowFilter.files.updatedbyid": string;
+    "rowFilter.files.created_on": string;
+    "rowFilter.files.created_by_id": string;
+    "rowFilter.files.deleted_on": string;
+    "rowFilter.files.deleted_by_id": string;
+    "rowFilter.files.updated_on": string;
+    "rowFilter.files.updated_by_id": string;
     "rowFilter.files.id": string;
     "rowFilter.files.bucketid": string;
     "rowFilter.files.description": string;
@@ -690,22 +690,22 @@ export interface parameters {
     "rowFilter.pgmigrations.run_on": string;
     /** projects */
     "body.projects": definitions["projects"];
-    "rowFilter.projects.createdon": string;
-    "rowFilter.projects.createdbyid": string;
-    "rowFilter.projects.deletedon": string;
-    "rowFilter.projects.deletedbyid": string;
-    "rowFilter.projects.updatedon": string;
-    "rowFilter.projects.updatedbyid": string;
+    "rowFilter.projects.created_on": string;
+    "rowFilter.projects.created_by_id": string;
+    "rowFilter.projects.deleted_on": string;
+    "rowFilter.projects.deleted_by_id": string;
+    "rowFilter.projects.updated_on": string;
+    "rowFilter.projects.updated_by_id": string;
     "rowFilter.projects.id": string;
     "rowFilter.projects.name": string;
     /** tracks */
     "body.tracks": definitions["tracks"];
-    "rowFilter.tracks.createdon": string;
-    "rowFilter.tracks.createdbyid": string;
-    "rowFilter.tracks.deletedon": string;
-    "rowFilter.tracks.deletedbyid": string;
-    "rowFilter.tracks.updatedon": string;
-    "rowFilter.tracks.updatedbyid": string;
+    "rowFilter.tracks.created_on": string;
+    "rowFilter.tracks.created_by_id": string;
+    "rowFilter.tracks.deleted_on": string;
+    "rowFilter.tracks.deleted_by_id": string;
+    "rowFilter.tracks.updated_on": string;
+    "rowFilter.tracks.updated_by_id": string;
     "rowFilter.tracks.id": string;
     "rowFilter.tracks.name": string;
     "rowFilter.tracks.mute": string;
@@ -714,12 +714,12 @@ export interface parameters {
     "rowFilter.tracks.project_id": string;
     /** users */
     "body.users": definitions["users"];
-    "rowFilter.users.createdon": string;
-    "rowFilter.users.createdbyid": string;
-    "rowFilter.users.deletedon": string;
-    "rowFilter.users.deletedbyid": string;
-    "rowFilter.users.updatedon": string;
-    "rowFilter.users.updatedbyid": string;
+    "rowFilter.users.created_on": string;
+    "rowFilter.users.created_by_id": string;
+    "rowFilter.users.deleted_on": string;
+    "rowFilter.users.deleted_by_id": string;
+    "rowFilter.users.updated_on": string;
+    "rowFilter.users.updated_by_id": string;
     "rowFilter.users.id": string;
     "rowFilter.users.email": string;
 }

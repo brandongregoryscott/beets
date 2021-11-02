@@ -1,10 +1,10 @@
 interface File {
-    createdon?: string;
-    createdbyid?: string;
-    deletedon?: string;
-    deletedbyid?: string;
-    updatedon?: string;
-    updatedbyid?: string;
+    created_on?: string;
+    created_by_id?: string;
+    deleted_on?: string;
+    deleted_by_id?: string;
+    updated_on?: string;
+    updated_by_id?: string;
     id: string;
     /**
      * Note:
