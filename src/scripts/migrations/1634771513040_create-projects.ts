@@ -2,6 +2,7 @@ import { MigrationBuilder } from "node-pg-migrate";
 import { configure } from "./utils/migration-builder-utils";
 import { makeAuditableColumns } from "./utils/auditable-columns";
 import { tables } from "./utils/tables";
+import { makeIdColumn } from "./utils/id-column";
 
 const tableName = tables.projects;
 
@@ -18,11 +19,7 @@ const up = (pgm: MigrationBuilder) => {
 
     pgm.createTable(tableName, {
         ...makeAuditableColumns(pgm),
-        id: {
-            type: "uuid",
-            primaryKey: true,
-            notNull: true,
-        },
+        ...makeIdColumn(pgm),
         name: {
             type: "text",
             notNull: true,
