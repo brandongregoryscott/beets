@@ -1,10 +1,10 @@
 interface Auditable {
-    createdOn?: string;
-    createdById?: string;
-    deletedOn?: string;
-    deletedById?: string;
-    updatedOn?: string;
-    updatedById?: string;
+    createdon?: string;
+    createdbyid?: string;
+    deletedn?: string;
+    deletedbyid?: string;
+    updatedon?: string;
+    updatedbyid?: string;
 }
 
 export type { Auditable };
