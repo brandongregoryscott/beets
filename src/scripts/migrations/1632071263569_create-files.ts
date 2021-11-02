@@ -46,7 +46,7 @@ const up = (pgm: MigrationBuilder) => {
         },
     });
 
-    uniqueNonDeletedIndex("id");
+    uniqueNonDeletedIndex("id", { dropFkConstraint: true });
 
     rowLevelSecurity();
     softDeleteRule();

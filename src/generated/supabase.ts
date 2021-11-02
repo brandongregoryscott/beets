@@ -336,6 +336,126 @@ export interface paths {
             };
         };
     };
+    "/tracks": {
+        get: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.tracks.createdon"];
+                    createdbyid?: parameters["rowFilter.tracks.createdbyid"];
+                    deletedon?: parameters["rowFilter.tracks.deletedon"];
+                    deletedbyid?: parameters["rowFilter.tracks.deletedbyid"];
+                    updatedon?: parameters["rowFilter.tracks.updatedon"];
+                    updatedbyid?: parameters["rowFilter.tracks.updatedbyid"];
+                    id?: parameters["rowFilter.tracks.id"];
+                    name?: parameters["rowFilter.tracks.name"];
+                    mute?: parameters["rowFilter.tracks.mute"];
+                    solo?: parameters["rowFilter.tracks.solo"];
+                    pan?: parameters["rowFilter.tracks.pan"];
+                    project_id?: parameters["rowFilter.tracks.project_id"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["tracks"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
+        };
+        post: {
+            parameters: {
+                body: {
+                    /** tracks */
+                    tracks?: definitions["tracks"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
+        };
+        delete: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.tracks.createdon"];
+                    createdbyid?: parameters["rowFilter.tracks.createdbyid"];
+                    deletedon?: parameters["rowFilter.tracks.deletedon"];
+                    deletedbyid?: parameters["rowFilter.tracks.deletedbyid"];
+                    updatedon?: parameters["rowFilter.tracks.updatedon"];
+                    updatedbyid?: parameters["rowFilter.tracks.updatedbyid"];
+                    id?: parameters["rowFilter.tracks.id"];
+                    name?: parameters["rowFilter.tracks.name"];
+                    mute?: parameters["rowFilter.tracks.mute"];
+                    solo?: parameters["rowFilter.tracks.solo"];
+                    pan?: parameters["rowFilter.tracks.pan"];
+                    project_id?: parameters["rowFilter.tracks.project_id"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+        patch: {
+            parameters: {
+                query: {
+                    createdon?: parameters["rowFilter.tracks.createdon"];
+                    createdbyid?: parameters["rowFilter.tracks.createdbyid"];
+                    deletedon?: parameters["rowFilter.tracks.deletedon"];
+                    deletedbyid?: parameters["rowFilter.tracks.deletedbyid"];
+                    updatedon?: parameters["rowFilter.tracks.updatedon"];
+                    updatedbyid?: parameters["rowFilter.tracks.updatedbyid"];
+                    id?: parameters["rowFilter.tracks.id"];
+                    name?: parameters["rowFilter.tracks.name"];
+                    mute?: parameters["rowFilter.tracks.mute"];
+                    solo?: parameters["rowFilter.tracks.solo"];
+                    pan?: parameters["rowFilter.tracks.pan"];
+                    project_id?: parameters["rowFilter.tracks.project_id"];
+                };
+                body: {
+                    /** tracks */
+                    tracks?: definitions["tracks"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+    };
     "/users": {
         get: {
             parameters: {
@@ -489,6 +609,28 @@ export interface definitions {
         id: string;
         name: string;
     };
+    tracks: {
+        createdon?: string;
+        createdbyid?: string;
+        deletedon?: string;
+        deletedbyid?: string;
+        updatedon?: string;
+        updatedbyid?: string;
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
+        id: string;
+        name: string;
+        mute: boolean;
+        solo: boolean;
+        pan: number;
+        /**
+         * Note:
+         * This is a Foreign Key to `projects.id`.<fk table='projects' column='id'/>
+         */
+        project_id: string;
+    };
     users: {
         createdon?: string;
         createdbyid?: string;
@@ -556,6 +698,20 @@ export interface parameters {
     "rowFilter.projects.updatedbyid": string;
     "rowFilter.projects.id": string;
     "rowFilter.projects.name": string;
+    /** tracks */
+    "body.tracks": definitions["tracks"];
+    "rowFilter.tracks.createdon": string;
+    "rowFilter.tracks.createdbyid": string;
+    "rowFilter.tracks.deletedon": string;
+    "rowFilter.tracks.deletedbyid": string;
+    "rowFilter.tracks.updatedon": string;
+    "rowFilter.tracks.updatedbyid": string;
+    "rowFilter.tracks.id": string;
+    "rowFilter.tracks.name": string;
+    "rowFilter.tracks.mute": string;
+    "rowFilter.tracks.solo": string;
+    "rowFilter.tracks.pan": string;
+    "rowFilter.tracks.project_id": string;
     /** users */
     "body.users": definitions["users"];
     "rowFilter.users.createdon": string;

@@ -1,6 +1,7 @@
 import { File } from "generated/interfaces/file";
 import { Pgmigration } from "generated/interfaces/pgmigration";
 import { Project } from "generated/interfaces/project";
+import { Track } from "generated/interfaces/track";
 import { User } from "generated/interfaces/user";
 import { useCallback } from "react";
 import { useSupabase } from "utils/hooks/supabase/use-supabase";
@@ -24,12 +25,17 @@ const useDatabase = () => {
         [supabase]
     );
 
+    const fromTracks = useCallback(
+        () => supabase.from<Track>(Tables.Tracks),
+        [supabase]
+    );
+
     const fromUsers = useCallback(
         () => supabase.from<User>(Tables.Users),
         [supabase]
     );
 
-    return { fromFiles, fromPgmigrations, fromProjects, fromUsers };
+    return { fromFiles, fromPgmigrations, fromProjects, fromTracks, fromUsers };
 };
 
 export { useDatabase };

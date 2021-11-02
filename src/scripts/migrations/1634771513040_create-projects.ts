@@ -29,7 +29,7 @@ const up = (pgm: MigrationBuilder) => {
         },
     });
 
-    uniqueNonDeletedIndex("id", false);
+    uniqueNonDeletedIndex("id");
 
     rowLevelSecurity();
     softDeleteRule();

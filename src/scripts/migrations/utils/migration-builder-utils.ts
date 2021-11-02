@@ -2,6 +2,11 @@ import { MigrationBuilder, Name } from "node-pg-migrate";
 import { auditableColumns } from "./auditable-columns";
 import { q } from "./quote";
 
+interface MigrationBuilderUtilsOptions {
+    pgm: MigrationBuilder;
+    tableName: Name;
+}
+
 const notDeleted = "deletedon is null";
 
 const authenticatedCreatePolicy =
@@ -58,10 +63,10 @@ const uniqueNonDeletedIndex =
     (tableName: Name) =>
     /**
      * @param {string} column
-     * @param {boolean} dropConstraint Drop a foreign key constraint as well. Defaults to `true`
+     * @param {{ dropFkConstraint: boolean }} [options] dropFkConstraint: Drop a foreign key constraint as well. Defaults to `true`
      */
-    (column: string, dropConstraint: boolean = true) => {
-        if (dropConstraint) {
+    (column: string, options?: { dropFkConstraint: boolean }) => {
+        if (options?.dropFkConstraint === true) {
             pgm.dropConstraint(tableName, `${tableName}_${column}_fkey`);
         }
 
@@ -70,11 +75,6 @@ const uniqueNonDeletedIndex =
             where: notDeleted,
         });
     };
-
-interface MigrationBuilderUtilsOptions {
-    pgm: MigrationBuilder;
-    tableName: Name;
-}
 
 const configure = (options: MigrationBuilderUtilsOptions) => {
     const { pgm, tableName } = options;
