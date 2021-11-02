@@ -7,7 +7,7 @@ interface MigrationBuilderUtilsOptions {
     tableName: Name;
 }
 
-const notDeleted = "deletedon is null";
+const notDeleted = "deleted_on is null";
 
 const authenticatedCreatePolicy =
     (pgm: MigrationBuilder) => (tableName: Name) => () =>
