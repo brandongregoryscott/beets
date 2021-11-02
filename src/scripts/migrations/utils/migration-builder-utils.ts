@@ -63,7 +63,7 @@ const uniqueNonDeletedIndex =
     (tableName: Name) =>
     /**
      * @param {string} column
-     * @param {{ dropFkConstraint: boolean }} [options] dropFkConstraint: Drop a foreign key constraint as well. Defaults to `true`
+     * @param {{ dropFkConstraint: boolean }} [options] dropFkConstraint: Drop a foreign key constraint as well.
      */
     (column: string, options?: { dropFkConstraint: boolean }) => {
         if (options?.dropFkConstraint === true) {
