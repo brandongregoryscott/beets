@@ -1,10 +1,11 @@
 import _ from "lodash";
 import { Project, PropertySignature } from "ts-morph";
-import { BASE_PATH } from "./constants";
+import { BASE_PATH, TABLES_ENUM } from "./constants";
 import { log } from "./log";
+import { getTableName } from "./utils";
 
 const generateEnum = (project: Project, properties: PropertySignature[]) => {
-    const name = "Tables";
+    const name = TABLES_ENUM;
     const filename = "tables.ts";
 
     const file = project.createSourceFile(
@@ -16,7 +17,7 @@ const generateEnum = (project: Project, properties: PropertySignature[]) => {
     file.addEnum({
         name,
         members: properties.map((property) => ({
-            name: _.capitalize(property.getName()),
+            name: getTableName(property),
             value: property.getName(),
         })),
     });

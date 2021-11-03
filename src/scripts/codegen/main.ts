@@ -4,7 +4,7 @@ import { log } from "./log";
 import { generateInterface } from "./generate-interface";
 import { generateSupabase } from "./generate-supabase";
 import { generateEnum } from "./generate-enum";
-import { generateHook } from "./generate-hook";
+import { generateUseDatabase } from "./hooks/generate-use-database";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -26,7 +26,7 @@ const main = async () => {
         generateInterface(project, property);
     });
 
-    generateHook(project, properties);
+    generateUseDatabase(project, properties);
 
     await project.save();
 

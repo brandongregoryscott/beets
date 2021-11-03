@@ -1,10 +1,18 @@
 import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
-import { BASE_IMPORT_PATH, BASE_PATH } from "./constants";
-import { log } from "./log";
-import { getInterfaceName, getInterfaceImportPath } from "./utils";
+import { BASE_IMPORT_PATH, BASE_PATH, TABLES_ENUM } from "../constants";
+import { log } from "../log";
+import {
+    getInterfaceName,
+    getInterfaceImportPath,
+    getFromFunctionName,
+    getTableName,
+} from "../utils";
 
-const generateHook = (project: Project, properties: PropertySignature[]) => {
+const generateUseDatabase = (
+    project: Project,
+    properties: PropertySignature[]
+) => {
     const name = "useDatabase";
     const filename = "use-database.ts";
 
@@ -58,9 +66,9 @@ const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
         (property) =>
             `
     const ${getFromFunctionName(property)} = useCallback(() =>
-        supabase.from<${getInterfaceName(property)}>(Tables.${getTableName(
-                property
-            )}),
+        supabase.from<${getInterfaceName(
+            property
+        )}>(${TABLES_ENUM}.${getTableName(property)}),
         [supabase]
     )
 
@@ -70,10 +78,4 @@ const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
     return { ${properties.map(getFromFunctionName).join(", ")} };
 }`;
 
-const getFromFunctionName = (property: PropertySignature): string =>
-    `from${getTableName(property)}`;
-
-const getTableName = (property: PropertySignature): string =>
-    _.capitalize(property.getName());
-
-export { generateHook };
+export { generateUseDatabase };
