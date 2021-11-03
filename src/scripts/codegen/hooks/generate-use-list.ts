@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
-import { BASE_IMPORT_PATH, BASE_PATH, TABLES_ENUM } from "../constants";
 import { log } from "../log";
 import {
     getInterfaceName,
@@ -8,6 +7,9 @@ import {
     getFromFunctionName,
     getTableName,
 } from "../utils";
+import upath from "upath";
+import { Paths } from "../constants/paths";
+import { Enums } from "../constants/enums";
 
 const generateUseList = (project: Project, property: PropertySignature) => {
     const entityName = getTableName(property);
@@ -16,7 +18,13 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     const filename = `use-list-${lowerCaseEntityName}.ts`;
 
     const file = project.createSourceFile(
-        `${BASE_PATH}/hooks/domain/${lowerCaseEntityName}/${filename}`,
+        upath.join(
+            Paths.base,
+            "hooks",
+            "domain",
+            lowerCaseEntityName,
+            filename
+        ),
         undefined,
         { overwrite: true }
     );
@@ -32,13 +40,8 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: ["useSupabase"],
-        moduleSpecifier: "utils/hooks/supabase/use-supabase",
-    });
-
-    file.addImportDeclaration({
-        namedImports: [TABLES_ENUM],
-        moduleSpecifier: `${BASE_IMPORT_PATH}/enums/tables`,
+        namedImports: [Enums.Tables.name],
+        moduleSpecifier: Enums.Tables.importPath,
     });
 
     file.addVariableStatement({
@@ -57,6 +60,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
 };
 
 const useListInitializer = (property: PropertySignature) => `() => {
+    const { ${getFromFunctionName(property)} } = useDatabase();
     return { };
 }`;
 

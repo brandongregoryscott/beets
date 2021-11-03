@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
-import { BASE_IMPORT_PATH, BASE_PATH, TABLES_ENUM } from "../constants";
 import { log } from "../log";
 import {
     getInterfaceName,
@@ -8,18 +7,22 @@ import {
     getFromFunctionName,
     getTableName,
 } from "../utils";
+import upath from "upath";
+import { Enums } from "../constants/enums";
+import { Hooks } from "../constants/hooks";
 
 const generateUseDatabase = (
     project: Project,
     properties: PropertySignature[]
 ) => {
-    const name = "useDatabase";
-    const filename = "use-database.ts";
+    const name = Hooks.useDatabase.name;
 
     const file = project.createSourceFile(
-        `${BASE_PATH}/hooks/${filename}`,
+        Hooks.useDatabase.filePath,
         undefined,
-        { overwrite: true }
+        {
+            overwrite: true,
+        }
     );
 
     file.addImportDeclarations(
@@ -40,8 +43,8 @@ const generateUseDatabase = (
     });
 
     file.addImportDeclaration({
-        namedImports: [TABLES_ENUM],
-        moduleSpecifier: `${BASE_IMPORT_PATH}/enums/tables`,
+        namedImports: [Enums.Tables.name],
+        moduleSpecifier: Enums.Tables.importPath,
     });
 
     file.addVariableStatement({
@@ -66,9 +69,9 @@ const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
         (property) =>
             `
     const ${getFromFunctionName(property)} = useCallback(() =>
-        supabase.from<${getInterfaceName(
-            property
-        )}>(${TABLES_ENUM}.${getTableName(property)}),
+        supabase.from<${getInterfaceName(property)}>(${
+                Enums.Tables.name
+            }.${getTableName(property)}),
         [supabase]
     )
 
