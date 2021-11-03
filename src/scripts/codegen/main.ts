@@ -5,6 +5,7 @@ import { generateInterface } from "./generate-interface";
 import { generateSupabase } from "./generate-supabase";
 import { generateEnum } from "./generate-enum";
 import { generateUseDatabase } from "./hooks/generate-use-database";
+import { generateUseList } from "./hooks/generate-use-list";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -24,6 +25,7 @@ const main = async () => {
 
     properties.forEach((property) => {
         generateInterface(project, property);
+        generateUseList(project, property);
     });
 
     generateUseDatabase(project, properties);

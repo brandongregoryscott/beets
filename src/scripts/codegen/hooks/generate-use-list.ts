@@ -9,25 +9,22 @@ import {
     getTableName,
 } from "../utils";
 
-const generateUseDatabase = (
-    project: Project,
-    properties: PropertySignature[]
-) => {
-    const name = "useDatabase";
-    const filename = "use-database.ts";
+const generateUseList = (project: Project, property: PropertySignature) => {
+    const entityName = getTableName(property);
+    const lowerCaseEntityName = entityName.toLowerCase();
+    const name = `useList${entityName}`;
+    const filename = `use-list-${lowerCaseEntityName}.ts`;
 
     const file = project.createSourceFile(
-        `${BASE_PATH}/hooks/${filename}`,
+        `${BASE_PATH}/hooks/domain/${lowerCaseEntityName}/${filename}`,
         undefined,
         { overwrite: true }
     );
 
-    file.addImportDeclarations(
-        properties.map((property) => ({
-            namedImports: [getInterfaceName(property)],
-            moduleSpecifier: getInterfaceImportPath(property),
-        }))
-    );
+    file.addImportDeclaration({
+        namedImports: [getInterfaceName(property)],
+        moduleSpecifier: getInterfaceImportPath(property),
+    });
 
     file.addImportDeclaration({
         namedImports: ["useCallback"],
@@ -49,7 +46,7 @@ const generateUseDatabase = (
         declarations: [
             {
                 name,
-                initializer: useDatabaseInitializer(properties),
+                initializer: useListInitializer(property),
             },
         ],
     });
@@ -59,23 +56,8 @@ const generateUseDatabase = (
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
-    const { supabase } = useSupabase();
-
-    ${properties.map(
-        (property) =>
-            `
-    const ${getFromFunctionName(property)} = useCallback(() =>
-        supabase.from<${getInterfaceName(
-            property
-        )}>(${TABLES_ENUM}.${getTableName(property)}),
-        [supabase]
-    )
-
-    `
-    )}
-
-    return { ${properties.map(getFromFunctionName).join(", ")} };
+const useListInitializer = (property: PropertySignature) => `() => {
+    return { };
 }`;
 
-export { generateUseDatabase };
+export { generateUseList };
