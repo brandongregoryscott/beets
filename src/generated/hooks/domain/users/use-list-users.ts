@@ -2,14 +2,29 @@ import { User } from "generated/interfaces/user";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
-const useListUsers = (): UseQueryResult<User[], Error> => {
+interface UseListUsersOptions {
+    filter?: (
+        query: PostgrestFilterBuilder<User>
+    ) => PostgrestFilterBuilder<User>;
+}
+
+const useListUsers = (
+    options?: UseListUsersOptions
+): UseQueryResult<User[], Error> => {
     const { fromUsers } = useDatabase();
-    const listQuery = useQuery<User[], Error>({
+    const { filter } = options ?? {};
+
+    const result = useQuery<User[], Error>({
         key: Tables.Users,
         fn: async () => {
-            const result = await fromUsers().select("*");
-            const { data, error } = result;
+            let query = fromUsers().select("*");
+            if (filter != null) {
+                query = filter(query);
+            }
+
+            const { data, error } = await query;
             if (error != null) {
                 throw error;
             }
@@ -18,7 +33,7 @@ const useListUsers = (): UseQueryResult<User[], Error> => {
         },
     });
 
-    return listQuery;
+    return result;
 };
 
 export { useListUsers };

@@ -2,14 +2,29 @@ import { File } from "generated/interfaces/file";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
-const useListFiles = (): UseQueryResult<File[], Error> => {
+interface UseListFilesOptions {
+    filter?: (
+        query: PostgrestFilterBuilder<File>
+    ) => PostgrestFilterBuilder<File>;
+}
+
+const useListFiles = (
+    options?: UseListFilesOptions
+): UseQueryResult<File[], Error> => {
     const { fromFiles } = useDatabase();
-    const listQuery = useQuery<File[], Error>({
+    const { filter } = options ?? {};
+
+    const result = useQuery<File[], Error>({
         key: Tables.Files,
         fn: async () => {
-            const result = await fromFiles().select("*");
-            const { data, error } = result;
+            let query = fromFiles().select("*");
+            if (filter != null) {
+                query = filter(query);
+            }
+
+            const { data, error } = await query;
             if (error != null) {
                 throw error;
             }
@@ -18,7 +33,7 @@ const useListFiles = (): UseQueryResult<File[], Error> => {
         },
     });
 
-    return listQuery;
+    return result;
 };
 
 export { useListFiles };

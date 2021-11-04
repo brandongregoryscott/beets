@@ -25,8 +25,6 @@ const getTableName = (property: PropertySignature): string =>
     _.capitalize(property.getName());
 
 const toKebabCase = (value: string) => {
-    log.info("value.match", value.match(/[A-Z]/g));
-
     const hasOneCapitalLetter = value.match(/[A-Z]/g)?.length === 1;
     const firstLetterIsCapitalized = value[0].match(/[A-Z]/g) != null;
     if (hasOneCapitalLetter && firstLetterIsCapitalized) {

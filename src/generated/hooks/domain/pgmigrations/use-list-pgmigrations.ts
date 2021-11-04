@@ -2,14 +2,29 @@ import { Pgmigration } from "generated/interfaces/pgmigration";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
-const useListPgmigrations = (): UseQueryResult<Pgmigration[], Error> => {
+interface UseListPgmigrationsOptions {
+    filter?: (
+        query: PostgrestFilterBuilder<Pgmigration>
+    ) => PostgrestFilterBuilder<Pgmigration>;
+}
+
+const useListPgmigrations = (
+    options?: UseListPgmigrationsOptions
+): UseQueryResult<Pgmigration[], Error> => {
     const { fromPgmigrations } = useDatabase();
-    const listQuery = useQuery<Pgmigration[], Error>({
+    const { filter } = options ?? {};
+
+    const result = useQuery<Pgmigration[], Error>({
         key: Tables.Pgmigrations,
         fn: async () => {
-            const result = await fromPgmigrations().select("*");
-            const { data, error } = result;
+            let query = fromPgmigrations().select("*");
+            if (filter != null) {
+                query = filter(query);
+            }
+
+            const { data, error } = await query;
             if (error != null) {
                 throw error;
             }
@@ -18,7 +33,7 @@ const useListPgmigrations = (): UseQueryResult<Pgmigration[], Error> => {
         },
     });
 
-    return listQuery;
+    return result;
 };
 
 export { useListPgmigrations };

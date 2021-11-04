@@ -13,11 +13,14 @@ import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 
+const PostgrestFilterBuilder = "PostgrestFilterBuilder";
+
 const generateUseList = (project: Project, property: PropertySignature) => {
     const entityName = getTableName(property);
     const lowerCaseEntityName = entityName.toLowerCase();
     const name = `useList${entityName}`;
     const filename = `${toKebabCase(name)}.ts`;
+    const interfaceName = getInterfaceName(property);
 
     const file = project.createSourceFile(
         upath.join(
@@ -51,6 +54,22 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         moduleSpecifier: "utils/hooks/use-query",
     });
 
+    file.addImportDeclaration({
+        namedImports: [PostgrestFilterBuilder],
+        moduleSpecifier: "@supabase/postgrest-js",
+    });
+
+    file.addInterface({
+        name: `UseList${getTableName(property)}Options`,
+        properties: [
+            {
+                name: "filter",
+                hasQuestionToken: true,
+                type: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => ${PostgrestFilterBuilder}<${interfaceName}>`,
+            },
+        ],
+    });
+
     file.addVariableStatement({
         declarationKind: VariableDeclarationKind.Const,
         declarations: [
@@ -66,17 +85,28 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
+const getOptionsInterfaceName = (property: PropertySignature) =>
+    `UseList${getTableName(property)}Options`;
+
 const useListInitializer = (property: PropertySignature) => {
     const interfaceName = getInterfaceName(property);
     const fromTable = getFromFunctionName(property);
     const key = `${Enums.Tables.name}.${getTableName(property)}`;
-    return `(): UseQueryResult<${interfaceName}[], Error> => {
+    const optionsInterfaceName = getOptionsInterfaceName(property);
+
+    return `(options?: ${optionsInterfaceName}): UseQueryResult<${interfaceName}[], Error> => {
         const { ${fromTable} } = useDatabase();
-        const listQuery = useQuery<${interfaceName}[], Error>({
+        const { filter } = options ?? {};
+
+        const result = useQuery<${interfaceName}[], Error>({
             key: ${key},
             fn: async () => {
-                const result = await ${fromTable}().select("*");
-                const { data, error } = result;
+                let query = ${fromTable}().select("*");
+                if (filter != null) {
+                    query = filter(query);
+                }
+
+                const { data, error } = await query;
                 if (error != null) {
                     throw error;
                 }
@@ -85,7 +115,7 @@ const useListInitializer = (property: PropertySignature) => {
             },
         });
 
-        return listQuery;
+        return result;
     }`;
 };
 

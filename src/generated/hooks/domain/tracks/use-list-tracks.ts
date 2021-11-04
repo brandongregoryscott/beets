@@ -2,14 +2,29 @@ import { Track } from "generated/interfaces/track";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
-const useListTracks = (): UseQueryResult<Track[], Error> => {
+interface UseListTracksOptions {
+    filter?: (
+        query: PostgrestFilterBuilder<Track>
+    ) => PostgrestFilterBuilder<Track>;
+}
+
+const useListTracks = (
+    options?: UseListTracksOptions
+): UseQueryResult<Track[], Error> => {
     const { fromTracks } = useDatabase();
-    const listQuery = useQuery<Track[], Error>({
+    const { filter } = options ?? {};
+
+    const result = useQuery<Track[], Error>({
         key: Tables.Tracks,
         fn: async () => {
-            const result = await fromTracks().select("*");
-            const { data, error } = result;
+            let query = fromTracks().select("*");
+            if (filter != null) {
+                query = filter(query);
+            }
+
+            const { data, error } = await query;
             if (error != null) {
                 throw error;
             }
@@ -18,7 +33,7 @@ const useListTracks = (): UseQueryResult<Track[], Error> => {
         },
     });
 
-    return listQuery;
+    return result;
 };
 
 export { useListTracks };
