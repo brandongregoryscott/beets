@@ -10,8 +10,8 @@ import {
     getRecordName,
     getRecordImportPath,
     getRecordSourceFile,
-    getHookName,
     getHookOptionsInterfaceName,
+    getHookName,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -19,15 +19,21 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 
-const id = "id";
-const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
+const onError = "onError";
+const onSuccess = "onSuccess";
+const { interfaceName: UseMutationResult, name: useMutation } =
+    Hooks.useMutation;
+const { name: useQueryClient } = Hooks.useQueryClient;
 const { name: useDatabase } = Hooks.useDatabase;
 
-const generateUseGet = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.GET);
+const generateUseCreate = (project: Project, property: PropertySignature) => {
+    const name = getHookName(property, HookAction.CREATE);
     const filename = `${toKebabCase(name)}.ts`;
     const recordSourceFile = getRecordSourceFile(project, property);
-
+    const typeName =
+        recordSourceFile != null
+            ? getRecordName(property)
+            : getInterfaceName(property);
     const file = project.createSourceFile(
         upath.join(
             Paths.base,
@@ -60,22 +66,32 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: [useDatabase],
+        namedImports: [Hooks.useDatabase.name],
         moduleSpecifier: Hooks.useDatabase.importPath,
     });
 
     file.addImportDeclaration({
-        namedImports: [useQuery, UseQueryResult],
-        moduleSpecifier: Hooks.useQuery.importPath,
+        namedImports: [useQueryClient],
+        moduleSpecifier: Hooks.useQueryClient.importPath,
+    });
+
+    file.addImportDeclaration({
+        namedImports: [useMutation, UseMutationResult],
+        moduleSpecifier: Hooks.useMutation.importPath,
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.GET),
+        name: getHookOptionsInterfaceName(property, HookAction.CREATE),
         properties: [
             {
-                name: id,
-                hasQuestionToken: false,
-                type: "string",
+                name: onError,
+                hasQuestionToken: true,
+                type: "(error: Error) => void",
+            },
+            {
+                name: onSuccess,
+                hasQuestionToken: true,
+                type: `(resultObject: ${typeName}) => void`,
             },
         ],
     });
@@ -85,7 +101,7 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useGetInitializer(
+                initializer: useCreateInitializer(
                     property,
                     recordSourceFile != null
                 ),
@@ -98,39 +114,44 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
+const useCreateInitializer = (
+    property: PropertySignature,
+    useRecord: boolean
+) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
     const key = `${Enums.Tables.name}.${getTableName(property)}`;
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.GET
+        HookAction.CREATE
     );
-    const returnType = `${useRecord ? recordName : interfaceName} | undefined`;
-    const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
-    return `(options: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}, Error> => {
+    const returnType = useRecord ? recordName : interfaceName;
+    const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
+    return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
         const { ${fromTable} } = ${useDatabase}();
-        const { ${id} } = options;
+        const { ${onError}, ${onSuccess} } = options ?? {};
+        const queryClient = ${useQueryClient}();
 
-        const result = ${useQuery}<${returnType}, Error>({
-            key: ${key},
-            fn: async () => {
-                const query = ${fromTable}()
-                    .select("*")
-                    .eq("${id}", ${id})
-                    .limit(1)
-                    .single();
-                const { data, error } = await query;
-                if (error != null) {
-                    throw error;
-                }
+        const create = async (${interfaceName.toLowerCase()}: ${interfaceName}) => {
+            const { data, error } = await ${fromTable}()
+                .insert(${interfaceName.toLowerCase()})
+                .limit(1)
+                .single();
 
-                if (data == null) {
-                    return undefined;
-                }
+            if (error != null) {
+                throw error;
+            }
 
-                return ${returnValue};
+            return ${returnValue};
+        };
+
+        const result = ${useMutation}<${returnType}, Error, ${interfaceName}>({
+            fn: create,
+            onSuccess,
+            onError,
+            onSettled: () => {
+                queryClient.invalidateQueries(${key});
             },
         });
 
@@ -138,4 +159,4 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     }`;
 };
 
-export { generateUseGet };
+export { generateUseCreate };

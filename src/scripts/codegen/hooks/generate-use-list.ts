@@ -10,15 +10,19 @@ import {
     getRecordName,
     getRecordImportPath,
     getRecordSourceFile,
+    getHookOptionsInterfaceName,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
+import { HookAction } from "../enums/hook-action";
 
 const defaultFilter = "defaultFilter";
 const filter = "filter";
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
+const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
+const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseList = (project: Project, property: PropertySignature) => {
     const entityName = getTableName(property);
@@ -63,8 +67,8 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: ["useQuery", "UseQueryResult"],
-        moduleSpecifier: "utils/hooks/use-query",
+        namedImports: [useQuery, UseQueryResult],
+        moduleSpecifier: Hooks.useQuery.importPath,
     });
 
     file.addImportDeclaration({
@@ -73,7 +77,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getOptionsInterfaceName(property),
+        name: getHookOptionsInterfaceName(property, HookAction.LIST),
         properties: [
             {
                 name: filter,
@@ -111,9 +115,6 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const getOptionsInterfaceName = (property: PropertySignature) =>
-    `UseList${getTableName(property)}Options`;
-
 const useListInitializer = (
     property: PropertySignature,
     useRecord: boolean
@@ -122,16 +123,19 @@ const useListInitializer = (
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
     const key = `${Enums.Tables.name}.${getTableName(property)}`;
-    const optionsInterfaceName = getOptionsInterfaceName(property);
+    const optionsInterfaceName = getHookOptionsInterfaceName(
+        property,
+        HookAction.LIST
+    );
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord
         ? "data ?? []"
         : `data?.map((${interfaceName.toLowerCase()}) => new ${recordName}(${interfaceName.toLowerCase()})) ?? []`;
-    return `(options?: ${optionsInterfaceName}): UseQueryResult<${returnType}[], Error> => {
-        const { ${fromTable} } = useDatabase();
+    return `(options?: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}[], Error> => {
+        const { ${fromTable} } = ${useDatabase}();
         const { ${filter} = ${defaultFilter} } = options ?? {};
 
-        const result = useQuery<${returnType}[], Error>({
+        const result = ${useQuery}<${returnType}[], Error>({
             key: ${key},
             fn: async () => {
                 const query = ${fromTable}().select("*");

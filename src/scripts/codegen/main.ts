@@ -7,6 +7,7 @@ import { generateEnum } from "./generate-enum";
 import { generateUseDatabase } from "./hooks/generate-use-database";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generateUseGet } from "./hooks/generate-use-get";
+import { generateUseCreate } from "./hooks/generate-use-create";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -28,6 +29,7 @@ const main = async () => {
         generateInterface(project, property);
         generateUseList(project, property);
         generateUseGet(project, property);
+        generateUseCreate(project, property);
     });
 
     generateUseDatabase(project, properties);

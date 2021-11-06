@@ -4,6 +4,9 @@ import { Paths } from "./paths";
 
 const hooks = "hooks";
 const useDatabase = "useDatabase";
+const useQuery = "useQuery";
+const useQueryClient = "useQueryClient";
+const useMutation = "useMutation";
 
 const Hooks = {
     [useDatabase]: {
@@ -19,6 +22,20 @@ const Hooks = {
             hooks,
             toKebabCase(useDatabase)
         ),
+    },
+    [useMutation]: {
+        name: useMutation,
+        interfaceName: "UseMutationResult",
+        importPath: upath.join("utils", hooks, toKebabCase(useMutation)),
+    },
+    [useQuery]: {
+        name: useQuery,
+        interfaceName: "UseQueryResult",
+        importPath: upath.join("utils", hooks, toKebabCase(useQuery)),
+    },
+    [useQueryClient]: {
+        name: useQueryClient,
+        importPath: "react-query",
     },
 };
 

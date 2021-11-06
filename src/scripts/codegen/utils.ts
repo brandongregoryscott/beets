@@ -3,6 +3,7 @@ import pluralize from "pluralize";
 import { Project, PropertySignature, SourceFile } from "ts-morph";
 import upath from "upath";
 import { Paths } from "./constants/paths";
+import { HookAction } from "./enums/hook-action";
 import { log } from "./log";
 
 const getFromFunctionName = (property: PropertySignature): string =>
@@ -20,6 +21,26 @@ const getInterfacePath = (property: PropertySignature): string =>
 
 const getInterfaceImportPath = (property: PropertySignature): string =>
     removeExt(getInterfacePath(property).replace("src/", ""));
+
+const getHookName = (
+    property: PropertySignature,
+    action: HookAction
+): string => {
+    const entityName =
+        action === HookAction.LIST
+            ? getTableName(property)
+            : getInterfaceName(property);
+
+    return `use${action}${entityName}`;
+};
+
+const getHookOptionsInterfaceName = (
+    property: PropertySignature,
+    action: HookAction
+): string => {
+    const hookName = getHookName(property, action).replace("use", "Use");
+    return `${hookName}Options`;
+};
 
 const getRecordImportPath = (property: PropertySignature): string =>
     upath.join("models", removeExt(getRecordFileName(property)));
@@ -47,6 +68,7 @@ const getRecordSourceFile = (
 
     return sourceFile;
 };
+
 const getTableName = (property: PropertySignature): string =>
     _.capitalize(property.getName());
 
@@ -69,6 +91,8 @@ export {
     getInterfaceImportPath,
     getInterfaceName,
     getInterfacePath,
+    getHookName,
+    getHookOptionsInterfaceName,
     getRecordFileName,
     getRecordImportPath,
     getRecordName,
