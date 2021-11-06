@@ -1,3 +1,4 @@
+import { FileRecord } from "models/file-record";
 import { File } from "generated/interfaces/file";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
@@ -14,24 +15,20 @@ const defaultFilter = (query: PostgrestFilterBuilder<File>) => query;
 
 const useListFiles = (
     options?: UseListFilesOptions
-): UseQueryResult<File[], Error> => {
+): UseQueryResult<FileRecord[], Error> => {
     const { fromFiles } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
-    const result = useQuery<File[], Error>({
+    const result = useQuery<FileRecord[], Error>({
         key: Tables.Files,
         fn: async () => {
-            let query = fromFiles().select("*");
-            if (filter != null) {
-                query = filter(query);
-            }
-
-            const { data, error } = await query;
+            const query = fromFiles().select("*");
+            const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
             }
 
-            return data ?? [];
+            return data?.map((file) => new FileRecord(file)) ?? [];
         },
     });
 

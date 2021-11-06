@@ -21,12 +21,8 @@ const useListPgmigrations = (
     const result = useQuery<Pgmigration[], Error>({
         key: Tables.Pgmigrations,
         fn: async () => {
-            let query = fromPgmigrations().select("*");
-            if (filter != null) {
-                query = filter(query);
-            }
-
-            const { data, error } = await query;
+            const query = fromPgmigrations().select("*");
+            const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
             }

@@ -1,3 +1,4 @@
+import { UserRecord } from "models/user-record";
 import { User } from "generated/interfaces/user";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
@@ -14,24 +15,20 @@ const defaultFilter = (query: PostgrestFilterBuilder<User>) => query;
 
 const useListUsers = (
     options?: UseListUsersOptions
-): UseQueryResult<User[], Error> => {
+): UseQueryResult<UserRecord[], Error> => {
     const { fromUsers } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
-    const result = useQuery<User[], Error>({
+    const result = useQuery<UserRecord[], Error>({
         key: Tables.Users,
         fn: async () => {
-            let query = fromUsers().select("*");
-            if (filter != null) {
-                query = filter(query);
-            }
-
-            const { data, error } = await query;
+            const query = fromUsers().select("*");
+            const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
             }
 
-            return data ?? [];
+            return data?.map((user) => new UserRecord(user)) ?? [];
         },
     });
 

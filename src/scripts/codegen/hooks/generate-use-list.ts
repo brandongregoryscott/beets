@@ -7,6 +7,9 @@ import {
     getFromFunctionName,
     getTableName,
     toKebabCase,
+    getRecordName,
+    getRecordImportPath,
+    getRecordFileName,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -23,6 +26,14 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     const name = `useList${entityName}`;
     const filename = `${toKebabCase(name)}.ts`;
     const interfaceName = getInterfaceName(property);
+    const recordFile = project.getSourceFiles(
+        `**/*/${getRecordFileName(property)}`
+    )[0];
+    if (recordFile == null) {
+        log.warn(
+            `No record found for '${interfaceName}', this hook will return raw objects.`
+        );
+    }
 
     const file = project.createSourceFile(
         upath.join(
@@ -35,6 +46,13 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         undefined,
         { overwrite: true }
     );
+
+    if (recordFile != null) {
+        file.addImportDeclaration({
+            namedImports: [getRecordName(property)],
+            moduleSpecifier: getRecordImportPath(property),
+        });
+    }
 
     file.addImportDeclaration({
         namedImports: [getInterfaceName(property)],
@@ -87,7 +105,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useListInitializer(property),
+                initializer: useListInitializer(property, recordFile != null),
             },
         ],
     });
@@ -100,17 +118,24 @@ const generateUseList = (project: Project, property: PropertySignature) => {
 const getOptionsInterfaceName = (property: PropertySignature) =>
     `UseList${getTableName(property)}Options`;
 
-const useListInitializer = (property: PropertySignature) => {
+const useListInitializer = (
+    property: PropertySignature,
+    useRecord: boolean
+) => {
     const interfaceName = getInterfaceName(property);
+    const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
     const key = `${Enums.Tables.name}.${getTableName(property)}`;
     const optionsInterfaceName = getOptionsInterfaceName(property);
-
-    return `(options?: ${optionsInterfaceName}): UseQueryResult<${interfaceName}[], Error> => {
+    const returnType = useRecord ? recordName : interfaceName;
+    const returnValue = !useRecord
+        ? "data ?? []"
+        : `data?.map((${interfaceName.toLowerCase()}) => new ${recordName}(${interfaceName.toLowerCase()})) ?? []`;
+    return `(options?: ${optionsInterfaceName}): UseQueryResult<${returnType}[], Error> => {
         const { ${fromTable} } = useDatabase();
         const { ${filter} = ${defaultFilter} } = options ?? {};
 
-        const result = useQuery<${interfaceName}[], Error>({
+        const result = useQuery<${returnType}[], Error>({
             key: ${key},
             fn: async () => {
                 const query = ${fromTable}().select("*");
@@ -119,7 +144,7 @@ const useListInitializer = (property: PropertySignature) => {
                     throw error;
                 }
 
-                return data ?? [];
+                return ${returnValue};
             },
         });
 

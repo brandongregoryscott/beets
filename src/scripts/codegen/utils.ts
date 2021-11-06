@@ -3,7 +3,6 @@ import pluralize from "pluralize";
 import { PropertySignature } from "ts-morph";
 import upath from "upath";
 import { Paths } from "./constants/paths";
-import { log } from "./log";
 
 const getFromFunctionName = (property: PropertySignature): string =>
     `from${getTableName(property)}`;
@@ -19,10 +18,21 @@ const getInterfacePath = (property: PropertySignature): string =>
     );
 
 const getInterfaceImportPath = (property: PropertySignature): string =>
-    getInterfacePath(property).replace("src/", "").replace(".ts", "");
+    removeExt(getInterfacePath(property).replace("src/", ""));
+
+const getRecordImportPath = (property: PropertySignature): string =>
+    upath.join("models", removeExt(getRecordFileName(property)));
+
+const getRecordName = (property: PropertySignature): string =>
+    `${getInterfaceName(property)}Record`;
+
+const getRecordFileName = (property: PropertySignature): string =>
+    `${getInterfaceName(property).toLowerCase()}-record.ts`;
 
 const getTableName = (property: PropertySignature): string =>
     _.capitalize(property.getName());
+
+const removeExt = (filename: string) => upath.removeExt(filename, ".ts");
 
 const toKebabCase = (value: string) => {
     const hasOneCapitalLetter = value.match(/[A-Z]/g)?.length === 1;
@@ -41,6 +51,9 @@ export {
     getInterfaceImportPath,
     getInterfaceName,
     getInterfacePath,
+    getRecordFileName,
+    getRecordImportPath,
+    getRecordName,
     getTableName,
     toKebabCase,
 };

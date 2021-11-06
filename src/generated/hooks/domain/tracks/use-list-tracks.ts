@@ -1,3 +1,4 @@
+import { TrackRecord } from "models/track-record";
 import { Track } from "generated/interfaces/track";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
@@ -14,24 +15,20 @@ const defaultFilter = (query: PostgrestFilterBuilder<Track>) => query;
 
 const useListTracks = (
     options?: UseListTracksOptions
-): UseQueryResult<Track[], Error> => {
+): UseQueryResult<TrackRecord[], Error> => {
     const { fromTracks } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
-    const result = useQuery<Track[], Error>({
+    const result = useQuery<TrackRecord[], Error>({
         key: Tables.Tracks,
         fn: async () => {
-            let query = fromTracks().select("*");
-            if (filter != null) {
-                query = filter(query);
-            }
-
-            const { data, error } = await query;
+            const query = fromTracks().select("*");
+            const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
             }
 
-            return data ?? [];
+            return data?.map((track) => new TrackRecord(track)) ?? [];
         },
     });
 

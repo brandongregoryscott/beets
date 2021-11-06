@@ -1,3 +1,4 @@
+import { ProjectRecord } from "models/project-record";
 import { Project } from "generated/interfaces/project";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
@@ -14,24 +15,20 @@ const defaultFilter = (query: PostgrestFilterBuilder<Project>) => query;
 
 const useListProjects = (
     options?: UseListProjectsOptions
-): UseQueryResult<Project[], Error> => {
+): UseQueryResult<ProjectRecord[], Error> => {
     const { fromProjects } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
-    const result = useQuery<Project[], Error>({
+    const result = useQuery<ProjectRecord[], Error>({
         key: Tables.Projects,
         fn: async () => {
-            let query = fromProjects().select("*");
-            if (filter != null) {
-                query = filter(query);
-            }
-
-            const { data, error } = await query;
+            const query = fromProjects().select("*");
+            const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
             }
 
-            return data ?? [];
+            return data?.map((project) => new ProjectRecord(project)) ?? [];
         },
     });
 
