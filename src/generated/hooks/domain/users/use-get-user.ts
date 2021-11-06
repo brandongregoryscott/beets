@@ -13,25 +13,23 @@ const useGetUser = (
     const { fromUsers } = useDatabase();
     const { id } = options;
 
+    const get = async () => {
+        const query = fromUsers().select("*").eq("id", id).limit(1).single();
+        const { data, error } = await query;
+        if (error != null) {
+            throw error;
+        }
+
+        if (data == null) {
+            return undefined;
+        }
+
+        return new UserRecord(data);
+    };
+
     const result = useQuery<UserRecord | undefined, Error>({
         key: Tables.Users,
-        fn: async () => {
-            const query = fromUsers()
-                .select("*")
-                .eq("id", id)
-                .limit(1)
-                .single();
-            const { data, error } = await query;
-            if (error != null) {
-                throw error;
-            }
-
-            if (data == null) {
-                return undefined;
-            }
-
-            return new UserRecord(data);
-        },
+        fn: get,
     });
 
     return result;

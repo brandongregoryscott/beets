@@ -13,25 +13,23 @@ const useGetFile = (
     const { fromFiles } = useDatabase();
     const { id } = options;
 
+    const get = async () => {
+        const query = fromFiles().select("*").eq("id", id).limit(1).single();
+        const { data, error } = await query;
+        if (error != null) {
+            throw error;
+        }
+
+        if (data == null) {
+            return undefined;
+        }
+
+        return new FileRecord(data);
+    };
+
     const result = useQuery<FileRecord | undefined, Error>({
         key: Tables.Files,
-        fn: async () => {
-            const query = fromFiles()
-                .select("*")
-                .eq("id", id)
-                .limit(1)
-                .single();
-            const { data, error } = await query;
-            if (error != null) {
-                throw error;
-            }
-
-            if (data == null) {
-                return undefined;
-            }
-
-            return new FileRecord(data);
-        },
+        fn: get,
     });
 
     return result;

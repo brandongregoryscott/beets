@@ -13,25 +13,27 @@ const useGetPgmigration = (
     const { fromPgmigrations } = useDatabase();
     const { id } = options;
 
+    const get = async () => {
+        const query = fromPgmigrations()
+            .select("*")
+            .eq("id", id)
+            .limit(1)
+            .single();
+        const { data, error } = await query;
+        if (error != null) {
+            throw error;
+        }
+
+        if (data == null) {
+            return undefined;
+        }
+
+        return data;
+    };
+
     const result = useQuery<Pgmigration | undefined, Error>({
         key: Tables.Pgmigrations,
-        fn: async () => {
-            const query = fromPgmigrations()
-                .select("*")
-                .eq("id", id)
-                .limit(1)
-                .single();
-            const { data, error } = await query;
-            if (error != null) {
-                throw error;
-            }
-
-            if (data == null) {
-                return undefined;
-            }
-
-            return data;
-        },
+        fn: get,
     });
 
     return result;

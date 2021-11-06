@@ -135,17 +135,19 @@ const useListInitializer = (
         const { ${fromTable} } = ${useDatabase}();
         const { ${filter} = ${defaultFilter} } = options ?? {};
 
+        const list = async () => {
+            const query = ${fromTable}().select("*");
+            const { data, error } = await filter(query);
+            if (error != null) {
+                throw error;
+            }
+
+            return ${returnValue};
+        };
+
         const result = ${useQuery}<${returnType}[], Error>({
             key: ${key},
-            fn: async () => {
-                const query = ${fromTable}().select("*");
-                const { data, error } = await filter(query);
-                if (error != null) {
-                    throw error;
-                }
-
-                return ${returnValue};
-            },
+            fn: list,
         });
 
         return result;

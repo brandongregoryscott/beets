@@ -19,17 +19,19 @@ const useListFiles = (
     const { fromFiles } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
+    const list = async () => {
+        const query = fromFiles().select("*");
+        const { data, error } = await filter(query);
+        if (error != null) {
+            throw error;
+        }
+
+        return data?.map((file) => new FileRecord(file)) ?? [];
+    };
+
     const result = useQuery<FileRecord[], Error>({
         key: Tables.Files,
-        fn: async () => {
-            const query = fromFiles().select("*");
-            const { data, error } = await filter(query);
-            if (error != null) {
-                throw error;
-            }
-
-            return data?.map((file) => new FileRecord(file)) ?? [];
-        },
+        fn: list,
     });
 
     return result;

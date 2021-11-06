@@ -8,6 +8,7 @@ import { generateUseDatabase } from "./hooks/generate-use-database";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generateUseGet } from "./hooks/generate-use-get";
 import { generateUseCreate } from "./hooks/generate-use-create";
+import { generateUseDelete } from "./hooks/generate-use-delete";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -30,6 +31,7 @@ const main = async () => {
         generateUseList(project, property);
         generateUseGet(project, property);
         generateUseCreate(project, property);
+        generateUseDelete(project, property);
     });
 
     generateUseDatabase(project, properties);

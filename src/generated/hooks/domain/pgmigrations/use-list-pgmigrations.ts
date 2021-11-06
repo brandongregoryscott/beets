@@ -18,17 +18,19 @@ const useListPgmigrations = (
     const { fromPgmigrations } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
+    const list = async () => {
+        const query = fromPgmigrations().select("*");
+        const { data, error } = await filter(query);
+        if (error != null) {
+            throw error;
+        }
+
+        return data ?? [];
+    };
+
     const result = useQuery<Pgmigration[], Error>({
         key: Tables.Pgmigrations,
-        fn: async () => {
-            const query = fromPgmigrations().select("*");
-            const { data, error } = await filter(query);
-            if (error != null) {
-                throw error;
-            }
-
-            return data ?? [];
-        },
+        fn: list,
     });
 
     return result;

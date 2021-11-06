@@ -19,17 +19,19 @@ const useListProjects = (
     const { fromProjects } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
+    const list = async () => {
+        const query = fromProjects().select("*");
+        const { data, error } = await filter(query);
+        if (error != null) {
+            throw error;
+        }
+
+        return data?.map((project) => new ProjectRecord(project)) ?? [];
+    };
+
     const result = useQuery<ProjectRecord[], Error>({
         key: Tables.Projects,
-        fn: async () => {
-            const query = fromProjects().select("*");
-            const { data, error } = await filter(query);
-            if (error != null) {
-                throw error;
-            }
-
-            return data?.map((project) => new ProjectRecord(project)) ?? [];
-        },
+        fn: list,
     });
 
     return result;

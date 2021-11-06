@@ -113,25 +113,27 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
         const { ${fromTable} } = ${useDatabase}();
         const { ${id} } = options;
 
+        const get = async () => {
+            const query = ${fromTable}()
+                .select("*")
+                .eq("${id}", ${id})
+                .limit(1)
+                .single();
+            const { data, error } = await query;
+            if (error != null) {
+                throw error;
+            }
+
+            if (data == null) {
+                return undefined;
+            }
+
+            return ${returnValue};
+        };
+
         const result = ${useQuery}<${returnType}, Error>({
             key: ${key},
-            fn: async () => {
-                const query = ${fromTable}()
-                    .select("*")
-                    .eq("${id}", ${id})
-                    .limit(1)
-                    .single();
-                const { data, error } = await query;
-                if (error != null) {
-                    throw error;
-                }
-
-                if (data == null) {
-                    return undefined;
-                }
-
-                return ${returnValue};
-            },
+            fn: get,
         });
 
         return result;

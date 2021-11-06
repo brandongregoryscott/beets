@@ -19,17 +19,19 @@ const useListTracks = (
     const { fromTracks } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
+    const list = async () => {
+        const query = fromTracks().select("*");
+        const { data, error } = await filter(query);
+        if (error != null) {
+            throw error;
+        }
+
+        return data?.map((track) => new TrackRecord(track)) ?? [];
+    };
+
     const result = useQuery<TrackRecord[], Error>({
         key: Tables.Tracks,
-        fn: async () => {
-            const query = fromTracks().select("*");
-            const { data, error } = await filter(query);
-            if (error != null) {
-                throw error;
-            }
-
-            return data?.map((track) => new TrackRecord(track)) ?? [];
-        },
+        fn: list,
     });
 
     return result;

@@ -19,17 +19,19 @@ const useListUsers = (
     const { fromUsers } = useDatabase();
     const { filter = defaultFilter } = options ?? {};
 
+    const list = async () => {
+        const query = fromUsers().select("*");
+        const { data, error } = await filter(query);
+        if (error != null) {
+            throw error;
+        }
+
+        return data?.map((user) => new UserRecord(user)) ?? [];
+    };
+
     const result = useQuery<UserRecord[], Error>({
         key: Tables.Users,
-        fn: async () => {
-            const query = fromUsers().select("*");
-            const { data, error } = await filter(query);
-            if (error != null) {
-                throw error;
-            }
-
-            return data?.map((user) => new UserRecord(user)) ?? [];
-        },
+        fn: list,
     });
 
     return result;

@@ -13,25 +13,23 @@ const useGetProject = (
     const { fromProjects } = useDatabase();
     const { id } = options;
 
+    const get = async () => {
+        const query = fromProjects().select("*").eq("id", id).limit(1).single();
+        const { data, error } = await query;
+        if (error != null) {
+            throw error;
+        }
+
+        if (data == null) {
+            return undefined;
+        }
+
+        return new ProjectRecord(data);
+    };
+
     const result = useQuery<ProjectRecord | undefined, Error>({
         key: Tables.Projects,
-        fn: async () => {
-            const query = fromProjects()
-                .select("*")
-                .eq("id", id)
-                .limit(1)
-                .single();
-            const { data, error } = await query;
-            if (error != null) {
-                throw error;
-            }
-
-            if (data == null) {
-                return undefined;
-            }
-
-            return new ProjectRecord(data);
-        },
+        fn: get,
     });
 
     return result;
