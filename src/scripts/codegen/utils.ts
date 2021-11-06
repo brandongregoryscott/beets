@@ -1,8 +1,9 @@
 import _ from "lodash";
 import pluralize from "pluralize";
-import { PropertySignature } from "ts-morph";
+import { Project, PropertySignature, SourceFile } from "ts-morph";
 import upath from "upath";
 import { Paths } from "./constants/paths";
+import { log } from "./log";
 
 const getFromFunctionName = (property: PropertySignature): string =>
     `from${getTableName(property)}`;
@@ -29,6 +30,23 @@ const getRecordName = (property: PropertySignature): string =>
 const getRecordFileName = (property: PropertySignature): string =>
     `${getInterfaceName(property).toLowerCase()}-record.ts`;
 
+const getRecordSourceFile = (
+    project: Project,
+    property: PropertySignature
+): SourceFile | undefined => {
+    const sourceFile = project.getSourceFiles(
+        `**/*/${getRecordFileName(property)}`
+    )[0];
+    if (sourceFile == null) {
+        log.warn(
+            `No record found for '${getInterfaceName(
+                property
+            )}', this hook will return raw objects.`
+        );
+    }
+
+    return sourceFile;
+};
 const getTableName = (property: PropertySignature): string =>
     _.capitalize(property.getName());
 
@@ -54,6 +72,7 @@ export {
     getRecordFileName,
     getRecordImportPath,
     getRecordName,
+    getRecordSourceFile,
     getTableName,
     toKebabCase,
 };

@@ -16,16 +16,12 @@ import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 
-const defaultFilter = "defaultFilter";
-const filter = "filter";
-const PostgrestFilterBuilder = "PostgrestFilterBuilder";
+const id = "id";
 
-const generateUseList = (project: Project, property: PropertySignature) => {
-    const entityName = getTableName(property);
-    const lowerCaseEntityName = entityName.toLowerCase();
-    const name = `useList${entityName}`;
+const generateUseGet = (project: Project, property: PropertySignature) => {
+    const entityName = getInterfaceName(property);
+    const name = `useGet${entityName}`;
     const filename = `${toKebabCase(name)}.ts`;
-    const interfaceName = getInterfaceName(property);
     const recordSourceFile = getRecordSourceFile(project, property);
 
     const file = project.createSourceFile(
@@ -33,7 +29,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
             Paths.base,
             "hooks",
             "domain",
-            lowerCaseEntityName,
+            getTableName(property).toLowerCase(),
             filename
         ),
         undefined,
@@ -47,10 +43,12 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         });
     }
 
-    file.addImportDeclaration({
-        namedImports: [getInterfaceName(property)],
-        moduleSpecifier: getInterfaceImportPath(property),
-    });
+    if (recordSourceFile == null) {
+        file.addImportDeclaration({
+            namedImports: [getInterfaceName(property)],
+            moduleSpecifier: getInterfaceImportPath(property),
+        });
+    }
 
     file.addImportDeclaration({
         namedImports: [Enums.Tables.name],
@@ -67,28 +65,13 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         moduleSpecifier: "utils/hooks/use-query",
     });
 
-    file.addImportDeclaration({
-        namedImports: [PostgrestFilterBuilder],
-        moduleSpecifier: "@supabase/postgrest-js",
-    });
-
     file.addInterface({
         name: getOptionsInterfaceName(property),
         properties: [
             {
-                name: filter,
-                hasQuestionToken: true,
-                type: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => ${PostgrestFilterBuilder}<${interfaceName}>`,
-            },
-        ],
-    });
-
-    file.addVariableStatement({
-        declarationKind: VariableDeclarationKind.Const,
-        declarations: [
-            {
-                name: defaultFilter,
-                initializer: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => query\n\n`,
+                name: id,
+                hasQuestionToken: false,
+                type: "string",
             },
         ],
     });
@@ -98,7 +81,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useListInitializer(
+                initializer: useGetInitializer(
                     property,
                     recordSourceFile != null
                 ),
@@ -112,32 +95,35 @@ const generateUseList = (project: Project, property: PropertySignature) => {
 };
 
 const getOptionsInterfaceName = (property: PropertySignature) =>
-    `UseList${getTableName(property)}Options`;
+    `UseGet${getInterfaceName(property)}Options`;
 
-const useListInitializer = (
-    property: PropertySignature,
-    useRecord: boolean
-) => {
+const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
     const key = `${Enums.Tables.name}.${getTableName(property)}`;
     const optionsInterfaceName = getOptionsInterfaceName(property);
-    const returnType = useRecord ? recordName : interfaceName;
-    const returnValue = !useRecord
-        ? "data ?? []"
-        : `data?.map((${interfaceName.toLowerCase()}) => new ${recordName}(${interfaceName.toLowerCase()})) ?? []`;
-    return `(options?: ${optionsInterfaceName}): UseQueryResult<${returnType}[], Error> => {
+    const returnType = `${useRecord ? recordName : interfaceName} | undefined`;
+    const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
+    return `(options: ${optionsInterfaceName}): UseQueryResult<${returnType}, Error> => {
         const { ${fromTable} } = useDatabase();
-        const { ${filter} = ${defaultFilter} } = options ?? {};
+        const { ${id} } = options;
 
-        const result = useQuery<${returnType}[], Error>({
+        const result = useQuery<${returnType}, Error>({
             key: ${key},
             fn: async () => {
-                const query = ${fromTable}().select("*");
-                const { data, error } = await filter(query);
+                const query = ${fromTable}()
+                    .select("*")
+                    .eq("${id}", ${id})
+                    .limit(1)
+                    .single();
+                const { data, error } = await query;
                 if (error != null) {
                     throw error;
+                }
+
+                if (data == null) {
+                    return undefined;
                 }
 
                 return ${returnValue};
@@ -148,4 +134,4 @@ const useListInitializer = (
     }`;
 };
 
-export { generateUseList };
+export { generateUseGet };
