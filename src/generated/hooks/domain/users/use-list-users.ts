@@ -10,11 +10,13 @@ interface UseListUsersOptions {
     ) => PostgrestFilterBuilder<User>;
 }
 
+const defaultFilter = (query: PostgrestFilterBuilder<User>) => query;
+
 const useListUsers = (
     options?: UseListUsersOptions
 ): UseQueryResult<User[], Error> => {
     const { fromUsers } = useDatabase();
-    const { filter } = options ?? {};
+    const { filter = defaultFilter } = options ?? {};
 
     const result = useQuery<User[], Error>({
         key: Tables.Users,

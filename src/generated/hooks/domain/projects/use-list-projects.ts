@@ -10,11 +10,13 @@ interface UseListProjectsOptions {
     ) => PostgrestFilterBuilder<Project>;
 }
 
+const defaultFilter = (query: PostgrestFilterBuilder<Project>) => query;
+
 const useListProjects = (
     options?: UseListProjectsOptions
 ): UseQueryResult<Project[], Error> => {
     const { fromProjects } = useDatabase();
-    const { filter } = options ?? {};
+    const { filter = defaultFilter } = options ?? {};
 
     const result = useQuery<Project[], Error>({
         key: Tables.Projects,

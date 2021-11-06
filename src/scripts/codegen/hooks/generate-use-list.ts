@@ -13,6 +13,8 @@ import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 
+const defaultFilter = "defaultFilter";
+const filter = "filter";
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
 
 const generateUseList = (project: Project, property: PropertySignature) => {
@@ -63,9 +65,19 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         name: `UseList${getTableName(property)}Options`,
         properties: [
             {
-                name: "filter",
+                name: filter,
                 hasQuestionToken: true,
                 type: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => ${PostgrestFilterBuilder}<${interfaceName}>`,
+            },
+        ],
+    });
+
+    file.addVariableStatement({
+        declarationKind: VariableDeclarationKind.Const,
+        declarations: [
+            {
+                name: defaultFilter,
+                initializer: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => query\n\n`,
             },
         ],
     });
@@ -96,17 +108,13 @@ const useListInitializer = (property: PropertySignature) => {
 
     return `(options?: ${optionsInterfaceName}): UseQueryResult<${interfaceName}[], Error> => {
         const { ${fromTable} } = useDatabase();
-        const { filter } = options ?? {};
+        const { ${filter} = ${defaultFilter} } = options ?? {};
 
         const result = useQuery<${interfaceName}[], Error>({
             key: ${key},
             fn: async () => {
-                let query = ${fromTable}().select("*");
-                if (filter != null) {
-                    query = filter(query);
-                }
-
-                const { data, error } = await query;
+                const query = ${fromTable}().select("*");
+                const { data, error } = await filter(query);
                 if (error != null) {
                     throw error;
                 }

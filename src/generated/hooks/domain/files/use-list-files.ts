@@ -10,11 +10,13 @@ interface UseListFilesOptions {
     ) => PostgrestFilterBuilder<File>;
 }
 
+const defaultFilter = (query: PostgrestFilterBuilder<File>) => query;
+
 const useListFiles = (
     options?: UseListFilesOptions
 ): UseQueryResult<File[], Error> => {
     const { fromFiles } = useDatabase();
-    const { filter } = options ?? {};
+    const { filter = defaultFilter } = options ?? {};
 
     const result = useQuery<File[], Error>({
         key: Tables.Files,

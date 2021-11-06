@@ -10,11 +10,13 @@ interface UseListPgmigrationsOptions {
     ) => PostgrestFilterBuilder<Pgmigration>;
 }
 
+const defaultFilter = (query: PostgrestFilterBuilder<Pgmigration>) => query;
+
 const useListPgmigrations = (
     options?: UseListPgmigrationsOptions
 ): UseQueryResult<Pgmigration[], Error> => {
     const { fromPgmigrations } = useDatabase();
-    const { filter } = options ?? {};
+    const { filter = defaultFilter } = options ?? {};
 
     const result = useQuery<Pgmigration[], Error>({
         key: Tables.Pgmigrations,

@@ -10,11 +10,13 @@ interface UseListTracksOptions {
     ) => PostgrestFilterBuilder<Track>;
 }
 
+const defaultFilter = (query: PostgrestFilterBuilder<Track>) => query;
+
 const useListTracks = (
     options?: UseListTracksOptions
 ): UseQueryResult<Track[], Error> => {
     const { fromTracks } = useDatabase();
-    const { filter } = options ?? {};
+    const { filter = defaultFilter } = options ?? {};
 
     const result = useQuery<Track[], Error>({
         key: Tables.Tracks,
