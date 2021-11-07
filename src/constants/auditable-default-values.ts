@@ -1,7 +1,8 @@
 import { Auditable } from "interfaces/auditable";
+import { RequiredOr } from "types/required-or";
 
-const AuditableDefaultValues: Auditable = {
-    id: undefined as any,
+const AuditableDefaultValues: RequiredOr<Auditable, undefined> = {
+    id: undefined,
     created_on: undefined,
     created_by_id: undefined,
     deleted_on: undefined,
