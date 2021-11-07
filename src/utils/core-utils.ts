@@ -1,5 +1,6 @@
 import { List } from "immutable";
 import _ from "lodash";
+import { SetStateAction } from "react";
 import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";
@@ -29,6 +30,9 @@ const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
 
     return value == null;
 };
+
+const getUpdatedState = <T>(previousValue: T, update: SetStateAction<T>) =>
+    _.isFunction(update) ? update(previousValue) : update;
 
 const groupBy = <TLeft, TRight>(
     left: TLeft[] | undefined,
@@ -80,6 +84,7 @@ export {
     hash,
     initializeList,
     isNilOrEmpty,
+    getUpdatedState,
     groupBy,
     mapTo,
     randomFloat,

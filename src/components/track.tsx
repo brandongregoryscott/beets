@@ -20,10 +20,10 @@ import { FileRecord } from "models/file-record";
 import React, { useEffect, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { useTrackAtom } from "utils/hooks/use-track-atom";
 import { List } from "immutable";
 import { initializeList } from "utils/core-utils";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
+import { useTrackState } from "utils/hooks/use-track-state";
 
 interface TrackProps extends TrackInterface {
     index: number;
@@ -33,7 +33,7 @@ const iconMarginRight = minorScale(2);
 
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { id, name, mute, solo } = props;
-    const { remove, setName, toggleMute, toggleSolo } = useTrackAtom(id);
+    const { remove, setName, toggleMute, toggleSolo } = useTrackState(id);
     const {
         value: sequencerDialogOpen,
         setTrue: handleOpenSequencerDialog,
