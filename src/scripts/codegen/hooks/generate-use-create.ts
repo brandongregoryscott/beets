@@ -53,12 +53,10 @@ const generateUseCreate = (project: Project, property: PropertySignature) => {
         });
     }
 
-    if (recordSourceFile == null) {
-        file.addImportDeclaration({
-            namedImports: [getInterfaceName(property)],
-            moduleSpecifier: getInterfaceImportPath(property),
-        });
-    }
+    file.addImportDeclaration({
+        namedImports: [getInterfaceName(property)],
+        moduleSpecifier: getInterfaceImportPath(property),
+    });
 
     file.addImportDeclaration({
         namedImports: [Enums.Tables.name],

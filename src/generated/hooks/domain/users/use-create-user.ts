@@ -1,4 +1,5 @@
 import { UserRecord } from "models/user-record";
+import { User } from "generated/interfaces/user";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQueryClient } from "react-query";

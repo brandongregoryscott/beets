@@ -1,4 +1,5 @@
 import { TrackRecord } from "models/track-record";
+import { Track } from "generated/interfaces/track";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQueryClient } from "react-query";

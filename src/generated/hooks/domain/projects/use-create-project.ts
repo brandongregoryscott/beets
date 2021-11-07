@@ -1,4 +1,5 @@
 import { ProjectRecord } from "models/project-record";
+import { Project } from "generated/interfaces/project";
 import { Tables } from "generated/enums/tables";
 import { useDatabase } from "generated/hooks/use-database";
 import { useQueryClient } from "react-query";

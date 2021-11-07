@@ -3,7 +3,7 @@ import _ from "lodash";
 import { log } from "./log";
 import { generateInterface } from "./generate-interface";
 import { generateSupabase } from "./generate-supabase";
-import { generateEnum } from "./generate-enum";
+import { generateTablesEnum } from "./generate-tables-enum";
 import { generateUseDatabase } from "./hooks/generate-use-database";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generateUseGet } from "./hooks/generate-use-get";
@@ -25,7 +25,7 @@ const main = async () => {
         process.exit(1);
     }
 
-    generateEnum(project, properties);
+    generateTablesEnum(project, properties);
 
     properties.forEach((property) => {
         generateInterface(project, property);
