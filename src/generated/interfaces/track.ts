@@ -19,6 +19,7 @@ interface Track {
      * This is a Foreign Key to `projects.id`.<fk table='projects' column='id'/>
      */
     project_id: string;
+    volume: number;
 }
 
 export type { Track };

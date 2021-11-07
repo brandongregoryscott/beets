@@ -1,7 +1,9 @@
-interface Auditable {
+import { Entity } from "interfaces/entity";
+
+interface Auditable extends Entity {
     created_on?: string;
     created_by_id?: string;
-    deletedn?: string;
+    deleted_on?: string;
     deleted_by_id?: string;
     updated_on?: string;
     updated_by_id?: string;

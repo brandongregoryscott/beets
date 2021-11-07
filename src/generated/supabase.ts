@@ -352,6 +352,7 @@ export interface paths {
                     solo?: parameters["rowFilter.tracks.solo"];
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
+                    volume?: parameters["rowFilter.tracks.volume"];
                     /** Filtering Columns */
                     select?: parameters["select"];
                     /** Ordering */
@@ -414,6 +415,7 @@ export interface paths {
                     solo?: parameters["rowFilter.tracks.solo"];
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
+                    volume?: parameters["rowFilter.tracks.volume"];
                 };
                 header: {
                     /** Preference */
@@ -440,6 +442,7 @@ export interface paths {
                     solo?: parameters["rowFilter.tracks.solo"];
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
+                    volume?: parameters["rowFilter.tracks.volume"];
                 };
                 body: {
                     /** tracks */
@@ -630,6 +633,7 @@ export interface definitions {
          * This is a Foreign Key to `projects.id`.<fk table='projects' column='id'/>
          */
         project_id: string;
+        volume: number;
     };
     users: {
         created_on?: string;
@@ -712,6 +716,7 @@ export interface parameters {
     "rowFilter.tracks.solo": string;
     "rowFilter.tracks.pan": string;
     "rowFilter.tracks.project_id": string;
+    "rowFilter.tracks.volume": string;
     /** users */
     "body.users": definitions["users"];
     "rowFilter.users.created_on": string;
