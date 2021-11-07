@@ -1,17 +1,28 @@
 import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
-import { BASE_IMPORT_PATH, BASE_PATH } from "./constants";
-import { log } from "./log";
-import { getInterfaceName, getInterfaceImportPath } from "./utils";
+import { log } from "../log";
+import {
+    getInterfaceName,
+    getInterfaceImportPath,
+    getFromFunctionName,
+    getTableName,
+} from "../utils";
+import upath from "upath";
+import { Enums } from "../constants/enums";
+import { Hooks } from "../constants/hooks";
 
-const generateHook = (project: Project, properties: PropertySignature[]) => {
-    const name = "useDatabase";
-    const filename = "use-database.ts";
+const generateUseDatabase = (
+    project: Project,
+    properties: PropertySignature[]
+) => {
+    const name = Hooks.useDatabase.name;
 
     const file = project.createSourceFile(
-        `${BASE_PATH}/hooks/${filename}`,
+        Hooks.useDatabase.filePath,
         undefined,
-        { overwrite: true }
+        {
+            overwrite: true,
+        }
     );
 
     file.addImportDeclarations(
@@ -32,15 +43,15 @@ const generateHook = (project: Project, properties: PropertySignature[]) => {
     });
 
     file.addImportDeclaration({
-        namedImports: ["Tables"],
-        moduleSpecifier: `${BASE_IMPORT_PATH}/enums/tables`,
+        namedImports: [Enums.Tables.name],
+        moduleSpecifier: Enums.Tables.importPath,
     });
 
     file.addVariableStatement({
         declarationKind: VariableDeclarationKind.Const,
         declarations: [
             {
-                name: "useDatabase",
+                name,
                 initializer: useDatabaseInitializer(properties),
             },
         ],
@@ -58,9 +69,9 @@ const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
         (property) =>
             `
     const ${getFromFunctionName(property)} = useCallback(() =>
-        supabase.from<${getInterfaceName(property)}>(Tables.${getTableName(
-                property
-            )}),
+        supabase.from<${getInterfaceName(property)}>(${
+                Enums.Tables.name
+            }.${getTableName(property)}),
         [supabase]
     )
 
@@ -70,10 +81,4 @@ const useDatabaseInitializer = (properties: PropertySignature[]) => `() => {
     return { ${properties.map(getFromFunctionName).join(", ")} };
 }`;
 
-const getFromFunctionName = (property: PropertySignature): string =>
-    `from${getTableName(property)}`;
-
-const getTableName = (property: PropertySignature): string =>
-    _.capitalize(property.getName());
-
-export { generateHook };
+export { generateUseDatabase };

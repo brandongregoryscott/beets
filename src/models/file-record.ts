@@ -9,18 +9,18 @@ import { MidiNotes } from "constants/midi-notes";
 
 const defaultValues = makeDefaultValues<File>({
     bucketid: "",
-    createdbyid: undefined,
-    createdon: undefined,
-    deletedbyid: undefined,
-    deletedon: undefined,
+    created_by_id: undefined,
+    created_on: undefined,
+    deleted_by_id: undefined,
+    deleted_on: undefined,
     description: "",
     id: "",
     name: "",
     path: "",
     size: undefined,
     type: "",
-    updatedbyid: undefined,
-    updatedon: undefined,
+    updated_by_id: undefined,
+    updated_on: undefined,
 });
 
 class FileRecord
@@ -82,7 +82,7 @@ class FileRecord
     }
 
     public getPath(): string {
-        return `${this.createdbyid}/${this.path}`;
+        return `${this.created_by_id}/${this.path}`;
     }
 
     public getPublicUrl(): string {

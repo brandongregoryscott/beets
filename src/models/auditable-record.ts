@@ -14,7 +14,7 @@ function AuditableRecord<TRecord extends Constructor<Auditable>>(
 ) {
     return class AuditableRecord extends Base {
         public getUpdatedOn(): string | undefined {
-            return this.updatedon ?? this.createdon;
+            return this.updated_on ?? this.created_on;
         }
     };
 }

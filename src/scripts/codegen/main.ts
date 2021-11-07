@@ -3,8 +3,13 @@ import _ from "lodash";
 import { log } from "./log";
 import { generateInterface } from "./generate-interface";
 import { generateSupabase } from "./generate-supabase";
-import { generateEnum } from "./generate-enum";
-import { generateHook } from "./generate-hook";
+import { generateTablesEnum } from "./generate-tables-enum";
+import { generateUseDatabase } from "./hooks/generate-use-database";
+import { generateUseList } from "./hooks/generate-use-list";
+import { generateUseGet } from "./hooks/generate-use-get";
+import { generateUseCreate } from "./hooks/generate-use-create";
+import { generateUseDelete } from "./hooks/generate-use-delete";
+import { generateUseUpdate } from "./hooks/generate-use-update";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -20,13 +25,18 @@ const main = async () => {
         process.exit(1);
     }
 
-    generateEnum(project, properties);
+    generateTablesEnum(project, properties);
 
     properties.forEach((property) => {
         generateInterface(project, property);
+        generateUseList(project, property);
+        generateUseGet(project, property);
+        generateUseCreate(project, property);
+        generateUseDelete(project, property);
+        generateUseUpdate(project, property);
     });
 
-    generateHook(project, properties);
+    generateUseDatabase(project, properties);
 
     await project.save();
 

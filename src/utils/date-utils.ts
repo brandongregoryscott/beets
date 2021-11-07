@@ -1,10 +1,10 @@
 import { DateTime } from "luxon";
 import { isNilOrEmpty } from "utils/core-utils";
 
-const formatUpdatedOn = (updatedon?: string): string =>
-    isNilOrEmpty(updatedon)
+const formatUpdatedOn = (updated_on?: string): string =>
+    isNilOrEmpty(updated_on)
         ? "--"
-        : DateTime.fromISO(updatedon!).toLocaleString(
+        : DateTime.fromISO(updated_on!).toLocaleString(
               DateTime.DATETIME_MED_WITH_WEEKDAY
           );
 

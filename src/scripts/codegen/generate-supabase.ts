@@ -1,8 +1,9 @@
 import { log } from "./log";
 import openapi from "openapi-typescript";
 import { env } from "../../utils/env";
-import { BASE_PATH } from "./constants";
 import { Project } from "ts-morph";
+import { Paths } from "./constants/paths";
+import upath from "upath";
 
 const generateSupabase = async (project: Project) => {
     const filename = "supabase.ts";
@@ -12,9 +13,13 @@ const generateSupabase = async (project: Project) => {
         `${env.REACT_APP_SUPABASE_URL}/rest/v1/?apikey=${env.REACT_APP_SUPABASE_ANON_KEY}`
     );
 
-    const file = project.createSourceFile(`${BASE_PATH}/${filename}`, output, {
-        overwrite: true,
-    });
+    const file = project.createSourceFile(
+        upath.join(Paths.base, filename),
+        output,
+        {
+            overwrite: true,
+        }
+    );
 
     log.info(`Writing ${filename}`);
 

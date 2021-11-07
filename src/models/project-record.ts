@@ -5,14 +5,14 @@ import { Project } from "generated/interfaces/project";
 import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<Project>({
-    createdbyid: undefined,
-    createdon: undefined,
-    deletedbyid: undefined,
-    deletedon: undefined,
+    created_by_id: undefined,
+    created_on: undefined,
+    deleted_by_id: undefined,
+    deleted_on: undefined,
     id: undefined,
     name: "",
-    updatedbyid: undefined,
-    updatedon: undefined,
+    updated_by_id: undefined,
+    updated_on: undefined,
 });
 
 class ProjectRecord
