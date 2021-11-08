@@ -1,15 +1,9 @@
 import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
 import { Track } from "components/track";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { List } from "immutable";
-import { MidiNote } from "reactronica";
-import { FileRecord } from "models/file-record";
 import { useCallback } from "react";
 
 interface TrackListProps {}
-
-const files = List<FileRecord>();
-const steps = List<MidiNote>();
 
 const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
     const { state, addTrack } = useWorkstationState();
@@ -19,13 +13,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         <Pane>
             <Pane display="flex" flexDirection="column">
                 {tracks.map((track, index) => (
-                    <Track
-                        {...track.toPOJO()}
-                        files={files}
-                        steps={steps}
-                        index={index}
-                        key={track.id}
-                    />
+                    <Track {...track.toPOJO()} index={index} key={track.id} />
                 ))}
             </Pane>
             <Pane display="flex" flexDirection="row" marginRight="auto">

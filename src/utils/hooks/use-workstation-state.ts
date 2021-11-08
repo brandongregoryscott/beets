@@ -1,15 +1,15 @@
 import { SetStateAction, useAtom } from "jotai";
 import { ProjectRecord } from "models/project-record";
-import { TrackRecordV2 } from "models/track-record-v2";
+import { TrackRecord } from "models/track-record";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCallback } from "react";
 import { WorkstationStateAtom } from "utils/atoms/workstation-state-atom";
 import { getUpdatedState } from "utils/core-utils";
 
 interface UseWorkstationStateResult {
-    addTrack: (track?: TrackRecordV2) => void | Promise<void>;
-    getTrack: (id: string) => TrackRecordV2 | undefined;
-    removeTrack: (track: TrackRecordV2) => void | Promise<void>;
+    addTrack: (track?: TrackRecord) => void | Promise<void>;
+    getTrack: (id: string) => TrackRecord | undefined;
+    removeTrack: (track: TrackRecord) => void | Promise<void>;
     state: WorkstationStateRecord;
     setState: (
         update: SetStateAction<WorkstationStateRecord>
@@ -17,7 +17,7 @@ interface UseWorkstationStateResult {
     setCurrentProject: (
         updatedProject: SetStateAction<ProjectRecord>
     ) => void | Promise<void>;
-    updateTrack: (track: TrackRecordV2) => void | Promise<void>;
+    updateTrack: (track: TrackRecord) => void | Promise<void>;
 }
 
 const useWorkstationState = (): UseWorkstationStateResult => {
@@ -37,7 +37,7 @@ const useWorkstationState = (): UseWorkstationStateResult => {
     );
 
     const addTrack = useCallback(
-        (track?: TrackRecordV2) =>
+        (track?: TrackRecord) =>
             setCurrentProject((prev) => prev.addTrack(track)),
         [setCurrentProject]
     );
@@ -48,13 +48,13 @@ const useWorkstationState = (): UseWorkstationStateResult => {
     );
 
     const removeTrack = useCallback(
-        (track: TrackRecordV2) =>
+        (track: TrackRecord) =>
             setCurrentProject((prev) => prev.removeTrack(track)),
         [setCurrentProject]
     );
 
     const updateTrack = useCallback(
-        (updatedTrack: TrackRecordV2) =>
+        (updatedTrack: TrackRecord) =>
             setCurrentProject((prev) => prev.updateTrack(updatedTrack)),
         [setCurrentProject]
     );

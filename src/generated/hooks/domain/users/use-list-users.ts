@@ -20,7 +20,12 @@ const useListUsers = (
     options?: UseListUsersOptions
 ): UseQueryResult<UserRecord[], Error> => {
     const { fromUsers } = useDatabase();
-    const { enabled, filter = defaultFilter } = options ?? {};
+    const {
+        enabled,
+        filter = defaultFilter,
+        onError,
+        onSuccess,
+    } = options ?? {};
 
     const list = async () => {
         const query = fromUsers().select("*");
@@ -36,6 +41,8 @@ const useListUsers = (
         enabled,
         key: ["List", Tables.Users],
         fn: list,
+        onError,
+        onSuccess,
     });
 
     return result;

@@ -4,10 +4,10 @@ import { BaseRecord } from "models/base-record";
 import { Project } from "generated/interfaces/project";
 import { AuditableRecord } from "models/auditable-record";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
-import { TrackRecordV2 } from "models/track-record-v2";
+import { TrackRecord } from "models/track-record";
 
 interface NavigationProperties {
-    tracks?: List<TrackRecordV2>;
+    tracks?: List<TrackRecord>;
 }
 
 const defaultValues = makeDefaultValues<Project>({
@@ -19,7 +19,7 @@ class ProjectRecord
     extends AuditableRecord(BaseRecord(ImmutableRecord(defaultValues)))
     implements Project
 {
-    private tracks: List<TrackRecordV2>;
+    private tracks: List<TrackRecord>;
 
     constructor(values?: Partial<Project | ProjectRecord>) {
         values = values ?? defaultValues;
@@ -30,11 +30,11 @@ class ProjectRecord
 
         super(values);
 
-        this.tracks = List([new TrackRecordV2()]);
+        this.tracks = List([new TrackRecord()]);
     }
 
-    public addTrack(track?: TrackRecordV2): ProjectRecord {
-        const tracks = this.tracks.push(track ?? new TrackRecordV2());
+    public addTrack(track?: TrackRecord): ProjectRecord {
+        const tracks = this.tracks.push(track ?? new TrackRecord());
         return new ProjectRecord(this).setTracks(tracks);
     }
 
@@ -42,11 +42,11 @@ class ProjectRecord
         return { tracks: this.tracks };
     }
 
-    public getTrack(id: string): TrackRecordV2 | undefined {
+    public getTrack(id: string): TrackRecord | undefined {
         return this.tracks.find((track) => track.id === id);
     }
 
-    public getTracks(): List<TrackRecordV2> {
+    public getTracks(): List<TrackRecord> {
         return this.tracks;
     }
 
@@ -54,7 +54,7 @@ class ProjectRecord
         return !isNilOrEmpty(this.id);
     }
 
-    public removeTrack(track: TrackRecordV2): ProjectRecord {
+    public removeTrack(track: TrackRecord): ProjectRecord {
         const tracks = this.tracks.filterNot(
             (existingTrack) => existingTrack.id === track.id
         );
@@ -62,12 +62,15 @@ class ProjectRecord
         return new ProjectRecord(this).setTracks(tracks);
     }
 
-    public setTracks(tracks: List<TrackRecordV2>): ProjectRecord {
-        this.tracks = tracks;
+    public setTracks(tracks: List<TrackRecord> | TrackRecord[]): ProjectRecord {
+        this.tracks = (List.isList(tracks) ? tracks : List(tracks)).filter(
+            (track) =>
+                isNilOrEmpty(track.project_id) || track.project_id === this.id
+        );
         return this;
     }
 
-    public updateTrack(track: TrackRecordV2): ProjectRecord {
+    public updateTrack(track: TrackRecord): ProjectRecord {
         const existingTrack = this.getTrack(track.id);
         if (existingTrack == null) {
             return this;

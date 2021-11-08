@@ -20,7 +20,12 @@ const useListProjects = (
     options?: UseListProjectsOptions
 ): UseQueryResult<ProjectRecord[], Error> => {
     const { fromProjects } = useDatabase();
-    const { enabled, filter = defaultFilter } = options ?? {};
+    const {
+        enabled,
+        filter = defaultFilter,
+        onError,
+        onSuccess,
+    } = options ?? {};
 
     const list = async () => {
         const query = fromProjects().select("*");
@@ -36,6 +41,8 @@ const useListProjects = (
         enabled,
         key: ["List", Tables.Projects],
         fn: list,
+        onError,
+        onSuccess,
     });
 
     return result;

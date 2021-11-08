@@ -15,7 +15,7 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import { Track as TrackInterface } from "interfaces/track";
+import { Track as TrackInterface } from "generated/interfaces/track";
 import { FileRecord } from "models/file-record";
 import React, { useEffect, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
@@ -64,7 +64,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
             flexDirection="column"
             alignItems="flex-start"
             background="gray200"
-            width={majorScale(26)}
+            width={majorScale(21)}
             marginY={majorScale(1)}
             padding={majorScale(1)}>
             <EditableParagraph onChange={setName} value={name} />

@@ -20,7 +20,12 @@ const useListFiles = (
     options?: UseListFilesOptions
 ): UseQueryResult<FileRecord[], Error> => {
     const { fromFiles } = useDatabase();
-    const { enabled, filter = defaultFilter } = options ?? {};
+    const {
+        enabled,
+        filter = defaultFilter,
+        onError,
+        onSuccess,
+    } = options ?? {};
 
     const list = async () => {
         const query = fromFiles().select("*");
@@ -36,6 +41,8 @@ const useListFiles = (
         enabled,
         key: ["List", Tables.Files],
         fn: list,
+        onError,
+        onSuccess,
     });
 
     return result;

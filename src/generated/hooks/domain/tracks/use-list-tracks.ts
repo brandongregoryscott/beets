@@ -20,7 +20,12 @@ const useListTracks = (
     options?: UseListTracksOptions
 ): UseQueryResult<TrackRecord[], Error> => {
     const { fromTracks } = useDatabase();
-    const { enabled, filter = defaultFilter } = options ?? {};
+    const {
+        enabled,
+        filter = defaultFilter,
+        onError,
+        onSuccess,
+    } = options ?? {};
 
     const list = async () => {
         const query = fromTracks().select("*");
@@ -36,6 +41,8 @@ const useListTracks = (
         enabled,
         key: ["List", Tables.Tracks],
         fn: list,
+        onError,
+        onSuccess,
     });
 
     return result;

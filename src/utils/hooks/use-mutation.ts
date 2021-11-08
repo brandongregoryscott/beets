@@ -37,6 +37,10 @@ interface UseMutationResult<
         variables: TVariables,
         options?: MutateOptions<TResultObject, TError, TVariables, TContext>
     ) => void;
+    mutateAsync: (
+        variables: TVariables,
+        options?: MutateOptions<TResultObject, TError, TVariables, TContext>
+    ) => Promise<TResultObject>;
     reset: () => void;
 }
 
@@ -79,6 +83,7 @@ const useMutation = <
             "isLoading",
             "isSuccess",
             "mutate",
+            "mutateAsync",
             "reset"
         ),
         resultObject: result.data,

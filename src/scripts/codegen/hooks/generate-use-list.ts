@@ -157,7 +157,12 @@ const useListInitializer = (
         : `data?.map((${interfaceName.toLowerCase()}) => new ${recordName}(${interfaceName.toLowerCase()})) ?? []`;
     return `(options?: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}[], Error> => {
         const { ${fromTable} } = ${useDatabase}();
-        const { ${enabled}, ${filter} = ${defaultFilter} } = options ?? {};
+        const {
+            ${enabled},
+            ${filter} = ${defaultFilter},
+            ${onError},
+            ${onSuccess}
+        } = options ?? {};
 
         const list = async () => {
             const query = ${fromTable}().select("*");
@@ -173,6 +178,8 @@ const useListInitializer = (
             ${enabled},
             key: ${getQueryKey(HookAction.LIST, property)},
             fn: list,
+            ${onError},
+            ${onSuccess},
         });
 
         return result;

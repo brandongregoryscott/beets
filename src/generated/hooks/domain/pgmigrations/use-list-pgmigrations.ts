@@ -19,7 +19,12 @@ const useListPgmigrations = (
     options?: UseListPgmigrationsOptions
 ): UseQueryResult<Pgmigration[], Error> => {
     const { fromPgmigrations } = useDatabase();
-    const { enabled, filter = defaultFilter } = options ?? {};
+    const {
+        enabled,
+        filter = defaultFilter,
+        onError,
+        onSuccess,
+    } = options ?? {};
 
     const list = async () => {
         const query = fromPgmigrations().select("*");
@@ -35,6 +40,8 @@ const useListPgmigrations = (
         enabled,
         key: ["List", Tables.Pgmigrations],
         fn: list,
+        onError,
+        onSuccess,
     });
 
     return result;
