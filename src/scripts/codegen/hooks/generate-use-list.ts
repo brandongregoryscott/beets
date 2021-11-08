@@ -11,6 +11,8 @@ import {
     getRecordImportPath,
     getRecordSourceFile,
     getHookOptionsInterfaceName,
+    getTablesEnumValue,
+    getQueryKey,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -19,10 +21,14 @@ import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 
 const defaultFilter = "defaultFilter";
+const enabled = "enabled";
 const filter = "filter";
+const onError = "onError";
+const onSuccess = "onSuccess";
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 const { name: useDatabase } = Hooks.useDatabase;
+const { name: Tables } = Enums.Tables;
 
 const generateUseList = (project: Project, property: PropertySignature) => {
     const entityName = getTableName(property);
@@ -31,6 +37,10 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     const filename = `${toKebabCase(name)}.ts`;
     const interfaceName = getInterfaceName(property);
     const recordSourceFile = getRecordSourceFile(project, property);
+    const typeName =
+        recordSourceFile != null
+            ? getRecordName(property)
+            : getInterfaceName(property);
 
     const file = project.createSourceFile(
         upath.join(
@@ -80,9 +90,24 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         name: getHookOptionsInterfaceName(property, HookAction.LIST),
         properties: [
             {
+                name: enabled,
+                hasQuestionToken: true,
+                type: "boolean",
+            },
+            {
                 name: filter,
                 hasQuestionToken: true,
                 type: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => ${PostgrestFilterBuilder}<${interfaceName}>`,
+            },
+            {
+                name: onError,
+                hasQuestionToken: true,
+                type: "(error: Error) => void",
+            },
+            {
+                name: onSuccess,
+                hasQuestionToken: true,
+                type: `(resultObjects: ${typeName}[]) => void`,
             },
         ],
     });
@@ -122,7 +147,6 @@ const useListInitializer = (
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
-    const key = `${Enums.Tables.name}.${getTableName(property)}`;
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.LIST
@@ -133,7 +157,7 @@ const useListInitializer = (
         : `data?.map((${interfaceName.toLowerCase()}) => new ${recordName}(${interfaceName.toLowerCase()})) ?? []`;
     return `(options?: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}[], Error> => {
         const { ${fromTable} } = ${useDatabase}();
-        const { ${filter} = ${defaultFilter} } = options ?? {};
+        const { ${enabled}, ${filter} = ${defaultFilter} } = options ?? {};
 
         const list = async () => {
             const query = ${fromTable}().select("*");
@@ -146,7 +170,8 @@ const useListInitializer = (
         };
 
         const result = ${useQuery}<${returnType}[], Error>({
-            key: ${key},
+            ${enabled},
+            key: ${getQueryKey(HookAction.LIST, property)},
             fn: list,
         });
 

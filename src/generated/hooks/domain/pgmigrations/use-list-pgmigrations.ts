@@ -5,9 +5,12 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 interface UseListPgmigrationsOptions {
+    enabled?: boolean;
     filter?: (
         query: PostgrestFilterBuilder<Pgmigration>
     ) => PostgrestFilterBuilder<Pgmigration>;
+    onError?: (error: Error) => void;
+    onSuccess?: (resultObjects: Pgmigration[]) => void;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<Pgmigration>) => query;
@@ -16,7 +19,7 @@ const useListPgmigrations = (
     options?: UseListPgmigrationsOptions
 ): UseQueryResult<Pgmigration[], Error> => {
     const { fromPgmigrations } = useDatabase();
-    const { filter = defaultFilter } = options ?? {};
+    const { enabled, filter = defaultFilter } = options ?? {};
 
     const list = async () => {
         const query = fromPgmigrations().select("*");
@@ -29,7 +32,8 @@ const useListPgmigrations = (
     };
 
     const result = useQuery<Pgmigration[], Error>({
-        key: Tables.Pgmigrations,
+        enabled,
+        key: ["List", Tables.Pgmigrations],
         fn: list,
     });
 

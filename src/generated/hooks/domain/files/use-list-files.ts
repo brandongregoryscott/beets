@@ -6,9 +6,12 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 interface UseListFilesOptions {
+    enabled?: boolean;
     filter?: (
         query: PostgrestFilterBuilder<File>
     ) => PostgrestFilterBuilder<File>;
+    onError?: (error: Error) => void;
+    onSuccess?: (resultObjects: FileRecord[]) => void;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<File>) => query;
@@ -17,7 +20,7 @@ const useListFiles = (
     options?: UseListFilesOptions
 ): UseQueryResult<FileRecord[], Error> => {
     const { fromFiles } = useDatabase();
-    const { filter = defaultFilter } = options ?? {};
+    const { enabled, filter = defaultFilter } = options ?? {};
 
     const list = async () => {
         const query = fromFiles().select("*");
@@ -30,7 +33,8 @@ const useListFiles = (
     };
 
     const result = useQuery<FileRecord[], Error>({
-        key: Tables.Files,
+        enabled,
+        key: ["List", Tables.Files],
         fn: list,
     });
 

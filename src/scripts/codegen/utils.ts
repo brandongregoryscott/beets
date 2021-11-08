@@ -42,6 +42,19 @@ const getHookOptionsInterfaceName = (
     return `${hookName}Options`;
 };
 
+const getQueryKey = (
+    action: HookAction,
+    property: PropertySignature
+): string => {
+    const queryKey = `"${action}", ${getTablesEnumValue(property)}`;
+
+    if (action === HookAction.GET) {
+        return `[${queryKey}, id]`;
+    }
+
+    return `[${queryKey}]`;
+};
+
 const getRecordImportPath = (property: PropertySignature): string =>
     upath.join("models", removeExt(getRecordFileName(property)));
 
@@ -69,6 +82,9 @@ const getRecordSourceFile = (
     return sourceFile;
 };
 
+const getTablesEnumValue = (property: PropertySignature): string =>
+    `Tables.${getTableName(property)}`;
+
 const getTableName = (property: PropertySignature): string =>
     _.capitalize(property.getName());
 
@@ -93,10 +109,12 @@ export {
     getInterfacePath,
     getHookName,
     getHookOptionsInterfaceName,
+    getQueryKey,
     getRecordFileName,
     getRecordImportPath,
     getRecordName,
     getRecordSourceFile,
+    getTablesEnumValue,
     getTableName,
     toKebabCase,
 };

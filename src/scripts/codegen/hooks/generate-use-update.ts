@@ -12,6 +12,8 @@ import {
     getRecordSourceFile,
     getHookOptionsInterfaceName,
     getHookName,
+    getTablesEnumValue,
+    getQueryKey,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -126,7 +128,7 @@ const useUpdateInitializer = (
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
-    const key = `${Enums.Tables.name}.${getTableName(property)}`;
+    const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.UPDATE
@@ -160,7 +162,10 @@ const useUpdateInitializer = (
             ${onSuccess},
             ${onError},
             ${onSettled}: () => {
-                queryClient.invalidateQueries(${key});
+                queryClient.invalidateQueries(${getQueryKey(
+                    HookAction.LIST,
+                    property
+                )});
                 ${onSettled}?.();
             },
         });

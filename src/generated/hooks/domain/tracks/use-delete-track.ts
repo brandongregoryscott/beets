@@ -28,7 +28,7 @@ const useDeleteTrack = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Tracks);
+            queryClient.invalidateQueries(["List", Tables.Tracks]);
         },
     });
 

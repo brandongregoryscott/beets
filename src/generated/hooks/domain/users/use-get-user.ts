@@ -4,6 +4,7 @@ import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetUserOptions {
+    enabled?: boolean;
     id: string;
 }
 
@@ -11,7 +12,7 @@ const useGetUser = (
     options: UseGetUserOptions
 ): UseQueryResult<UserRecord | undefined, Error> => {
     const { fromUsers } = useDatabase();
-    const { id } = options;
+    const { id, enabled } = options;
 
     const get = async () => {
         const query = fromUsers().select("*").eq("id", id).limit(1).single();
@@ -28,7 +29,8 @@ const useGetUser = (
     };
 
     const result = useQuery<UserRecord | undefined, Error>({
-        key: Tables.Users,
+        enabled,
+        key: ["Get", Tables.Users, id],
         fn: get,
     });
 

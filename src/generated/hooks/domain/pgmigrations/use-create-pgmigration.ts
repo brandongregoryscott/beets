@@ -18,7 +18,7 @@ const useCreatePgmigration = (
 
     const create = async (pgmigration: Pgmigration) => {
         const { data, error } = await fromPgmigrations()
-            .insert(pgmigration)
+            .insert({ ...pgmigration, id: undefined })
             .limit(1)
             .single();
 
@@ -34,7 +34,7 @@ const useCreatePgmigration = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Pgmigrations);
+            queryClient.invalidateQueries(["List", Tables.Pgmigrations]);
         },
     });
 

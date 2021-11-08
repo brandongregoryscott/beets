@@ -19,7 +19,10 @@ const useCreateUser = (
 
     const create = async (user: User) => {
         const { data, error } = await fromUsers()
-            .insert(user)
+            .insert({
+                ...(user instanceof UserRecord ? user.toPOJO() : user),
+                id: undefined,
+            })
             .limit(1)
             .single();
 
@@ -35,7 +38,7 @@ const useCreateUser = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Users);
+            queryClient.invalidateQueries(["List", Tables.Users]);
         },
     });
 

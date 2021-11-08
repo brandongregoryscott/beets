@@ -12,6 +12,8 @@ import {
     getRecordSourceFile,
     getHookOptionsInterfaceName,
     getHookName,
+    getTablesEnumValue,
+    getQueryKey,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -118,22 +120,25 @@ const useCreateInitializer = (
 ) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
+    const variableName = interfaceName.toLowerCase();
     const fromTable = getFromFunctionName(property);
-    const key = `${Enums.Tables.name}.${getTableName(property)}`;
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.CREATE
     );
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
+    const insertValue = useRecord
+        ? `${variableName} instanceof ${recordName} ? ${variableName}.toPOJO() : ${variableName}`
+        : variableName;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
         const { ${fromTable} } = ${useDatabase}();
         const { ${onError}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
 
-        const create = async (${interfaceName.toLowerCase()}: ${interfaceName}) => {
+        const create = async (${variableName}: ${interfaceName}) => {
             const { data, error } = await ${fromTable}()
-                .insert(${interfaceName.toLowerCase()})
+                .insert({ ...${insertValue}, id: undefined })
                 .limit(1)
                 .single();
 
@@ -149,7 +154,10 @@ const useCreateInitializer = (
             onSuccess,
             onError,
             onSettled: () => {
-                queryClient.invalidateQueries(${key});
+                queryClient.invalidateQueries(${getQueryKey(
+                    HookAction.LIST,
+                    property
+                )});
             },
         });
 

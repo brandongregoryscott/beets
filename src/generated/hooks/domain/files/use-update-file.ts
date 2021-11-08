@@ -36,7 +36,7 @@ const useUpdateFile = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Files);
+            queryClient.invalidateQueries(["List", Tables.Files]);
             onSettled?.();
         },
     });

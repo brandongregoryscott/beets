@@ -35,7 +35,7 @@ const useUpdatePgmigration = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Pgmigrations);
+            queryClient.invalidateQueries(["List", Tables.Pgmigrations]);
             onSettled?.();
         },
     });

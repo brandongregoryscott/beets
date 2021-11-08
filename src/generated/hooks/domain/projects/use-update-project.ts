@@ -38,7 +38,7 @@ const useUpdateProject = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Projects);
+            queryClient.invalidateQueries(["List", Tables.Projects]);
             onSettled?.();
         },
     });

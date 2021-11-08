@@ -19,7 +19,12 @@ const useCreateProject = (
 
     const create = async (project: Project) => {
         const { data, error } = await fromProjects()
-            .insert(project)
+            .insert({
+                ...(project instanceof ProjectRecord
+                    ? project.toPOJO()
+                    : project),
+                id: undefined,
+            })
             .limit(1)
             .single();
 
@@ -35,7 +40,7 @@ const useCreateProject = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Projects);
+            queryClient.invalidateQueries(["List", Tables.Projects]);
         },
     });
 

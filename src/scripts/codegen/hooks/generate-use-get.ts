@@ -12,6 +12,8 @@ import {
     getRecordSourceFile,
     getHookName,
     getHookOptionsInterfaceName,
+    getTablesEnumValue,
+    getQueryKey,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -19,9 +21,11 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 
+const enabled = "enabled";
 const id = "id";
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 const { name: useDatabase } = Hooks.useDatabase;
+const { name: Tables } = Enums.Tables;
 
 const generateUseGet = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.GET);
@@ -73,6 +77,11 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
         name: getHookOptionsInterfaceName(property, HookAction.GET),
         properties: [
             {
+                name: enabled,
+                hasQuestionToken: true,
+                type: "boolean",
+            },
+            {
                 name: id,
                 hasQuestionToken: false,
                 type: "string",
@@ -102,7 +111,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
-    const key = `${Enums.Tables.name}.${getTableName(property)}`;
+    const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.GET
@@ -111,7 +120,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
     return `(options: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}, Error> => {
         const { ${fromTable} } = ${useDatabase}();
-        const { ${id} } = options;
+        const { ${id}, ${enabled} } = options;
 
         const get = async () => {
             const query = ${fromTable}()
@@ -132,7 +141,8 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
         };
 
         const result = ${useQuery}<${returnType}, Error>({
-            key: ${key},
+            ${enabled},
+            key: ${getQueryKey(HookAction.GET, property)},
             fn: get,
         });
 
