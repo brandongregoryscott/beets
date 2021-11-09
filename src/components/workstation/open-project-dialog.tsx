@@ -27,9 +27,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     const { resultObject: projects, isLoading: isLoadingProjects } =
         useListProjects();
 
-    const [selected, setSelected] = useState<ProjectRecord | undefined>(
-        state.initialProject
-    );
+    const [selected, setSelected] = useState<ProjectRecord | undefined>();
 
     const { resultObject: tracks, isLoading: isLoadingTracks } = useListTracks({
         enabled: !isNilOrEmpty(projects),
@@ -69,7 +67,11 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
         <Dialog
             confirmLabel={confirmLabel}
             isConfirmLoading={false}
-            isConfirmDisabled={!hasProjects || selected == null}
+            isConfirmDisabled={
+                !hasProjects ||
+                selected == null ||
+                selected?.equals(state.currentProject)
+            }
             isShown={isShown}
             onConfirm={handleConfirm}
             onCloseComplete={onCloseComplete}

@@ -3,7 +3,6 @@ import { useCreateProject } from "generated/hooks/domain/projects/use-create-pro
 import { useUpdateProject } from "generated/hooks/domain/projects/use-update-project";
 import { useCreateTrack } from "generated/hooks/domain/tracks/use-create-track";
 import { useUpdateTrack } from "generated/hooks/domain/tracks/use-update-track";
-import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
 import { isNilOrEmpty, isTemporaryId } from "utils/core-utils";
 import { useMutation } from "utils/hooks/use-mutation";
@@ -24,16 +23,6 @@ const useSyncProject = (options?: UseSyncProjectOptions) => {
         const projectResult = isNilOrEmpty(project.id)
             ? await createProject(project.toPOJO())
             : await updateProject(project.toPOJO());
-
-        console.log("project", project);
-        console.log("project.getTracks()", project.getTracks());
-
-        console.log(
-            "project.getTracks() is List",
-            List.isList(project.getTracks())
-        );
-        console.log("project.getTracks().map", project.getTracks().map);
-
         const trackResults = await Promise.all(
             project.getTracks().map((track) =>
                 isNilOrEmpty(track.id) || isTemporaryId(track.id)

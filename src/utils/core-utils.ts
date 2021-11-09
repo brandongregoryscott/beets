@@ -86,16 +86,20 @@ const randomFloat = (min: number, max: number): number =>
 const randomInt = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
+const unixTime = (date?: Date): number =>
+    Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
+
 export {
+    getTemporaryId,
+    getUpdatedState,
+    groupBy,
     hash,
     initializeList,
     isNilOrEmpty,
     isTemporaryId,
-    getTemporaryId,
-    getUpdatedState,
-    groupBy,
+    makeDefaultValues,
     mapTo,
     randomFloat,
     randomInt,
-    makeDefaultValues,
+    unixTime,
 };

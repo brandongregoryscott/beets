@@ -8,6 +8,7 @@ import { getUpdatedState } from "utils/core-utils";
 
 interface UseWorkstationStateResult {
     addTrack: (track?: TrackRecord) => void | Promise<void>;
+    isDirty: boolean;
     getTrack: (id: string) => TrackRecord | undefined;
     removeTrack: (track: TrackRecord) => void | Promise<void>;
     state: WorkstationStateRecord;
@@ -59,9 +60,18 @@ const useWorkstationState = (): UseWorkstationStateResult => {
         [setCurrentProject]
     );
 
+    const isPersisted = state.currentProject.isPersisted();
+    const isProjectDirty = !state.initialProject.equals(state.currentProject);
+    const isTrackListDirty = !state.initialProject
+        .getTracks()
+        .equals(state.currentProject.getTracks());
+
+    const isDirty = isPersisted && (isProjectDirty || isTrackListDirty);
+
     return {
         addTrack,
         getTrack,
+        isDirty,
         removeTrack,
         state,
         setState,

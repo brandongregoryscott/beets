@@ -8,6 +8,8 @@ import {
     UseMutationResult as UseReactQueryMutationResult,
 } from "react-query";
 import { ServiceResult } from "interfaces/service-result";
+import { useEffect, useState } from "react";
+import { unixTime } from "utils/core-utils";
 
 interface UseMutationOptions<
     TResultObject = unknown,
@@ -33,6 +35,8 @@ interface UseMutationResult<
     TVariables = unknown,
     TContext = unknown
 > extends ServiceResult<TResultObject, TError> {
+    dataUpdatedAt?: number;
+    errorUpdatedAt?: number;
     mutate: (
         variables: TVariables,
         options?: MutateOptions<TResultObject, TError, TVariables, TContext>
@@ -65,6 +69,33 @@ const useMutation = <
         mutationKey: options.key,
         mutationFn: options.fn,
     });
+    const { isError, isSuccess } = result;
+
+    const [dataUpdatedAt, setDataUpdatedAt] = useState<number | undefined>(
+        undefined
+    );
+
+    const [errorUpdatedAt, setErrorUpdatedAt] = useState<number | undefined>(
+        undefined
+    );
+
+    useEffect(() => {
+        if (isSuccess) {
+            setDataUpdatedAt(unixTime());
+            return;
+        }
+
+        setDataUpdatedAt(undefined);
+    }, [isSuccess]);
+
+    useEffect(() => {
+        if (isError) {
+            setErrorUpdatedAt(unixTime());
+            return;
+        }
+
+        setErrorUpdatedAt(undefined);
+    }, [isError]);
 
     return {
         ..._.pick<
@@ -86,6 +117,8 @@ const useMutation = <
             "mutateAsync",
             "reset"
         ),
+        dataUpdatedAt,
+        errorUpdatedAt,
         resultObject: result.data,
     };
 };

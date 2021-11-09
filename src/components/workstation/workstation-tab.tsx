@@ -1,21 +1,21 @@
 import { Menu } from "components/menu/menu";
 import { OpenProjectDialog } from "components/workstation/open-project-dialog";
 import { SaveProjectDialog } from "components/workstation/save-project-dialog";
-import { Button, Popover, Position, toaster } from "evergreen-ui";
+import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
 import React, { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useSyncProject } from "utils/hooks/domain/projects/use-sync-project";
 import { ProjectRecord } from "models/project-record";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface WorkstationTabProps {}
 
 const WorkstationTab: React.FC<WorkstationTabProps> = (
     props: WorkstationTabProps
 ) => {
-    const { state, setState } = useWorkstationState();
+    const { isDirty, state, setState } = useWorkstationState();
     const { currentProject } = state;
-
     const isProjectOpen = currentProject.isPersisted();
     const {
         value: isSaveProjectModalOpen,
@@ -27,7 +27,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         setFalse: handleCloseOpenProjectModal,
         setTrue: handleOpenOpenProjectModal,
     } = useBoolean();
-
+    const theme = useTheme();
     const handleSyncProjectError = useCallback(
         (error: Error) =>
             toaster.danger("There was an error syncing the project", {
@@ -36,13 +36,15 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         []
     );
     const handleSyncProjectSuccess = useCallback(
-        (project: ProjectRecord) =>
+        (project: ProjectRecord) => {
             setState((prev) =>
                 prev.merge({
                     initialProject: project,
                     currentProject: project,
                 })
-            ),
+            );
+            toaster.success("Successfully saved project");
+        },
         [setState]
     );
 
@@ -50,11 +52,6 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         onError: handleSyncProjectError,
         onSuccess: handleSyncProjectSuccess,
     });
-
-    const openButtonText = isProjectOpen
-        ? "Open Another Project"
-        : "Open Existing Project";
-    const saveButtonText = isProjectOpen ? "Save" : "Save New Project";
 
     const handleOpenClick = useCallback(
         (closePopover: () => void) => () => {
@@ -84,16 +81,23 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 content={({ close: closePopover }) => (
                     <Menu>
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
-                            {openButtonText}
+                            Open Project
                         </Menu.Item>
                         <Menu.Item onClick={handleSaveClick(closePopover)}>
-                            {saveButtonText}
+                            Save
                         </Menu.Item>
                     </Menu>
                 )}
                 position={Position.TOP_RIGHT}>
                 <Button
                     appearance={"tab" as any}
+                    iconBefore={
+                        <DocumentIcon
+                            color={
+                                isDirty ? theme.intents.warning.icon : undefined
+                            }
+                        />
+                    }
                     intent="none"
                     isLoading={isSyncing}>
                     File
