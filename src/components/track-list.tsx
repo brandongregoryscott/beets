@@ -13,7 +13,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         <Pane>
             <Pane display="flex" flexDirection="column">
                 {tracks.map((track, index) => (
-                    <Track {...track.toPOJO()} index={index} key={track.id} />
+                    <Track key={track.id} track={track} />
                 ))}
             </Pane>
             <Pane display="flex" flexDirection="row" marginRight="auto">

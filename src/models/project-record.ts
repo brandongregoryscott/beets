@@ -5,6 +5,7 @@ import { Project } from "generated/interfaces/project";
 import { AuditableRecord } from "models/auditable-record";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackRecord } from "models/track-record";
+import { Track } from "generated/interfaces/track";
 
 interface NavigationProperties {
     tracks?: List<TrackRecord>;
@@ -70,8 +71,8 @@ class ProjectRecord
         return this;
     }
 
-    public updateTrack(track: TrackRecord): ProjectRecord {
-        const existingTrack = this.getTrack(track.id);
+    public updateTrack(id: string, update: Partial<Track>): ProjectRecord {
+        const existingTrack = this.getTrack(id);
         if (existingTrack == null) {
             return this;
         }
@@ -81,7 +82,7 @@ class ProjectRecord
             return this;
         }
 
-        const tracks = this.tracks.set(index, track);
+        const tracks = this.tracks.set(index, existingTrack.merge(update));
         return new ProjectRecord(this).setTracks(tracks);
     }
 }

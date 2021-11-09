@@ -1,3 +1,4 @@
+import { Track } from "generated/interfaces/track";
 import { SetStateAction, useAtom } from "jotai";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
@@ -18,7 +19,7 @@ interface UseWorkstationStateResult {
     setCurrentProject: (
         updatedProject: SetStateAction<ProjectRecord>
     ) => void | Promise<void>;
-    updateTrack: (track: TrackRecord) => void | Promise<void>;
+    updateTrack: (id: string, update: Partial<Track>) => void | Promise<void>;
 }
 
 const useWorkstationState = (): UseWorkstationStateResult => {
@@ -55,8 +56,8 @@ const useWorkstationState = (): UseWorkstationStateResult => {
     );
 
     const updateTrack = useCallback(
-        (updatedTrack: TrackRecord) =>
-            setCurrentProject((prev) => prev.updateTrack(updatedTrack)),
+        (id: string, update: Partial<Track>) =>
+            setCurrentProject((prev) => prev.updateTrack(id, update)),
         [setCurrentProject]
     );
 

@@ -15,25 +15,26 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import { Track as TrackInterface } from "generated/interfaces/track";
 import { FileRecord } from "models/file-record";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { List } from "immutable";
 import { initializeList } from "utils/core-utils";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
-import { useTrackState } from "utils/hooks/use-track-state";
+import { TrackRecord } from "models/track-record";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
-interface TrackProps extends TrackInterface {
-    index: number;
+interface TrackProps {
+    track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
 
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
-    const { id, name, mute, solo } = props;
-    const { remove, setName, toggleMute, toggleSolo } = useTrackState(id);
+    const { track } = props;
+    const { id, name, mute, solo } = track;
+    const { updateTrack, removeTrack } = useWorkstationState();
     const {
         value: sequencerDialogOpen,
         setTrue: handleOpenSequencerDialog,
@@ -50,6 +51,23 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     } = useBoolean(false);
 
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
+
+    const setName = useCallback(
+        (value: string) => updateTrack(id, { name: value }),
+        [id, updateTrack]
+    );
+
+    const toggleMute = useCallback(
+        () => updateTrack(id, { mute: !mute }),
+        [id, mute, updateTrack]
+    );
+
+    const toggleSolo = useCallback(
+        () => updateTrack(id, { solo: !solo }),
+        [id, solo, updateTrack]
+    );
+
+    const remove = useCallback(() => removeTrack(track), [removeTrack, track]);
 
     useEffect(() => {
         if (sequencerValue.flatten().isEmpty()) {
