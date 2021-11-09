@@ -30,10 +30,6 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
 
     const handleSuccess = (project: ProjectRecord) => {
         toaster.success(`Successfully created Project '${project.name}'`);
-        console.log(
-            "project instanceof ProjectRecord",
-            project instanceof ProjectRecord
-        );
         setState((prev) =>
             prev.merge({ initialProject: project, currentProject: project })
         );
