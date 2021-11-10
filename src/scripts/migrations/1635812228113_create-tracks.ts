@@ -36,6 +36,11 @@ const up = (pgm: MigrationBuilder) => {
             notNull: true,
             references: tables.projects,
         },
+        volume: {
+            type: "integer",
+            notNull: true,
+            default: 0,
+        },
     });
 
     config.uniqueNonDeletedIndex("id");

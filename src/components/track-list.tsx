@@ -1,21 +1,19 @@
 import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
 import { Track } from "components/track";
-import { useTracksAtom } from "utils/hooks/use-tracks-atom";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useCallback } from "react";
 
 interface TrackListProps {}
 
 const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
-    const { tracks, add } = useTracksAtom();
+    const { state, addTrack } = useWorkstationState();
+    const { tracks } = state.currentProject.getNavigationProperties();
+    const handleAddTrack = useCallback(() => addTrack(), [addTrack]);
     return (
         <Pane>
             <Pane display="flex" flexDirection="column">
                 {tracks.map((track, index) => (
-                    <Track
-                        {...track.toPOJO()}
-                        files={track.files}
-                        index={index}
-                        key={track.id}
-                    />
+                    <Track key={track.id} track={track} />
                 ))}
             </Pane>
             <Pane display="flex" flexDirection="row" marginRight="auto">
@@ -23,7 +21,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                     <IconButton
                         icon={PlusIcon}
                         marginTop={minorScale(2)}
-                        onClick={add}
+                        onClick={handleAddTrack}
                     />
                 </Tooltip>
             </Pane>

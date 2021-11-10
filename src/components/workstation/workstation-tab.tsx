@@ -1,21 +1,22 @@
 import { Menu } from "components/menu/menu";
 import { OpenProjectDialog } from "components/workstation/open-project-dialog";
 import { SaveProjectDialog } from "components/workstation/save-project-dialog";
-import { Button, Popover, Position } from "evergreen-ui";
+import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
 import React, { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useSyncProject } from "utils/hooks/domain/projects/use-sync-project";
+import { ProjectRecord } from "models/project-record";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface WorkstationTabProps {}
 
 const WorkstationTab: React.FC<WorkstationTabProps> = (
     props: WorkstationTabProps
 ) => {
-    const { state } = useWorkstationState();
-    const { initialProject } = state;
-
-    const isProjectOpen = initialProject.isPersisted();
+    const { isDirty, state, setState } = useWorkstationState();
+    const { currentProject } = state;
+    const isProjectOpen = currentProject.isPersisted();
     const {
         value: isSaveProjectModalOpen,
         setFalse: handleCloseSaveProjectModal,
@@ -26,13 +27,31 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         setFalse: handleCloseOpenProjectModal,
         setTrue: handleOpenOpenProjectModal,
     } = useBoolean();
+    const theme = useTheme();
+    const handleSyncProjectError = useCallback(
+        (error: Error) =>
+            toaster.danger("There was an error syncing the project", {
+                description: error.message,
+            }),
+        []
+    );
+    const handleSyncProjectSuccess = useCallback(
+        (project: ProjectRecord) => {
+            setState((prev) =>
+                prev.merge({
+                    initialProject: project,
+                    currentProject: project,
+                })
+            );
+            toaster.success("Successfully saved project");
+        },
+        [setState]
+    );
 
-    const { isLoading: isSyncing, mutate: syncProject } = useSyncProject();
-
-    const openButtonText = isProjectOpen
-        ? "Open Another Project"
-        : "Open Existing Project";
-    const saveButtonText = isProjectOpen ? "Save" : "Save New Project";
+    const { isLoading: isSyncing, mutate: syncProject } = useSyncProject({
+        onError: handleSyncProjectError,
+        onSuccess: handleSyncProjectSuccess,
+    });
 
     const handleOpenClick = useCallback(
         (closePopover: () => void) => () => {
@@ -45,7 +64,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     const handleSaveClick = useCallback(
         (closePopover: () => void) => () => {
             if (isProjectOpen) {
-                syncProject();
+                syncProject(currentProject);
                 closePopover();
                 return;
             }
@@ -53,7 +72,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             handleOpenSaveProjectModal();
             closePopover();
         },
-        [isProjectOpen, handleOpenSaveProjectModal, syncProject]
+        [isProjectOpen, currentProject, handleOpenSaveProjectModal, syncProject]
     );
 
     return (
@@ -62,16 +81,23 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 content={({ close: closePopover }) => (
                     <Menu>
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
-                            {openButtonText}
+                            Open Project
                         </Menu.Item>
                         <Menu.Item onClick={handleSaveClick(closePopover)}>
-                            {saveButtonText}
+                            Save
                         </Menu.Item>
                     </Menu>
                 )}
                 position={Position.TOP_RIGHT}>
                 <Button
                     appearance={"tab" as any}
+                    iconBefore={
+                        <DocumentIcon
+                            color={
+                                isDirty ? theme.intents.warning.icon : undefined
+                            }
+                        />
+                    }
                     intent="none"
                     isLoading={isSyncing}>
                     File

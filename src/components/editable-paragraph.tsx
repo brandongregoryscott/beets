@@ -71,7 +71,8 @@ const EditableParagraph: React.FC<EditableParagraphProps> = (
         <Paragraph
             fontSize="small"
             onClick={startEditing}
-            padding={minorScale(2)}>
+            paddingBottom={minorScale(2)}
+            paddingX={minorScale(2)}>
             {value}
         </Paragraph>
     );

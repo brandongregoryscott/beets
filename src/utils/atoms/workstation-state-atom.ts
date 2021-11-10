@@ -1,10 +1,8 @@
-import { immutableAtomWithStorage } from "utils/atoms/immutable-atom-with-storage";
 import { WorkstationStateRecord } from "models/workstation-state-record";
+import { atom } from "jotai";
 
-const WorkstationStateAtom = immutableAtomWithStorage<WorkstationStateRecord>(
-    "workstationState",
-    new WorkstationStateRecord(),
-    WorkstationStateRecord
+const WorkstationStateAtom = atom<WorkstationStateRecord>(
+    new WorkstationStateRecord()
 );
 
 export { WorkstationStateAtom };

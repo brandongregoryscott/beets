@@ -15,25 +15,26 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import { Track as TrackInterface } from "interfaces/track";
 import { FileRecord } from "models/file-record";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { useTrackAtom } from "utils/hooks/use-track-atom";
 import { List } from "immutable";
 import { initializeList } from "utils/core-utils";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
+import { TrackRecord } from "models/track-record";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
-interface TrackProps extends TrackInterface {
-    index: number;
+interface TrackProps {
+    track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
 
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
-    const { id, name, mute, solo } = props;
-    const { remove, setName, toggleMute, toggleSolo } = useTrackAtom(id);
+    const { track } = props;
+    const { id, name, mute, solo } = track;
+    const { updateTrack, removeTrack } = useWorkstationState();
     const {
         value: sequencerDialogOpen,
         setTrue: handleOpenSequencerDialog,
@@ -51,6 +52,23 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
 
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
 
+    const setName = useCallback(
+        (value: string) => updateTrack(id, { name: value }),
+        [id, updateTrack]
+    );
+
+    const toggleMute = useCallback(
+        () => updateTrack(id, { mute: !mute }),
+        [id, mute, updateTrack]
+    );
+
+    const toggleSolo = useCallback(
+        () => updateTrack(id, { solo: !solo }),
+        [id, solo, updateTrack]
+    );
+
+    const remove = useCallback(() => removeTrack(track), [removeTrack, track]);
+
     useEffect(() => {
         if (sequencerValue.flatten().isEmpty()) {
             return;
@@ -64,7 +82,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
             flexDirection="column"
             alignItems="flex-start"
             background="gray200"
-            width={majorScale(26)}
+            width={majorScale(21)}
             marginY={majorScale(1)}
             padding={majorScale(1)}>
             <EditableParagraph onChange={setName} value={name} />

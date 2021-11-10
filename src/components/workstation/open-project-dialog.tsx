@@ -6,11 +6,12 @@ import {
     Spinner,
     Table,
 } from "evergreen-ui";
+import { useListProjects } from "generated/hooks/domain/projects/use-list-projects";
+import { useListTracks } from "generated/hooks/domain/tracks/use-list-tracks";
 import { ProjectRecord } from "models/project-record";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { formatUpdatedOn } from "utils/date-utils";
-import { useListProjects } from "utils/hooks/domain/projects/use-list-projects";
 import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
@@ -23,9 +24,23 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     const { isShown, onCloseComplete } = props;
     const theme = useTheme();
     const { state, setState } = useWorkstationState();
-    const { resultObject: projects, isLoading } = useListProjects();
-    const [selected, setSelected] = useState<ProjectRecord | undefined>(
-        state.initialProject
+    const { resultObject: projects, isLoading: isLoadingProjects } =
+        useListProjects();
+
+    const [selected, setSelected] = useState<ProjectRecord | undefined>();
+
+    const { resultObject: tracks, isLoading: isLoadingTracks } = useListTracks({
+        enabled: !isNilOrEmpty(projects),
+        filter: (query) =>
+            query.in(
+                "project_id",
+                projects?.map((project) => project.id) ?? []
+            ),
+    });
+
+    const projectsWithTracks = useMemo(
+        () => projects?.map((project) => project.setTracks(tracks ?? [])),
+        [projects, tracks]
     );
 
     const handleConfirm = useCallback(() => {
@@ -46,12 +61,17 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
 
     const title = "Open Project";
     const confirmLabel = "Open";
-    const hasProjects = !isNilOrEmpty(projects);
+    const isLoading = isLoadingProjects || isLoadingTracks;
+    const hasProjects = !isNilOrEmpty(projectsWithTracks);
     return (
         <Dialog
             confirmLabel={confirmLabel}
             isConfirmLoading={false}
-            isConfirmDisabled={!hasProjects || selected == null}
+            isConfirmDisabled={
+                !hasProjects ||
+                selected == null ||
+                selected?.equals(state.currentProject)
+            }
             isShown={isShown}
             onConfirm={handleConfirm}
             onCloseComplete={onCloseComplete}
@@ -60,20 +80,25 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             <Table>
                 <Table.Head>
                     <Table.TextHeaderCell>Name</Table.TextHeaderCell>
+                    <Table.TextHeaderCell>Tracks</Table.TextHeaderCell>
                     <Table.TextHeaderCell>Updated On</Table.TextHeaderCell>
                 </Table.Head>
-                {isLoading && <Spinner />}
+                {isLoading && <Spinner margin="auto" />}
                 {!isLoading && (
                     <Table.Body>
                         {hasProjects &&
-                            projects?.map((project) => (
+                            projectsWithTracks?.map((project) => (
                                 <Table.Row
+                                    key={project.id}
                                     isSelectable={true}
                                     isSelected={selected?.equals(project)}
                                     onDeselect={handleDeselect}
                                     onSelect={() => setSelected(project)}>
                                     <Table.TextCell>
                                         {project.name}
+                                    </Table.TextCell>
+                                    <Table.TextCell>
+                                        {project.getTracks().count()} Tracks
                                     </Table.TextCell>
                                     <Table.TextCell>
                                         {formatUpdatedOn(

@@ -1,20 +1,19 @@
-import { Track } from "interfaces/track";
-import * as uuid from "uuid";
-import { List, Record } from "immutable";
+import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
-import { initializeList, makeDefaultValues } from "utils/core-utils";
-import { FileRecord } from "models/file-record";
+import { getTemporaryId, makeDefaultValues } from "utils/core-utils";
+import { AuditableDefaultValues } from "constants/auditable-default-values";
+import { Track } from "generated/interfaces/track";
 
 const defaultValues = makeDefaultValues<Track>({
-    files: List<FileRecord>(),
+    ...AuditableDefaultValues,
     get id() {
-        return uuid.v4();
+        return getTemporaryId();
     },
     mute: false,
     name: "New Track",
     pan: 0,
     solo: false,
-    steps: initializeList(16, null),
+    project_id: undefined,
     volume: 0,
 });
 

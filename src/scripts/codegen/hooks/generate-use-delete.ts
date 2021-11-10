@@ -2,16 +2,13 @@ import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "../log";
 import {
-    getInterfaceName,
-    getInterfaceImportPath,
     getFromFunctionName,
     getTableName,
     toKebabCase,
-    getRecordName,
-    getRecordImportPath,
-    getRecordSourceFile,
     getHookOptionsInterfaceName,
     getHookName,
+    getTablesEnumValue,
+    getQueryKey,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
@@ -95,7 +92,7 @@ const generateUseDelete = (project: Project, property: PropertySignature) => {
 
 const useDeleteInitializer = (property: PropertySignature) => {
     const fromTable = getFromFunctionName(property);
-    const key = `${Enums.Tables.name}.${getTableName(property)}`;
+    const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.DELETE
@@ -120,7 +117,10 @@ const useDeleteInitializer = (property: PropertySignature) => {
             onSuccess,
             onError,
             onSettled: () => {
-                queryClient.invalidateQueries(${key});
+                queryClient.invalidateQueries(${getQueryKey(
+                    HookAction.LIST,
+                    property
+                )});
             },
         });
 

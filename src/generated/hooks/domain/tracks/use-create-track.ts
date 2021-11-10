@@ -19,7 +19,10 @@ const useCreateTrack = (
 
     const create = async (track: Track) => {
         const { data, error } = await fromTracks()
-            .insert(track)
+            .insert({
+                ...(track instanceof TrackRecord ? track.toPOJO() : track),
+                id: undefined,
+            })
             .limit(1)
             .single();
 
@@ -35,7 +38,7 @@ const useCreateTrack = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Tracks);
+            queryClient.invalidateQueries(["List", Tables.Tracks]);
         },
     });
 

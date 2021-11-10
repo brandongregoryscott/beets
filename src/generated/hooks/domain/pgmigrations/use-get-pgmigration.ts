@@ -4,6 +4,7 @@ import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetPgmigrationOptions {
+    enabled?: boolean;
     id: string;
 }
 
@@ -11,7 +12,7 @@ const useGetPgmigration = (
     options: UseGetPgmigrationOptions
 ): UseQueryResult<Pgmigration | undefined, Error> => {
     const { fromPgmigrations } = useDatabase();
-    const { id } = options;
+    const { id, enabled } = options;
 
     const get = async () => {
         const query = fromPgmigrations()
@@ -32,7 +33,8 @@ const useGetPgmigration = (
     };
 
     const result = useQuery<Pgmigration | undefined, Error>({
-        key: Tables.Pgmigrations,
+        enabled,
+        key: ["Get", Tables.Pgmigrations, id],
         fn: get,
     });
 

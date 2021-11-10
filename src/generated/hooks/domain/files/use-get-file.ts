@@ -4,6 +4,7 @@ import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetFileOptions {
+    enabled?: boolean;
     id: string;
 }
 
@@ -11,7 +12,7 @@ const useGetFile = (
     options: UseGetFileOptions
 ): UseQueryResult<FileRecord | undefined, Error> => {
     const { fromFiles } = useDatabase();
-    const { id } = options;
+    const { id, enabled } = options;
 
     const get = async () => {
         const query = fromFiles().select("*").eq("id", id).limit(1).single();
@@ -28,7 +29,8 @@ const useGetFile = (
     };
 
     const result = useQuery<FileRecord | undefined, Error>({
-        key: Tables.Files,
+        enabled,
+        key: ["Get", Tables.Files, id],
         fn: get,
     });
 

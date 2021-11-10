@@ -31,6 +31,8 @@ interface UseQueryResult<
     TError = unknown,
     TResultObject = TQueryFnData
 > extends ServiceResult<TResultObject, TError> {
+    dataUpdatedAt?: number;
+    errorUpdatedAt?: number;
     refetch: () => void;
 }
 
@@ -62,6 +64,8 @@ const useQuery = <
             keyof UseReactQueryQueryResult
         >(
             result,
+            "dataUpdatedAt",
+            "errorUpdatedAt",
             "error",
             "isError",
             "isIdle",

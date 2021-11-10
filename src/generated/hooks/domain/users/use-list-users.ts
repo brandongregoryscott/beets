@@ -6,9 +6,12 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 interface UseListUsersOptions {
+    enabled?: boolean;
     filter?: (
         query: PostgrestFilterBuilder<User>
     ) => PostgrestFilterBuilder<User>;
+    onError?: (error: Error) => void;
+    onSuccess?: (resultObjects: UserRecord[]) => void;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<User>) => query;
@@ -17,7 +20,12 @@ const useListUsers = (
     options?: UseListUsersOptions
 ): UseQueryResult<UserRecord[], Error> => {
     const { fromUsers } = useDatabase();
-    const { filter = defaultFilter } = options ?? {};
+    const {
+        enabled,
+        filter = defaultFilter,
+        onError,
+        onSuccess,
+    } = options ?? {};
 
     const list = async () => {
         const query = fromUsers().select("*");
@@ -30,8 +38,11 @@ const useListUsers = (
     };
 
     const result = useQuery<UserRecord[], Error>({
-        key: Tables.Users,
+        enabled,
+        key: ["List", Tables.Users],
         fn: list,
+        onError,
+        onSuccess,
     });
 
     return result;

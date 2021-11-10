@@ -19,7 +19,10 @@ const useCreateFile = (
 
     const create = async (file: File) => {
         const { data, error } = await fromFiles()
-            .insert(file)
+            .insert({
+                ...(file instanceof FileRecord ? file.toPOJO() : file),
+                id: undefined,
+            })
             .limit(1)
             .single();
 
@@ -35,7 +38,7 @@ const useCreateFile = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(Tables.Files);
+            queryClient.invalidateQueries(["List", Tables.Files]);
         },
     });
 

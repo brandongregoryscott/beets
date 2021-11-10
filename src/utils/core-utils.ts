@@ -1,8 +1,10 @@
 import { List } from "immutable";
 import _ from "lodash";
+import { SetStateAction } from "react";
 import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";
+import * as uuid from "uuid";
 
 const hash = (value: string): number => {
     let hash = 5381;
@@ -29,6 +31,14 @@ const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
 
     return value == null;
 };
+
+const isTemporaryId = (value?: string): boolean =>
+    !isNilOrEmpty(value) && value!.startsWith("temp-");
+
+const getTemporaryId = (): string => `temp-${uuid.v4()}`;
+
+const getUpdatedState = <T>(previousValue: T, update: SetStateAction<T>) =>
+    _.isFunction(update) ? update(previousValue) : update;
 
 const groupBy = <TLeft, TRight>(
     left: TLeft[] | undefined,
@@ -76,13 +86,20 @@ const randomFloat = (min: number, max: number): number =>
 const randomInt = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
+const unixTime = (date?: Date): number =>
+    Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
+
 export {
+    getTemporaryId,
+    getUpdatedState,
+    groupBy,
     hash,
     initializeList,
     isNilOrEmpty,
-    groupBy,
+    isTemporaryId,
+    makeDefaultValues,
     mapTo,
     randomFloat,
     randomInt,
-    makeDefaultValues,
+    unixTime,
 };

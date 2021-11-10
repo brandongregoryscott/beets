@@ -4,6 +4,7 @@ import { useDatabase } from "generated/hooks/use-database";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetProjectOptions {
+    enabled?: boolean;
     id: string;
 }
 
@@ -11,7 +12,7 @@ const useGetProject = (
     options: UseGetProjectOptions
 ): UseQueryResult<ProjectRecord | undefined, Error> => {
     const { fromProjects } = useDatabase();
-    const { id } = options;
+    const { id, enabled } = options;
 
     const get = async () => {
         const query = fromProjects().select("*").eq("id", id).limit(1).single();
@@ -28,7 +29,8 @@ const useGetProject = (
     };
 
     const result = useQuery<ProjectRecord | undefined, Error>({
-        key: Tables.Projects,
+        enabled,
+        key: ["Get", Tables.Projects, id],
         fn: get,
     });
 
