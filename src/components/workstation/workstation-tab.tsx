@@ -8,6 +8,7 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useSyncProject } from "utils/hooks/domain/projects/use-sync-project";
 import { ProjectRecord } from "models/project-record";
 import { useTheme } from "utils/hooks/use-theme";
+import { ConfirmationDialog } from "components/confirmation-dialog";
 
 interface WorkstationTabProps {}
 
@@ -18,16 +19,23 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     const { currentProject } = state;
     const isProjectOpen = currentProject.isPersisted();
     const {
-        value: isSaveProjectModalOpen,
-        setFalse: handleCloseSaveProjectModal,
-        setTrue: handleOpenSaveProjectModal,
+        value: isSaveProjectDialogOpen,
+        setFalse: handleCloseSaveProjectDialog,
+        setTrue: handleOpenSaveProjectDialog,
     } = useBoolean();
     const {
-        value: isOpenProjectModalOpen,
-        setFalse: handleCloseOpenProjectModal,
-        setTrue: handleOpenOpenProjectModal,
+        value: isOpenProjectDialogOpen,
+        setFalse: handleCloseOpenProjectDialog,
+        setTrue: handleOpenOpenProjectDialog,
     } = useBoolean();
+    const {
+        value: isConfirmDialogOpen,
+        setFalse: handleCloseConfirmDialog,
+        setTrue: handleOpenConfirmDialog,
+    } = useBoolean();
+
     const theme = useTheme();
+
     const handleSyncProjectError = useCallback(
         (error: Error) =>
             toaster.danger("There was an error syncing the project", {
@@ -53,12 +61,31 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         onSuccess: handleSyncProjectSuccess,
     });
 
-    const handleOpenClick = useCallback(
+    const handleNewClick = useCallback(
         (closePopover: () => void) => () => {
-            handleOpenOpenProjectModal();
+            if (isDirty) {
+                handleOpenConfirmDialog();
+                return;
+            }
+
+            setState((prev) =>
+                prev.merge({
+                    initialProject: new ProjectRecord(),
+                    currentProject: new ProjectRecord(),
+                })
+            );
+
             closePopover();
         },
-        [handleOpenOpenProjectModal]
+        [isDirty, handleOpenConfirmDialog, setState]
+    );
+
+    const handleOpenClick = useCallback(
+        (closePopover: () => void) => () => {
+            handleOpenOpenProjectDialog();
+            closePopover();
+        },
+        [handleOpenOpenProjectDialog]
     );
 
     const handleSaveClick = useCallback(
@@ -69,19 +96,38 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 return;
             }
 
-            handleOpenSaveProjectModal();
+            handleOpenSaveProjectDialog();
             closePopover();
         },
-        [isProjectOpen, currentProject, handleOpenSaveProjectModal, syncProject]
+        [
+            isProjectOpen,
+            currentProject,
+            handleOpenSaveProjectDialog,
+            syncProject,
+        ]
     );
+
+    const handleDirtyConfirm = useCallback(() => {
+        setState((prev) =>
+            prev.merge({
+                initialProject: new ProjectRecord(),
+                currentProject: new ProjectRecord(),
+            })
+        );
+
+        handleCloseConfirmDialog();
+    }, [handleCloseConfirmDialog, setState]);
 
     return (
         <React.Fragment>
             <Popover
                 content={({ close: closePopover }) => (
                     <Menu>
+                        <Menu.Item onClick={handleNewClick(closePopover)}>
+                            New
+                        </Menu.Item>
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
-                            Open Project
+                            Open
                         </Menu.Item>
                         <Menu.Item onClick={handleSaveClick(closePopover)}>
                             Save
@@ -103,16 +149,25 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                     File
                 </Button>
             </Popover>
-            {isSaveProjectModalOpen && (
+            {isSaveProjectDialogOpen && (
                 <SaveProjectDialog
-                    isShown={isSaveProjectModalOpen}
-                    onCloseComplete={handleCloseSaveProjectModal}
+                    isShown={isSaveProjectDialogOpen}
+                    onCloseComplete={handleCloseSaveProjectDialog}
                 />
             )}
-            {isOpenProjectModalOpen && (
+            {isOpenProjectDialogOpen && (
                 <OpenProjectDialog
-                    isShown={isOpenProjectModalOpen}
-                    onCloseComplete={handleCloseOpenProjectModal}
+                    isShown={isOpenProjectDialogOpen}
+                    onCloseComplete={handleCloseOpenProjectDialog}
+                />
+            )}
+            {isConfirmDialogOpen && (
+                <ConfirmationDialog
+                    alertTitle="You currently have unsaved changes."
+                    alertDescription="Opening a new project will wipe out any unsaved changes."
+                    isShown={isConfirmDialogOpen}
+                    onConfirm={handleDirtyConfirm}
+                    onCloseComplete={handleCloseConfirmDialog}
                 />
             )}
         </React.Fragment>
