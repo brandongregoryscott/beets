@@ -5,47 +5,34 @@ import {
     getInterfaceName,
     getInterfaceImportPath,
     getFromFunctionName,
-    getTableName,
-    toKebabCase,
     getRecordName,
     getRecordImportPath,
     getRecordSourceFile,
     getHookOptionsInterfaceName,
     getHookName,
-    getTablesEnumValue,
     getQueryKey,
+    getHookPath,
 } from "../utils";
-import upath from "upath";
-import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
+import { Variables } from "../constants/variables";
 
-const id = "id";
-const onError = "onError";
-const onSettled = "onSettled";
-const onSuccess = "onSuccess";
+const { id, onError, onSettled, onSuccess } = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
 const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseUpdate = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.UPDATE);
-    const filename = `${toKebabCase(name)}.ts`;
+    const name = getHookName(property, HookAction.Update);
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
         recordSourceFile != null
             ? getRecordName(property)
             : getInterfaceName(property);
     const file = project.createSourceFile(
-        upath.join(
-            Paths.base,
-            "hooks",
-            "domain",
-            getTableName(property).toLowerCase(),
-            filename
-        ),
+        getHookPath(property, HookAction.Update),
         undefined,
         { overwrite: true }
     );
@@ -83,7 +70,7 @@ const generateUseUpdate = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.UPDATE),
+        name: getHookOptionsInterfaceName(property, HookAction.Update),
         properties: [
             {
                 name: onError,
@@ -128,10 +115,9 @@ const useUpdateInitializer = (
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
-    const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.UPDATE
+        HookAction.Update
     );
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
@@ -163,7 +149,7 @@ const useUpdateInitializer = (
             ${onError},
             ${onSettled}: () => {
                 queryClient.invalidateQueries(${getQueryKey(
-                    HookAction.LIST,
+                    HookAction.List,
                     property
                 )});
                 ${onSettled}?.();

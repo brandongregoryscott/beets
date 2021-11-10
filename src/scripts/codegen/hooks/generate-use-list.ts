@@ -5,36 +5,26 @@ import {
     getInterfaceName,
     getInterfaceImportPath,
     getFromFunctionName,
-    getTableName,
-    toKebabCase,
     getRecordName,
     getRecordImportPath,
     getRecordSourceFile,
     getHookOptionsInterfaceName,
-    getTablesEnumValue,
     getQueryKey,
+    getHookPath,
+    getHookName,
 } from "../utils";
-import upath from "upath";
-import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
+import { Variables } from "../constants/variables";
 
-const defaultFilter = "defaultFilter";
-const enabled = "enabled";
-const filter = "filter";
-const onError = "onError";
-const onSuccess = "onSuccess";
+const { defaultFilter, enabled, filter, onError, onSuccess } = Variables;
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 const { name: useDatabase } = Hooks.useDatabase;
-const { name: Tables } = Enums.Tables;
 
 const generateUseList = (project: Project, property: PropertySignature) => {
-    const entityName = getTableName(property);
-    const lowerCaseEntityName = entityName.toLowerCase();
-    const name = `useList${entityName}`;
-    const filename = `${toKebabCase(name)}.ts`;
+    const name = getHookName(property, HookAction.List);
     const interfaceName = getInterfaceName(property);
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
@@ -43,13 +33,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
             : getInterfaceName(property);
 
     const file = project.createSourceFile(
-        upath.join(
-            Paths.base,
-            "hooks",
-            "domain",
-            lowerCaseEntityName,
-            filename
-        ),
+        getHookPath(property, HookAction.List),
         undefined,
         { overwrite: true }
     );
@@ -87,7 +71,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.LIST),
+        name: getHookOptionsInterfaceName(property, HookAction.List),
         properties: [
             {
                 name: enabled,
@@ -149,7 +133,7 @@ const useListInitializer = (
     const fromTable = getFromFunctionName(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.LIST
+        HookAction.List
     );
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord
@@ -176,7 +160,7 @@ const useListInitializer = (
 
         const result = ${useQuery}<${returnType}[], Error>({
             ${enabled},
-            key: ${getQueryKey(HookAction.LIST, property)},
+            key: ${getQueryKey(HookAction.List, property)},
             fn: list,
             ${onError},
             ${onSuccess},

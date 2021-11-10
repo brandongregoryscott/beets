@@ -1,38 +1,61 @@
-import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
-import { log } from "../log";
+import { HookAction } from "../enums/hook-action";
 import {
-    getInterfaceName,
-    getInterfaceImportPath,
     getFromFunctionName,
-    getRecordName,
-    getRecordImportPath,
-    getRecordSourceFile,
-    getHookOptionsInterfaceName,
+    getHookImportPath,
     getHookName,
-    getQueryKey,
+    getHookOptionsInterfaceName,
     getHookPath,
+    getInterfaceImportPath,
+    getInterfaceName,
+    getQueryKey,
+    getRecordImportPath,
+    getRecordName,
+    getRecordSourceFile,
+    getTableName,
+    toKebabCase,
 } from "../utils";
+import upath from "upath";
+import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
-import { HookAction } from "../enums/hook-action";
+import { log } from "../log";
 import { Variables } from "../constants/variables";
 
-const { onError, onSettled, onSuccess } = Variables;
+const {
+    createOrUpdate,
+    id,
+    isNilOrEmpty,
+    isTemporaryId,
+    onError,
+    onSettled,
+    onSuccess,
+    mutateAsync,
+} = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
-const { name: useDatabase } = Hooks.useDatabase;
+const excludedTypes = ["Pgmigration"];
 
-const generateUseCreate = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.Create);
+const generateUseCreateOrUpdate = (
+    project: Project,
+    property: PropertySignature
+) => {
+    const name = getHookName(property, HookAction.CreateOrUpdate);
+    if (excludedTypes.includes(getInterfaceName(property))) {
+        log.warn(
+            `Skipping '${name}' as '${property.getName()}' was in the exclusion list.`
+        );
+        return;
+    }
+
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
         recordSourceFile != null
             ? getRecordName(property)
             : getInterfaceName(property);
     const file = project.createSourceFile(
-        getHookPath(property, HookAction.Create),
+        getHookPath(property, HookAction.CreateOrUpdate),
         undefined,
         { overwrite: true }
     );
@@ -55,11 +78,6 @@ const generateUseCreate = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: [Hooks.useDatabase.name],
-        moduleSpecifier: Hooks.useDatabase.importPath,
-    });
-
-    file.addImportDeclaration({
         namedImports: [useQueryClient],
         moduleSpecifier: Hooks.useQueryClient.importPath,
     });
@@ -69,8 +87,23 @@ const generateUseCreate = (project: Project, property: PropertySignature) => {
         moduleSpecifier: Hooks.useMutation.importPath,
     });
 
+    file.addImportDeclaration({
+        namedImports: [isNilOrEmpty, isTemporaryId],
+        moduleSpecifier: "utils/core-utils",
+    });
+
+    file.addImportDeclaration({
+        namedImports: [getHookName(property, HookAction.Create)],
+        moduleSpecifier: getHookImportPath(property, HookAction.Create),
+    });
+
+    file.addImportDeclaration({
+        namedImports: [getHookName(property, HookAction.Update)],
+        moduleSpecifier: getHookImportPath(property, HookAction.Update),
+    });
+
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.Create),
+        name: `UseCreateOrUpdate${getInterfaceName(property)}Options`,
         properties: [
             {
                 name: onError,
@@ -90,7 +123,7 @@ const generateUseCreate = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useCreateInitializer(
+                initializer: useCreateOrUpdateInitializer(
                     property,
                     recordSourceFile != null
                 ),
@@ -103,43 +136,36 @@ const generateUseCreate = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useCreateInitializer = (
+const useCreateOrUpdateInitializer = (
     property: PropertySignature,
     useRecord: boolean
 ) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const variableName = interfaceName.toLowerCase();
-    const fromTable = getFromFunctionName(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.Create
+        HookAction.CreateOrUpdate
     );
     const returnType = useRecord ? recordName : interfaceName;
-    const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
-    const insertValue = useRecord
-        ? `${variableName} instanceof ${recordName} ? ${variableName}.toPOJO() : ${variableName}`
-        : variableName;
+    const useCreate = getHookName(property, HookAction.Create);
+    const useUpdate = getHookName(property, HookAction.Update);
+    const create = `create${interfaceName}`;
+    const update = `update${interfaceName}`;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
-        const { ${fromTable} } = ${useDatabase}();
         const { ${onError}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
+        const { ${mutateAsync}: ${create} } = ${useCreate}();
+        const { ${mutateAsync}: ${update} } = ${useUpdate}();
 
-        const create = async (${variableName}: ${interfaceName}) => {
-            const { data, error } = await ${fromTable}()
-                .insert({ ...${insertValue}, id: undefined })
-                .limit(1)
-                .single();
 
-            if (error != null) {
-                throw error;
-            }
-
-            return ${returnValue};
-        };
+        const ${createOrUpdate} = async (${variableName}: ${interfaceName}) =>
+            ${isNilOrEmpty}(${variableName}.${id}) || ${isTemporaryId}(${variableName}.${id})
+                ? ${create}(${variableName})
+                : ${update}(${variableName})
 
         const result = ${useMutation}<${returnType}, Error, ${interfaceName}>({
-            fn: create,
+            fn: ${createOrUpdate},
             ${onSuccess},
             ${onError},
             ${onSettled}: () => {
@@ -154,4 +180,4 @@ const useCreateInitializer = (
     }`;
 };
 
-export { generateUseCreate };
+export { generateUseCreateOrUpdate };

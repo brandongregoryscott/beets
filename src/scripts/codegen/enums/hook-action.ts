@@ -1,9 +1,10 @@
 enum HookAction {
-    CREATE = "Create",
-    DELETE = "Delete",
-    GET = "Get",
-    LIST = "List",
-    UPDATE = "Update",
+    Create = "Create",
+    CreateOrUpdate = "CreateOrUpdate",
+    Delete = "Delete",
+    Get = "Get",
+    List = "List",
+    Update = "Update",
 }
 
 export { HookAction };

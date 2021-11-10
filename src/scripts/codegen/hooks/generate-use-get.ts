@@ -14,32 +14,26 @@ import {
     getHookOptionsInterfaceName,
     getTablesEnumValue,
     getQueryKey,
+    getHookPath,
 } from "../utils";
 import upath from "upath";
 import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
+import { Variables } from "../constants/variables";
 
-const enabled = "enabled";
-const id = "id";
+const { enabled, id } = Variables;
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 const { name: useDatabase } = Hooks.useDatabase;
-const { name: Tables } = Enums.Tables;
 
 const generateUseGet = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.GET);
+    const name = getHookName(property, HookAction.Get);
     const filename = `${toKebabCase(name)}.ts`;
     const recordSourceFile = getRecordSourceFile(project, property);
 
     const file = project.createSourceFile(
-        upath.join(
-            Paths.base,
-            "hooks",
-            "domain",
-            getTableName(property).toLowerCase(),
-            filename
-        ),
+        getHookPath(property, HookAction.Get),
         undefined,
         { overwrite: true }
     );
@@ -74,7 +68,7 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.GET),
+        name: getHookOptionsInterfaceName(property, HookAction.Get),
         properties: [
             {
                 name: enabled,
@@ -111,10 +105,9 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
-    const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.GET
+        HookAction.Get
     );
     const returnType = `${useRecord ? recordName : interfaceName} | undefined`;
     const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
@@ -142,7 +135,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
 
         const result = ${useQuery}<${returnType}, Error>({
             ${enabled},
-            key: ${getQueryKey(HookAction.GET, property)},
+            key: ${getQueryKey(HookAction.Get, property)},
             fn: get,
         });
 

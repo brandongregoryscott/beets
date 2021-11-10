@@ -22,12 +22,26 @@ const getInterfacePath = (property: PropertySignature): string =>
 const getInterfaceImportPath = (property: PropertySignature): string =>
     removeExt(getInterfacePath(property).replace("src/", ""));
 
+const getHookPath = (property: PropertySignature, action: HookAction): string =>
+    upath.join(
+        Paths.base,
+        "hooks",
+        "domain",
+        getTableName(property).toLowerCase(),
+        `${toKebabCase(getHookName(property, action))}.ts`
+    );
+
+const getHookImportPath = (
+    property: PropertySignature,
+    action: HookAction
+): string => removeExt(getHookPath(property, action)).replace("src/", "");
+
 const getHookName = (
     property: PropertySignature,
     action: HookAction
 ): string => {
     const entityName =
-        action === HookAction.LIST
+        action === HookAction.List
             ? getTableName(property)
             : getInterfaceName(property);
 
@@ -48,7 +62,7 @@ const getQueryKey = (
 ): string => {
     const queryKey = `"${action}", ${getTablesEnumValue(property)}`;
 
-    if (action === HookAction.GET) {
+    if (action === HookAction.Get) {
         return `[${queryKey}, id]`;
     }
 
@@ -107,8 +121,10 @@ export {
     getInterfaceImportPath,
     getInterfaceName,
     getInterfacePath,
+    getHookImportPath,
     getHookName,
     getHookOptionsInterfaceName,
+    getHookPath,
     getQueryKey,
     getRecordFileName,
     getRecordImportPath,
