@@ -22,6 +22,20 @@ const getInterfacePath = (property: PropertySignature): string =>
 const getInterfaceImportPath = (property: PropertySignature): string =>
     removeExt(getInterfacePath(property).replace("src/", ""));
 
+const getHookPath = (property: PropertySignature, action: HookAction): string =>
+    upath.join(
+        Paths.base,
+        "hooks",
+        "domain",
+        getTableName(property).toLowerCase(),
+        `${toKebabCase(getHookName(property, action))}.ts`
+    );
+
+const getHookImportPath = (
+    property: PropertySignature,
+    action: HookAction
+): string => removeExt(getHookPath(property, action)).replace("src/", "");
+
 const getHookName = (
     property: PropertySignature,
     action: HookAction
@@ -107,8 +121,10 @@ export {
     getInterfaceImportPath,
     getInterfaceName,
     getInterfacePath,
+    getHookImportPath,
     getHookName,
     getHookOptionsInterfaceName,
+    getHookPath,
     getQueryKey,
     getRecordFileName,
     getRecordImportPath,

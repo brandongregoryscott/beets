@@ -3,22 +3,19 @@ import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "../log";
 import {
     getFromFunctionName,
-    getTableName,
     toKebabCase,
     getHookOptionsInterfaceName,
     getHookName,
     getTablesEnumValue,
     getQueryKey,
+    getHookPath,
 } from "../utils";
-import upath from "upath";
-import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
+import { Variables } from "../constants/variables";
 
-const id = "id";
-const onError = "onError";
-const onSuccess = "onSuccess";
+const { id, onError, onSettled, onSuccess } = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
@@ -26,15 +23,8 @@ const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseDelete = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.DELETE);
-    const filename = `${toKebabCase(name)}.ts`;
     const file = project.createSourceFile(
-        upath.join(
-            Paths.base,
-            "hooks",
-            "domain",
-            getTableName(property).toLowerCase(),
-            filename
-        ),
+        getHookPath(property, HookAction.DELETE),
         undefined,
         { overwrite: true }
     );
@@ -114,9 +104,9 @@ const useDeleteInitializer = (property: PropertySignature) => {
 
         const result = ${useMutation}<void, Error, string>({
             fn: deleteFn,
-            onSuccess,
-            onError,
-            onSettled: () => {
+            ${onSuccess},
+            ${onError},
+            ${onSettled}: () => {
                 queryClient.invalidateQueries(${getQueryKey(
                     HookAction.LIST,
                     property

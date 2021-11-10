@@ -10,6 +10,7 @@ import { generateUseGet } from "./hooks/generate-use-get";
 import { generateUseCreate } from "./hooks/generate-use-create";
 import { generateUseDelete } from "./hooks/generate-use-delete";
 import { generateUseUpdate } from "./hooks/generate-use-update";
+import { generateUseCreateOrUpdate } from "./hooks/generate-use-create-or-update";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -34,6 +35,7 @@ const main = async () => {
         generateUseCreate(project, property);
         generateUseDelete(project, property);
         generateUseUpdate(project, property);
+        generateUseCreateOrUpdate(project, property);
     });
 
     generateUseDatabase(project, properties);
