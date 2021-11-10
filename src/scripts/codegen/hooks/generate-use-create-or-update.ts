@@ -33,13 +33,20 @@ const {
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
-const { name: useDatabase } = Hooks.useDatabase;
+const excludedTypes = ["Pgmigration"];
 
 const generateUseCreateOrUpdate = (
     project: Project,
     property: PropertySignature
 ) => {
     const name = `useCreateOrUpdate${getInterfaceName(property)}`;
+    if (excludedTypes.includes(getInterfaceName(property))) {
+        log.warn(
+            `Skipping '${name}' as '${property.getName()}' was in the exclusion list.`
+        );
+        return;
+    }
+
     const filename = `${toKebabCase(name)}.ts`;
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
@@ -73,11 +80,6 @@ const generateUseCreateOrUpdate = (
     file.addImportDeclaration({
         namedImports: [Enums.Tables.name],
         moduleSpecifier: Enums.Tables.importPath,
-    });
-
-    file.addImportDeclaration({
-        namedImports: [Hooks.useDatabase.name],
-        moduleSpecifier: Hooks.useDatabase.importPath,
     });
 
     file.addImportDeclaration({
