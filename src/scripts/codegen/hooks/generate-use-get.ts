@@ -28,12 +28,12 @@ const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseGet = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.GET);
+    const name = getHookName(property, HookAction.Get);
     const filename = `${toKebabCase(name)}.ts`;
     const recordSourceFile = getRecordSourceFile(project, property);
 
     const file = project.createSourceFile(
-        getHookPath(property, HookAction.GET),
+        getHookPath(property, HookAction.Get),
         undefined,
         { overwrite: true }
     );
@@ -68,7 +68,7 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.GET),
+        name: getHookOptionsInterfaceName(property, HookAction.Get),
         properties: [
             {
                 name: enabled,
@@ -107,7 +107,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const fromTable = getFromFunctionName(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.GET
+        HookAction.Get
     );
     const returnType = `${useRecord ? recordName : interfaceName} | undefined`;
     const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
@@ -135,7 +135,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
 
         const result = ${useQuery}<${returnType}, Error>({
             ${enabled},
-            key: ${getQueryKey(HookAction.GET, property)},
+            key: ${getQueryKey(HookAction.Get, property)},
             fn: get,
         });
 

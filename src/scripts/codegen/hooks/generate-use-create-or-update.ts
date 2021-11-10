@@ -4,6 +4,8 @@ import {
     getFromFunctionName,
     getHookImportPath,
     getHookName,
+    getHookOptionsInterfaceName,
+    getHookPath,
     getInterfaceImportPath,
     getInterfaceName,
     getQueryKey,
@@ -39,7 +41,7 @@ const generateUseCreateOrUpdate = (
     project: Project,
     property: PropertySignature
 ) => {
-    const name = `useCreateOrUpdate${getInterfaceName(property)}`;
+    const name = getHookName(property, HookAction.CreateOrUpdate);
     if (excludedTypes.includes(getInterfaceName(property))) {
         log.warn(
             `Skipping '${name}' as '${property.getName()}' was in the exclusion list.`
@@ -47,20 +49,13 @@ const generateUseCreateOrUpdate = (
         return;
     }
 
-    const filename = `${toKebabCase(name)}.ts`;
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
         recordSourceFile != null
             ? getRecordName(property)
             : getInterfaceName(property);
     const file = project.createSourceFile(
-        upath.join(
-            Paths.base,
-            "hooks",
-            "domain",
-            getTableName(property).toLowerCase(),
-            filename
-        ),
+        getHookPath(property, HookAction.CreateOrUpdate),
         undefined,
         { overwrite: true }
     );
@@ -98,13 +93,13 @@ const generateUseCreateOrUpdate = (
     });
 
     file.addImportDeclaration({
-        namedImports: [getHookName(property, HookAction.CREATE)],
-        moduleSpecifier: getHookImportPath(property, HookAction.CREATE),
+        namedImports: [getHookName(property, HookAction.Create)],
+        moduleSpecifier: getHookImportPath(property, HookAction.Create),
     });
 
     file.addImportDeclaration({
-        namedImports: [getHookName(property, HookAction.UPDATE)],
-        moduleSpecifier: getHookImportPath(property, HookAction.UPDATE),
+        namedImports: [getHookName(property, HookAction.Update)],
+        moduleSpecifier: getHookImportPath(property, HookAction.Update),
     });
 
     file.addInterface({
@@ -148,13 +143,13 @@ const useCreateOrUpdateInitializer = (
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const variableName = interfaceName.toLowerCase();
-    const fromTable = getFromFunctionName(property);
-    const optionsInterfaceName = `UseCreateOrUpdate${getInterfaceName(
-        property
-    )}Options`;
+    const optionsInterfaceName = getHookOptionsInterfaceName(
+        property,
+        HookAction.CreateOrUpdate
+    );
     const returnType = useRecord ? recordName : interfaceName;
-    const useCreate = getHookName(property, HookAction.CREATE);
-    const useUpdate = getHookName(property, HookAction.UPDATE);
+    const useCreate = getHookName(property, HookAction.Create);
+    const useUpdate = getHookName(property, HookAction.Update);
     const create = `create${interfaceName}`;
     const update = `update${interfaceName}`;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
@@ -175,7 +170,7 @@ const useCreateOrUpdateInitializer = (
             ${onError},
             ${onSettled}: () => {
                 queryClient.invalidateQueries(${getQueryKey(
-                    HookAction.LIST,
+                    HookAction.List,
                     property
                 )});
             },

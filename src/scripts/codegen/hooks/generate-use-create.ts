@@ -25,14 +25,14 @@ const { name: useQueryClient } = Hooks.useQueryClient;
 const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseCreate = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.CREATE);
+    const name = getHookName(property, HookAction.Create);
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
         recordSourceFile != null
             ? getRecordName(property)
             : getInterfaceName(property);
     const file = project.createSourceFile(
-        getHookPath(property, HookAction.CREATE),
+        getHookPath(property, HookAction.Create),
         undefined,
         { overwrite: true }
     );
@@ -70,7 +70,7 @@ const generateUseCreate = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.CREATE),
+        name: getHookOptionsInterfaceName(property, HookAction.Create),
         properties: [
             {
                 name: onError,
@@ -113,7 +113,7 @@ const useCreateInitializer = (
     const fromTable = getFromFunctionName(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.CREATE
+        HookAction.Create
     );
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
@@ -144,7 +144,7 @@ const useCreateInitializer = (
             ${onError},
             ${onSettled}: () => {
                 queryClient.invalidateQueries(${getQueryKey(
-                    HookAction.LIST,
+                    HookAction.List,
                     property
                 )});
             },

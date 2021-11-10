@@ -41,7 +41,7 @@ const getHookName = (
     action: HookAction
 ): string => {
     const entityName =
-        action === HookAction.LIST
+        action === HookAction.List
             ? getTableName(property)
             : getInterfaceName(property);
 
@@ -62,7 +62,7 @@ const getQueryKey = (
 ): string => {
     const queryKey = `"${action}", ${getTablesEnumValue(property)}`;
 
-    if (action === HookAction.GET) {
+    if (action === HookAction.Get) {
         return `[${queryKey}, id]`;
     }
 

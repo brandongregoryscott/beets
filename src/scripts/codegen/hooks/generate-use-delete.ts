@@ -22,9 +22,9 @@ const { name: useQueryClient } = Hooks.useQueryClient;
 const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseDelete = (project: Project, property: PropertySignature) => {
-    const name = getHookName(property, HookAction.DELETE);
+    const name = getHookName(property, HookAction.Delete);
     const file = project.createSourceFile(
-        getHookPath(property, HookAction.DELETE),
+        getHookPath(property, HookAction.Delete),
         undefined,
         { overwrite: true }
     );
@@ -50,7 +50,7 @@ const generateUseDelete = (project: Project, property: PropertySignature) => {
     });
 
     file.addInterface({
-        name: getHookOptionsInterfaceName(property, HookAction.DELETE),
+        name: getHookOptionsInterfaceName(property, HookAction.Delete),
         properties: [
             {
                 name: onError,
@@ -85,7 +85,7 @@ const useDeleteInitializer = (property: PropertySignature) => {
     const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
-        HookAction.DELETE
+        HookAction.Delete
     );
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<void, Error, string> => {
         const { ${fromTable} } = ${useDatabase}();
@@ -108,7 +108,7 @@ const useDeleteInitializer = (property: PropertySignature) => {
             ${onError},
             ${onSettled}: () => {
                 queryClient.invalidateQueries(${getQueryKey(
-                    HookAction.LIST,
+                    HookAction.List,
                     property
                 )});
             },
