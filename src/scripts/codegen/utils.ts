@@ -10,13 +10,13 @@ const getFromFunctionName = (property: PropertySignature): string =>
     `from${getTableName(property)}`;
 
 const getInterfaceName = (property: PropertySignature): string =>
-    _.capitalize(pluralize(property.getName(), 1));
+    pluralize(snakeToTitleCase(property.getName()), 1);
 
 const getInterfacePath = (property: PropertySignature): string =>
     upath.join(
         Paths.base,
         "interfaces",
-        `${getInterfaceName(property).toLowerCase()}.ts`
+        `${toKebabCase(getInterfaceName(property))}.ts`
     );
 
 const getInterfaceImportPath = (property: PropertySignature): string =>
@@ -27,7 +27,7 @@ const getHookPath = (property: PropertySignature, action: HookAction): string =>
         Paths.base,
         "hooks",
         "domain",
-        getTableName(property).toLowerCase(),
+        toKebabCase(getTableName(property)),
         `${toKebabCase(getHookName(property, action))}.ts`
     );
 
@@ -76,7 +76,7 @@ const getRecordName = (property: PropertySignature): string =>
     `${getInterfaceName(property)}Record`;
 
 const getRecordFileName = (property: PropertySignature): string =>
-    `${getInterfaceName(property).toLowerCase()}-record.ts`;
+    `${toKebabCase(getInterfaceName(property))}-record.ts`;
 
 const getRecordSourceFile = (
     project: Project,
@@ -100,9 +100,17 @@ const getTablesEnumValue = (property: PropertySignature): string =>
     `Tables.${getTableName(property)}`;
 
 const getTableName = (property: PropertySignature): string =>
-    _.capitalize(property.getName());
+    pluralize(getInterfaceName(property), 2);
 
 const removeExt = (filename: string) => upath.removeExt(filename, ".ts");
+
+const snakeToTitleCase = (value: string) => {
+    if (!value.includes("_")) {
+        return _.capitalize(value);
+    }
+
+    return value.split("_").map(_.capitalize).join("");
+};
 
 const toKebabCase = (value: string) => {
     const hasOneCapitalLetter = value.match(/[A-Z]/g)?.length === 1;
@@ -111,9 +119,15 @@ const toKebabCase = (value: string) => {
         return value.toLowerCase();
     }
 
-    return value
+    const kebabCaseString = value
         .replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)
         .toLowerCase();
+
+    if (kebabCaseString.startsWith("-")) {
+        return kebabCaseString.substring(1);
+    }
+
+    return kebabCaseString;
 };
 
 export {

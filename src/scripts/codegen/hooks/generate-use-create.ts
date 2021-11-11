@@ -109,7 +109,7 @@ const useCreateInitializer = (
 ) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
-    const variableName = interfaceName.toLowerCase();
+    const variableName = _.camelCase(interfaceName);
     const fromTable = getFromFunctionName(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,

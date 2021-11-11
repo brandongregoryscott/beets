@@ -121,7 +121,7 @@ const useUpdateInitializer = (
     );
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
-    const variableName = interfaceName.toLowerCase();
+    const variableName = _.camelCase(interfaceName);
     const updateValue = useRecord
         ? `${variableName} instanceof ${recordName} ? ${variableName}.toPOJO() : ${variableName}`
         : variableName;
