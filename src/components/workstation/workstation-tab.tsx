@@ -80,13 +80,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 return;
             }
 
-            setState((prev) =>
-                prev.merge({
-                    initialProject: new ProjectRecord(),
-                    currentProject: new ProjectRecord(),
-                })
-            );
-
+            setState((prev) => prev.newProject());
             closePopover();
         },
         [setConfirmationAction, isDirty, handleOpenConfirmDialog, setState]
