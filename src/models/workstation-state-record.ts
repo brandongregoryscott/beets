@@ -26,6 +26,19 @@ class WorkstationStateRecord
 
         super(values);
     }
+
+    public newProject(): WorkstationStateRecord {
+        return this.merge({
+            initialProject: new ProjectRecord(),
+            currentProject: new ProjectRecord(),
+        });
+    }
+
+    public revertCurrentProject(): WorkstationStateRecord {
+        return this.merge({
+            currentProject: this.initialProject,
+        });
+    }
 }
 
 export { WorkstationStateRecord };
