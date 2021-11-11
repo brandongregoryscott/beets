@@ -8,6 +8,7 @@ import {
     majorScale,
     minorScale,
     Pane,
+    PlusIcon,
     PropertiesIcon,
     PropertyIcon,
     Spinner,
@@ -24,6 +25,8 @@ import { initializeList } from "utils/core-utils";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { TrackSection } from "components/track-section";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface TrackProps {
     track: TrackRecord;
@@ -50,6 +53,8 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
         setFalse: setLoadingSamplesFalse,
     } = useBoolean(false);
 
+    const theme = useTheme();
+    const sections = track.getSections();
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
 
     const setName = useCallback(
@@ -77,66 +82,74 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     }, [sequencerValue, setLoadingSamplesTrue]);
 
     return (
-        <Card
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-            background="gray200"
-            width={majorScale(21)}
-            marginY={majorScale(1)}
-            padding={majorScale(1)}>
-            <EditableParagraph onChange={setName} value={name} />
-            <Pane display="flex" flexDirection="row">
-                <Tooltip content="Mute Track">
-                    <IconButton
-                        icon={mute ? VolumeOffIcon : VolumeUpIcon}
-                        marginRight={iconMarginRight}
-                        onClick={toggleMute}
+        <Pane display="flex" flexDirection="row" alignItems="center">
+            <Card
+                display="flex"
+                flexDirection="column"
+                alignItems="flex-start"
+                background={theme.colors.gray200}
+                width={majorScale(21)}
+                marginY={majorScale(1)}
+                padding={majorScale(1)}>
+                <EditableParagraph onChange={setName} value={name} />
+                <Pane display="flex" flexDirection="row">
+                    <Tooltip content="Mute Track">
+                        <IconButton
+                            icon={mute ? VolumeOffIcon : VolumeUpIcon}
+                            marginRight={iconMarginRight}
+                            onClick={toggleMute}
+                        />
+                    </Tooltip>
+                    <Tooltip content="Solo Track">
+                        <IconButton
+                            icon={solo ? PropertyIcon : PropertiesIcon}
+                            marginRight={iconMarginRight}
+                            onClick={toggleSolo}
+                        />
+                    </Tooltip>
+                    <Tooltip content="Sequencer">
+                        <IconButton
+                            icon={loadingSamples ? Spinner : HeatGridIcon}
+                            marginRight={iconMarginRight}
+                            onClick={handleOpenSequencerDialog}
+                        />
+                    </Tooltip>
+                    <Tooltip content="Remove Track">
+                        <IconButton
+                            icon={DeleteIcon}
+                            intent="danger"
+                            marginRight={iconMarginRight}
+                            onClick={remove}
+                        />
+                    </Tooltip>
+                </Pane>
+                {sequencerDialogOpen && files != null && (
+                    <SequencerDialog
+                        files={files}
+                        onChange={setSequencerValue}
+                        onClose={handleCloseSequencerDialog}
+                        trackId={id}
+                        value={sequencerValue}
                     />
-                </Tooltip>
-                <Tooltip content="Solo Track">
-                    <IconButton
-                        icon={solo ? PropertyIcon : PropertiesIcon}
-                        marginRight={iconMarginRight}
-                        onClick={toggleSolo}
+                )}
+                <ReactronicaTrack
+                    mute={mute}
+                    solo={solo}
+                    steps={FileRecord.toStepTypes(sequencerValue)}>
+                    <Instrument
+                        onLoad={setLoadingSamplesFalse}
+                        samples={FileRecord.toMidiNoteMap(samples)}
+                        type="sampler"
                     />
-                </Tooltip>
-                <Tooltip content="Sequencer">
-                    <IconButton
-                        icon={loadingSamples ? Spinner : HeatGridIcon}
-                        marginRight={iconMarginRight}
-                        onClick={handleOpenSequencerDialog}
-                    />
-                </Tooltip>
-                <Tooltip content="Remove Track">
-                    <IconButton
-                        icon={DeleteIcon}
-                        intent="danger"
-                        marginRight={iconMarginRight}
-                        onClick={remove}
-                    />
-                </Tooltip>
-            </Pane>
-            {sequencerDialogOpen && files != null && (
-                <SequencerDialog
-                    files={files}
-                    onChange={setSequencerValue}
-                    onClose={handleCloseSequencerDialog}
-                    trackId={id}
-                    value={sequencerValue}
-                />
-            )}
-            <ReactronicaTrack
-                mute={mute}
-                solo={solo}
-                steps={FileRecord.toStepTypes(sequencerValue)}>
-                <Instrument
-                    onLoad={setLoadingSamplesFalse}
-                    samples={FileRecord.toMidiNoteMap(samples)}
-                    type="sampler"
-                />
-            </ReactronicaTrack>
-        </Card>
+                </ReactronicaTrack>
+            </Card>
+            {sections.map((section) => (
+                <TrackSection section={section} />
+            ))}
+            <Tooltip content="Add Section">
+                <IconButton icon={PlusIcon} onClick={toggleMute} />
+            </Tooltip>
+        </Pane>
     );
 };
 

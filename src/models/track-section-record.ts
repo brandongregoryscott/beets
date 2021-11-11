@@ -2,10 +2,13 @@ import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackSection } from "generated/interfaces/track-section";
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
-import { makeDefaultValues } from "utils/core-utils";
+import { getTemporaryId, makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<TrackSection>({
     ...AuditableDefaultValues,
+    get id() {
+        return getTemporaryId();
+    },
     index: 0,
     step_count: 16,
     track_id: undefined,

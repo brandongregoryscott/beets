@@ -7,10 +7,6 @@ import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackRecord } from "models/track-record";
 import { Track } from "generated/interfaces/track";
 
-interface NavigationProperties {
-    tracks?: List<TrackRecord>;
-}
-
 const defaultValues = makeDefaultValues<Project>({
     ...AuditableDefaultValues,
     name: "",
@@ -37,10 +33,6 @@ class ProjectRecord
     public addTrack(track?: TrackRecord): ProjectRecord {
         const tracks = this.tracks.push(track ?? new TrackRecord());
         return new ProjectRecord(this).setTracks(tracks);
-    }
-
-    public getNavigationProperties(): Required<NavigationProperties> {
-        return { tracks: this.tracks };
     }
 
     public getTrack(id: string): TrackRecord | undefined {
