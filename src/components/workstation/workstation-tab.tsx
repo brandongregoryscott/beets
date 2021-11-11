@@ -2,15 +2,21 @@ import { Menu } from "components/menu/menu";
 import { OpenProjectDialog } from "components/workstation/open-project-dialog";
 import { SaveProjectDialog } from "components/workstation/save-project-dialog";
 import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useSyncProject } from "utils/hooks/domain/projects/use-sync-project";
 import { ProjectRecord } from "models/project-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { ConfirmationDialog } from "components/confirmation-dialog";
+import { WorkstationStateRecord } from "models/workstation-state-record";
 
 interface WorkstationTabProps {}
+
+enum ConfirmationAction {
+    NewProject,
+    RevertToSaved,
+}
 
 const WorkstationTab: React.FC<WorkstationTabProps> = (
     props: WorkstationTabProps
@@ -33,7 +39,12 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         setFalse: handleCloseConfirmDialog,
         setTrue: handleOpenConfirmDialog,
     } = useBoolean();
-
+    const [confirmationAction, setConfirmationAction] =
+        useState<ConfirmationAction>(ConfirmationAction.NewProject);
+    const alertDecription =
+        confirmationAction === ConfirmationAction.NewProject
+            ? "Opening a new project will wipe out any unsaved changes."
+            : "Reverting the project to the last saved state will wipe out any unsaved changes.";
     const theme = useTheme();
 
     const handleSyncProjectError = useCallback(
@@ -64,20 +75,15 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     const handleNewClick = useCallback(
         (closePopover: () => void) => () => {
             if (isDirty) {
+                setConfirmationAction(ConfirmationAction.NewProject);
                 handleOpenConfirmDialog();
                 return;
             }
 
-            setState((prev) =>
-                prev.merge({
-                    initialProject: new ProjectRecord(),
-                    currentProject: new ProjectRecord(),
-                })
-            );
-
+            setState((prev) => prev.newProject());
             closePopover();
         },
-        [isDirty, handleOpenConfirmDialog, setState]
+        [setConfirmationAction, isDirty, handleOpenConfirmDialog, setState]
     );
 
     const handleOpenClick = useCallback(
@@ -107,16 +113,25 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         ]
     );
 
-    const handleDirtyConfirm = useCallback(() => {
-        setState((prev) =>
-            prev.merge({
-                initialProject: new ProjectRecord(),
-                currentProject: new ProjectRecord(),
-            })
-        );
+    const handleRevertClick = useCallback(
+        (closePopover: () => void) => () => {
+            setConfirmationAction(ConfirmationAction.RevertToSaved);
+            handleOpenConfirmDialog();
+            closePopover();
+        },
+        [setConfirmationAction, handleOpenConfirmDialog]
+    );
 
+    const handleDirtyConfirm = useCallback(() => {
+        let update = (prev: WorkstationStateRecord) => prev.newProject();
+        if (confirmationAction === ConfirmationAction.RevertToSaved) {
+            update = (prev: WorkstationStateRecord) =>
+                prev.revertCurrentProject();
+        }
+
+        setState(update);
         handleCloseConfirmDialog();
-    }, [handleCloseConfirmDialog, setState]);
+    }, [confirmationAction, handleCloseConfirmDialog, setState]);
 
     return (
         <React.Fragment>
@@ -131,6 +146,11 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         </Menu.Item>
                         <Menu.Item onClick={handleSaveClick(closePopover)}>
                             Save
+                        </Menu.Item>
+                        <Menu.Item
+                            disabled={!isDirty}
+                            onClick={handleRevertClick(closePopover)}>
+                            Revert to saved
                         </Menu.Item>
                     </Menu>
                 )}
@@ -164,7 +184,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             {isConfirmDialogOpen && (
                 <ConfirmationDialog
                     alertTitle="You currently have unsaved changes."
-                    alertDescription="Opening a new project will wipe out any unsaved changes."
+                    alertDescription={alertDecription}
                     isShown={isConfirmDialogOpen}
                     onConfirm={handleDirtyConfirm}
                     onCloseComplete={handleCloseConfirmDialog}

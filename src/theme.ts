@@ -25,6 +25,12 @@ const theme = _.merge(defaultTheme, {
         MenuItem: {
             appearances: {
                 tab: {
+                    _disabled: {
+                        cursor: "not-allowed",
+                        pointerEvents: "auto",
+                        fontStyle: "italic",
+                        color: defaultTheme.colors.gray500,
+                    },
                     _hover: {
                         backgroundColor: defaultTheme.colors.gray300,
                     },
