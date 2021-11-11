@@ -20,6 +20,7 @@ const up = (pgm: MigrationBuilder) => {
             type: "uuid",
             references: "storage.objects",
             notNull: true,
+            primaryKey: true,
         },
         bucketid: {
             type: "text",

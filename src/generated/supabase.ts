@@ -336,6 +336,120 @@ export interface paths {
             };
         };
     };
+    "/track_section_steps": {
+        get: {
+            parameters: {
+                query: {
+                    created_on?: parameters["rowFilter.track_section_steps.created_on"];
+                    created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+                    deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+                    updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+                    id?: parameters["rowFilter.track_section_steps.id"];
+                    file_id?: parameters["rowFilter.track_section_steps.file_id"];
+                    index?: parameters["rowFilter.track_section_steps.index"];
+                    track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["track_section_steps"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
+        };
+        post: {
+            parameters: {
+                body: {
+                    /** track_section_steps */
+                    track_section_steps?: definitions["track_section_steps"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
+        };
+        delete: {
+            parameters: {
+                query: {
+                    created_on?: parameters["rowFilter.track_section_steps.created_on"];
+                    created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+                    deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+                    updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+                    id?: parameters["rowFilter.track_section_steps.id"];
+                    file_id?: parameters["rowFilter.track_section_steps.file_id"];
+                    index?: parameters["rowFilter.track_section_steps.index"];
+                    track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+        patch: {
+            parameters: {
+                query: {
+                    created_on?: parameters["rowFilter.track_section_steps.created_on"];
+                    created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+                    deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+                    updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+                    id?: parameters["rowFilter.track_section_steps.id"];
+                    file_id?: parameters["rowFilter.track_section_steps.file_id"];
+                    index?: parameters["rowFilter.track_section_steps.index"];
+                    track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                };
+                body: {
+                    /** track_section_steps */
+                    track_section_steps?: definitions["track_section_steps"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+    };
     "/track_sections": {
         get: {
             parameters: {
@@ -691,6 +805,10 @@ export interface definitions {
         deleted_by_id?: string;
         updated_on?: string;
         updated_by_id?: string;
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
         id: string;
         /**
          * Note:
@@ -725,6 +843,30 @@ export interface definitions {
          */
         id: string;
         name: string;
+    };
+    track_section_steps: {
+        created_on?: string;
+        created_by_id?: string;
+        deleted_on?: string;
+        deleted_by_id?: string;
+        updated_on?: string;
+        updated_by_id?: string;
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
+        id: string;
+        /**
+         * Note:
+         * This is a Foreign Key to `files.id`.<fk table='files' column='id'/>
+         */
+        file_id: string;
+        index: number;
+        /**
+         * Note:
+         * This is a Foreign Key to `track_sections.id`.<fk table='track_sections' column='id'/>
+         */
+        track_section_id: string;
     };
     track_sections: {
         created_on?: string;
@@ -836,6 +978,18 @@ export interface parameters {
     "rowFilter.projects.updated_by_id": string;
     "rowFilter.projects.id": string;
     "rowFilter.projects.name": string;
+    /** track_section_steps */
+    "body.track_section_steps": definitions["track_section_steps"];
+    "rowFilter.track_section_steps.created_on": string;
+    "rowFilter.track_section_steps.created_by_id": string;
+    "rowFilter.track_section_steps.deleted_on": string;
+    "rowFilter.track_section_steps.deleted_by_id": string;
+    "rowFilter.track_section_steps.updated_on": string;
+    "rowFilter.track_section_steps.updated_by_id": string;
+    "rowFilter.track_section_steps.id": string;
+    "rowFilter.track_section_steps.file_id": string;
+    "rowFilter.track_section_steps.index": string;
+    "rowFilter.track_section_steps.track_section_id": string;
     /** track_sections */
     "body.track_sections": definitions["track_sections"];
     "rowFilter.track_sections.created_on": string;
