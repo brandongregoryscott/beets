@@ -58,18 +58,30 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
 
     const setName = useCallback(
-        (value: string) => updateTrack(id, { name: value }),
+        (value: string) =>
+            updateTrack(id, (prev: TrackRecord) => prev.merge({ name: value })),
         [id, updateTrack]
     );
 
     const toggleMute = useCallback(
-        () => updateTrack(id, { mute: !mute }),
-        [id, mute, updateTrack]
+        () =>
+            updateTrack(id, (prev: TrackRecord) =>
+                prev.merge({ mute: !prev.mute })
+            ),
+        [id, updateTrack]
     );
 
     const toggleSolo = useCallback(
-        () => updateTrack(id, { solo: !solo }),
-        [id, solo, updateTrack]
+        () =>
+            updateTrack(id, (prev: TrackRecord) =>
+                prev.merge({ solo: !prev.solo })
+            ),
+        [id, updateTrack]
+    );
+
+    const addSection = useCallback(
+        () => updateTrack(id, (prev: TrackRecord) => prev.addSection()),
+        [id, updateTrack]
     );
 
     const remove = useCallback(() => removeTrack(track), [removeTrack, track]);
@@ -90,6 +102,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                 background={theme.colors.gray200}
                 width={majorScale(21)}
                 marginY={majorScale(1)}
+                marginRight={majorScale(1)}
                 padding={majorScale(1)}>
                 <EditableParagraph onChange={setName} value={name} />
                 <Pane display="flex" flexDirection="row">
@@ -147,7 +160,11 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                 <TrackSection section={section} />
             ))}
             <Tooltip content="Add Section">
-                <IconButton icon={PlusIcon} onClick={toggleMute} />
+                <IconButton
+                    icon={PlusIcon}
+                    marginLeft={majorScale(1)}
+                    onClick={addSection}
+                />
             </Tooltip>
         </Pane>
     );

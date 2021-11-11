@@ -5,7 +5,8 @@ import { Project } from "generated/interfaces/project";
 import { AuditableRecord } from "models/auditable-record";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackRecord } from "models/track-record";
-import { Track } from "generated/interfaces/track";
+import _ from "lodash";
+import { SetStateAction } from "jotai";
 
 const defaultValues = makeDefaultValues<Project>({
     ...AuditableDefaultValues,
@@ -63,7 +64,10 @@ class ProjectRecord
         return this;
     }
 
-    public updateTrack(id: string, update: Partial<Track>): ProjectRecord {
+    public updateTrack(
+        id: string,
+        update: SetStateAction<TrackRecord>
+    ): ProjectRecord {
         const existingTrack = this.getTrack(id);
         if (existingTrack == null) {
             return this;
@@ -74,7 +78,16 @@ class ProjectRecord
             return this;
         }
 
-        const tracks = this.tracks.set(index, existingTrack.merge(update));
+        const updatedValue = _.isFunction(update)
+            ? update(existingTrack)
+            : update;
+
+        const tracks = this.tracks.set(
+            index,
+            existingTrack
+                .merge(updatedValue.toPOJO())
+                .setSections(updatedValue.getSections())
+        );
         return new ProjectRecord(this).setTracks(tracks);
     }
 }

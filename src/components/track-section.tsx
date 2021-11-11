@@ -14,7 +14,7 @@ const TrackSection: React.FC<TrackSectionProps> = (
         <Card
             backgroundColor={theme.colors.gray200}
             alignItems="flex-start"
-            margin={majorScale(1)}
+            marginX={majorScale(1)}
             padding={majorScale(1)}
             height={majorScale(10)}
             width={majorScale(21)}

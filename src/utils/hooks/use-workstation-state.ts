@@ -1,11 +1,10 @@
-import { Track } from "generated/interfaces/track";
 import { SetStateAction, useAtom } from "jotai";
+import _ from "lodash";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCallback } from "react";
 import { WorkstationStateAtom } from "utils/atoms/workstation-state-atom";
-import { getUpdatedState } from "utils/core-utils";
 
 interface UseWorkstationStateResult {
     addTrack: (track?: TrackRecord) => void | Promise<void>;
@@ -19,7 +18,10 @@ interface UseWorkstationStateResult {
     setCurrentProject: (
         updatedProject: SetStateAction<ProjectRecord>
     ) => void | Promise<void>;
-    updateTrack: (id: string, update: Partial<Track>) => void | Promise<void>;
+    updateTrack: (
+        id: string,
+        update: SetStateAction<TrackRecord>
+    ) => void | Promise<void>;
 }
 
 const useWorkstationState = (): UseWorkstationStateResult => {
@@ -29,10 +31,9 @@ const useWorkstationState = (): UseWorkstationStateResult => {
         (updatedProject: SetStateAction<ProjectRecord>) =>
             setState((prev: WorkstationStateRecord) =>
                 prev.merge({
-                    currentProject: getUpdatedState(
-                        prev.currentProject,
-                        updatedProject
-                    ),
+                    currentProject: _.isFunction(updatedProject)
+                        ? updatedProject(prev.currentProject)
+                        : updatedProject,
                 })
             ),
         [setState]
@@ -56,7 +57,7 @@ const useWorkstationState = (): UseWorkstationStateResult => {
     );
 
     const updateTrack = useCallback(
-        (id: string, update: Partial<Track>) =>
+        (id: string, update: SetStateAction<TrackRecord>) =>
             setCurrentProject((prev) => prev.updateTrack(id, update)),
         [setCurrentProject]
     );
