@@ -21,6 +21,7 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { log } from "../log";
 import { Variables } from "../constants/variables";
+import _ from "lodash";
 
 const {
     createOrUpdate,
@@ -142,7 +143,7 @@ const useCreateOrUpdateInitializer = (
 ) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
-    const variableName = interfaceName.toLowerCase();
+    const variableName = _.camelCase(interfaceName);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.CreateOrUpdate

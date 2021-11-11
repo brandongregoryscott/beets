@@ -1,15 +1,6 @@
-interface Track {
-    created_on?: string;
-    created_by_id?: string;
-    deleted_on?: string;
-    deleted_by_id?: string;
-    updated_on?: string;
-    updated_by_id?: string;
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: string;
+import { Auditable } from "interfaces/auditable";
+
+interface Track extends Auditable {
     name: string;
     mute: boolean;
     solo: boolean;
