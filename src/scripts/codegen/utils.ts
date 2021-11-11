@@ -102,6 +102,18 @@ const getTablesEnumValue = (property: PropertySignature): string =>
 const getTableName = (property: PropertySignature): string =>
     pluralize(getInterfaceName(property), 2);
 
+const keyMirror = <T extends Record<string, null>>(
+    object: T
+): Record<keyof T, string> => {
+    const keys = Object.keys(object);
+    const outputObject: Record<string, string> = {};
+    keys.forEach((key: string) => {
+        outputObject[key] = key;
+    });
+
+    return outputObject as Record<keyof T, string>;
+};
+
 const removeExt = (filename: string) => upath.removeExt(filename, ".ts");
 
 const snakeToTitleCase = (value: string) => {
@@ -146,5 +158,6 @@ export {
     getRecordSourceFile,
     getTablesEnumValue,
     getTableName,
+    keyMirror,
     toKebabCase,
 };

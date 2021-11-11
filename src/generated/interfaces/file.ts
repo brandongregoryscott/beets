@@ -1,11 +1,6 @@
-interface File {
-    created_on?: string;
-    created_by_id?: string;
-    deleted_on?: string;
-    deleted_by_id?: string;
-    updated_on?: string;
-    updated_by_id?: string;
-    id: string;
+import { Auditable } from "interfaces/auditable";
+
+interface File extends Auditable {
     /**
      * Note:
      * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
