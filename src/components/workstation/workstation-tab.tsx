@@ -40,7 +40,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         setTrue: handleOpenConfirmDialog,
     } = useBoolean();
     const [confirmationAction, setConfirmationAction] =
-        useState<ConfirmationAction>();
+        useState<ConfirmationAction>(ConfirmationAction.NewProject);
     const alertDecription =
         confirmationAction === ConfirmationAction.NewProject
             ? "Opening a new project will wipe out any unsaved changes."
@@ -129,10 +129,6 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     );
 
     const handleDirtyConfirm = useCallback(() => {
-        if (confirmationAction == null) {
-            toaster.danger("Confirmation action was unexpectedly null.");
-        }
-
         let update = (prev: WorkstationStateRecord) => prev.newProject();
         if (confirmationAction === ConfirmationAction.RevertToSaved) {
             update = (prev: WorkstationStateRecord) =>
