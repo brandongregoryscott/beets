@@ -66,7 +66,11 @@ const Song: React.FC<SongProps> = (props: PropsWithChildren<SongProps>) => {
             <Heading size={500} marginBottom={majorScale(1)}>
                 {currentProject.name}
             </Heading>
-            <Pane display="flex" flexDirection="row" alignItems="center">
+            <Pane
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                marginBottom={majorScale(1)}>
                 <IconButton
                     icon={isPlaying ? PauseIcon : PlayIcon}
                     marginRight={marginRight}

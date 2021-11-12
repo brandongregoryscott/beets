@@ -86,7 +86,7 @@ class ProjectRecord
             index,
             existingTrack
                 .merge(updatedValue.toPOJO())
-                .setSections(updatedValue.getSections())
+                .setTrackSection(updatedValue.getTrackSections())
         );
         return new ProjectRecord(this).setTracks(tracks);
     }

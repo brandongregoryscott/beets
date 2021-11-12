@@ -8,6 +8,8 @@ import {
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { Track } from "generated/interfaces/track";
 import { TrackSectionRecord } from "models/track-section-record";
+import { SetStateAction } from "react";
+import _ from "lodash";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
@@ -23,7 +25,7 @@ const defaultValues = makeDefaultValues<Track>({
 });
 
 class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
-    private sections: List<TrackSectionRecord>;
+    private trackSections: List<TrackSectionRecord>;
 
     constructor(values?: Partial<Track | TrackRecord>) {
         values = values ?? defaultValues;
@@ -34,42 +36,68 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
 
         super(values);
 
-        this.sections = List([new TrackSectionRecord()]);
+        this.trackSections = List([new TrackSectionRecord()]);
     }
 
-    public addSection(section?: TrackSectionRecord): TrackRecord {
-        const sections = this.sections.push(
+    public addTrackSection(section?: TrackSectionRecord): TrackRecord {
+        const sections = this.trackSections.push(
             section ?? new TrackSectionRecord()
         );
-        return new TrackRecord(this).setSections(sections);
+        return new TrackRecord(this).setTrackSection(sections);
     }
 
-    public getSection(id: string): TrackSectionRecord | undefined {
-        return this.sections.find((section) => section.id === id);
+    public getTrackSection(id: string): TrackSectionRecord | undefined {
+        return this.trackSections.find(
+            (trackSection) => trackSection.id === id
+        );
     }
 
-    public getSections(): List<TrackSectionRecord> {
-        return this.sections;
+    public getTrackSections(): List<TrackSectionRecord> {
+        return this.trackSections;
     }
 
-    public removeSection(section: TrackSectionRecord): TrackRecord {
-        const sections = this.sections.filterNot(
+    public removeTrackSection(section: TrackSectionRecord): TrackRecord {
+        const trackSections = this.trackSections.filterNot(
             (existingSection) => existingSection.id === section.id
         );
 
-        return new TrackRecord(this).setSections(sections);
+        return new TrackRecord(this).setTrackSection(trackSections);
     }
 
-    public setSections(
+    public setTrackSection(
         sections: List<TrackSectionRecord> | TrackSectionRecord[]
     ): TrackRecord {
-        this.sections = (
+        this.trackSections = (
             List.isList(sections) ? sections : List(sections)
         ).filter(
-            (section) =>
-                isNilOrEmpty(section.track_id) || section.track_id === this.id
+            (trackSection) =>
+                isNilOrEmpty(trackSection.track_id) ||
+                trackSection.track_id === this.id
         );
         return this;
+    }
+
+    public updateTrackSection(
+        id: string,
+        update: SetStateAction<TrackSectionRecord>
+    ): TrackRecord {
+        const existing = this.getTrackSection(id);
+        if (existing == null) {
+            return this;
+        }
+
+        const index = this.trackSections.indexOf(existing);
+        if (index < 0) {
+            return this;
+        }
+
+        const updatedValue = _.isFunction(update) ? update(existing) : update;
+
+        const sections = this.trackSections.set(
+            index,
+            existing.merge(updatedValue.toPOJO())
+        );
+        return new TrackRecord(this).setTrackSection(sections);
     }
 }
 

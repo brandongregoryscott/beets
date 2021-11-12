@@ -5,25 +5,34 @@ import { FileRecord } from "models/file-record";
 import { useState } from "react";
 
 interface SequencerDialogProps {
+    stepCount: number;
     files: Array<FileRecord>;
-    onChange: (value: List<List<FileRecord>>) => void;
+    onStepChange: (value: List<List<FileRecord>>) => void;
+    onStepCountChange: (stepCount: number) => void;
     onClose: () => void;
-    trackId: string;
-    value: List<List<FileRecord>>;
+    steps: List<List<FileRecord>>;
 }
 
 const SequencerDialog: React.FC<SequencerDialogProps> = (
     props: SequencerDialogProps
 ) => {
-    const { onChange, onClose, files, trackId, value: initialValue } = props;
-    const name = "sequencer-dialog.tsx TODO";
-    const [value, setValue] = useState<List<List<FileRecord>>>(initialValue);
+    const {
+        onStepChange,
+        onStepCountChange,
+        onClose,
+        files,
+        steps: initialValue,
+        stepCount: initialStepCount,
+    } = props;
+    const [steps, setSteps] = useState<List<List<FileRecord>>>(initialValue);
+    const [stepCount, setStepCount] = useState<number>(initialStepCount);
 
-    const handleChange = (index: number, value: List<FileRecord>) =>
-        setValue((prev) => prev.set(index, value));
+    const handleStepChange = (index: number, value: List<FileRecord>) =>
+        setSteps((prev) => prev.set(index, value));
 
     const handleConfirm = () => {
-        onChange(value);
+        onStepChange(steps);
+        onStepCountChange(stepCount);
         onClose();
     };
 
@@ -33,12 +42,13 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
             isShown={true}
             onCloseComplete={onClose}
             onConfirm={handleConfirm}
-            title={`Sequencer for ${name}`}>
+            title="Sequencer">
             <Sequencer
                 files={files}
-                onChange={handleChange}
-                trackId={trackId}
-                value={value}
+                onStepChange={handleStepChange}
+                stepCount={stepCount}
+                onStepCountChange={setStepCount}
+                steps={steps}
             />
         </Dialog>
     );
