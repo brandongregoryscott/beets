@@ -39,11 +39,11 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
         this.trackSections = List([new TrackSectionRecord()]);
     }
 
-    public addTrackSection(section?: TrackSectionRecord): TrackRecord {
-        const sections = this.trackSections.push(
-            section ?? new TrackSectionRecord()
+    public addTrackSection(trackSection?: TrackSectionRecord): TrackRecord {
+        const trackSections = this.trackSections.push(
+            trackSection ?? new TrackSectionRecord()
         );
-        return new TrackRecord(this).setTrackSection(sections);
+        return new TrackRecord(this).setTrackSection(trackSections);
     }
 
     public getTrackSection(id: string): TrackSectionRecord | undefined {
@@ -65,10 +65,10 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
     }
 
     public setTrackSection(
-        sections: List<TrackSectionRecord> | TrackSectionRecord[]
+        trackSections: List<TrackSectionRecord> | TrackSectionRecord[]
     ): TrackRecord {
         this.trackSections = (
-            List.isList(sections) ? sections : List(sections)
+            List.isList(trackSections) ? trackSections : List(trackSections)
         ).filter(
             (trackSection) =>
                 isNilOrEmpty(trackSection.track_id) ||
@@ -93,11 +93,11 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
 
         const updatedValue = _.isFunction(update) ? update(existing) : update;
 
-        const sections = this.trackSections.set(
+        const trackSections = this.trackSections.set(
             index,
             existing.merge(updatedValue.toPOJO())
         );
-        return new TrackRecord(this).setTrackSection(sections);
+        return new TrackRecord(this).setTrackSection(trackSections);
     }
 }
 

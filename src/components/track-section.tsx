@@ -35,9 +35,9 @@ const TrackSection: React.FC<TrackSectionProps> = (
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
 
-    const [sequencerValue, setSequencerValue] = useState<
+    const [trackSectionStepFiles, setTrackSectionStepFiles] = useState<
         List<List<FileRecord>>
-    >(initializeList(16, List()));
+    >(initializeList(trackSection.step_count, List()));
 
     const handleStepCountChange = useCallback(
         (stepCount: number) => {
@@ -66,10 +66,10 @@ const TrackSection: React.FC<TrackSectionProps> = (
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
                     files={files}
-                    onStepChange={setSequencerValue}
+                    onStepChange={setTrackSectionStepFiles}
                     onStepCountChange={handleStepCountChange}
                     onClose={handleCloseSequencerDialog}
-                    steps={sequencerValue}
+                    steps={trackSectionStepFiles}
                     stepCount={trackSection.step_count}
                 />
             )}
