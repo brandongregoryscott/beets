@@ -9,16 +9,16 @@ import { WorkstationStateAtomFamily } from "utils/atoms/workstation-state-atom-f
 
 interface UseWorkstationStateResult {
     addTrack: (track?: TrackRecord) => void;
+    getTrack: (id: string) => TrackRecord | undefined;
     initialState: WorkstationStateRecord;
     isDirty: boolean;
-    getTrack: (id: string) => TrackRecord | undefined;
     removeTrack: (track: TrackRecord) => void;
-    state: WorkstationStateRecord;
-    setState: (update: SetStateAction<WorkstationStateRecord>) => void;
-    setCurrentState: (update: SetStateAction<WorkstationStateRecord>) => void;
     setCurrentProject: (update: SetStateAction<ProjectRecord>) => void;
+    setCurrentState: (update: SetStateAction<WorkstationStateRecord>) => void;
     setInitialProject: (update: SetStateAction<ProjectRecord>) => void;
     setProject: (updatedProject: SetStateAction<ProjectRecord>) => void;
+    setState: (update: SetStateAction<WorkstationStateRecord>) => void;
+    state: WorkstationStateRecord;
     updateTrack: (id: string, update: SetStateAction<TrackRecord>) => void;
 }
 
@@ -132,12 +132,12 @@ const useWorkstationState = (): UseWorkstationStateResult => {
         initialState,
         isDirty,
         removeTrack,
-        state,
-        setCurrentState,
         setCurrentProject,
+        setCurrentState,
         setInitialProject,
-        setState,
         setProject,
+        setState,
+        state,
         updateTrack,
     };
 };
