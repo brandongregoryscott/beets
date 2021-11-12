@@ -9,30 +9,25 @@ import { useCallback } from "react";
 import { WorkstationStateAtomFamily } from "utils/atoms/workstation-state-atom-family";
 
 interface UseWorkstationStateResult {
-    addTrack: (track?: TrackRecord) => void | Promise<void>;
+    addTrack: (track?: TrackRecord) => void;
     initialState: WorkstationStateRecord;
     isDirty: boolean;
     getTrack: (id: string) => TrackRecord | undefined;
-    removeTrack: (track: TrackRecord) => void | Promise<void>;
+    removeTrack: (track: TrackRecord) => void;
     state: WorkstationStateRecord;
-    setState: (
-        update: SetStateAction<WorkstationStateRecord>
-    ) => void | Promise<void>;
-    setCurrentProject: (
-        updatedProject: SetStateAction<ProjectRecord>
-    ) => void | Promise<void>;
-    setInitialProject: (
-        updatedProject: SetStateAction<ProjectRecord>
-    ) => void | Promise<void>;
+    setState: (update: SetStateAction<WorkstationStateRecord>) => void;
+    setCurrentState: (update: SetStateAction<WorkstationStateRecord>) => void;
+    setCurrentProject: (update: SetStateAction<ProjectRecord>) => void;
+    setInitialProject: (update: SetStateAction<ProjectRecord>) => void;
     setProject: (updatedProject: SetStateAction<ProjectRecord>) => void;
-    updateTrack: (id: string, update: Partial<Track>) => void | Promise<void>;
+    updateTrack: (id: string, update: Partial<Track>) => void;
 }
 
 const useWorkstationState = (): UseWorkstationStateResult => {
     const [initialState, setInitialState] = useAtom(
         WorkstationStateAtomFamily(DiffableState.Initial)
     );
-    const [state, setState] = useAtom(
+    const [state, setCurrentState] = useAtom(
         WorkstationStateAtomFamily(DiffableState.Current)
     );
 
@@ -61,31 +56,53 @@ const useWorkstationState = (): UseWorkstationStateResult => {
 
     const setCurrentProject = useCallback(
         (updatedProject: SetStateAction<ProjectRecord>) =>
-            _setProject(setState, updatedProject),
-        [_setProject, setState]
+            _setProject(setCurrentState, updatedProject),
+        [_setProject, setCurrentState]
     );
 
     const addTrack = useCallback(
         (track?: TrackRecord) =>
-            setCurrentProject((prev) => prev.addTrack(track)),
-        [setCurrentProject]
+            setCurrentState((prev) =>
+                prev.merge({
+                    tracks: prev.tracks.push(track ?? new TrackRecord()),
+                })
+            ),
+        [setCurrentState]
     );
 
     const getTrack = useCallback(
-        (id: string) => state.project.getTrack(id),
-        [state.project]
+        (id: string) => state.tracks.find((track) => track.id === id),
+        [state.tracks]
     );
 
     const removeTrack = useCallback(
         (track: TrackRecord) =>
-            setCurrentProject((prev) => prev.removeTrack(track)),
-        [setCurrentProject]
+            setCurrentState((prev) =>
+                prev.merge({
+                    tracks: prev.tracks.filter(
+                        (existingTrack) => existingTrack.id !== track.id
+                    ),
+                })
+            ),
+        [setCurrentState]
     );
 
     const updateTrack = useCallback(
         (id: string, update: Partial<Track>) =>
-            setCurrentProject((prev) => prev.updateTrack(id, update)),
-        [setCurrentProject]
+            setCurrentState((prev) => {
+                const index = prev.tracks.findIndex((track) => track.id === id);
+
+                if (index < 0) {
+                    return prev;
+                }
+
+                const value = _.isFunction(update)
+                    ? update(prev.tracks.get(index))
+                    : update;
+
+                return prev.merge({ tracks: prev.tracks.set(index, value) });
+            }),
+        [setCurrentState]
     );
 
     const setProject = useCallback(
@@ -96,11 +113,17 @@ const useWorkstationState = (): UseWorkstationStateResult => {
         [setCurrentProject, setInitialProject]
     );
 
+    const setState = useCallback(
+        (updatedWorkstationState: SetStateAction<WorkstationStateRecord>) => {
+            setInitialState(updatedWorkstationState);
+            setCurrentState(updatedWorkstationState);
+        },
+        [setCurrentState, setInitialState]
+    );
+
     const isPersisted = state.project.isPersisted();
     const isProjectDirty = !initialState.project.equals(state.project);
-    const isTrackListDirty = !initialState.project
-        .getTracks()
-        .equals(state.project.getTracks());
+    const isTrackListDirty = !initialState.tracks.equals(state.tracks);
 
     const isDirty = isPersisted && (isProjectDirty || isTrackListDirty);
 
@@ -111,9 +134,10 @@ const useWorkstationState = (): UseWorkstationStateResult => {
         isDirty,
         removeTrack,
         state,
-        setState,
+        setCurrentState,
         setCurrentProject,
         setInitialProject,
+        setState,
         setProject,
         updateTrack,
     };

@@ -9,8 +9,9 @@ import {
 } from "evergreen-ui";
 import { useListProjects } from "generated/hooks/domain/projects/use-list-projects";
 import { useListTracks } from "generated/hooks/domain/tracks/use-list-tracks";
+import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
@@ -25,7 +26,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
 ) => {
     const { isShown, onCloseComplete } = props;
     const theme = useTheme();
-    const { isDirty, state, setProject } = useWorkstationState();
+    const { isDirty, state, setState } = useWorkstationState();
     const { resultObject: projects, isLoading: isLoadingProjects } =
         useListProjects();
     const {
@@ -44,9 +45,15 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             ),
     });
 
-    const projectsWithTracks = useMemo(
-        () => projects?.map((project) => project.setTracks(tracks ?? [])),
-        [projects, tracks]
+    const getTracksByProject = useCallback(
+        (project: ProjectRecord) =>
+            tracks?.filter((track) => track.project_id === project.id) ?? [],
+        [tracks]
+    );
+
+    const getTrackCount = useCallback(
+        (project: ProjectRecord) => getTracksByProject(project).length,
+        [getTracksByProject]
     );
 
     const handleConfirm = useCallback(() => {
@@ -55,21 +62,40 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             return;
         }
 
-        setProject(selected!);
+        const project = selected!;
+        setState((prev) =>
+            prev.merge({
+                project,
+                tracks: List(getTracksByProject(project)),
+            })
+        );
         onCloseComplete?.();
     }, [
-        isDirty,
+        getTracksByProject,
         handleOpenConfirmDialog,
+        isDirty,
         onCloseComplete,
         selected,
-        setProject,
+        setState,
     ]);
 
     const handleDirtyConfirm = useCallback(() => {
-        setProject(selected!);
+        const project = selected!;
+        setState((prev) =>
+            prev.merge({
+                project,
+                tracks: List(getTracksByProject(project)),
+            })
+        );
         handleCloseConfirmDialog();
         onCloseComplete?.();
-    }, [handleCloseConfirmDialog, onCloseComplete, selected, setProject]);
+    }, [
+        getTracksByProject,
+        handleCloseConfirmDialog,
+        onCloseComplete,
+        selected,
+        setState,
+    ]);
 
     const handleDeselect = useCallback(
         () => setSelected(undefined),
@@ -79,7 +105,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     const title = "Open Project";
     const confirmLabel = "Open";
     const isLoading = isLoadingProjects || isLoadingTracks;
-    const hasProjects = !isNilOrEmpty(projectsWithTracks);
+    const hasProjects = !isNilOrEmpty(projects);
 
     return (
         <React.Fragment>
@@ -106,7 +132,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                     {!isLoading && (
                         <Table.Body>
                             {hasProjects &&
-                                projectsWithTracks?.map((project) => (
+                                projects?.map((project) => (
                                     <Table.Row
                                         key={project.id}
                                         isSelectable={true}
@@ -117,7 +143,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                                             {project.name}
                                         </Table.TextCell>
                                         <Table.TextCell>
-                                            {project.getTracks().count()} Tracks
+                                            {getTrackCount(project)} Tracks
                                         </Table.TextCell>
                                         <Table.TextCell>
                                             {formatUpdatedOn(

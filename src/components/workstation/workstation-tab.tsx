@@ -5,10 +5,10 @@ import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
 import React, { useCallback, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { useSyncProject } from "utils/hooks/domain/projects/use-sync-project";
-import { ProjectRecord } from "models/project-record";
+import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { ConfirmationDialog } from "components/confirmation-dialog";
+import { WorkstationStateRecord } from "models/workstation-state-record";
 
 interface WorkstationTabProps {}
 
@@ -20,7 +20,7 @@ enum ConfirmationAction {
 const WorkstationTab: React.FC<WorkstationTabProps> = (
     props: WorkstationTabProps
 ) => {
-    const { initialState, isDirty, state, setCurrentProject, setProject } =
+    const { initialState, isDirty, state, setCurrentState, setState } =
         useWorkstationState();
     const { project } = state;
     const isProjectOpen = project.isPersisted();
@@ -47,24 +47,24 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             : "Reverting the project to the last saved state will wipe out any unsaved changes.";
     const theme = useTheme();
 
-    const handleSyncProjectError = useCallback(
+    const handleSyncError = useCallback(
         (error: Error) =>
             toaster.danger("There was an error syncing the project", {
                 description: error.message,
             }),
         []
     );
-    const handleSyncProjectSuccess = useCallback(
-        (project: ProjectRecord) => {
-            setProject(project);
+    const handleSyncSuccess = useCallback(
+        (workstationState: WorkstationStateRecord) => {
+            setState(workstationState);
             toaster.success("Successfully saved project");
         },
-        [setProject]
+        [setState]
     );
 
-    const { isLoading: isSyncing, mutate: syncProject } = useSyncProject({
-        onError: handleSyncProjectError,
-        onSuccess: handleSyncProjectSuccess,
+    const { isLoading: isSyncing, mutate: sync } = useSyncWorkstationState({
+        onError: handleSyncError,
+        onSuccess: handleSyncSuccess,
     });
 
     const handleNewClick = useCallback(
@@ -75,10 +75,10 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 return;
             }
 
-            setProject(new ProjectRecord());
+            setState(new WorkstationStateRecord());
             closePopover();
         },
-        [handleOpenConfirmDialog, isDirty, setConfirmationAction, setProject]
+        [handleOpenConfirmDialog, isDirty, setConfirmationAction, setState]
     );
 
     const handleOpenClick = useCallback(
@@ -92,7 +92,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     const handleSaveClick = useCallback(
         (closePopover: () => void) => () => {
             if (isProjectOpen) {
-                syncProject(project);
+                sync(state);
                 closePopover();
                 return;
             }
@@ -100,7 +100,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             handleOpenSaveProjectDialog();
             closePopover();
         },
-        [isProjectOpen, project, handleOpenSaveProjectDialog, syncProject]
+        [isProjectOpen, state, handleOpenSaveProjectDialog, sync]
     );
 
     const handleRevertClick = useCallback(
@@ -113,9 +113,9 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     );
 
     const handleDirtyConfirm = useCallback(() => {
-        let update = () => setProject(new ProjectRecord());
+        let update = () => setState(new WorkstationStateRecord());
         if (confirmationAction === ConfirmationAction.RevertToSaved) {
-            update = () => setCurrentProject(initialState.project);
+            update = () => setCurrentState(initialState);
         }
 
         update();
@@ -123,9 +123,9 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     }, [
         confirmationAction,
         handleCloseConfirmDialog,
-        initialState.project,
-        setCurrentProject,
-        setProject,
+        initialState,
+        setCurrentState,
+        setState,
     ]);
 
     return (

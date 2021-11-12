@@ -7,7 +7,7 @@ interface TrackListProps {}
 
 const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
     const { state, addTrack } = useWorkstationState();
-    const { tracks } = state.project.getNavigationProperties();
+    const { tracks } = state;
     const handleAddTrack = useCallback(() => addTrack(), [addTrack]);
     return (
         <Pane>

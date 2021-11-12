@@ -5,11 +5,11 @@ import {
     TextInputField,
     toaster,
 } from "evergreen-ui";
-import { ProjectRecord } from "models/project-record";
+import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useState } from "react";
 import { useInput } from "rooks";
 import { isNilOrEmpty } from "utils/core-utils";
-import { useSyncProject } from "utils/hooks/domain/projects/use-sync-project";
+import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface SaveProjectDialogProps
@@ -21,20 +21,22 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     props: SaveProjectDialogProps
 ) => {
     const { isShown, onCloseComplete } = props;
-    const { state, setProject } = useWorkstationState();
+    const { state, setState } = useWorkstationState();
     const title = "New Project";
     const { value, onChange } = useInput();
     const [validationMessage, setValidationMessage] = useState<
         string | undefined
     >(undefined);
 
-    const handleSuccess = (project: ProjectRecord) => {
-        toaster.success(`Successfully created Project '${project.name}'`);
-        setProject(project);
+    const handleSuccess = (workstationState: WorkstationStateRecord) => {
+        toaster.success(
+            `Successfully created Project '${workstationState.project.name}'`
+        );
+        setState(workstationState);
         onCloseComplete?.();
     };
 
-    const { mutate, isLoading, error } = useSyncProject({
+    const { mutate, isLoading, error } = useSyncWorkstationState({
         onSuccess: handleSuccess,
     });
 
@@ -53,11 +55,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             return;
         }
 
-        mutate(
-            state.project
-                .merge({ name: value })
-                .setTracks(state.project.getTracks())
-        );
+        mutate(state);
     };
 
     return (
