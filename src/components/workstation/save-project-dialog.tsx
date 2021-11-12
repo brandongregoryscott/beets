@@ -21,7 +21,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     props: SaveProjectDialogProps
 ) => {
     const { isShown, onCloseComplete } = props;
-    const { state, setState } = useWorkstationState();
+    const { state, setProject } = useWorkstationState();
     const title = "New Project";
     const { value, onChange } = useInput();
     const [validationMessage, setValidationMessage] = useState<
@@ -30,9 +30,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
 
     const handleSuccess = (project: ProjectRecord) => {
         toaster.success(`Successfully created Project '${project.name}'`);
-        setState((prev) =>
-            prev.merge({ initialProject: project, currentProject: project })
-        );
+        setProject(project);
         onCloseComplete?.();
     };
 
@@ -56,9 +54,9 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
         }
 
         mutate(
-            state.currentProject
+            state.project
                 .merge({ name: value })
-                .setTracks(state.currentProject.getTracks())
+                .setTracks(state.project.getTracks())
         );
     };
 

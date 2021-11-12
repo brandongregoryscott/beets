@@ -25,7 +25,8 @@ const marginRight = minorScale(2);
 const Song: React.FC<SongProps> = (props: PropsWithChildren<SongProps>) => {
     const { children } = props;
     const { state } = useWorkstationState();
-    const { currentProject } = state;
+    const { project } = state;
+
     const { value: isMuted, toggle: toggleIsMuted } = useBoolean(false);
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean(false);
     const [bpm, setBpm] = useState<number | undefined>(80);
@@ -64,7 +65,7 @@ const Song: React.FC<SongProps> = (props: PropsWithChildren<SongProps>) => {
     return (
         <Pane>
             <Heading size={500} marginBottom={majorScale(1)}>
-                {currentProject.name}
+                {project.name}
             </Heading>
             <Pane display="flex" flexDirection="row" alignItems="center">
                 <IconButton

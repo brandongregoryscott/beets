@@ -1,12 +1,13 @@
-import { Record } from "immutable";
+import { List, Record } from "immutable";
 import { WorkstationState } from "interfaces/workstation-state";
 import { BaseRecord } from "models/base-record";
 import { ProjectRecord } from "models/project-record";
+import { TrackRecord } from "models/track-record";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<WorkstationState>({
-    initialProject: new ProjectRecord(),
-    currentProject: new ProjectRecord(),
+    project: new ProjectRecord(),
+    tracks: List<TrackRecord>(),
 });
 
 class WorkstationStateRecord
@@ -16,28 +17,20 @@ class WorkstationStateRecord
     constructor(values?: Partial<WorkstationState>) {
         values = values ?? defaultValues;
 
-        if (values.initialProject != null) {
-            values.initialProject = new ProjectRecord(values.initialProject);
+        if (values.project != null) {
+            values.project = new ProjectRecord(values.project);
         }
 
-        if (values.currentProject != null) {
-            values.currentProject = new ProjectRecord(values.currentProject);
+        if (values.tracks != null) {
+            values.tracks = List(
+                values.tracks.map((track) =>
+                    new TrackRecord(track).merge({
+                        project_id: values?.project?.id,
+                    })
+                )
+            );
         }
-
         super(values);
-    }
-
-    public newProject(): WorkstationStateRecord {
-        return this.merge({
-            initialProject: new ProjectRecord(),
-            currentProject: new ProjectRecord(),
-        });
-    }
-
-    public revertCurrentProject(): WorkstationStateRecord {
-        return this.merge({
-            currentProject: this.initialProject,
-        });
     }
 }
 

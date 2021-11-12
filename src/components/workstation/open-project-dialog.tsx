@@ -25,7 +25,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
 ) => {
     const { isShown, onCloseComplete } = props;
     const theme = useTheme();
-    const { isDirty, state, setState } = useWorkstationState();
+    const { isDirty, state, setProject } = useWorkstationState();
     const { resultObject: projects, isLoading: isLoadingProjects } =
         useListProjects();
     const {
@@ -55,27 +55,21 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             return;
         }
 
-        setState((prev) =>
-            prev.merge({
-                initialProject: selected,
-                currentProject: selected,
-            })
-        );
-
+        setProject(selected!);
         onCloseComplete?.();
-    }, [isDirty, handleOpenConfirmDialog, onCloseComplete, selected, setState]);
+    }, [
+        isDirty,
+        handleOpenConfirmDialog,
+        onCloseComplete,
+        selected,
+        setProject,
+    ]);
 
     const handleDirtyConfirm = useCallback(() => {
-        setState((prev) =>
-            prev.merge({
-                initialProject: selected,
-                currentProject: selected,
-            })
-        );
-
+        setProject(selected!);
         handleCloseConfirmDialog();
         onCloseComplete?.();
-    }, [handleCloseConfirmDialog, onCloseComplete, selected, setState]);
+    }, [handleCloseConfirmDialog, onCloseComplete, selected, setProject]);
 
     const handleDeselect = useCallback(
         () => setSelected(undefined),
@@ -95,7 +89,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                 isConfirmDisabled={
                     !hasProjects ||
                     selected == null ||
-                    selected?.equals(state.currentProject)
+                    selected?.equals(state.project)
                 }
                 isShown={isShown}
                 onConfirm={handleConfirm}
