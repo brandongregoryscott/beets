@@ -1,5 +1,4 @@
 import { DiffableState } from "enums/diffable-state";
-import { Track } from "generated/interfaces/track";
 import { SetStateAction, useAtom } from "jotai";
 import _ from "lodash";
 import { ProjectRecord } from "models/project-record";
@@ -20,7 +19,7 @@ interface UseWorkstationStateResult {
     setCurrentProject: (update: SetStateAction<ProjectRecord>) => void;
     setInitialProject: (update: SetStateAction<ProjectRecord>) => void;
     setProject: (updatedProject: SetStateAction<ProjectRecord>) => void;
-    updateTrack: (id: string, update: Partial<Track>) => void;
+    updateTrack: (id: string, update: SetStateAction<TrackRecord>) => void;
 }
 
 const useWorkstationState = (): UseWorkstationStateResult => {
@@ -88,7 +87,7 @@ const useWorkstationState = (): UseWorkstationStateResult => {
     );
 
     const updateTrack = useCallback(
-        (id: string, update: Partial<Track>) =>
+        (id: string, update: SetStateAction<TrackRecord>) =>
             setCurrentState((prev) => {
                 const index = prev.tracks.findIndex((track) => track.id === id);
 
@@ -97,7 +96,7 @@ const useWorkstationState = (): UseWorkstationStateResult => {
                 }
 
                 const value = _.isFunction(update)
-                    ? update(prev.tracks.get(index))
+                    ? update(prev.tracks.get(index)!)
                     : update;
 
                 return prev.merge({ tracks: prev.tracks.set(index, value) });

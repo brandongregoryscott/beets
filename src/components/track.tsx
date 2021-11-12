@@ -53,18 +53,19 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
 
     const setName = useCallback(
-        (value: string) => updateTrack(id, { name: value }),
+        (value: string) =>
+            updateTrack(id, (prev) => prev.merge({ name: value })),
         [id, updateTrack]
     );
 
     const toggleMute = useCallback(
-        () => updateTrack(id, { mute: !mute }),
-        [id, mute, updateTrack]
+        () => updateTrack(id, (prev) => prev.merge({ mute: !prev.mute })),
+        [id, updateTrack]
     );
 
     const toggleSolo = useCallback(
-        () => updateTrack(id, { solo: !solo }),
-        [id, solo, updateTrack]
+        () => updateTrack(id, (prev) => prev.merge({ solo: !prev.solo })),
+        [id, updateTrack]
     );
 
     const remove = useCallback(() => removeTrack(track), [removeTrack, track]);
