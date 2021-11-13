@@ -23,7 +23,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     const { isShown, onCloseComplete } = props;
     const { state, setState } = useWorkstationState();
     const title = "New Project";
-    const { value, onChange } = useInput();
+    const { value: name, onChange } = useInput();
     const [validationMessage, setValidationMessage] = useState<
         string | undefined
     >(undefined);
@@ -41,7 +41,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     });
 
     const validate = (): boolean => {
-        if (isNilOrEmpty(value)) {
+        if (isNilOrEmpty(name)) {
             setValidationMessage(ERROR_NAME_IS_REQUIRED);
             return false;
         }
@@ -55,7 +55,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             return;
         }
 
-        mutate(state);
+        mutate(state.merge({ project: state.project.merge({ name }) }));
     };
 
     return (
@@ -71,7 +71,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
                 label="Name"
                 onChange={onChange}
                 required={true}
-                value={value}
+                value={name}
                 isInvalid={validationMessage != null}
                 validationMessage={validationMessage}
             />

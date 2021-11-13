@@ -7,7 +7,7 @@ import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<WorkstationState>({
     project: new ProjectRecord(),
-    tracks: List<TrackRecord>(),
+    tracks: List.of(new TrackRecord()),
 });
 
 class WorkstationStateRecord
