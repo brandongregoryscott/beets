@@ -23,7 +23,7 @@ import { List } from "immutable";
 import { initializeList } from "utils/core-utils";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useWorkstationTracksState } from "utils/hooks/use-workstation-tracks-state";
 
 interface TrackProps {
     track: TrackRecord;
@@ -34,7 +34,7 @@ const iconMarginRight = minorScale(2);
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { track } = props;
     const { id, name, mute, solo } = track;
-    const { updateTrack, removeTrack } = useWorkstationState();
+    const { update, remove } = useWorkstationTracksState();
     const {
         value: sequencerDialogOpen,
         setTrue: handleOpenSequencerDialog,
@@ -53,21 +53,21 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const samples = sequencerValue.flatten().toList() as List<FileRecord>;
 
     const setName = useCallback(
-        (value: string) => updateTrack(id, { name: value }),
-        [id, updateTrack]
+        (value: string) => update(id, (prev) => prev.merge({ name: value })),
+        [id, update]
     );
 
     const toggleMute = useCallback(
-        () => updateTrack(id, { mute: !mute }),
-        [id, mute, updateTrack]
+        () => update(id, (prev) => prev.merge({ mute: !prev.mute })),
+        [id, update]
     );
 
     const toggleSolo = useCallback(
-        () => updateTrack(id, { solo: !solo }),
-        [id, solo, updateTrack]
+        () => update(id, (prev) => prev.merge({ solo: !prev.solo })),
+        [id, update]
     );
 
-    const remove = useCallback(() => removeTrack(track), [removeTrack, track]);
+    const handleRemove = useCallback(() => remove(track), [remove, track]);
 
     useEffect(() => {
         if (sequencerValue.flatten().isEmpty()) {
@@ -113,7 +113,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                         icon={DeleteIcon}
                         intent="danger"
                         marginRight={iconMarginRight}
-                        onClick={remove}
+                        onClick={handleRemove}
                     />
                 </Tooltip>
             </Pane>

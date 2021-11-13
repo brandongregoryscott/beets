@@ -1,83 +1,61 @@
-import { Track } from "generated/interfaces/track";
+import { DiffableState } from "enums/diffable-state";
 import { SetStateAction, useAtom } from "jotai";
-import { ProjectRecord } from "models/project-record";
-import { TrackRecord } from "models/track-record";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCallback } from "react";
-import { WorkstationStateAtom } from "utils/atoms/workstation-state-atom";
-import { getUpdatedState } from "utils/core-utils";
+import { WorkstationStateAtomFamily } from "utils/atoms/workstation-state-atom-family";
 
 interface UseWorkstationStateResult {
-    addTrack: (track?: TrackRecord) => void | Promise<void>;
+    /**
+     * **Initial** state value (at time of load, last save, etc.)
+     */
+    initialState: WorkstationStateRecord;
+    /**
+     * Returns true if the current state does not equal the initial state
+     */
     isDirty: boolean;
-    getTrack: (id: string) => TrackRecord | undefined;
-    removeTrack: (track: TrackRecord) => void | Promise<void>;
+    /**
+     * Sets the **current** state only
+     */
+    setCurrentState: (update: SetStateAction<WorkstationStateRecord>) => void;
+    /**
+     * Sets the **initial** state only
+     */
+    setInitialState: (update: SetStateAction<WorkstationStateRecord>) => void;
+    /**
+     * Sets the **initial** and **current** state
+     */
+    setState: (update: SetStateAction<WorkstationStateRecord>) => void;
+    /**
+     * **Current** state value
+     */
     state: WorkstationStateRecord;
-    setState: (
-        update: SetStateAction<WorkstationStateRecord>
-    ) => void | Promise<void>;
-    setCurrentProject: (
-        updatedProject: SetStateAction<ProjectRecord>
-    ) => void | Promise<void>;
-    updateTrack: (id: string, update: Partial<Track>) => void | Promise<void>;
 }
 
 const useWorkstationState = (): UseWorkstationStateResult => {
-    const [state, setState] = useAtom(WorkstationStateAtom);
-
-    const setCurrentProject = useCallback(
-        (updatedProject: SetStateAction<ProjectRecord>) =>
-            setState((prev: WorkstationStateRecord) =>
-                prev.merge({
-                    currentProject: getUpdatedState(
-                        prev.currentProject,
-                        updatedProject
-                    ),
-                })
-            ),
-        [setState]
+    const [initialState, setInitialState] = useAtom(
+        WorkstationStateAtomFamily(DiffableState.Initial)
+    );
+    const [state, setCurrentState] = useAtom(
+        WorkstationStateAtomFamily(DiffableState.Current)
     );
 
-    const addTrack = useCallback(
-        (track?: TrackRecord) =>
-            setCurrentProject((prev) => prev.addTrack(track)),
-        [setCurrentProject]
+    const setState = useCallback(
+        (updatedWorkstationState: SetStateAction<WorkstationStateRecord>) => {
+            setInitialState(updatedWorkstationState);
+            setCurrentState(updatedWorkstationState);
+        },
+        [setCurrentState, setInitialState]
     );
 
-    const getTrack = useCallback(
-        (id: string) => state.currentProject.getTrack(id),
-        [state.currentProject]
-    );
-
-    const removeTrack = useCallback(
-        (track: TrackRecord) =>
-            setCurrentProject((prev) => prev.removeTrack(track)),
-        [setCurrentProject]
-    );
-
-    const updateTrack = useCallback(
-        (id: string, update: Partial<Track>) =>
-            setCurrentProject((prev) => prev.updateTrack(id, update)),
-        [setCurrentProject]
-    );
-
-    const isPersisted = state.currentProject.isPersisted();
-    const isProjectDirty = !state.initialProject.equals(state.currentProject);
-    const isTrackListDirty = !state.initialProject
-        .getTracks()
-        .equals(state.currentProject.getTracks());
-
-    const isDirty = isPersisted && (isProjectDirty || isTrackListDirty);
+    const isDirty = !state.equals(initialState);
 
     return {
-        addTrack,
-        getTrack,
+        initialState,
         isDirty,
-        removeTrack,
-        state,
+        setCurrentState,
+        setInitialState,
         setState,
-        setCurrentProject,
-        updateTrack,
+        state,
     };
 };
 
