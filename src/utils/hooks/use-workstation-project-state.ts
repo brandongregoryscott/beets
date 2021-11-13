@@ -5,16 +5,37 @@ import { SetStateAction, useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface UseWorkstationProjectStateResult {
+    /**
+     * **Initial** state value (at time of load, last save, etc.)
+     */
     initialState: ProjectRecord;
-    setCurrentProject: (update: SetStateAction<ProjectRecord>) => void;
-    setProject: (updatedProject: SetStateAction<ProjectRecord>) => void;
-    setInitialProject: (update: SetStateAction<ProjectRecord>) => void;
+    /**
+     * Sets the **current** state only
+     */
+    setCurrentState: (update: SetStateAction<ProjectRecord>) => void;
+    /**
+     * Sets the **initial** and **current** state
+     */
+    setState: (update: SetStateAction<ProjectRecord>) => void;
+    /**
+     * Sets the **initial** state only
+     */
+    setInitialState: (update: SetStateAction<ProjectRecord>) => void;
+    /**
+     * **Current** state value
+     */
     state: ProjectRecord;
 }
 
 const useWorkstationProjectState = (): UseWorkstationProjectStateResult => {
-    const { state, initialState, setInitialState, setCurrentState } =
-        useWorkstationState();
+    const {
+        state: workstationState,
+        initialState: initialWorkstationState,
+        setInitialState: setInitialWorkstationState,
+        setCurrentState: setCurrentWorkstationState,
+    } = useWorkstationState();
+    const { project: state } = workstationState;
+    const { project: initialState } = initialWorkstationState;
 
     const _setProject = useCallback(
         (
@@ -33,32 +54,32 @@ const useWorkstationProjectState = (): UseWorkstationProjectStateResult => {
         []
     );
 
-    const setInitialProject = useCallback(
-        (updatedProject: SetStateAction<ProjectRecord>) =>
-            _setProject(setInitialState, updatedProject),
-        [_setProject, setInitialState]
+    const setInitialState = useCallback(
+        (update: SetStateAction<ProjectRecord>) =>
+            _setProject(setInitialWorkstationState, update),
+        [_setProject, setInitialWorkstationState]
     );
 
-    const setCurrentProject = useCallback(
-        (updatedProject: SetStateAction<ProjectRecord>) =>
-            _setProject(setCurrentState, updatedProject),
-        [_setProject, setCurrentState]
+    const setCurrentState = useCallback(
+        (update: SetStateAction<ProjectRecord>) =>
+            _setProject(setCurrentWorkstationState, update),
+        [_setProject, setCurrentWorkstationState]
     );
 
-    const setProject = useCallback(
+    const setState = useCallback(
         (updatedProject: SetStateAction<ProjectRecord>) => {
-            setCurrentProject(updatedProject);
-            setInitialProject(updatedProject);
+            setCurrentState(updatedProject);
+            setInitialState(updatedProject);
         },
-        [setCurrentProject, setInitialProject]
+        [setCurrentState, setInitialState]
     );
 
     return {
-        initialState: initialState.project,
-        setCurrentProject,
-        setInitialProject,
-        setProject,
-        state: state.project,
+        initialState,
+        setCurrentState,
+        setInitialState,
+        setState,
+        state,
     };
 };
 
