@@ -106,7 +106,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                     />
                 </ReactronicaTrack>
             </Card>
-            {trackSections.map((trackSection) => (
+            {trackSections?.map((trackSection) => (
                 <TrackSection
                     trackSection={trackSection}
                     onChange={updateTrackSection}

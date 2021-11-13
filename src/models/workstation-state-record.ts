@@ -8,6 +8,8 @@ import { makeDefaultValues } from "utils/core-utils";
 const defaultValues = makeDefaultValues<WorkstationState>({
     project: new ProjectRecord(),
     tracks: List.of(new TrackRecord()),
+    trackSections: List(),
+    trackSectionSteps: List(),
 });
 
 class WorkstationStateRecord
@@ -23,11 +25,7 @@ class WorkstationStateRecord
 
         if (values.tracks != null) {
             values.tracks = List(
-                values.tracks.map((track) =>
-                    new TrackRecord(track).merge({
-                        project_id: values?.project?.id,
-                    })
-                )
+                values.tracks.map((track) => new TrackRecord(track))
             );
         }
         super(values);
