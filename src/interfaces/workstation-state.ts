@@ -1,8 +1,10 @@
+import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
+import { TrackRecord } from "models/track-record";
 
 interface WorkstationState {
-    initialProject: ProjectRecord;
-    currentProject: ProjectRecord;
+    project: ProjectRecord;
+    tracks: List<TrackRecord>;
 }
 
 export type { WorkstationState };

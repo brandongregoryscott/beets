@@ -16,10 +16,10 @@ import {
 import React, { SetStateAction, useCallback } from "react";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { TrackSection } from "components/track-section";
 import { useTheme } from "utils/hooks/use-theme";
 import { TrackSectionRecord } from "models/track-section-record";
+import { useWorkstationTracksState } from "utils/hooks/use-workstation-tracks-state";
 
 interface TrackProps {
     track: TrackRecord;
@@ -30,47 +30,33 @@ const iconMarginRight = minorScale(2);
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { track } = props;
     const { id, name, mute, solo } = track;
-    const { updateTrack, removeTrack } = useWorkstationState();
-
+    const { update, remove } = useWorkstationTracksState();
     const theme = useTheme();
     const trackSections = track.getTrackSections();
 
     const setName = useCallback(
-        (value: string) =>
-            updateTrack(id, (prev: TrackRecord) => prev.merge({ name: value })),
-        [id, updateTrack]
+        (value: string) => update(id, (prev) => prev.merge({ name: value })),
+        [id, update]
     );
 
     const toggleMute = useCallback(
-        () =>
-            updateTrack(id, (prev: TrackRecord) =>
-                prev.merge({ mute: !prev.mute })
-            ),
-        [id, updateTrack]
+        () => update(id, (prev) => prev.merge({ mute: !prev.mute })),
+        [id, update]
     );
 
     const toggleSolo = useCallback(
-        () =>
-            updateTrack(id, (prev: TrackRecord) =>
-                prev.merge({ solo: !prev.solo })
-            ),
-        [id, updateTrack]
-    );
-
-    const addTrackSection = useCallback(
-        () => updateTrack(id, (prev: TrackRecord) => prev.addTrackSection()),
-        [id, updateTrack]
+        () => update(id, (prev) => prev.merge({ solo: !prev.solo })),
+        [id, update]
     );
 
     const updateTrackSection = useCallback(
-        (trackSectionId: string, update: SetStateAction<TrackSectionRecord>) =>
-            updateTrack(id, (prev: TrackRecord) =>
-                prev.updateTrackSection(trackSectionId, update)
-            ),
-        [id, updateTrack]
+        (id: string, update: SetStateAction<TrackSectionRecord>) => {},
+        []
     );
 
-    const remove = useCallback(() => removeTrack(track), [removeTrack, track]);
+    const addTrackSection = useCallback(() => {}, []);
+
+    const handleRemove = useCallback(() => remove(track), [remove, track]);
 
     return (
         <Pane display="flex" flexDirection="row" alignItems="center">
@@ -104,7 +90,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                             icon={DeleteIcon}
                             intent="danger"
                             marginRight={iconMarginRight}
-                            onClick={remove}
+                            onClick={handleRemove}
                         />
                     </Tooltip>
                 </Pane>
