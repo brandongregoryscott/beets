@@ -32,8 +32,11 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { track } = props;
     const { id, name, mute, solo } = track;
     const { update, remove } = useTracksState();
-    const { add: addTrackSection, state: trackSections } =
-        useTrackSectionsState({ trackId: id });
+    const {
+        add: addTrackSection,
+        state: trackSections,
+        update: updateTrackSection,
+    } = useTrackSectionsState({ trackId: id });
     const theme = useTheme();
 
     const setName = useCallback(
@@ -49,11 +52,6 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const toggleSolo = useCallback(
         () => update(id, (prev) => prev.merge({ solo: !prev.solo })),
         [id, update]
-    );
-
-    const updateTrackSection = useCallback(
-        (id: string, update: SetStateAction<TrackSectionRecord>) => {},
-        []
     );
 
     const handleAddTrackSection = useCallback(

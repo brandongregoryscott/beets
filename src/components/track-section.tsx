@@ -65,35 +65,32 @@ const TrackSection: React.FC<TrackSectionProps> = (
         [onChange, trackSection.id]
     );
 
+    const width = majorScale(6) + trackSection.step_count * majorScale(1);
+
     return (
         <Pane
             {...borderProps}
-            alignItems="flex-start"
             backgroundColor={theme.colors.gray200}
             borderRight={!isLast}
             borderRightColor={theme.colors.gray700}
             borderRightWidth={2}
-            display="flex"
-            flexDirection="column"
             height={majorScale(10)}
             padding={majorScale(1)}
-            width={majorScale(21)}>
-            <Pane display="flex" flexDirection="row" alignItems="flex-start">
-                <Tooltip content="Sequencer">
-                    <IconButton
-                        icon={HeatGridIcon}
-                        marginRight={iconMarginRight}
-                        onClick={handleOpenSequencerDialog}
-                    />
-                </Tooltip>
-                <Tooltip content="Remove section">
-                    <IconButton
-                        icon={DeleteIcon}
-                        marginRight={iconMarginRight}
-                        onClick={handleRemove}
-                    />
-                </Tooltip>
-            </Pane>
+            width={width}>
+            <Tooltip content="Sequencer">
+                <IconButton
+                    icon={HeatGridIcon}
+                    marginRight={iconMarginRight}
+                    onClick={handleOpenSequencerDialog}
+                />
+            </Tooltip>
+            <Tooltip content="Remove section">
+                <IconButton
+                    icon={DeleteIcon}
+                    marginRight={iconMarginRight}
+                    onClick={handleRemove}
+                />
+            </Tooltip>
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
                     files={files}
