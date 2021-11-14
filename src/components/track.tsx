@@ -19,7 +19,8 @@ import { TrackRecord } from "models/track-record";
 import { TrackSection } from "components/track-section";
 import { useTheme } from "utils/hooks/use-theme";
 import { TrackSectionRecord } from "models/track-section-record";
-import { useWorkstationTracksState } from "utils/hooks/use-workstation-tracks-state";
+import { useTracksState } from "utils/hooks/use-workstation-tracks-state";
+import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 
 interface TrackProps {
     track: TrackRecord;
@@ -30,9 +31,10 @@ const iconMarginRight = minorScale(2);
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { track } = props;
     const { id, name, mute, solo } = track;
-    const { update, remove } = useWorkstationTracksState();
+    const { update, remove } = useTracksState();
+    const { add: addTrackSection, state: trackSections } =
+        useTrackSectionsState({ trackId: id });
     const theme = useTheme();
-    const trackSections = track.getTrackSections();
 
     const setName = useCallback(
         (value: string) => update(id, (prev) => prev.merge({ name: value })),
@@ -54,7 +56,10 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
         []
     );
 
-    const addTrackSection = useCallback(() => {}, []);
+    const handleAddTrackSection = useCallback(
+        () => addTrackSection(),
+        [addTrackSection]
+    );
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
@@ -116,7 +121,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                 <IconButton
                     icon={PlusIcon}
                     marginLeft={majorScale(1)}
-                    onClick={addTrackSection}
+                    onClick={handleAddTrackSection}
                 />
             </Tooltip>
         </Pane>

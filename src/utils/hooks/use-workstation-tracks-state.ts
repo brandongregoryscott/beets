@@ -4,7 +4,7 @@ import { SetStateAction, useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import _ from "lodash";
 
-interface UseWorkstationTracksStateResult {
+interface UseTracksStateResult {
     add: (track?: TrackRecord) => void;
     get: (id: string) => TrackRecord | undefined;
     initialState: List<TrackRecord>;
@@ -13,7 +13,7 @@ interface UseWorkstationTracksStateResult {
     update: (id: string, update: SetStateAction<TrackRecord>) => void;
 }
 
-const useWorkstationTracksState = (): UseWorkstationTracksStateResult => {
+const useTracksState = (): UseTracksStateResult => {
     const { state, initialState, setCurrentState } = useWorkstationState();
 
     const add = useCallback(
@@ -71,4 +71,4 @@ const useWorkstationTracksState = (): UseWorkstationTracksStateResult => {
     };
 };
 
-export { useWorkstationTracksState };
+export { useTracksState };

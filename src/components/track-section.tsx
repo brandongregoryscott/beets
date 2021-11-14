@@ -1,9 +1,11 @@
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
     Card,
+    DeleteIcon,
     HeatGridIcon,
     IconButton,
     majorScale,
+    Pane,
     Tooltip,
 } from "evergreen-ui";
 import { List } from "immutable";
@@ -15,6 +17,7 @@ import { initializeList } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useTheme } from "utils/hooks/use-theme";
+import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 
 interface TrackSectionProps {
     trackSection: TrackSectionRecord;
@@ -32,12 +35,20 @@ const TrackSection: React.FC<TrackSectionProps> = (
         setFalse: handleCloseSequencerDialog,
     } = useBoolean(false);
     const { trackSection, onChange } = props;
+    const { remove } = useTrackSectionsState({
+        trackId: trackSection.track_id,
+    });
+
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
 
     const [trackSectionStepFiles, setTrackSectionStepFiles] = useState<
         List<List<FileRecord>>
     >(initializeList(trackSection.step_count, List()));
+
+    const handleRemove = useCallback(() => {
+        remove(trackSection);
+    }, [remove, trackSection]);
 
     const handleStepCountChange = useCallback(
         (stepCount: number) => {
@@ -56,13 +67,22 @@ const TrackSection: React.FC<TrackSectionProps> = (
             padding={majorScale(1)}
             height={majorScale(10)}
             width={majorScale(21)}>
-            <Tooltip content="Sequencer">
-                <IconButton
-                    icon={HeatGridIcon}
-                    marginRight={iconMarginRight}
-                    onClick={handleOpenSequencerDialog}
-                />
-            </Tooltip>
+            <Pane display="flex" flexDirection="row">
+                <Tooltip content="Sequencer">
+                    <IconButton
+                        icon={HeatGridIcon}
+                        marginRight={iconMarginRight}
+                        onClick={handleOpenSequencerDialog}
+                    />
+                </Tooltip>
+                <Tooltip content="Remove section">
+                    <IconButton
+                        icon={DeleteIcon}
+                        marginRight={iconMarginRight}
+                        onClick={handleRemove}
+                    />
+                </Tooltip>
+            </Pane>
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
                     files={files}

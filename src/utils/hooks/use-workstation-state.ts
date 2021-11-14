@@ -39,6 +39,9 @@ const useWorkstationState = (): UseWorkstationStateResult => {
         WorkstationStateAtomFamily(DiffableState.Current)
     );
 
+    console.log("state.tracks", state.tracks);
+    console.log("state.trackSections", state.trackSections);
+
     const setState = useCallback(
         (updatedWorkstationState: SetStateAction<WorkstationStateRecord>) => {
             setInitialState(updatedWorkstationState);
