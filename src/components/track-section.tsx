@@ -1,10 +1,10 @@
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
-    Card,
     DeleteIcon,
     HeatGridIcon,
     IconButton,
     majorScale,
+    minorScale,
     Pane,
     Tooltip,
 } from "evergreen-ui";
@@ -13,13 +13,15 @@ import { SetStateAction } from "jotai";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback, useState } from "react";
-import { initializeList } from "utils/core-utils";
+import { getBorderXProps, initializeList } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 
 interface TrackSectionProps {
+    isFirst?: boolean;
+    isLast?: boolean;
     trackSection: TrackSectionRecord;
     onChange: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
 }
@@ -34,11 +36,15 @@ const TrackSection: React.FC<TrackSectionProps> = (
         setTrue: handleOpenSequencerDialog,
         setFalse: handleCloseSequencerDialog,
     } = useBoolean(false);
-    const { trackSection, onChange } = props;
+    const { isFirst = false, isLast = false, trackSection, onChange } = props;
+    const borderProps = getBorderXProps({
+        isFirst,
+        isLast,
+        borderRadius: minorScale(1),
+    });
     const { remove } = useTrackSectionsState({
         trackId: trackSection.track_id,
     });
-
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
 
@@ -60,14 +66,19 @@ const TrackSection: React.FC<TrackSectionProps> = (
     );
 
     return (
-        <Card
-            backgroundColor={theme.colors.gray200}
+        <Pane
+            {...borderProps}
             alignItems="flex-start"
-            marginX={majorScale(1)}
-            padding={majorScale(1)}
+            backgroundColor={theme.colors.gray200}
+            borderRight={!isLast}
+            borderRightColor={theme.colors.gray700}
+            borderRightWidth={2}
+            display="flex"
+            flexDirection="column"
             height={majorScale(10)}
+            padding={majorScale(1)}
             width={majorScale(21)}>
-            <Pane display="flex" flexDirection="row">
+            <Pane display="flex" flexDirection="row" alignItems="flex-start">
                 <Tooltip content="Sequencer">
                     <IconButton
                         icon={HeatGridIcon}
@@ -93,7 +104,7 @@ const TrackSection: React.FC<TrackSectionProps> = (
                     stepCount={trackSection.step_count}
                 />
             )}
-        </Card>
+        </Pane>
     );
 };
 

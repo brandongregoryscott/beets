@@ -111,8 +111,10 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                     />
                 </ReactronicaTrack>
             </Card>
-            {trackSections?.map((trackSection) => (
+            {trackSections?.map((trackSection, index) => (
                 <TrackSection
+                    isFirst={index === 0}
+                    isLast={index === trackSections.count() - 1}
                     trackSection={trackSection}
                     onChange={updateTrackSection}
                 />

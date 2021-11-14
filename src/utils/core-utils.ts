@@ -1,3 +1,5 @@
+import { BorderProps } from "generated/interfaces/border-props";
+import { BorderPropsOptions } from "generated/interfaces/border-props-options";
 import { List } from "immutable";
 import _ from "lodash";
 import { SetStateAction } from "react";
@@ -35,10 +37,48 @@ const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
 const isTemporaryId = (value?: string): boolean =>
     !isNilOrEmpty(value) && value!.startsWith("temp-");
 
-const getTemporaryId = (): string => `temp-${uuid.v4()}`;
+const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
+    const { isFirst = false, isLast = false, borderRadius } = options;
+    let borderProps: BorderProps = {};
+    if (isFirst) {
+        borderProps = {
+            borderTopLeftRadius: borderRadius,
+            borderTopRightRadius: borderRadius,
+        };
+    }
 
-const getUpdatedState = <T>(previousValue: T, update: SetStateAction<T>) =>
-    _.isFunction(update) ? update(previousValue) : update;
+    if (isLast && !isFirst) {
+        borderProps = {
+            borderBottomLeftRadius: borderRadius,
+            borderBottomRightRadius: borderRadius,
+        };
+    }
+
+    return borderProps;
+};
+
+const getBorderXProps = (options: BorderPropsOptions): BorderProps => {
+    const { isFirst = false, isLast = false, borderRadius } = options;
+    let borderProps: BorderProps = {};
+    if (isFirst) {
+        borderProps = {
+            borderTopLeftRadius: borderRadius,
+            borderBottomLeftRadius: borderRadius,
+        };
+    }
+
+    if (isLast) {
+        borderProps = {
+            ...borderProps,
+            borderTopRightRadius: borderRadius,
+            borderBottomRightRadius: borderRadius,
+        };
+    }
+
+    return borderProps;
+};
+
+const getTemporaryId = (): string => `temp-${uuid.v4()}`;
 
 const groupBy = <TLeft, TRight>(
     left: TLeft[] | undefined,
@@ -90,8 +130,9 @@ const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
 export {
+    getBorderYProps,
+    getBorderXProps,
     getTemporaryId,
-    getUpdatedState,
     groupBy,
     hash,
     initializeList,

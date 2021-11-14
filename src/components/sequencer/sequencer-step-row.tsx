@@ -9,6 +9,7 @@ import {
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { MouseEvent } from "react";
+import { getBorderYProps } from "utils/core-utils";
 
 interface SequencerStepRowProps {
     file: FileRecord;
@@ -26,20 +27,11 @@ const SequencerStepRow: React.FC<SequencerStepRowProps> = (
     const isFirst = files.indexOf(file) === 0;
     const isLast = files.indexOf(file) === files.count() - 1;
 
-    let borderProps = {};
-    if (isFirst) {
-        borderProps = {
-            borderTopLeftRadius: borderRadius,
-            borderTopRightRadius: borderRadius,
-        };
-    }
-
-    if (isLast && !isFirst) {
-        borderProps = {
-            borderBottomLeftRadius: borderRadius,
-            borderBottomRightRadius: borderRadius,
-        };
-    }
+    const borderProps = getBorderYProps({
+        isFirst,
+        isLast,
+        borderRadius,
+    });
 
     const handleClick = (event: MouseEvent<HTMLDivElement>) => {
         event.stopPropagation();
