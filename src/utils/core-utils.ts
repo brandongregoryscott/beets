@@ -2,7 +2,6 @@ import { BorderProps } from "generated/interfaces/border-props";
 import { BorderPropsOptions } from "generated/interfaces/border-props-options";
 import { List } from "immutable";
 import _ from "lodash";
-import { SetStateAction } from "react";
 import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";

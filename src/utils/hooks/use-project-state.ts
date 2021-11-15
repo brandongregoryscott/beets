@@ -4,7 +4,7 @@ import { WorkstationStateRecord } from "models/workstation-state-record";
 import { SetStateAction, useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
-interface UseWorkstationProjectStateResult {
+interface UseProjectStateResult {
     /**
      * **Initial** state value (at time of load, last save, etc.)
      */
@@ -27,7 +27,7 @@ interface UseWorkstationProjectStateResult {
     state: ProjectRecord;
 }
 
-const useWorkstationProjectState = (): UseWorkstationProjectStateResult => {
+const useProjectState = (): UseProjectStateResult => {
     const {
         state: workstationState,
         initialState: initialWorkstationState,
@@ -83,4 +83,4 @@ const useWorkstationProjectState = (): UseWorkstationProjectStateResult => {
     };
 };
 
-export { useWorkstationProjectState };
+export { useProjectState };

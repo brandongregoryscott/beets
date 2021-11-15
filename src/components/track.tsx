@@ -13,12 +13,11 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { SetStateAction, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
 import { TrackSection } from "components/track-section";
 import { useTheme } from "utils/hooks/use-theme";
-import { TrackSectionRecord } from "models/track-section-record";
 import { useTracksState } from "utils/hooks/use-workstation-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 

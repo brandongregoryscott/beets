@@ -65,7 +65,7 @@ const TrackSection: React.FC<TrackSectionProps> = (
         [onChange, trackSection.id]
     );
 
-    const width = majorScale(6) + trackSection.step_count * majorScale(1);
+    const width = majorScale(8) + trackSection.step_count * majorScale(1);
 
     return (
         <Pane
