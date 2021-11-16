@@ -5,19 +5,14 @@ import {
     getInterfaceName,
     getInterfaceImportPath,
     getFromFunctionName,
-    getTableName,
-    toKebabCase,
     getRecordName,
     getRecordImportPath,
     getRecordSourceFile,
     getHookName,
     getHookOptionsInterfaceName,
-    getTablesEnumValue,
     getQueryKey,
     getHookPath,
 } from "../utils";
-import upath from "upath";
-import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
@@ -29,7 +24,6 @@ const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseGet = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.Get);
-    const filename = `${toKebabCase(name)}.ts`;
     const recordSourceFile = getRecordSourceFile(project, property);
 
     const file = project.createSourceFile(
