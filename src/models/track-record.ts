@@ -3,6 +3,7 @@ import { BaseRecord } from "models/base-record";
 import {
     getTemporaryId,
     isNilOrEmpty,
+    isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
@@ -19,6 +20,8 @@ const defaultValues = makeDefaultValues<Track>({
 });
 
 class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
+    private temporaryId: string | undefined;
+
     constructor(values?: Partial<Track | TrackRecord>) {
         values = values ?? defaultValues;
 
@@ -27,10 +30,24 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
         }
 
         if (isNilOrEmpty(values.id)) {
-            values = { ...values, id: getTemporaryId() };
+            const id = getTemporaryId();
+            values = { ...values, id };
         }
 
         super(values);
+
+        if (isTemporaryId(this.id)) {
+            this.temporaryId = this.id;
+        }
+    }
+
+    public getTemporaryId(): string | undefined {
+        return this.temporaryId;
+    }
+
+    public setTemporaryId(temporaryId: string | undefined): TrackRecord {
+        this.temporaryId = temporaryId;
+        return this;
     }
 }
 

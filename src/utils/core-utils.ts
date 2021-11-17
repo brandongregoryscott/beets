@@ -1,11 +1,58 @@
-import { BorderProps } from "generated/interfaces/border-props";
-import { BorderPropsOptions } from "generated/interfaces/border-props-options";
-import { List } from "immutable";
+import { List, Record } from "immutable";
+import { Auditable } from "interfaces/auditable";
+import { BorderPropsOptions } from "interfaces/border-props-options";
+import { BorderProps } from "interfaces/border-props";
+import { Entity } from "interfaces/entity";
 import _ from "lodash";
+import { BaseRecord } from "models/base-record";
 import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";
 import * as uuid from "uuid";
+
+const diffDeletedEntities = <T extends Entity>(
+    initialValues: List<T>,
+    values: List<T>
+): List<T> =>
+    List(
+        _.differenceWith(
+            initialValues.toArray(),
+            values.toArray(),
+            (a, b) => a.id === b.id
+            // No need to delete entities that were never persisted
+        ).filter((entities) => !isTemporaryId(entities.id))
+    );
+
+const diffUpdatedEntities = <T extends Auditable>(
+    values: List<T>,
+    initialValues: List<T>
+): List<T> =>
+    List(
+        _.differenceWith(values.toArray(), initialValues.toArray(), (a, b) => {
+            const isNew = isTemporaryId(a.id);
+            const isDifferent =
+                Record.isRecord(a) && Record.isRecord(b) && !a.equals(b);
+            if (isNew || isDifferent) {
+                return false; // Returning 'false' marks it as different/updated
+            }
+
+            return true;
+        })
+    );
+
+const hasValues = <T extends any[] | List<any> = any[] | List<any>>(
+    value: T | null | undefined
+): value is T => {
+    if (value == null) {
+        return false;
+    }
+
+    if (List.isList(value) && !value.isEmpty()) {
+        return true;
+    }
+
+    return Array.isArray(value) && value.length > 1;
+};
 
 const hash = (value: string): number => {
     let hash = 5381;
@@ -17,24 +64,6 @@ const hash = (value: string): number => {
 
     return hash >>> 0;
 };
-
-const initializeList = <T>(count: number, value: T): List<T> =>
-    List(_.fill(new Array(count), value));
-
-const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
-    if (typeof value === "string") {
-        return value.trim().length === 0;
-    }
-
-    if (Array.isArray(value)) {
-        return value.length === 0;
-    }
-
-    return value == null;
-};
-
-const isTemporaryId = (value?: string): boolean =>
-    !isNilOrEmpty(value) && value!.startsWith("temp-");
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;
@@ -107,6 +136,24 @@ const groupBy = <TLeft, TRight>(
     return _.compact(zipped);
 };
 
+const initializeList = <T>(count: number, value: T): List<T> =>
+    List(_.fill(new Array(count), value));
+
+const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
+    if (typeof value === "string") {
+        return value.trim().length === 0;
+    }
+
+    if (Array.isArray(value)) {
+        return value.length === 0;
+    }
+
+    return value == null;
+};
+
+const isTemporaryId = (value?: string): boolean =>
+    !isNilOrEmpty(value) && value!.startsWith("temp-");
+
 const makeDefaultValues = <T>(defaultValues: RequiredOrUndefined<T>): T =>
     defaultValues as T;
 
@@ -129,11 +176,14 @@ const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
 export {
+    diffDeletedEntities,
+    diffUpdatedEntities,
     getBorderYProps,
     getBorderXProps,
     getTemporaryId,
     groupBy,
     hash,
+    hasValues,
     initializeList,
     isNilOrEmpty,
     isTemporaryId,

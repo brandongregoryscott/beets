@@ -5,6 +5,7 @@ import { BaseRecord } from "models/base-record";
 import {
     getTemporaryId,
     isNilOrEmpty,
+    isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
 
@@ -31,6 +32,10 @@ class TrackSectionRecord
         }
 
         super(values);
+    }
+
+    public hasTrackId(): boolean {
+        return !isNilOrEmpty(this.track_id) && !isTemporaryId(this.track_id);
     }
 }
 
