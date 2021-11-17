@@ -1,6 +1,5 @@
 import { useCreateOrUpdateProject } from "generated/hooks/domain/projects/use-create-or-update-project";
 import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sections/use-create-or-update-track-section";
-import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
 import { List } from "immutable";

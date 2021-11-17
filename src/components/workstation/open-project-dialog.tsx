@@ -7,14 +7,12 @@ import {
     Spinner,
     Table,
 } from "evergreen-ui";
-import { useListProjects } from "generated/hooks/domain/projects/use-list-projects";
-import { useListTracks } from "generated/hooks/domain/tracks/use-list-tracks";
-import { List } from "immutable";
-import { ProjectRecord } from "models/project-record";
+import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
+import { useListWorkstations } from "utils/hooks/use-list-workstations";
 import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
@@ -27,36 +25,15 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     const { isShown, onCloseComplete } = props;
     const theme = useTheme();
     const { isDirty, state, setState } = useWorkstationState();
-    const { resultObject: projects, isLoading: isLoadingProjects } =
-        useListProjects({
-            filter: (query) => query.order("created_on", { ascending: false }),
-        });
+    const { resultObject: workstations, isLoading } = useListWorkstations({});
     const {
         value: isConfirmDialogOpen,
         setTrue: handleOpenConfirmDialog,
         setFalse: handleCloseConfirmDialog,
     } = useBoolean();
-    const [selected, setSelected] = useState<ProjectRecord | undefined>();
-
-    const { resultObject: tracks, isLoading: isLoadingTracks } = useListTracks({
-        enabled: !isNilOrEmpty(projects),
-        filter: (query) =>
-            query.in(
-                "project_id",
-                projects?.map((project) => project.id) ?? []
-            ),
-    });
-
-    const getTracksByProject = useCallback(
-        (project: ProjectRecord) =>
-            tracks?.filter((track) => track.project_id === project.id) ?? [],
-        [tracks]
-    );
-
-    const getTrackCount = useCallback(
-        (project: ProjectRecord) => getTracksByProject(project).length,
-        [getTracksByProject]
-    );
+    const [selected, setSelected] = useState<
+        WorkstationStateRecord | undefined
+    >();
 
     const handleConfirm = useCallback(() => {
         if (isDirty) {
@@ -64,40 +41,15 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             return;
         }
 
-        const project = selected!;
-        setState((prev) =>
-            prev.merge({
-                project,
-                tracks: List(getTracksByProject(project)),
-            })
-        );
+        setState(selected!);
         onCloseComplete?.();
-    }, [
-        getTracksByProject,
-        handleOpenConfirmDialog,
-        isDirty,
-        onCloseComplete,
-        selected,
-        setState,
-    ]);
+    }, [handleOpenConfirmDialog, isDirty, onCloseComplete, selected, setState]);
 
     const handleDirtyConfirm = useCallback(() => {
-        const project = selected!;
-        setState((prev) =>
-            prev.merge({
-                project,
-                tracks: List(getTracksByProject(project)),
-            })
-        );
+        setState(selected!);
         handleCloseConfirmDialog();
         onCloseComplete?.();
-    }, [
-        getTracksByProject,
-        handleCloseConfirmDialog,
-        onCloseComplete,
-        selected,
-        setState,
-    ]);
+    }, [handleCloseConfirmDialog, onCloseComplete, selected, setState]);
 
     const handleDeselect = useCallback(
         () => setSelected(undefined),
@@ -106,8 +58,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
 
     const title = "Open Project";
     const confirmLabel = "Open";
-    const isLoading = isLoadingProjects || isLoadingTracks;
-    const hasProjects = !isNilOrEmpty(projects);
+    const hasProjects = !isNilOrEmpty(workstations);
 
     return (
         <React.Fragment>
@@ -134,22 +85,26 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                     {!isLoading && (
                         <Table.Body>
                             {hasProjects &&
-                                projects?.map((project) => (
+                                workstations?.map((workstation) => (
                                     <Table.Row
-                                        key={project.id}
+                                        key={workstation.project.id}
                                         isSelectable={true}
-                                        isSelected={selected?.equals(project)}
+                                        isSelected={selected?.equals(
+                                            workstation
+                                        )}
                                         onDeselect={handleDeselect}
-                                        onSelect={() => setSelected(project)}>
+                                        onSelect={() =>
+                                            setSelected(workstation)
+                                        }>
                                         <Table.TextCell>
-                                            {project.name}
+                                            {workstation.project.name}
                                         </Table.TextCell>
                                         <Table.TextCell>
-                                            {getTrackCount(project)} Tracks
+                                            {workstation.tracks.count()} Tracks
                                         </Table.TextCell>
                                         <Table.TextCell>
                                             {formatUpdatedOn(
-                                                project.getUpdatedOn()
+                                                workstation.project.getUpdatedOn()
                                             )}
                                         </Table.TextCell>
                                     </Table.Row>

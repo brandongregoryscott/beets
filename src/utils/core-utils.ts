@@ -4,7 +4,6 @@ import { BorderPropsOptions } from "interfaces/border-props-options";
 import { BorderProps } from "interfaces/border-props";
 import { Entity } from "interfaces/entity";
 import _ from "lodash";
-import { BaseRecord } from "models/base-record";
 import { Grouping } from "types/grouping";
 import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";
@@ -139,13 +138,17 @@ const groupBy = <TLeft, TRight>(
 const initializeList = <T>(count: number, value: T): List<T> =>
     List(_.fill(new Array(count), value));
 
-const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
+const isNilOrEmpty = (value: nil<string | any[] | List<any>>): value is nil => {
     if (typeof value === "string") {
         return value.trim().length === 0;
     }
 
     if (Array.isArray(value)) {
         return value.length === 0;
+    }
+
+    if (List.isList(value)) {
+        return value.isEmpty();
     }
 
     return value == null;

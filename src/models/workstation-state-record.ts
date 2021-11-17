@@ -1,6 +1,5 @@
 import { List, Record } from "immutable";
 import { WorkstationState } from "interfaces/workstation-state";
-import _ from "lodash";
 import { BaseRecord } from "models/base-record";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
@@ -8,7 +7,6 @@ import { TrackSectionRecord } from "models/track-section-record";
 import {
     diffDeletedEntities,
     diffUpdatedEntities,
-    isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
 
