@@ -1,7 +1,9 @@
 import { useCreateOrUpdateProject } from "generated/hooks/domain/projects/use-create-or-update-project";
 import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sections/use-create-or-update-track-section";
+import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
+import { useDatabase } from "generated/hooks/use-database";
 import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
@@ -18,12 +20,53 @@ interface UseSyncWorkstationState {
 
 const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { onError, onSuccess } = options ?? {};
+    const { fromProjects, fromTracks, fromTrackSections } = useDatabase();
     const { mutateAsync: createOrUpdateProject } = useCreateOrUpdateProject();
     const { mutateAsync: createOrUpdateTrack } = useCreateOrUpdateTrack();
     const { mutateAsync: createOrUpdateTrackSection } =
         useCreateOrUpdateTrackSection();
     const { mutateAsync: deleteTrack } = useDeleteTrack();
+    const { mutateAsync: deleteTrackSection } = useDeleteTrackSection();
     const { initialState, state } = useWorkstationState();
+
+    // TODO: https://github.com/brandongregoryscott/beets/issues/24
+    const refresh = async (
+        projectId: string
+    ): Promise<WorkstationStateRecord> => {
+        const [projectResult, tracksResult] = await Promise.all([
+            fromProjects().select("*").eq("id", projectId).limit(1).single(),
+            fromTracks().select("*").eq("project_id", projectId),
+        ]);
+        const { data: project, error: projectError } = projectResult;
+        const { data: tracks, error: tracksError } = tracksResult;
+
+        if (projectError != null) {
+            throw projectError;
+        }
+
+        if (tracksError != null) {
+            throw tracksError;
+        }
+
+        const { data: trackSections, error: trackSectionsError } =
+            await fromTrackSections()
+                .select("*")
+                .in("track_id", tracks?.map((track) => track.id) ?? []);
+
+        if (trackSectionsError != null) {
+            throw trackSectionsError;
+        }
+
+        return new WorkstationStateRecord({
+            project: new ProjectRecord(project!),
+            tracks: List(tracks?.map((track) => new TrackRecord(track)) ?? []),
+            trackSections: List(
+                trackSections?.map(
+                    (trackSection) => new TrackSectionRecord(trackSection)
+                ) ?? []
+            ),
+        });
+    };
 
     const sync = async () => {
         const {
@@ -31,6 +74,7 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             createdOrUpdatedTracks,
             createdOrUpdatedTrackSections,
             deletedTracks,
+            deletedTrackSections,
         } = initialState.diff(state);
         let project: ProjectRecord | undefined;
         let tracks: List<TrackRecord> | undefined;
@@ -38,14 +82,14 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
         if (createdOrUpdatedProject != null) {
             project = await createOrUpdateProject(createdOrUpdatedProject);
         }
+        const projectId = [
+            state.project.id,
+            initialState.project.id,
+            project?.id,
+        ].find((id?: string) => !isNilOrEmpty(id) && !isTemporaryId(id))!;
 
         if (hasValues(createdOrUpdatedTracks)) {
             tracks = List(createdOrUpdatedTracks);
-            const projectId = [
-                state.project.id,
-                initialState.project.id,
-                project?.id,
-            ].find((id?: string) => !isNilOrEmpty(id) && !isTemporaryId(id));
 
             const hasMissingProjectIds = tracks.some((track) =>
                 isNilOrEmpty(track.project_id)
@@ -120,8 +164,15 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             );
         }
 
-        // TODO: Refresh state from API
-        return state;
+        if (hasValues(deletedTrackSections)) {
+            await Promise.all(
+                deletedTrackSections.map((trackSection) =>
+                    deleteTrackSection(trackSection.id)
+                )
+            );
+        }
+
+        return refresh(projectId);
     };
 
     const result = useMutation({
