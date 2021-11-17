@@ -28,7 +28,9 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     const theme = useTheme();
     const { isDirty, state, setState } = useWorkstationState();
     const { resultObject: projects, isLoading: isLoadingProjects } =
-        useListProjects();
+        useListProjects({
+            filter: (query) => query.order("created_on", { ascending: false }),
+        });
     const {
         value: isConfirmDialogOpen,
         setTrue: handleOpenConfirmDialog,
