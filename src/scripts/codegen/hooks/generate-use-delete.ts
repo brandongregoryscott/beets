@@ -14,12 +14,12 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
+import { Paths } from "../constants/paths";
 
-const { id, onError, onSettled, onSuccess } = Variables;
+const { id, onError, onSettled, onSuccess, SupabaseClient } = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
-const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseDelete = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.Delete);
@@ -35,8 +35,8 @@ const generateUseDelete = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: [Hooks.useDatabase.name],
-        moduleSpecifier: Hooks.useDatabase.importPath,
+        namedImports: [SupabaseClient],
+        moduleSpecifier: Paths.supabaseClientImport,
     });
 
     file.addImportDeclaration({
@@ -88,7 +88,7 @@ const useDeleteInitializer = (property: PropertySignature) => {
         HookAction.Delete
     );
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<void, Error, string> => {
-        const { ${fromTable} } = ${useDatabase}();
+        const { ${fromTable} } = ${SupabaseClient};
         const { ${onError}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
 

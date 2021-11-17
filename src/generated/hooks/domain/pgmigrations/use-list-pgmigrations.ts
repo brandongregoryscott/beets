@@ -1,6 +1,6 @@
 import { Pgmigration } from "generated/interfaces/pgmigration";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
@@ -18,7 +18,7 @@ const defaultFilter = (query: PostgrestFilterBuilder<Pgmigration>) => query;
 const useListPgmigrations = (
     options?: UseListPgmigrationsOptions
 ): UseQueryResult<Pgmigration[], Error> => {
-    const { fromPgmigrations } = useDatabase();
+    const { fromPgmigrations } = SupabaseClient;
     const {
         enabled,
         filter = defaultFilter,

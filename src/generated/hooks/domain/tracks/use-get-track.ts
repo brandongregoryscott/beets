@@ -1,6 +1,6 @@
 import { TrackRecord } from "models/track-record";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetTrackOptions {
@@ -11,7 +11,7 @@ interface UseGetTrackOptions {
 const useGetTrack = (
     options: UseGetTrackOptions
 ): UseQueryResult<TrackRecord | undefined, Error> => {
-    const { fromTracks } = useDatabase();
+    const { fromTracks } = SupabaseClient;
     const { id, enabled } = options;
 
     const get = async () => {

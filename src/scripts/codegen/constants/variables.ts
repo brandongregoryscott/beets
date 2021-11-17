@@ -2,7 +2,9 @@ import { keyMirror } from "../utils";
 
 const Variables = keyMirror({
     Auditable: null,
+    client: null,
     createOrUpdate: null,
+    env: null,
     id: null,
     isNilOrEmpty: null,
     isTemporaryId: null,
@@ -13,6 +15,7 @@ const Variables = keyMirror({
     onError: null,
     onSettled: null,
     onSuccess: null,
+    SupabaseClient: null,
 });
 
 export { Variables };

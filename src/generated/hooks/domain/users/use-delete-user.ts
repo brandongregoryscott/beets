@@ -1,5 +1,5 @@
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -11,7 +11,7 @@ interface UseDeleteUserOptions {
 const useDeleteUser = (
     options?: UseDeleteUserOptions
 ): UseMutationResult<void, Error, string> => {
-    const { fromUsers } = useDatabase();
+    const { fromUsers } = SupabaseClient;
     const { onError, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

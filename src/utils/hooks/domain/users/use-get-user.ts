@@ -1,11 +1,11 @@
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { UserRecord } from "models/user-record";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 const useGetUser = (
     id?: string
 ): UseQueryResult<UserRecord | undefined, Error> => {
-    const { fromUsers } = useDatabase();
+    const { fromUsers } = SupabaseClient;
 
     const result = useQuery<UserRecord | undefined, Error>({
         enabled: id != null,

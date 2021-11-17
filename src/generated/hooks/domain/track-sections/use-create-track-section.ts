@@ -1,7 +1,7 @@
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSection } from "generated/interfaces/track-section";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -13,7 +13,7 @@ interface UseCreateTrackSectionOptions {
 const useCreateTrackSection = (
     options?: UseCreateTrackSectionOptions
 ): UseMutationResult<TrackSectionRecord, Error, TrackSection> => {
-    const { fromTrackSections } = useDatabase();
+    const { fromTrackSections } = SupabaseClient;
     const { onError, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

@@ -1,7 +1,7 @@
 import { UserRecord } from "models/user-record";
 import { User } from "generated/interfaces/user";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -14,7 +14,7 @@ interface UseUpdateUserOptions {
 const useUpdateUser = (
     options?: UseUpdateUserOptions
 ): UseMutationResult<UserRecord, Error, User> => {
-    const { fromUsers } = useDatabase();
+    const { fromUsers } = SupabaseClient;
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

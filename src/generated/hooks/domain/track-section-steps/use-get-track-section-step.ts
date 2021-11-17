@@ -1,6 +1,6 @@
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetTrackSectionStepOptions {
@@ -11,7 +11,7 @@ interface UseGetTrackSectionStepOptions {
 const useGetTrackSectionStep = (
     options: UseGetTrackSectionStepOptions
 ): UseQueryResult<TrackSectionStepRecord | undefined, Error> => {
-    const { fromTrackSectionSteps } = useDatabase();
+    const { fromTrackSectionSteps } = SupabaseClient;
     const { id, enabled } = options;
 
     const get = async () => {

@@ -17,11 +17,12 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
+import { Paths } from "../constants/paths";
 
-const { defaultFilter, enabled, filter, onError, onSuccess } = Variables;
+const { defaultFilter, enabled, filter, onError, onSuccess, SupabaseClient } =
+    Variables;
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
-const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseList = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.List);
@@ -56,8 +57,8 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: [Hooks.useDatabase.name],
-        moduleSpecifier: Hooks.useDatabase.importPath,
+        namedImports: [SupabaseClient],
+        moduleSpecifier: Paths.supabaseClientImport,
     });
 
     file.addImportDeclaration({
@@ -140,7 +141,7 @@ const useListInitializer = (
         ? "data ?? []"
         : `data?.map((${interfaceName.toLowerCase()}) => new ${recordName}(${interfaceName.toLowerCase()})) ?? []`;
     return `(options?: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}[], Error> => {
-        const { ${fromTable} } = ${useDatabase}();
+        const { ${fromTable} } = ${SupabaseClient};
         const {
             ${enabled},
             ${filter} = ${defaultFilter},

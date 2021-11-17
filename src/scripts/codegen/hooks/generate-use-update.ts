@@ -17,12 +17,12 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
+import { Paths } from "../constants/paths";
 
-const { id, onError, onSettled, onSuccess } = Variables;
+const { id, onError, onSettled, onSuccess, SupabaseClient } = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
-const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseUpdate = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.Update);
@@ -55,8 +55,8 @@ const generateUseUpdate = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: [Hooks.useDatabase.name],
-        moduleSpecifier: Hooks.useDatabase.importPath,
+        namedImports: [SupabaseClient],
+        moduleSpecifier: Paths.supabaseClientImport,
     });
 
     file.addImportDeclaration({
@@ -126,7 +126,7 @@ const useUpdateInitializer = (
         ? `${variableName} instanceof ${recordName} ? ${variableName}.toPOJO() : ${variableName}`
         : variableName;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
-        const { ${fromTable} } = ${useDatabase}();
+        const { ${fromTable} } = ${SupabaseClient};
         const { ${onError}, ${onSettled}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
 

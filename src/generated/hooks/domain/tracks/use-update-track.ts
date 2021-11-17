@@ -1,7 +1,7 @@
 import { TrackRecord } from "models/track-record";
 import { Track } from "generated/interfaces/track";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -14,7 +14,7 @@ interface UseUpdateTrackOptions {
 const useUpdateTrack = (
     options?: UseUpdateTrackOptions
 ): UseMutationResult<TrackRecord, Error, Track> => {
-    const { fromTracks } = useDatabase();
+    const { fromTracks } = SupabaseClient;
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

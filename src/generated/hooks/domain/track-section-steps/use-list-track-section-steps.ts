@@ -1,7 +1,7 @@
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionStep } from "generated/interfaces/track-section-step";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
@@ -20,7 +20,7 @@ const defaultFilter = (query: PostgrestFilterBuilder<TrackSectionStep>) =>
 const useListTrackSectionSteps = (
     options?: UseListTrackSectionStepsOptions
 ): UseQueryResult<TrackSectionStepRecord[], Error> => {
-    const { fromTrackSectionSteps } = useDatabase();
+    const { fromTrackSectionSteps } = SupabaseClient;
     const {
         enabled,
         filter = defaultFilter,

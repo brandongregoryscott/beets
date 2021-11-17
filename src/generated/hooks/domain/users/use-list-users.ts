@@ -1,7 +1,7 @@
 import { UserRecord } from "models/user-record";
 import { User } from "generated/interfaces/user";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
@@ -19,7 +19,7 @@ const defaultFilter = (query: PostgrestFilterBuilder<User>) => query;
 const useListUsers = (
     options?: UseListUsersOptions
 ): UseQueryResult<UserRecord[], Error> => {
-    const { fromUsers } = useDatabase();
+    const { fromUsers } = SupabaseClient;
     const {
         enabled,
         filter = defaultFilter,

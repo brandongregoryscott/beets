@@ -1,7 +1,7 @@
 import { ProjectRecord } from "models/project-record";
 import { Project } from "generated/interfaces/project";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
@@ -19,7 +19,7 @@ const defaultFilter = (query: PostgrestFilterBuilder<Project>) => query;
 const useListProjects = (
     options?: UseListProjectsOptions
 ): UseQueryResult<ProjectRecord[], Error> => {
-    const { fromProjects } = useDatabase();
+    const { fromProjects } = SupabaseClient;
     const {
         enabled,
         filter = defaultFilter,
