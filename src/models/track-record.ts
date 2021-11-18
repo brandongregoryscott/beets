@@ -8,6 +8,7 @@ import {
 } from "utils/core-utils";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { Track } from "generated/interfaces/track";
+import { RecordParams } from "types/record-params";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
@@ -22,14 +23,14 @@ const defaultValues = makeDefaultValues<Track>({
 class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
     private temporaryId: string | undefined;
 
-    constructor(values?: Partial<Track | TrackRecord>) {
+    constructor(values?: RecordParams<TrackRecord>) {
         values = values ?? defaultValues;
 
         if (values instanceof TrackRecord) {
             values = values.toPOJO();
         }
 
-        if (isNilOrEmpty(values.id)) {
+        if (isNilOrEmpty(values?.id)) {
             const id = getTemporaryId();
             values = { ...values, id };
         }

@@ -3,7 +3,7 @@ import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sect
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
@@ -20,7 +20,7 @@ interface UseSyncWorkstationState {
 
 const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { onError, onSuccess } = options ?? {};
-    const { fromProjects, fromTracks, fromTrackSections } = useDatabase();
+    const { fromProjects, fromTracks, fromTrackSections } = SupabaseClient;
     const { mutateAsync: createOrUpdateProject } = useCreateOrUpdateProject();
     const { mutateAsync: createOrUpdateTrack } = useCreateOrUpdateTrack();
     const { mutateAsync: createOrUpdateTrackSection } =

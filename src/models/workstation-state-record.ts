@@ -4,6 +4,7 @@ import { BaseRecord } from "models/base-record";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
+import { RecordParams } from "types/record-params";
 import {
     diffDeletedEntities,
     diffUpdatedEntities,
@@ -29,7 +30,7 @@ class WorkstationStateRecord
     extends BaseRecord(Record(defaultValues))
     implements WorkstationState
 {
-    constructor(values?: Partial<WorkstationState>) {
+    constructor(values?: RecordParams<WorkstationStateRecord>) {
         values = values ?? defaultValues;
 
         if (values.project != null) {
@@ -50,7 +51,7 @@ class WorkstationStateRecord
             );
         }
 
-        super(values);
+        super(values as WorkstationState);
     }
 
     public diff(right: WorkstationStateRecord): WorkstationStateDiff {

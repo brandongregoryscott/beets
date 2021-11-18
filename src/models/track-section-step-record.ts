@@ -2,6 +2,7 @@ import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackSectionStep } from "generated/interfaces/track-section-step";
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
+import { RecordParams } from "types/record-params";
 import {
     getTemporaryId,
     isNilOrEmpty,
@@ -19,7 +20,7 @@ class TrackSectionStepRecord
     extends BaseRecord(Record(defaultValues))
     implements TrackSectionStep
 {
-    constructor(values?: Partial<TrackSectionStep | TrackSectionStepRecord>) {
+    constructor(values?: RecordParams<TrackSectionStepRecord>) {
         values = values ?? defaultValues;
 
         if (values instanceof TrackSectionStepRecord) {

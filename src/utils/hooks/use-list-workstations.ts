@@ -1,82 +1,69 @@
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import { useListTracks } from "generated/hooks/domain/tracks/use-list-tracks";
-import { useListTrackSections } from "generated/hooks/domain/track-sections/use-list-track-sections";
-import { useCallback, useMemo } from "react";
 import { List } from "immutable";
-import { useListProjects } from "generated/hooks/domain/projects/use-list-projects";
+import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import { SupabaseClient } from "generated/supabase-client";
+import _ from "lodash";
+import { Tables } from "generated/enums/tables";
 
 interface UseListWorkstationsOptions {}
 
-interface UseListWorkstationsResult {
-    isError: boolean;
-    isLoading: boolean;
-    resultObject: List<WorkstationStateRecord>;
-    refetch: () => void;
-}
-
 const useListWorkstations = (
     options: UseListWorkstationsOptions
-): UseListWorkstationsResult => {
-    const {
-        refetch: refetchProjects,
-        resultObject: projects,
-        isError: isProjectsError,
-        isLoading: isProjectsLoading,
-    } = useListProjects({
-        filter: (query) => query.order("created_on", { ascending: false }),
+): UseQueryResult<List<WorkstationStateRecord>> => {
+    const listWorkstations = async () => {
+        const [projectsResult, tracksResult, trackSectionsResult] =
+            await Promise.all([
+                SupabaseClient.fromProjects()
+                    .select("*")
+                    .order("created_on", { ascending: false }),
+                SupabaseClient.fromTracks().select("*"),
+                SupabaseClient.fromTrackSections().select("*"),
+            ]);
+
+        const { data: projects, error: projectsError } = projectsResult;
+        const { data: tracks, error: tracksError } = tracksResult;
+        const { data: trackSections, error: trackSectionsError } =
+            trackSectionsResult;
+
+        if (projectsError != null) {
+            throw projectsError;
+        }
+
+        if (tracksError != null) {
+            throw tracksError;
+        }
+
+        if (trackSectionsError != null) {
+            throw trackSectionsError;
+        }
+
+        return List(
+            projects?.map((project) => {
+                const tracksForProject = tracks?.filter(
+                    (track) => track.project_id === project.id
+                );
+
+                const trackSectionsForTracks = _.intersectionWith(
+                    trackSections,
+                    tracks ?? [],
+                    (trackSection, track) => trackSection.track_id === track.id
+                );
+
+                return new WorkstationStateRecord({
+                    project,
+                    tracks: tracksForProject,
+                    trackSections: trackSectionsForTracks,
+                });
+            })
+        );
+    };
+
+    const result = useQuery<List<WorkstationStateRecord>, Error>({
+        key: [Tables.Projects, Tables.Tracks, Tables.TrackSections],
+        fn: listWorkstations,
     });
 
-    const {
-        refetch: refetchTracks,
-        resultObject: tracks,
-        isError: isTracksError,
-        isLoading: isTracksLoading,
-    } = useListTracks();
-
-    const {
-        refetch: refetchTrackSections,
-        resultObject: trackSections,
-        isError: isTrackSectionsError,
-        isLoading: isTrackSectionsLoading,
-    } = useListTrackSections();
-
-    const isLoading =
-        isProjectsLoading || isTracksLoading || isTrackSectionsLoading;
-    const isError = isProjectsError || isTracksError || isTrackSectionsError;
-
-    const resultObject = useMemo(
-        () =>
-            List(
-                projects?.map((project) => {
-                    const tracksForProject = List(
-                        tracks?.filter(
-                            (track) => track.project_id === project.id
-                        ) ?? []
-                    );
-
-                    const trackIds = tracksForProject.map((track) => track.id);
-                    const trackSectionsForTracks = List(
-                        trackSections?.filter((trackSection) =>
-                            trackIds.includes(trackSection.track_id)
-                        )
-                    );
-                    return new WorkstationStateRecord({
-                        project,
-                        tracks: tracksForProject,
-                        trackSections: trackSectionsForTracks,
-                    });
-                }) ?? []
-            ),
-        [projects, tracks, trackSections]
-    );
-
-    const refetch = useCallback(() => {
-        refetchProjects();
-        refetchTracks();
-        refetchTrackSections();
-    }, [refetchProjects, refetchTracks, refetchTrackSections]);
-
-    return { resultObject, isError, isLoading, refetch };
+    return result;
 };
 
 export { useListWorkstations };

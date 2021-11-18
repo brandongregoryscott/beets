@@ -1,6 +1,7 @@
 import { User } from "generated/interfaces/user";
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
+import { RecordParams } from "types/record-params";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<User>({
@@ -15,7 +16,7 @@ const defaultValues = makeDefaultValues<User>({
 });
 
 class UserRecord extends BaseRecord(Record(defaultValues)) implements User {
-    constructor(values?: Partial<User>) {
+    constructor(values?: RecordParams<UserRecord>) {
         super(values ?? defaultValues);
     }
 }
