@@ -1,6 +1,6 @@
 import { FileRecord } from "models/file-record";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetFileOptions {
@@ -11,7 +11,7 @@ interface UseGetFileOptions {
 const useGetFile = (
     options: UseGetFileOptions
 ): UseQueryResult<FileRecord | undefined, Error> => {
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
     const { id, enabled } = options;
 
     const get = async () => {

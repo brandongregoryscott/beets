@@ -5,8 +5,8 @@ import { Project } from "ts-morph";
 import { Paths } from "./constants/paths";
 import upath from "upath";
 
-const generateSupabase = async (project: Project) => {
-    const filename = "supabase.ts";
+const generateSupabaseTypes = async (project: Project) => {
+    const filename = "supabase-types.ts";
     log.info(`Loading supabase types...`);
 
     const output = await openapi(
@@ -26,4 +26,4 @@ const generateSupabase = async (project: Project) => {
     return file;
 };
 
-export { generateSupabase };
+export { generateSupabaseTypes };

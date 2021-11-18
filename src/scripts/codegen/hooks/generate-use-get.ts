@@ -18,9 +18,8 @@ import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
 
-const { enabled, id } = Variables;
+const { enabled, id, SupabaseClient } = Variables;
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
-const { name: useDatabase } = Hooks.useDatabase;
 
 const generateUseGet = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.Get);
@@ -52,8 +51,8 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
     });
 
     file.addImportDeclaration({
-        namedImports: [useDatabase],
-        moduleSpecifier: Hooks.useDatabase.importPath,
+        namedImports: [SupabaseClient],
+        moduleSpecifier: Paths.supabaseClientImport,
     });
 
     file.addImportDeclaration({
@@ -106,7 +105,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const returnType = `${useRecord ? recordName : interfaceName} | undefined`;
     const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
     return `(options: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}, Error> => {
-        const { ${fromTable} } = ${useDatabase}();
+        const { ${fromTable} } = ${SupabaseClient};
         const { ${id}, ${enabled} } = options;
 
         const get = async () => {

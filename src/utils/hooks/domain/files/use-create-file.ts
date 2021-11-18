@@ -7,14 +7,14 @@ import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { filesKey, storageProviderFilesKey } from "utils/query-key-utils";
 import { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
-import { useDatabase } from "generated/hooks/use-database";
 import { useMutation } from "utils/hooks/use-mutation";
+import { SupabaseClient } from "generated/supabase-client";
 
 const useCreateFile = (bucketName: BucketName) => {
     const { globalState } = useGlobalState();
     const userId = globalState.userId();
     const { from: fromBucket } = useStorageProvider();
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
     const queryClient = useQueryClient();
     const bucket = fromBucket(bucketName);
 

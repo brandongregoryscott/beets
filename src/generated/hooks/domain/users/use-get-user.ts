@@ -1,6 +1,6 @@
 import { UserRecord } from "models/user-record";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 
 interface UseGetUserOptions {
@@ -11,7 +11,7 @@ interface UseGetUserOptions {
 const useGetUser = (
     options: UseGetUserOptions
 ): UseQueryResult<UserRecord | undefined, Error> => {
-    const { fromUsers } = useDatabase();
+    const { fromUsers } = SupabaseClient;
     const { id, enabled } = options;
 
     const get = async () => {

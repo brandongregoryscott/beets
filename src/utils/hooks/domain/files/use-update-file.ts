@@ -2,7 +2,7 @@ import { FileRecord } from "models/file-record";
 import { filesKey } from "utils/query-key-utils";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { useQueryClient } from "react-query";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 
 interface UseUpdateFilesOptions {
     onSettled?: () => void;
@@ -12,7 +12,7 @@ const useUpdateFile = (
     options?: UseUpdateFilesOptions
 ): UseMutationResult<FileRecord, Error, FileRecord> => {
     const queryClient = useQueryClient();
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
 
     const updateFile = async (file: FileRecord) => {
         const { error: updateError, data: updatedFile } = await fromFiles()

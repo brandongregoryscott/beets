@@ -1,7 +1,7 @@
 import { FileRecord } from "models/file-record";
 import { File } from "generated/interfaces/file";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -13,7 +13,7 @@ interface UseCreateFileOptions {
 const useCreateFile = (
     options?: UseCreateFileOptions
 ): UseMutationResult<FileRecord, Error, File> => {
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
     const { onError, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

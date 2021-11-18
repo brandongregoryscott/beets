@@ -2,14 +2,14 @@ import { FileRecord } from "models/file-record";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { filesKey } from "utils/query-key-utils";
 import { File } from "generated/interfaces/file";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 
 interface UseListFilesOptions {}
 
 const useListFiles = (
     options?: UseListFilesOptions
 ): UseQueryResult<FileRecord[], Error> => {
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
     const listQuery = useQuery<FileRecord[], Error>({
         key: filesKey(),
         fn: async () => {

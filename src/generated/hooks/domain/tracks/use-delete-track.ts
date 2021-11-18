@@ -1,5 +1,5 @@
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -11,7 +11,7 @@ interface UseDeleteTrackOptions {
 const useDeleteTrack = (
     options?: UseDeleteTrackOptions
 ): UseMutationResult<void, Error, string> => {
-    const { fromTracks } = useDatabase();
+    const { fromTracks } = SupabaseClient;
     const { onError, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

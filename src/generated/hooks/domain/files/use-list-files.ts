@@ -1,7 +1,7 @@
 import { FileRecord } from "models/file-record";
 import { File } from "generated/interfaces/file";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
@@ -19,7 +19,7 @@ const defaultFilter = (query: PostgrestFilterBuilder<File>) => query;
 const useListFiles = (
     options?: UseListFilesOptions
 ): UseQueryResult<FileRecord[], Error> => {
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
     const {
         enabled,
         filter = defaultFilter,

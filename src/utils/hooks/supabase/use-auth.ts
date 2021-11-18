@@ -1,8 +1,7 @@
-import { useSupabase } from "utils/hooks/supabase/use-supabase";
+import { SupabaseClient } from "generated/supabase-client";
 
 const useAuth = () => {
-    const { supabase } = useSupabase();
-    const { auth } = supabase;
+    const { auth } = SupabaseClient;
 
     return auth;
 };

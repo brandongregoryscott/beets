@@ -1,7 +1,7 @@
 import { ProjectRecord } from "models/project-record";
 import { Project } from "generated/interfaces/project";
 import { Tables } from "generated/enums/tables";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
@@ -13,7 +13,7 @@ interface UseCreateProjectOptions {
 const useCreateProject = (
     options?: UseCreateProjectOptions
 ): UseMutationResult<ProjectRecord, Error, Project> => {
-    const { fromProjects } = useDatabase();
+    const { fromProjects } = SupabaseClient;
     const { onError, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 

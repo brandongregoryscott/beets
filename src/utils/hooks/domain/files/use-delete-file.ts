@@ -3,12 +3,12 @@ import { storageProviderFilesKey, filesKey } from "utils/query-key-utils";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { useQueryClient } from "react-query";
-import { useDatabase } from "generated/hooks/use-database";
+import { SupabaseClient } from "generated/supabase-client";
 
 const useDeleteFile = (): UseMutationResult<void, Error, string> => {
     const queryClient = useQueryClient();
     const { storage } = useStorageProvider();
-    const { fromFiles } = useDatabase();
+    const { fromFiles } = SupabaseClient;
 
     const deleteFile = async (id: string) => {
         const fileResult = await fromFiles().select("*").eq("id", id).single();
