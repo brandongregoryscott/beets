@@ -4,6 +4,7 @@ import { BaseRecord } from "models/base-record";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { RecordParams } from "types/record-params";
 import {
     diffDeletedEntities,
@@ -15,8 +16,10 @@ interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;
     createdOrUpdatedTracks?: List<TrackRecord>;
     createdOrUpdatedTrackSections?: List<TrackSectionRecord>;
+    createdOrUpdatedTrackSectionSteps?: List<TrackSectionStepRecord>;
     deletedTracks?: List<TrackRecord>;
     deletedTrackSections?: List<TrackSectionRecord>;
+    deletedTrackSectionSteps?: List<TrackSectionStepRecord>;
 }
 
 const defaultValues = makeDefaultValues<WorkstationState>({
@@ -51,6 +54,15 @@ class WorkstationStateRecord
             );
         }
 
+        if (values.trackSectionSteps != null) {
+            values.trackSectionSteps = List(
+                values.trackSectionSteps.map(
+                    (trackSectionStep) =>
+                        new TrackSectionStepRecord(trackSectionStep)
+                )
+            );
+        }
+
         super(values as WorkstationState);
     }
 
@@ -58,6 +70,7 @@ class WorkstationStateRecord
         let diff: WorkstationStateDiff = {};
 
         diff.createdOrUpdatedProject = right.project;
+
         diff.createdOrUpdatedTracks = diffUpdatedEntities(
             right.tracks,
             this.tracks
@@ -73,6 +86,16 @@ class WorkstationStateRecord
         diff.deletedTrackSections = diffDeletedEntities(
             this.trackSections,
             right.trackSections
+        );
+
+        diff.createdOrUpdatedTrackSectionSteps = diffUpdatedEntities(
+            right.trackSectionSteps,
+            this.trackSectionSteps
+        );
+
+        diff.deletedTrackSectionSteps = diffDeletedEntities(
+            this.trackSectionSteps,
+            right.trackSectionSteps
         );
 
         return diff;

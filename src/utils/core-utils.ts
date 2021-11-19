@@ -96,12 +96,12 @@ const getBorderXProps = (options: BorderPropsOptions): BorderProps => {
 const getTemporaryId = (): string => `temp-${uuid.v4()}`;
 
 const groupBy = <TLeft, TRight>(
-    left: TLeft[] | undefined,
-    right: TRight[] | undefined,
+    left: List<TLeft> | TLeft[] | undefined,
+    right: List<TRight> | TRight[] | undefined,
     comparator: (left: TLeft, right: TRight) => boolean
-): Array<Grouping<TLeft, TRight>> => {
-    left = left ?? [];
-    right = right ?? [];
+): List<Grouping<TLeft, TRight>> => {
+    left = List.isList(left) ? left.toArray() : List(left).toArray();
+    right = List.isList(right) ? right.toArray() : List(right).toArray();
 
     left = _.intersectionWith(left, right, comparator).sort();
     right = _.intersectionWith(right, left, (right, left) =>
@@ -120,7 +120,7 @@ const groupBy = <TLeft, TRight>(
         }
     );
 
-    return _.compact(zipped);
+    return List(_.compact(zipped));
 };
 
 const initializeList = <T>(count: number, value: T): List<T> =>

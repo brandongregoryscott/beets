@@ -4,7 +4,7 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import _ from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
 
-interface UseTrackSectionsOptions {
+interface UseTrackSectionsStateOptions {
     trackId: string;
 }
 
@@ -18,7 +18,7 @@ interface UseTrackSectionsStateResult {
 }
 
 const useTrackSectionsState = (
-    options: UseTrackSectionsOptions
+    options: UseTrackSectionsStateOptions
 ): UseTrackSectionsStateResult => {
     const { trackId } = options;
     const {
@@ -55,10 +55,7 @@ const useTrackSectionsState = (
                     (existingTrackSection) =>
                         existingTrackSection.id !== trackSection.id
                 );
-                console.log(
-                    `Removing trackSectionId ${trackSection.id}`,
-                    updated
-                );
+
                 return prev.merge({ trackSections: updated });
             }),
         [setCurrentState]

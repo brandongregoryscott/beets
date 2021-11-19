@@ -1,4 +1,6 @@
 import { useCreateOrUpdateProject } from "generated/hooks/domain/projects/use-create-or-update-project";
+import { useCreateOrUpdateTrackSectionStep } from "generated/hooks/domain/track-section-steps/use-create-or-update-track-section-step";
+import { useDeleteTrackSectionStep } from "generated/hooks/domain/track-section-steps/use-delete-track-section-step";
 import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sections/use-create-or-update-track-section";
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
@@ -7,6 +9,7 @@ import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { hasValues, isNilOrEmpty, isTemporaryId } from "utils/core-utils";
 import { useMutation } from "utils/hooks/use-mutation";
@@ -18,14 +21,24 @@ interface UseSyncWorkstationState {
     onSuccess?: (resultObject: WorkstationStateRecord) => void;
 }
 
+const MissingProjectIdError = new Error(
+    "ProjectId was not found on new Tracks"
+);
+const UnmatchedTemporaryIdError = new Error(
+    "Entity could not be matched by temporaryId"
+);
+
 const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { onError, onSuccess } = options ?? {};
     const { mutateAsync: createOrUpdateProject } = useCreateOrUpdateProject();
     const { mutateAsync: createOrUpdateTrack } = useCreateOrUpdateTrack();
     const { mutateAsync: createOrUpdateTrackSection } =
         useCreateOrUpdateTrackSection();
+    const { mutateAsync: createOrUpdateTrackSectionStep } =
+        useCreateOrUpdateTrackSectionStep();
     const { mutateAsync: deleteTrack } = useDeleteTrack();
     const { mutateAsync: deleteTrackSection } = useDeleteTrackSection();
+    const { mutateAsync: deleteTrackSectionStep } = useDeleteTrackSectionStep();
     const { initialState, state } = useWorkstationState();
 
     const sync = async () => {
@@ -33,15 +46,20 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             createdOrUpdatedProject,
             createdOrUpdatedTracks,
             createdOrUpdatedTrackSections,
+            createdOrUpdatedTrackSectionSteps,
             deletedTracks,
             deletedTrackSections,
+            deletedTrackSectionSteps,
         } = initialState.diff(state);
         let project: ProjectRecord | undefined;
         let tracks: List<TrackRecord> | undefined;
         let trackSections: List<TrackSectionRecord> | undefined;
+        let trackSectionSteps: List<TrackSectionStepRecord> | undefined;
+
         if (createdOrUpdatedProject != null) {
             project = await createOrUpdateProject(createdOrUpdatedProject);
         }
+
         const projectId = [
             state.project.id,
             initialState.project.id,
@@ -56,9 +74,7 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             );
             const projectIdFound = !isNilOrEmpty(projectId);
             if (hasMissingProjectIds && !projectIdFound) {
-                throw new Error(
-                    "New tracks were added but could not be created without a ProjectId."
-                );
+                throw MissingProjectIdError;
             }
 
             if (hasMissingProjectIds) {
@@ -72,7 +88,7 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
                     tracks.map(async (track) => {
                         const result = await createOrUpdateTrack(track);
 
-                        return result.setTemporaryId(track.id);
+                        return result.setTemporaryId(track.getTemporaryId());
                     })
                 )
             );
@@ -101,14 +117,8 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
                             track.getTemporaryId() === trackSection.track_id
                     );
 
-                    console.log(
-                        `Matched TrackSection ${trackSection.id} with temporaryId ${trackSection.track_id} to ${originalTrack?.id}`
-                    );
-
                     if (originalTrack == null) {
-                        throw new Error(
-                            `Tried to match up track section ${trackSection.id} with temporary trackId ${trackSection.track_id}, but nothing was found.`
-                        );
+                        throw UnmatchedTemporaryIdError;
                     }
 
                     return trackSection.merge({ track_id: originalTrack?.id });
@@ -117,9 +127,15 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
 
             trackSections = List(
                 await Promise.all(
-                    trackSections.map((trackSection) =>
-                        createOrUpdateTrackSection(trackSection)
-                    )
+                    trackSections.map(async (trackSection) => {
+                        const result = await createOrUpdateTrackSection(
+                            trackSection
+                        );
+
+                        return result.setTemporaryId(
+                            trackSection.getTemporaryId()
+                        );
+                    })
                 )
             );
         }
@@ -128,6 +144,53 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             await Promise.all(
                 deletedTrackSections.map((trackSection) =>
                     deleteTrackSection(trackSection.id)
+                )
+            );
+        }
+
+        if (hasValues(createdOrUpdatedTrackSectionSteps)) {
+            trackSectionSteps = List(createdOrUpdatedTrackSectionSteps);
+            const hasMissingTrackSectionId = trackSectionSteps.some(
+                (trackSectionStep) => !trackSectionStep.hasTrackSectionId()
+            );
+
+            if (hasMissingTrackSectionId) {
+                trackSectionSteps = trackSectionSteps.map(
+                    (trackSectionStep) => {
+                        if (trackSectionStep.hasTrackSectionId()) {
+                            return trackSectionStep;
+                        }
+
+                        const originalTrackSection = trackSections?.find(
+                            (trackSection) =>
+                                trackSection.getTemporaryId() ===
+                                trackSectionStep.track_section_id
+                        );
+
+                        if (originalTrackSection == null) {
+                            throw UnmatchedTemporaryIdError;
+                        }
+
+                        return trackSectionStep.merge({
+                            track_section_id: originalTrackSection?.id,
+                        });
+                    }
+                );
+            }
+
+            trackSectionSteps = List(
+                await Promise.all(
+                    trackSectionSteps.map((trackSectionStep) =>
+                        createOrUpdateTrackSectionStep(trackSectionStep)
+                    )
+                )
+            );
+        }
+
+        if (hasValues(deletedTrackSectionSteps)) {
+            await Promise.all(
+                deletedTrackSectionSteps.map((trackSectionStep) =>
+                    deleteTrackSectionStep(trackSectionStep.id)
                 )
             );
         }

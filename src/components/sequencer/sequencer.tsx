@@ -6,17 +6,27 @@ import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { FileRecord } from "models/file-record";
 import { useMemo, useState } from "react";
 import pluralize from "pluralize";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { TrackSectionRecord } from "models/track-section-record";
 
 interface SequencerProps {
-    files: Array<FileRecord>;
+    files: List<FileRecord>;
     onStepCountChange: (stepCount: number) => void;
-    onStepChange: (index: number, value: List<FileRecord>) => void;
+    onStepChange: (index: number, value: List<TrackSectionStepRecord>) => void;
     stepCount: number;
-    steps: List<List<FileRecord>>;
+    steps: List<TrackSectionStepRecord>;
+    trackSection: TrackSectionRecord;
 }
 
 const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
-    const { onStepChange, onStepCountChange, files, steps, stepCount } = props;
+    const {
+        onStepChange,
+        onStepCountChange,
+        files,
+        stepCount,
+        steps,
+        trackSection,
+    } = props;
     const [selectedFiles, setSelectedFiles] = useState<List<FileRecord>>(
         List()
     );
@@ -83,10 +93,15 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 {_.range(0, stepCount).map((index: number) => (
                     <SequencerStep
                         index={index}
+                        files={files}
                         key={index}
                         onChange={onStepChange}
                         selected={selectedFiles}
-                        value={steps.get(index, List())}
+                        trackSection={trackSection}
+                        value={steps.filter(
+                            (trackSectionStep) =>
+                                trackSectionStep.index === index
+                        )}
                     />
                 ))}
             </Pane>

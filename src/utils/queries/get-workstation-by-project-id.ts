@@ -33,10 +33,23 @@ const getWorkstationByProjectId = async (
         throw trackSectionsError;
     }
 
+    const { data: trackSectionSteps, error: trackSectionStepsError } =
+        await SupabaseClient.fromTrackSectionSteps()
+            .select("*")
+            .in(
+                "track_section_id",
+                trackSections?.map((trackSection) => trackSection.id) ?? []
+            );
+
+    if (trackSectionStepsError != null) {
+        throw trackSectionStepsError;
+    }
+
     return new WorkstationStateRecord({
         project: new ProjectRecord(project!),
         tracks: tracks ?? [],
         trackSections: trackSections ?? [],
+        trackSectionSteps: trackSectionSteps ?? [],
     });
 };
 

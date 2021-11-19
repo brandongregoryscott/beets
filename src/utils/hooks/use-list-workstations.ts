@@ -1,7 +1,6 @@
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { List } from "immutable";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
-import _ from "lodash";
 import { Tables } from "generated/enums/tables";
 import { listWorkstations } from "utils/queries/list-workstations";
 

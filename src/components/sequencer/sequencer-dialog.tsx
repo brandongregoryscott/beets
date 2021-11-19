@@ -2,15 +2,17 @@ import { Sequencer } from "components/sequencer/sequencer";
 import { Dialog } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
-import { useState } from "react";
+import { TrackSectionRecord } from "models/track-section-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { useCallback, useState } from "react";
 
 interface SequencerDialogProps {
-    stepCount: number;
-    files: Array<FileRecord>;
-    onStepChange: (value: List<List<FileRecord>>) => void;
-    onStepCountChange: (stepCount: number) => void;
+    files: List<FileRecord>;
     onClose: () => void;
-    steps: List<List<FileRecord>>;
+    onStepChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
+    onStepCountChange: (stepCount: number) => void;
+    trackSectionSteps: List<TrackSectionStepRecord>;
+    trackSection: TrackSectionRecord;
 }
 
 const SequencerDialog: React.FC<SequencerDialogProps> = (
@@ -21,17 +23,32 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
         onStepCountChange,
         onClose,
         files,
-        steps: initialValue,
-        stepCount: initialStepCount,
+        trackSectionSteps: initialValue,
+        trackSection,
     } = props;
-    const [steps, setSteps] = useState<List<List<FileRecord>>>(initialValue);
-    const [stepCount, setStepCount] = useState<number>(initialStepCount);
+    const [trackSectionSteps, setTrackSectionSteps] =
+        useState<List<TrackSectionStepRecord>>(initialValue);
+    const [stepCount, setStepCount] = useState<number>(trackSection.step_count);
 
-    const handleStepChange = (index: number, value: List<FileRecord>) =>
-        setSteps((prev) => prev.set(index, value));
+    const handleStepChange = useCallback(
+        (index, trackSectionSteps) =>
+            setTrackSectionSteps((prev) =>
+                prev
+                    .filter(
+                        (existingTrackSectionStep) =>
+                            existingTrackSectionStep.index !== index
+                    )
+                    .concat(trackSectionSteps)
+            ),
+        [setTrackSectionSteps]
+    );
 
     const handleConfirm = () => {
-        onStepChange(steps);
+        onStepChange(
+            trackSectionSteps.filter(
+                (trackSectionStep) => trackSectionStep.index <= stepCount
+            )
+        );
         onStepCountChange(stepCount);
         onClose();
     };
@@ -46,9 +63,10 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
             <Sequencer
                 files={files}
                 onStepChange={handleStepChange}
-                stepCount={stepCount}
                 onStepCountChange={setStepCount}
-                steps={steps}
+                steps={trackSectionSteps}
+                stepCount={stepCount}
+                trackSection={trackSection}
             />
         </Dialog>
     );

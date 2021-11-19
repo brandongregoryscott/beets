@@ -42,8 +42,12 @@ class FileRecord
     }
 
     public static toSelectMenuItems(
-        files?: Array<FileRecord>
+        files?: Array<FileRecord> | List<FileRecord>
     ): Array<SelectMenuItem<FileRecord>> {
+        if (List.isList(files)) {
+            files = files.toArray();
+        }
+
         return (
             files?.map((file) => ({
                 label: file.name,

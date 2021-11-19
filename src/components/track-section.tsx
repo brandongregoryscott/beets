@@ -11,13 +11,13 @@ import {
 import { List } from "immutable";
 import { SetStateAction } from "jotai";
 import _ from "lodash";
-import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { useCallback, useMemo, useState } from "react";
-import { getBorderXProps, initializeList } from "utils/core-utils";
+import { useCallback } from "react";
+import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useTheme } from "utils/hooks/use-theme";
+import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
 
@@ -49,12 +49,16 @@ const TrackSection: React.FC<TrackSectionProps> = (
     const { remove } = useTrackSectionsState({
         trackId: trackSection.track_id,
     });
+
+    const {
+        setState: handleTrackSectionStepsChange,
+        state: trackSectionSteps,
+    } = useTrackSectionStepsState({ trackSectionId: trackSection.id });
+
+    const groupedTrackSectionSteps = trackSectionSteps.groupBy((e) => e.index);
+
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
-
-    const [trackSectionStepFiles, setTrackSectionStepFiles] = useState<
-        List<List<FileRecord>>
-    >(initializeList(trackSection.step_count, List()));
 
     const handleRemove = useCallback(() => {
         remove(trackSection);
@@ -100,40 +104,45 @@ const TrackSection: React.FC<TrackSectionProps> = (
                 </Tooltip>
             </Pane>
             <Pane display="flex" flexDirection="row">
-                {trackSectionStepFiles.map((files) => {
-                    const sortedFiles = List(_.sortBy(files.toArray(), "id"));
+                {_.range(0, trackSection.step_count).map((index: number) => {
+                    const steps =
+                        groupedTrackSectionSteps.get(index)?.toList() ?? List();
+                    const stepsSortedByFileId = List(
+                        _.sortBy(steps.toArray(), "file_id")
+                    );
+
                     return (
                         <Pane
                             display="flex"
                             flexDirection="column"
+                            key={index}
                             minHeight={stepHeight}
                             minWidth={stepWidth}
                             width={stepWidth}>
-                            {!files.isEmpty() &&
-                                _.range(0, 4).map((row: number) => (
-                                    <Pane
-                                        height={stepHeight}
-                                        minHeight={stepHeight}
-                                        minWidth={stepWidth}
-                                        width={stepWidth}
-                                        backgroundColor={getStepColor(
-                                            sortedFiles.get(row)?.id,
-                                            theme
-                                        )}
-                                    />
-                                ))}
+                            {_.range(0, 4).map((row: number) => (
+                                <Pane
+                                    height={stepHeight}
+                                    minHeight={stepHeight}
+                                    minWidth={stepWidth}
+                                    width={stepWidth}
+                                    backgroundColor={getStepColor(
+                                        stepsSortedByFileId.get(row)?.file_id,
+                                        theme
+                                    )}
+                                />
+                            ))}
                         </Pane>
                     );
                 })}
             </Pane>
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
-                    files={files}
-                    onStepChange={setTrackSectionStepFiles}
+                    files={List(files)}
+                    onStepChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}
                     onClose={handleCloseSequencerDialog}
-                    steps={trackSectionStepFiles}
-                    stepCount={trackSection.step_count}
+                    trackSectionSteps={trackSectionSteps}
+                    trackSection={trackSection}
                 />
             )}
         </Pane>

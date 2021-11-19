@@ -112,6 +112,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                 <TrackSection
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
+                    key={trackSection.id}
                     trackSection={trackSection}
                     onChange={updateTrackSection}
                 />

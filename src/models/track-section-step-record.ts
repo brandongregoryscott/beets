@@ -6,6 +6,7 @@ import { RecordParams } from "types/record-params";
 import {
     getTemporaryId,
     isNilOrEmpty,
+    isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
 
@@ -32,6 +33,13 @@ class TrackSectionStepRecord
         }
 
         super(values);
+    }
+
+    public hasTrackSectionId(): boolean {
+        return (
+            !isNilOrEmpty(this.track_section_id) &&
+            !isTemporaryId(this.track_section_id)
+        );
     }
 }
 
