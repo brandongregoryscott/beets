@@ -3,7 +3,6 @@ import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sect
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
-import { SupabaseClient } from "generated/supabase-client";
 import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
@@ -12,6 +11,7 @@ import { WorkstationStateRecord } from "models/workstation-state-record";
 import { hasValues, isNilOrEmpty, isTemporaryId } from "utils/core-utils";
 import { useMutation } from "utils/hooks/use-mutation";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { getWorkstationByProjectId } from "utils/queries/get-workstation-by-project-id";
 
 interface UseSyncWorkstationState {
     onError?: (error: Error) => void;
@@ -20,7 +20,6 @@ interface UseSyncWorkstationState {
 
 const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { onError, onSuccess } = options ?? {};
-    const { fromProjects, fromTracks, fromTrackSections } = SupabaseClient;
     const { mutateAsync: createOrUpdateProject } = useCreateOrUpdateProject();
     const { mutateAsync: createOrUpdateTrack } = useCreateOrUpdateTrack();
     const { mutateAsync: createOrUpdateTrackSection } =
@@ -28,45 +27,6 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { mutateAsync: deleteTrack } = useDeleteTrack();
     const { mutateAsync: deleteTrackSection } = useDeleteTrackSection();
     const { initialState, state } = useWorkstationState();
-
-    // TODO: https://github.com/brandongregoryscott/beets/issues/24
-    const refresh = async (
-        projectId: string
-    ): Promise<WorkstationStateRecord> => {
-        const [projectResult, tracksResult] = await Promise.all([
-            fromProjects().select("*").eq("id", projectId).limit(1).single(),
-            fromTracks().select("*").eq("project_id", projectId),
-        ]);
-        const { data: project, error: projectError } = projectResult;
-        const { data: tracks, error: tracksError } = tracksResult;
-
-        if (projectError != null) {
-            throw projectError;
-        }
-
-        if (tracksError != null) {
-            throw tracksError;
-        }
-
-        const { data: trackSections, error: trackSectionsError } =
-            await fromTrackSections()
-                .select("*")
-                .in("track_id", tracks?.map((track) => track.id) ?? []);
-
-        if (trackSectionsError != null) {
-            throw trackSectionsError;
-        }
-
-        return new WorkstationStateRecord({
-            project: new ProjectRecord(project!),
-            tracks: List(tracks?.map((track) => new TrackRecord(track)) ?? []),
-            trackSections: List(
-                trackSections?.map(
-                    (trackSection) => new TrackSectionRecord(trackSection)
-                ) ?? []
-            ),
-        });
-    };
 
     const sync = async () => {
         const {
@@ -172,7 +132,7 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             );
         }
 
-        return refresh(projectId);
+        return getWorkstationByProjectId(projectId);
     };
 
     const result = useMutation({
