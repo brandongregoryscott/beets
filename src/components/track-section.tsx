@@ -10,14 +10,16 @@ import {
 } from "evergreen-ui";
 import { List } from "immutable";
 import { SetStateAction } from "jotai";
+import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { getBorderXProps, initializeList } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
+import { getStepColor } from "utils/theme-utils";
 
 interface TrackSectionProps {
     isFirst?: boolean;
@@ -27,6 +29,8 @@ interface TrackSectionProps {
 }
 
 const iconMarginRight = majorScale(8);
+const stepHeight = majorScale(2);
+const stepWidth = majorScale(2);
 
 const TrackSection: React.FC<TrackSectionProps> = (
     props: TrackSectionProps
@@ -65,8 +69,6 @@ const TrackSection: React.FC<TrackSectionProps> = (
         [onChange, trackSection.id]
     );
 
-    const width = majorScale(8) + trackSection.step_count * majorScale(1);
-
     return (
         <Pane
             {...borderProps}
@@ -74,23 +76,56 @@ const TrackSection: React.FC<TrackSectionProps> = (
             borderRight={!isLast}
             borderRightColor={theme.colors.gray700}
             borderRightWidth={2}
+            display="flex"
+            flexDirection="row"
             height={majorScale(10)}
-            padding={majorScale(1)}
-            width={width}>
-            <Tooltip content="Sequencer">
-                <IconButton
-                    icon={HeatGridIcon}
-                    marginRight={iconMarginRight}
-                    onClick={handleOpenSequencerDialog}
-                />
-            </Tooltip>
-            <Tooltip content="Remove section">
-                <IconButton
-                    icon={DeleteIcon}
-                    marginRight={iconMarginRight}
-                    onClick={handleRemove}
-                />
-            </Tooltip>
+            padding={majorScale(1)}>
+            <Pane
+                display="flex"
+                flexDirection="column"
+                maxWidth={majorScale(5)}>
+                <Tooltip content="Sequencer">
+                    <IconButton
+                        icon={HeatGridIcon}
+                        marginRight={iconMarginRight}
+                        onClick={handleOpenSequencerDialog}
+                    />
+                </Tooltip>
+                <Tooltip content="Remove section">
+                    <IconButton
+                        icon={DeleteIcon}
+                        marginRight={iconMarginRight}
+                        onClick={handleRemove}
+                    />
+                </Tooltip>
+            </Pane>
+            <Pane display="flex" flexDirection="row">
+                {trackSectionStepFiles.map((files) => {
+                    const sortedFiles = List(_.sortBy(files.toArray(), "id"));
+                    return (
+                        <Pane
+                            display="flex"
+                            flexDirection="column"
+                            minHeight={stepHeight}
+                            minWidth={stepWidth}
+                            width={stepWidth}>
+                            {!files.isEmpty() &&
+                                _.range(0, 4).map((row: number) => (
+                                    <Pane
+                                        height={stepHeight}
+                                        minHeight={stepHeight}
+                                        minWidth={stepWidth}
+                                        width={stepWidth}
+                                        backgroundColor={getStepColor(
+                                            sortedFiles.get(row)?.id,
+                                            theme
+                                        )}
+                                    />
+                                ))}
+                        </Pane>
+                    );
+                })}
+            </Pane>
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
                     files={files}

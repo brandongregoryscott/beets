@@ -1,5 +1,4 @@
 import { Bucket } from "interfaces/supabase/bucket";
-import { nil } from "types/nil";
 
 interface StorageProviderFile {
     bucket_id: string;
@@ -13,7 +12,7 @@ interface StorageProviderFile {
     updated_at: string;
 
     // Navigation Properties
-    signedURL?: nil<string>;
+    signedURL?: string | null;
 }
 
 export type { StorageProviderFile };

@@ -5,7 +5,6 @@ import { BorderProps } from "interfaces/border-props";
 import { Entity } from "interfaces/entity";
 import _ from "lodash";
 import { Grouping } from "types/grouping";
-import { nil } from "types/nil";
 import { RequiredOrUndefined } from "types/required-or-undefined";
 import * as uuid from "uuid";
 
@@ -51,17 +50,6 @@ const hasValues = <T extends any[] | List<any> = any[] | List<any>>(
     }
 
     return Array.isArray(value) && value.length > 1;
-};
-
-const hash = (value: string): number => {
-    let hash = 5381;
-    let i = value.length;
-
-    while (i > 0) {
-        hash = (hash * 33) ^ value.charCodeAt(--i);
-    }
-
-    return hash >>> 0;
 };
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
@@ -138,7 +126,9 @@ const groupBy = <TLeft, TRight>(
 const initializeList = <T>(count: number, value: T): List<T> =>
     List(_.fill(new Array(count), value));
 
-const isNilOrEmpty = (value: nil<string | any[] | List<any>>): value is nil => {
+const isNilOrEmpty = <T = string | any[] | List<any>>(
+    value: T | any[] | List<any> | null | undefined
+): value is null | undefined => {
     if (typeof value === "string") {
         return value.trim().length === 0;
     }
@@ -185,7 +175,6 @@ export {
     getBorderXProps,
     getTemporaryId,
     groupBy,
-    hash,
     hasValues,
     initializeList,
     isNilOrEmpty,

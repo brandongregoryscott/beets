@@ -1,11 +1,12 @@
 import { List, Set, Record as ImmutableRecord, Map } from "immutable";
 import { File } from "generated/interfaces/file";
-import { hash, initializeList, makeDefaultValues } from "utils/core-utils";
+import { initializeList, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
 import { BaseRecord } from "models/base-record";
 import { SelectMenuItem } from "components/select-menu";
 import { MidiNote, StepType } from "reactronica";
 import { MidiNotes } from "constants/midi-notes";
+import { valueByHash } from "utils/hash-utils";
 
 const defaultValues = makeDefaultValues<File>({
     bucketid: "",
@@ -76,9 +77,7 @@ class FileRecord
     }
 
     public getMidiNote(): MidiNote {
-        const hashedId = hash(this.id);
-        const { length } = MidiNotes;
-        return MidiNotes[hashedId % length];
+        return valueByHash(this.id, MidiNotes);
     }
 
     public getPath(): string {
