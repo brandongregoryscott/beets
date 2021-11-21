@@ -8,7 +8,10 @@ import { RecordParams } from "types/record-params";
 
 const defaultValues = makeDefaultValues<Project>({
     ...AuditableDefaultValues,
+    bpm: 80,
     name: "",
+    swing: 0,
+    volume: 0,
 });
 
 class ProjectRecord

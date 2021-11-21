@@ -1,6 +1,7 @@
 import { Auditable } from "interfaces/auditable";
 
 interface Track extends Auditable {
+    index: number;
     name: string;
     mute: boolean;
     solo: boolean;

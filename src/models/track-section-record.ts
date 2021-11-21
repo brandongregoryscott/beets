@@ -9,6 +9,7 @@ import {
     isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<TrackSection>({
     ...AuditableDefaultValues,
@@ -18,11 +19,9 @@ const defaultValues = makeDefaultValues<TrackSection>({
 });
 
 class TrackSectionRecord
-    extends BaseRecord(Record(defaultValues))
+    extends AuditableRecord(BaseRecord(Record(defaultValues)))
     implements TrackSection
 {
-    private temporaryId: string | undefined;
-
     constructor(values?: RecordParams<TrackSectionRecord>) {
         values = values ?? defaultValues;
 
@@ -41,17 +40,8 @@ class TrackSectionRecord
         }
     }
 
-    public getTemporaryId(): string | undefined {
-        return this.temporaryId;
-    }
-
     public hasTrackId(): boolean {
         return !isNilOrEmpty(this.track_id) && !isTemporaryId(this.track_id);
-    }
-
-    public setTemporaryId(temporaryId: string | undefined): TrackSectionRecord {
-        this.temporaryId = temporaryId;
-        return this;
     }
 }
 

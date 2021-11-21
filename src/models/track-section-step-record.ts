@@ -9,6 +9,7 @@ import {
     isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<TrackSectionStep>({
     ...AuditableDefaultValues,
@@ -18,7 +19,7 @@ const defaultValues = makeDefaultValues<TrackSectionStep>({
 });
 
 class TrackSectionStepRecord
-    extends BaseRecord(Record(defaultValues))
+    extends AuditableRecord(BaseRecord(Record(defaultValues)))
     implements TrackSectionStep
 {
     constructor(values?: RecordParams<TrackSectionStepRecord>) {

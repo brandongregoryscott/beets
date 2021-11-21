@@ -15,12 +15,26 @@ function AuditableRecord<TRecord extends Constructor<Auditable>>(
     Base: TRecord
 ) {
     return class AuditableRecord extends Base {
+        /**
+         * Placeholder id to associate entities before being persisted to the database
+         */
+        protected temporaryId: string | undefined;
+
         public getUpdatedOn(): string | undefined {
             return this.updated_on ?? this.created_on;
         }
 
+        public getTemporaryId(): string | undefined {
+            return this.temporaryId;
+        }
+
         public isPersisted(): boolean {
             return !isNilOrEmpty(this.id) && !isTemporaryId(this.id);
+        }
+
+        public setTemporaryId(temporaryId: string | undefined): this {
+            this.temporaryId = temporaryId;
+            return this;
         }
     };
 }

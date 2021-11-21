@@ -23,7 +23,7 @@ export interface paths {
                     updated_on?: parameters["rowFilter.files.updated_on"];
                     updated_by_id?: parameters["rowFilter.files.updated_by_id"];
                     id?: parameters["rowFilter.files.id"];
-                    bucketid?: parameters["rowFilter.files.bucketid"];
+                    bucket_id?: parameters["rowFilter.files.bucket_id"];
                     description?: parameters["rowFilter.files.description"];
                     name?: parameters["rowFilter.files.name"];
                     path?: parameters["rowFilter.files.path"];
@@ -86,7 +86,7 @@ export interface paths {
                     updated_on?: parameters["rowFilter.files.updated_on"];
                     updated_by_id?: parameters["rowFilter.files.updated_by_id"];
                     id?: parameters["rowFilter.files.id"];
-                    bucketid?: parameters["rowFilter.files.bucketid"];
+                    bucket_id?: parameters["rowFilter.files.bucket_id"];
                     description?: parameters["rowFilter.files.description"];
                     name?: parameters["rowFilter.files.name"];
                     path?: parameters["rowFilter.files.path"];
@@ -113,7 +113,7 @@ export interface paths {
                     updated_on?: parameters["rowFilter.files.updated_on"];
                     updated_by_id?: parameters["rowFilter.files.updated_by_id"];
                     id?: parameters["rowFilter.files.id"];
-                    bucketid?: parameters["rowFilter.files.bucketid"];
+                    bucket_id?: parameters["rowFilter.files.bucket_id"];
                     description?: parameters["rowFilter.files.description"];
                     name?: parameters["rowFilter.files.name"];
                     path?: parameters["rowFilter.files.path"];
@@ -239,7 +239,10 @@ export interface paths {
                     updated_on?: parameters["rowFilter.projects.updated_on"];
                     updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
                     id?: parameters["rowFilter.projects.id"];
+                    bpm?: parameters["rowFilter.projects.bpm"];
                     name?: parameters["rowFilter.projects.name"];
+                    swing?: parameters["rowFilter.projects.swing"];
+                    volume?: parameters["rowFilter.projects.volume"];
                     /** Filtering Columns */
                     select?: parameters["select"];
                     /** Ordering */
@@ -297,7 +300,10 @@ export interface paths {
                     updated_on?: parameters["rowFilter.projects.updated_on"];
                     updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
                     id?: parameters["rowFilter.projects.id"];
+                    bpm?: parameters["rowFilter.projects.bpm"];
                     name?: parameters["rowFilter.projects.name"];
+                    swing?: parameters["rowFilter.projects.swing"];
+                    volume?: parameters["rowFilter.projects.volume"];
                 };
                 header: {
                     /** Preference */
@@ -319,7 +325,10 @@ export interface paths {
                     updated_on?: parameters["rowFilter.projects.updated_on"];
                     updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
                     id?: parameters["rowFilter.projects.id"];
+                    bpm?: parameters["rowFilter.projects.bpm"];
                     name?: parameters["rowFilter.projects.name"];
+                    swing?: parameters["rowFilter.projects.swing"];
+                    volume?: parameters["rowFilter.projects.volume"];
                 };
                 body: {
                     /** projects */
@@ -575,6 +584,7 @@ export interface paths {
                     updated_on?: parameters["rowFilter.tracks.updated_on"];
                     updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
                     id?: parameters["rowFilter.tracks.id"];
+                    index?: parameters["rowFilter.tracks.index"];
                     name?: parameters["rowFilter.tracks.name"];
                     mute?: parameters["rowFilter.tracks.mute"];
                     solo?: parameters["rowFilter.tracks.solo"];
@@ -638,6 +648,7 @@ export interface paths {
                     updated_on?: parameters["rowFilter.tracks.updated_on"];
                     updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
                     id?: parameters["rowFilter.tracks.id"];
+                    index?: parameters["rowFilter.tracks.index"];
                     name?: parameters["rowFilter.tracks.name"];
                     mute?: parameters["rowFilter.tracks.mute"];
                     solo?: parameters["rowFilter.tracks.solo"];
@@ -665,6 +676,7 @@ export interface paths {
                     updated_on?: parameters["rowFilter.tracks.updated_on"];
                     updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
                     id?: parameters["rowFilter.tracks.id"];
+                    index?: parameters["rowFilter.tracks.index"];
                     name?: parameters["rowFilter.tracks.name"];
                     mute?: parameters["rowFilter.tracks.mute"];
                     solo?: parameters["rowFilter.tracks.solo"];
@@ -814,7 +826,7 @@ export interface definitions {
          * Note:
          * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
          */
-        bucketid: string;
+        bucket_id: string;
         description?: string;
         name: string;
         path: string;
@@ -842,7 +854,10 @@ export interface definitions {
          * This is a Primary Key.<pk/>
          */
         id: string;
+        bpm: number;
         name: string;
+        swing: number;
+        volume: number;
     };
     track_section_steps: {
         created_on?: string;
@@ -900,6 +915,7 @@ export interface definitions {
          * This is a Primary Key.<pk/>
          */
         id: string;
+        index: number;
         name: string;
         mute: boolean;
         solo: boolean;
@@ -957,7 +973,7 @@ export interface parameters {
     "rowFilter.files.updated_on": string;
     "rowFilter.files.updated_by_id": string;
     "rowFilter.files.id": string;
-    "rowFilter.files.bucketid": string;
+    "rowFilter.files.bucket_id": string;
     "rowFilter.files.description": string;
     "rowFilter.files.name": string;
     "rowFilter.files.path": string;
@@ -977,7 +993,10 @@ export interface parameters {
     "rowFilter.projects.updated_on": string;
     "rowFilter.projects.updated_by_id": string;
     "rowFilter.projects.id": string;
+    "rowFilter.projects.bpm": string;
     "rowFilter.projects.name": string;
+    "rowFilter.projects.swing": string;
+    "rowFilter.projects.volume": string;
     /** track_section_steps */
     "body.track_section_steps": definitions["track_section_steps"];
     "rowFilter.track_section_steps.created_on": string;
@@ -1011,6 +1030,7 @@ export interface parameters {
     "rowFilter.tracks.updated_on": string;
     "rowFilter.tracks.updated_by_id": string;
     "rowFilter.tracks.id": string;
+    "rowFilter.tracks.index": string;
     "rowFilter.tracks.name": string;
     "rowFilter.tracks.mute": string;
     "rowFilter.tracks.solo": string;

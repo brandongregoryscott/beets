@@ -9,9 +9,11 @@ import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { Track } from "generated/interfaces/track";
 import { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
+    index: 0,
     mute: false,
     name: "New Track",
     pan: 0,
@@ -20,9 +22,10 @@ const defaultValues = makeDefaultValues<Track>({
     volume: 0,
 });
 
-class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
-    private temporaryId: string | undefined;
-
+class TrackRecord
+    extends AuditableRecord(BaseRecord(Record(defaultValues)))
+    implements Track
+{
     constructor(values?: RecordParams<TrackRecord>) {
         values = values ?? defaultValues;
 
@@ -40,15 +43,6 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
         if (isTemporaryId(this.id)) {
             this.temporaryId = this.id;
         }
-    }
-
-    public getTemporaryId(): string | undefined {
-        return this.temporaryId;
-    }
-
-    public setTemporaryId(temporaryId: string | undefined): TrackRecord {
-        this.temporaryId = temporaryId;
-        return this;
     }
 }
 

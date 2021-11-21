@@ -28,7 +28,7 @@ const useDeleteFile = (): UseMutationResult<void, Error, string> => {
             .eq("id", file.id);
 
         const { error: storageProviderError } = await storage
-            .from(file.bucketid)
+            .from(file.bucket_id)
             .remove([file.getPath()]);
 
         if (deletionError != null) {

@@ -16,7 +16,7 @@ const up = (pgm: MigrationBuilder) => {
             notNull: true,
             primaryKey: true,
         },
-        bucketid: {
+        bucket_id: {
             type: "text",
             references: "storage.buckets",
             notNull: true,

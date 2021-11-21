@@ -121,14 +121,6 @@ const uniqueNonDeletedIndex =
     (column: string, options?: { dropFkConstraint: boolean }): Migration => {
         const dropFkConstraint = options?.dropFkConstraint ?? false;
         const constraint = `${tableName}_${column}_fkey`;
-        if (dropFkConstraint) {
-            pgm.dropConstraint(tableName, constraint);
-        }
-
-        pgm.addIndex(tableName, [column, auditableColumns.deleted_on], {
-            unique: true,
-            where: notDeleted,
-        });
 
         return {
             down: () => {
@@ -141,10 +133,7 @@ const uniqueNonDeletedIndex =
             },
             up: () => {
                 if (dropFkConstraint) {
-                    pgm.dropConstraint(
-                        tableName,
-                        `${tableName}_${column}_fkey`
-                    );
+                    pgm.dropConstraint(tableName, constraint);
                 }
 
                 pgm.addIndex(tableName, [column, auditableColumns.deleted_on], {

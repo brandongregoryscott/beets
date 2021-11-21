@@ -12,9 +12,23 @@ const up = (pgm: MigrationBuilder) => {
     pgm.createTable(tableName, {
         ...makeAuditableColumns(pgm),
         ...makeIdColumn(pgm),
+        bpm: {
+            type: "integer",
+            notNull: true,
+        },
         name: {
             type: "text",
             notNull: true,
+        },
+        swing: {
+            type: "integer",
+            notNull: true,
+            default: 0,
+        },
+        volume: {
+            type: "integer",
+            notNull: true,
+            default: 0,
         },
     });
 
