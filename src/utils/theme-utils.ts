@@ -1,4 +1,4 @@
-import { isNilOrEmpty } from "utils/core-utils";
+import { isNilOrEmpty } from "utils/collection-utils";
 import { valueByHash } from "utils/hash-utils";
 import { DefaultEvergreenTheme } from "utils/hooks/use-theme";
 

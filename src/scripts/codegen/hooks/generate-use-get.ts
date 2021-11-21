@@ -17,6 +17,7 @@ import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
+import { Paths } from "../constants/paths";
 
 const { enabled, id, SupabaseClient } = Variables;
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;

@@ -89,8 +89,13 @@ const generateUseCreateOrUpdate = (
     });
 
     file.addImportDeclaration({
-        namedImports: [isNilOrEmpty, isTemporaryId],
+        namedImports: [isTemporaryId],
         moduleSpecifier: "utils/core-utils",
+    });
+
+    file.addImportDeclaration({
+        namedImports: [isNilOrEmpty],
+        moduleSpecifier: "utils/collection-utils",
     });
 
     file.addImportDeclaration({

@@ -9,8 +9,8 @@ import { RecordParams } from "types/record-params";
 import {
     diffDeletedEntities,
     diffUpdatedEntities,
-    makeDefaultValues,
-} from "utils/core-utils";
+} from "utils/collection-utils";
+import { makeDefaultValues } from "utils/core-utils";
 
 interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;

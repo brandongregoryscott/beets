@@ -1,56 +1,8 @@
-import { List, Record } from "immutable";
-import { Auditable } from "interfaces/auditable";
 import { BorderPropsOptions } from "interfaces/border-props-options";
 import { BorderProps } from "interfaces/border-props";
-import { Entity } from "interfaces/entity";
-import _ from "lodash";
-import { Grouping } from "types/grouping";
 import { RequiredOrUndefined } from "types/required-or-undefined";
 import * as uuid from "uuid";
-
-const diffDeletedEntities = <T extends Entity>(
-    initialValues: List<T>,
-    values: List<T>
-): List<T> =>
-    List(
-        _.differenceWith(
-            initialValues.toArray(),
-            values.toArray(),
-            (a, b) => a.id === b.id
-            // No need to delete entities that were never persisted
-        ).filter((entities) => !isTemporaryId(entities.id))
-    );
-
-const diffUpdatedEntities = <T extends Auditable>(
-    values: List<T>,
-    initialValues: List<T>
-): List<T> =>
-    List(
-        _.differenceWith(values.toArray(), initialValues.toArray(), (a, b) => {
-            const isNew = isTemporaryId(a.id);
-            const isDifferent =
-                Record.isRecord(a) && Record.isRecord(b) && !a.equals(b);
-            if (isNew || isDifferent) {
-                return false; // Returning 'false' marks it as different/updated
-            }
-
-            return true;
-        })
-    );
-
-const hasValues = <T extends any[] | List<any> = any[] | List<any>>(
-    value: T | null | undefined
-): value is T => {
-    if (value == null) {
-        return false;
-    }
-
-    if (List.isList(value) && !value.isEmpty()) {
-        return true;
-    }
-
-    return Array.isArray(value) && value.length > 1;
-};
+import { List } from "immutable";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;
@@ -95,37 +47,6 @@ const getBorderXProps = (options: BorderPropsOptions): BorderProps => {
 
 const getTemporaryId = (): string => `temp-${uuid.v4()}`;
 
-const groupBy = <TLeft, TRight>(
-    left: List<TLeft> | TLeft[] | undefined,
-    right: List<TRight> | TRight[] | undefined,
-    comparator: (left: TLeft, right: TRight) => boolean
-): List<Grouping<TLeft, TRight>> => {
-    left = List.isList(left) ? left.toArray() : List(left).toArray();
-    right = List.isList(right) ? right.toArray() : List(right).toArray();
-
-    left = _.intersectionWith(left, right, comparator).sort();
-    right = _.intersectionWith(right, left, (right, left) =>
-        comparator(left, right)
-    ).sort();
-
-    const zipped = _.zipWith(
-        left,
-        right,
-        (left: TLeft, right: TRight): Grouping<TLeft, TRight> | undefined => {
-            if (left == null || right == null || !comparator(left, right)) {
-                return undefined;
-            }
-
-            return { left, right };
-        }
-    );
-
-    return List(_.compact(zipped));
-};
-
-const initializeList = <T>(count: number, value: T): List<T> =>
-    List(_.fill(new Array(count), value));
-
 const isNilOrEmpty = <T = string | any[] | List<any>>(
     value: T | any[] | List<any> | null | undefined
 ): value is null | undefined => {
@@ -150,15 +71,6 @@ const isTemporaryId = (value?: string): boolean =>
 const makeDefaultValues = <T>(defaultValues: RequiredOrUndefined<T>): T =>
     defaultValues as T;
 
-const mapTo = <TSource, TDestination>(
-    collection: TSource[],
-    constructor: new (...args: any[]) => TDestination
-) =>
-    _.map<TSource, TDestination>(
-        collection,
-        (source) => new constructor(source)
-    );
-
 const randomFloat = (min: number, max: number): number =>
     Math.random() * (max - min) + min;
 
@@ -169,18 +81,12 @@ const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
 export {
-    diffDeletedEntities,
-    diffUpdatedEntities,
     getBorderYProps,
     getBorderXProps,
     getTemporaryId,
-    groupBy,
-    hasValues,
-    initializeList,
     isNilOrEmpty,
     isTemporaryId,
     makeDefaultValues,
-    mapTo,
     randomFloat,
     randomInt,
     unixTime,

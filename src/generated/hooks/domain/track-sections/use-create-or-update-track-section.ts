@@ -3,7 +3,8 @@ import { TrackSection } from "generated/interfaces/track-section";
 import { Tables } from "generated/enums/tables";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
-import { isNilOrEmpty, isTemporaryId } from "utils/core-utils";
+import { isTemporaryId } from "utils/core-utils";
+import { isNilOrEmpty } from "utils/collection-utils";
 import { useCreateTrackSection } from "generated/hooks/domain/track-sections/use-create-track-section";
 import { useUpdateTrackSection } from "generated/hooks/domain/track-sections/use-update-track-section";
 

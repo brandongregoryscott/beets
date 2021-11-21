@@ -7,7 +7,7 @@ import {
 } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { ChangeEvent, useCallback, useState } from "react";
-import { isNilOrEmpty } from "utils/core-utils";
+import { isNilOrEmpty } from "utils/collection-utils";
 import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";

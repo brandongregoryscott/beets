@@ -20,6 +20,11 @@ import { TrackSection } from "components/track-section";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-workstation-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
+import { TrackSectionStepUtils } from "utils/track-section-step-utils";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { FileRecord } from "models/file-record";
+import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { List } from "immutable";
 
 interface TrackProps {
     track: TrackRecord;
@@ -30,12 +35,15 @@ const iconMarginRight = minorScale(2);
 const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const { track } = props;
     const { id, name, mute, solo } = track;
+    const { state } = useWorkstationState();
     const { update, remove } = useTracksState();
     const {
         add: addTrackSection,
         state: trackSections,
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
+    const { resultObject: files } = useListFiles();
+
     const theme = useTheme();
 
     const setName = useCallback(
@@ -59,6 +67,12 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     );
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
+
+    const steps = TrackSectionStepUtils.toStepTypes(
+        trackSections,
+        state.trackSectionSteps,
+        List(files)
+    );
 
     return (
         <Pane display="flex" flexDirection="row" alignItems="center">
@@ -96,14 +110,9 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                         />
                     </Tooltip>
                 </Pane>
-                <ReactronicaTrack
-                    mute={mute}
-                    solo={solo}
-                    /** TODO: Flatten TrackSectionSteps here */
-                    steps={undefined}>
+                <ReactronicaTrack mute={mute} solo={solo} steps={steps}>
                     <Instrument
-                        onLoad={undefined}
-                        samples={undefined}
+                        samples={FileRecord.toMidiNoteMap(List(files))}
                         type="sampler"
                     />
                 </ReactronicaTrack>

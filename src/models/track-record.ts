@@ -2,13 +2,13 @@ import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
 import {
     getTemporaryId,
-    isNilOrEmpty,
     isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { Track } from "generated/interfaces/track";
 import { RecordParams } from "types/record-params";
+import { isNilOrEmpty } from "utils/collection-utils";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,

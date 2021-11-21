@@ -3,9 +3,9 @@ import { TrackSection } from "generated/interfaces/track-section";
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
 import { RecordParams } from "types/record-params";
+import { isNilOrEmpty } from "utils/collection-utils";
 import {
     getTemporaryId,
-    isNilOrEmpty,
     isTemporaryId,
     makeDefaultValues,
 } from "utils/core-utils";

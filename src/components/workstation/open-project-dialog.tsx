@@ -9,7 +9,7 @@ import {
 } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
-import { isNilOrEmpty } from "utils/core-utils";
+import { isNilOrEmpty } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
