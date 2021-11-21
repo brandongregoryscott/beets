@@ -3,18 +3,12 @@ import { makeAuditableColumns } from "./utils/auditable-columns";
 import { configure } from "./utils/migration-builder-utils";
 import { tables } from "./utils/tables";
 
-const up = (pgm: MigrationBuilder) => {
-    const {
-        deleteOwnRecordPolicy,
-        softDeleteRule,
-        uniqueNonDeletedIndex,
-        rowLevelSecurity,
-        authenticatedCreatePolicy,
-        updateOwnRecordPolicy,
-        readOwnRecordPolicy,
-    } = configure({ pgm, tableName: tables.files });
+const tableName = tables.files;
 
-    pgm.createTable(tables.files, {
+const up = (pgm: MigrationBuilder) => {
+    const config = configure({ pgm, tableName });
+
+    pgm.createTable(tableName, {
         ...makeAuditableColumns(pgm),
         id: {
             type: "uuid",
@@ -47,19 +41,19 @@ const up = (pgm: MigrationBuilder) => {
         },
     });
 
-    uniqueNonDeletedIndex("id", { dropFkConstraint: true });
+    config.uniqueNonDeletedIndex("id", { dropFkConstraint: true }).up();
 
-    rowLevelSecurity();
-    softDeleteRule();
+    config.rowLevelSecurity().up();
+    config.softDeleteRule().up();
 
-    authenticatedCreatePolicy();
-    deleteOwnRecordPolicy();
-    updateOwnRecordPolicy();
-    readOwnRecordPolicy();
+    config.authenticatedCreatePolicy().up();
+    config.deleteOwnRecordPolicy().up();
+    config.updateOwnRecordPolicy().up();
+    config.readOwnRecordPolicy().up();
 };
 
 const down = (pgm: MigrationBuilder) => {
-    pgm.dropTable(tables.files);
+    pgm.dropTable(tableName);
 };
 
 export { up, down };

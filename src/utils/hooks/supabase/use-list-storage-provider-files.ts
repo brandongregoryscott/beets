@@ -3,7 +3,7 @@ import { SortOptions } from "interfaces/sort-options";
 import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 import _ from "lodash";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
-import { isNilOrEmpty, mapTo } from "utils/core-utils";
+import { isNilOrEmpty, mapTo } from "utils/collection-utils";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { storageProviderFilesKey } from "utils/query-key-utils";

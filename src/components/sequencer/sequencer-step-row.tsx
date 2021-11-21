@@ -8,12 +8,15 @@ import {
 } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { MouseEvent } from "react";
+import { getBorderYProps } from "utils/core-utils";
 
 interface SequencerStepRowProps {
+    step: TrackSectionStepRecord;
+    steps: List<TrackSectionStepRecord>;
     file: FileRecord;
-    files: List<FileRecord>;
-    onClick: (file: FileRecord) => void;
+    onClick: (file: TrackSectionStepRecord) => void;
 }
 
 const borderRadius = minorScale(1);
@@ -22,28 +25,19 @@ const height = majorScale(3);
 const SequencerStepRow: React.FC<SequencerStepRowProps> = (
     props: SequencerStepRowProps
 ) => {
-    const { file, files, onClick } = props;
-    const isFirst = files.indexOf(file) === 0;
-    const isLast = files.indexOf(file) === files.count() - 1;
+    const { step, steps, file, onClick } = props;
+    const isFirst = steps.indexOf(step) === 0;
+    const isLast = steps.indexOf(step) === steps.count() - 1;
 
-    let borderProps = {};
-    if (isFirst) {
-        borderProps = {
-            borderTopLeftRadius: borderRadius,
-            borderTopRightRadius: borderRadius,
-        };
-    }
-
-    if (isLast && !isFirst) {
-        borderProps = {
-            borderBottomLeftRadius: borderRadius,
-            borderBottomRightRadius: borderRadius,
-        };
-    }
+    const borderProps = getBorderYProps({
+        isFirst,
+        isLast,
+        borderRadius,
+    });
 
     const handleClick = (event: MouseEvent<HTMLDivElement>) => {
         event.stopPropagation();
-        onClick(file);
+        onClick(step);
     };
 
     return (

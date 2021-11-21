@@ -29,15 +29,15 @@ const up = (pgm: MigrationBuilder) => {
         },
     });
 
-    config.uniqueNonDeletedIndex("id");
+    config.uniqueNonDeletedIndex("id").up();
 
-    config.rowLevelSecurity();
-    config.softDeleteRule();
+    config.rowLevelSecurity().up();
+    config.softDeleteRule().up();
 
-    config.authenticatedCreatePolicy();
-    config.deleteOwnRecordPolicy();
-    config.updateOwnRecordPolicy();
-    config.readOwnRecordPolicy();
+    config.authenticatedCreatePolicy().up();
+    config.deleteOwnRecordPolicy().up();
+    config.updateOwnRecordPolicy().up();
+    config.readOwnRecordPolicy().up();
 };
 
 const down = (pgm: MigrationBuilder) => {

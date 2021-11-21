@@ -1,11 +1,13 @@
-import { List, Set, Record as ImmutableRecord, Map } from "immutable";
+import { List, Record as ImmutableRecord } from "immutable";
 import { File } from "generated/interfaces/file";
-import { hash, initializeList, makeDefaultValues } from "utils/core-utils";
+import { makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
 import { BaseRecord } from "models/base-record";
 import { SelectMenuItem } from "components/select-menu";
-import { MidiNote, StepType } from "reactronica";
+import { MidiNote } from "reactronica";
 import { MidiNotes } from "constants/midi-notes";
+import { valueByHash } from "utils/hash-utils";
+import { FileUtils } from "utils/file-utils";
 
 const defaultValues = makeDefaultValues<File>({
     bucketid: "",
@@ -30,10 +32,10 @@ class FileRecord
     public static toMidiNoteMap(
         files: List<FileRecord>
     ): Record<MidiNote, string> {
-        const fileMap = mapFilesToNotes(files);
+        const fileMap = FileUtils.mapToMidiNotes(files);
 
         const midiNoteMap: Record<string, string> = {};
-        Object.entries(fileMap).forEach(([note, file]) => {
+        Object.entries(fileMap.toJSON()).forEach(([note, file]) => {
             midiNoteMap[note] = file.getPublicUrl();
         });
 
@@ -41,8 +43,12 @@ class FileRecord
     }
 
     public static toSelectMenuItems(
-        files?: Array<FileRecord>
+        files?: Array<FileRecord> | List<FileRecord>
     ): Array<SelectMenuItem<FileRecord>> {
+        if (List.isList(files)) {
+            files = files.toArray();
+        }
+
         return (
             files?.map((file) => ({
                 label: file.name,
@@ -52,33 +58,8 @@ class FileRecord
         );
     }
 
-    public static toStepTypes(files: List<List<FileRecord>>): Array<StepType> {
-        const fileMap = Map(
-            mapFilesToNotes(Set(files.flatMap((list) => list)).toList())
-        );
-
-        let steps = initializeList<StepType>(files.count(), []);
-        files.forEach((fileList, index) => {
-            if (fileList.isEmpty()) {
-                return;
-            }
-
-            const stepNotes = fileList
-                .map((file) => ({
-                    name: fileMap.keyOf(file)!,
-                }))
-                .toArray() as StepType;
-
-            steps = steps.set(index, stepNotes);
-        });
-
-        return steps.toArray();
-    }
-
     public getMidiNote(): MidiNote {
-        const hashedId = hash(this.id);
-        const { length } = MidiNotes;
-        return MidiNotes[hashedId % length];
+        return valueByHash(this.id, MidiNotes);
     }
 
     public getPath(): string {
@@ -90,10 +71,5 @@ class FileRecord
         return `${publicUrl}/${this.bucketid}/${this.getPath()}`;
     }
 }
-
-const mapFilesToNotes = (files: List<FileRecord>): Record<string, FileRecord> =>
-    Map<string, FileRecord>(
-        files.map((file) => [file.getMidiNote(), file])
-    ).toJSON();
 
 export { FileRecord };

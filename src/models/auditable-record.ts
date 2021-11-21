@@ -1,6 +1,7 @@
 import { Auditable } from "interfaces/auditable";
 import { Constructor } from "types/constructor";
-import { isNilOrEmpty, isTemporaryId } from "utils/core-utils";
+import { isNilOrEmpty } from "utils/collection-utils";
+import { isTemporaryId } from "utils/core-utils";
 
 /**
  * Mixin class to hold base functionality of auditable Immutable.Record classes

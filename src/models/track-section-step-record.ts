@@ -2,7 +2,13 @@ import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackSectionStep } from "generated/interfaces/track-section-step";
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
-import { makeDefaultValues } from "utils/core-utils";
+import { RecordParams } from "types/record-params";
+import { isNilOrEmpty } from "utils/collection-utils";
+import {
+    getTemporaryId,
+    isTemporaryId,
+    makeDefaultValues,
+} from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<TrackSectionStep>({
     ...AuditableDefaultValues,
@@ -15,14 +21,25 @@ class TrackSectionStepRecord
     extends BaseRecord(Record(defaultValues))
     implements TrackSectionStep
 {
-    constructor(values?: Partial<TrackSectionStep | TrackSectionStepRecord>) {
+    constructor(values?: RecordParams<TrackSectionStepRecord>) {
         values = values ?? defaultValues;
 
         if (values instanceof TrackSectionStepRecord) {
             values = values.toPOJO();
         }
 
+        if (isNilOrEmpty(values.id)) {
+            values = { ...values, id: getTemporaryId() };
+        }
+
         super(values);
+    }
+
+    public hasTrackSectionId(): boolean {
+        return (
+            !isNilOrEmpty(this.track_section_id) &&
+            !isTemporaryId(this.track_section_id)
+        );
     }
 }
 

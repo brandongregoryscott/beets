@@ -1,26 +1,55 @@
-import { List } from "immutable";
-import _ from "lodash";
-import { SetStateAction } from "react";
-import { Grouping } from "types/grouping";
-import { nil } from "types/nil";
+import { BorderPropsOptions } from "interfaces/border-props-options";
+import { BorderProps } from "interfaces/border-props";
 import { RequiredOrUndefined } from "types/required-or-undefined";
 import * as uuid from "uuid";
+import { List } from "immutable";
 
-const hash = (value: string): number => {
-    let hash = 5381;
-    let i = value.length;
-
-    while (i > 0) {
-        hash = (hash * 33) ^ value.charCodeAt(--i);
+const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
+    const { isFirst = false, isLast = false, borderRadius } = options;
+    let borderProps: BorderProps = {};
+    if (isFirst) {
+        borderProps = {
+            borderTopLeftRadius: borderRadius,
+            borderTopRightRadius: borderRadius,
+        };
     }
 
-    return hash >>> 0;
+    if (isLast && !isFirst) {
+        borderProps = {
+            borderBottomLeftRadius: borderRadius,
+            borderBottomRightRadius: borderRadius,
+        };
+    }
+
+    return borderProps;
 };
 
-const initializeList = <T>(count: number, value: T): List<T> =>
-    List(_.fill(new Array(count), value));
+const getBorderXProps = (options: BorderPropsOptions): BorderProps => {
+    const { isFirst = false, isLast = false, borderRadius } = options;
+    let borderProps: BorderProps = {};
+    if (isFirst) {
+        borderProps = {
+            borderTopLeftRadius: borderRadius,
+            borderBottomLeftRadius: borderRadius,
+        };
+    }
 
-const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
+    if (isLast) {
+        borderProps = {
+            ...borderProps,
+            borderTopRightRadius: borderRadius,
+            borderBottomRightRadius: borderRadius,
+        };
+    }
+
+    return borderProps;
+};
+
+const getTemporaryId = (): string => `temp-${uuid.v4()}`;
+
+const isNilOrEmpty = <T = string | any[] | List<any>>(
+    value: T | any[] | List<any> | null | undefined
+): value is null | undefined => {
     if (typeof value === "string") {
         return value.trim().length === 0;
     }
@@ -29,56 +58,18 @@ const isNilOrEmpty = (value: nil<string | any[]>): value is nil => {
         return value.length === 0;
     }
 
+    if (List.isList(value)) {
+        return value.isEmpty();
+    }
+
     return value == null;
 };
 
 const isTemporaryId = (value?: string): boolean =>
     !isNilOrEmpty(value) && value!.startsWith("temp-");
 
-const getTemporaryId = (): string => `temp-${uuid.v4()}`;
-
-const getUpdatedState = <T>(previousValue: T, update: SetStateAction<T>) =>
-    _.isFunction(update) ? update(previousValue) : update;
-
-const groupBy = <TLeft, TRight>(
-    left: TLeft[] | undefined,
-    right: TRight[] | undefined,
-    comparator: (left: TLeft, right: TRight) => boolean
-): Array<Grouping<TLeft, TRight>> => {
-    left = left ?? [];
-    right = right ?? [];
-
-    left = _.intersectionWith(left, right, comparator).sort();
-    right = _.intersectionWith(right, left, (right, left) =>
-        comparator(left, right)
-    ).sort();
-
-    const zipped = _.zipWith(
-        left,
-        right,
-        (left: TLeft, right: TRight): Grouping<TLeft, TRight> | undefined => {
-            if (left == null || right == null || !comparator(left, right)) {
-                return undefined;
-            }
-
-            return { left, right };
-        }
-    );
-
-    return _.compact(zipped);
-};
-
 const makeDefaultValues = <T>(defaultValues: RequiredOrUndefined<T>): T =>
     defaultValues as T;
-
-const mapTo = <TSource, TDestination>(
-    collection: TSource[],
-    constructor: new (...args: any[]) => TDestination
-) =>
-    _.map<TSource, TDestination>(
-        collection,
-        (source) => new constructor(source)
-    );
 
 const randomFloat = (min: number, max: number): number =>
     Math.random() * (max - min) + min;
@@ -90,15 +81,12 @@ const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
 export {
+    getBorderYProps,
+    getBorderXProps,
     getTemporaryId,
-    getUpdatedState,
-    groupBy,
-    hash,
-    initializeList,
     isNilOrEmpty,
     isTemporaryId,
     makeDefaultValues,
-    mapTo,
     randomFloat,
     randomInt,
     unixTime,

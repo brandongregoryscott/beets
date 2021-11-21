@@ -1,12 +1,12 @@
 import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
 import { Track } from "components/track";
 import { useCallback } from "react";
-import { useWorkstationTracksState } from "utils/hooks/use-workstation-tracks-state";
+import { useTracksState } from "utils/hooks/use-tracks-state";
 
 interface TrackListProps {}
 
 const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
-    const { state: tracks, add } = useWorkstationTracksState();
+    const { state: tracks, add } = useTracksState();
     const handleAdd = useCallback(() => add(), [add]);
     return (
         <Pane>

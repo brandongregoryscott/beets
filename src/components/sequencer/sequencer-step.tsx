@@ -1,14 +1,18 @@
 import { SequencerStepRow } from "components/sequencer/sequencer-step-row";
 import { ConditionalTooltip } from "components/conditional-tooltip";
 import { Card, majorScale } from "evergreen-ui";
-import { List, Set } from "immutable";
+import { List } from "immutable";
 import { FileRecord } from "models/file-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { TrackSectionRecord } from "models/track-section-record";
 
 interface SequencerStepProps {
+    files: List<FileRecord>;
     index: number;
     selected: List<FileRecord>;
-    value: List<FileRecord>;
-    onChange: (index: number, files: List<FileRecord>) => void;
+    trackSection: TrackSectionRecord;
+    value: List<TrackSectionStepRecord>;
+    onChange: (index: number, steps: List<TrackSectionStepRecord>) => void;
 }
 
 const maxCount = 4;
@@ -16,7 +20,7 @@ const maxCount = 4;
 const SequencerStep: React.FC<SequencerStepProps> = (
     props: SequencerStepProps
 ) => {
-    const { index, onChange, selected, value } = props;
+    const { index, files, onChange, selected, trackSection, value } = props;
     const hasSamples = !selected.isEmpty();
     const handleAdd = () => {
         if (
@@ -26,15 +30,31 @@ const SequencerStep: React.FC<SequencerStepProps> = (
             return;
         }
 
-        onChange(index, Set(value.push(...selected.toArray())).toList());
+        const newSteps = selected
+            .map(
+                (file) =>
+                    new TrackSectionStepRecord({
+                        file_id: file.id,
+                        index,
+                        track_section_id: trackSection.id,
+                    })
+            )
+            .filter(
+                (step) =>
+                    !value.some(
+                        (existingStep) => existingStep.file_id === step.file_id
+                    )
+            );
+
+        onChange(index, value.concat(newSteps));
     };
 
-    const handleRemove = (file: FileRecord) => {
-        if (!value.includes(file)) {
+    const handleRemove = (step: TrackSectionStepRecord) => {
+        if (!value.includes(step)) {
             return;
         }
 
-        onChange(index, value.remove(value.indexOf(file)));
+        onChange(index, value.remove(value.indexOf(step)));
     };
 
     return (
@@ -49,11 +69,12 @@ const SequencerStep: React.FC<SequencerStepProps> = (
                 margin={majorScale(1)}
                 onClick={handleAdd}
                 width={majorScale(12)}>
-                {value.map((file) => (
+                {value.map((step) => (
                     <SequencerStepRow
-                        file={file}
-                        files={value}
-                        key={file.id}
+                        file={files.find((file) => file.id === step.file_id)!}
+                        step={step}
+                        steps={value}
+                        key={step.id}
                         onClick={handleRemove}
                     />
                 ))}

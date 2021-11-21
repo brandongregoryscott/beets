@@ -7,15 +7,7 @@ import { makeIdColumn } from "./utils/id-column";
 const tableName = tables.projects;
 
 const up = (pgm: MigrationBuilder) => {
-    const {
-        uniqueNonDeletedIndex,
-        rowLevelSecurity,
-        authenticatedCreatePolicy,
-        updateOwnRecordPolicy,
-        readOwnRecordPolicy,
-        softDeleteRule,
-        deleteOwnRecordPolicy,
-    } = configure({ pgm, tableName });
+    const config = configure({ pgm, tableName });
 
     pgm.createTable(tableName, {
         ...makeAuditableColumns(pgm),
@@ -26,15 +18,15 @@ const up = (pgm: MigrationBuilder) => {
         },
     });
 
-    uniqueNonDeletedIndex("id");
+    config.uniqueNonDeletedIndex("id").up();
 
-    rowLevelSecurity();
-    softDeleteRule();
+    config.rowLevelSecurity().up();
+    config.softDeleteRule().up();
 
-    authenticatedCreatePolicy();
-    deleteOwnRecordPolicy();
-    updateOwnRecordPolicy();
-    readOwnRecordPolicy();
+    config.authenticatedCreatePolicy().up();
+    config.deleteOwnRecordPolicy().up();
+    config.updateOwnRecordPolicy().up();
+    config.readOwnRecordPolicy().up();
 };
 
 const down = (pgm: MigrationBuilder) => {
