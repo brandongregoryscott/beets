@@ -3,8 +3,7 @@ import { Track } from "generated/interfaces/track";
 import { Tables } from "generated/enums/tables";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
-import { isTemporaryId } from "utils/core-utils";
-import { isNilOrEmpty } from "utils/collection-utils";
+import { isNilOrEmpty, isTemporaryId } from "utils/core-utils";
 import { useCreateTrack } from "generated/hooks/domain/tracks/use-create-track";
 import { useUpdateTrack } from "generated/hooks/domain/tracks/use-update-track";
 

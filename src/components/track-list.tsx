@@ -1,7 +1,7 @@
 import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
 import { Track } from "components/track";
 import { useCallback } from "react";
-import { useTracksState } from "utils/hooks/use-workstation-tracks-state";
+import { useTracksState } from "utils/hooks/use-tracks-state";
 
 interface TrackListProps {}
 

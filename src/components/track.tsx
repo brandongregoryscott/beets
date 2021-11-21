@@ -18,7 +18,7 @@ import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
 import { TrackSection } from "components/track-section";
 import { useTheme } from "utils/hooks/use-theme";
-import { useTracksState } from "utils/hooks/use-workstation-tracks-state";
+import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { TrackSectionStepUtils } from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";

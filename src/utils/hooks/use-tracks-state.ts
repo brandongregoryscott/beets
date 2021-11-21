@@ -3,6 +3,7 @@ import { List } from "immutable";
 import { SetStateAction, useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import _ from "lodash";
+import { intersectionWith } from "utils/collection-utils";
 
 interface UseTracksStateResult {
     add: (track?: TrackRecord) => void;
@@ -33,13 +34,25 @@ const useTracksState = (): UseTracksStateResult => {
 
     const remove = useCallback(
         (track: TrackRecord) =>
-            setCurrentState((prev) =>
-                prev.merge({
-                    tracks: prev.tracks.filter(
-                        (existingTrack) => existingTrack.id !== track.id
-                    ),
-                })
-            ),
+            setCurrentState((prev) => {
+                const updatedTracks = prev.tracks.filter(
+                    (existingTrack) => existingTrack.id !== track.id
+                );
+                const updatedTrackSections = prev.trackSections.filter(
+                    (trackSections) => trackSections.track_id !== track.id
+                );
+                const updatedTrackSectionSteps = intersectionWith(
+                    prev.trackSectionSteps,
+                    updatedTrackSections,
+                    (trackSectionStep, trackSection) =>
+                        trackSectionStep.track_section_id === trackSection.id
+                );
+                return prev.merge({
+                    tracks: updatedTracks,
+                    trackSections: updatedTrackSections,
+                    trackSectionSteps: updatedTrackSectionSteps,
+                });
+            }),
         [setCurrentState]
     );
 
