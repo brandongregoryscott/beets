@@ -3,15 +3,12 @@ import { valueByHash } from "utils/hash-utils";
 import { DefaultEvergreenTheme } from "utils/hooks/use-theme";
 
 const stepColors: Array<keyof DefaultEvergreenTheme["colors"]> = [
-    "blue700",
-    "blue500",
+    "blue200",
     "blue300",
-    "red700",
-    "red600",
-    "red500",
-    "green700",
-    "green500",
     "green300",
+    "orange500",
+    "purple600",
+    "red300",
 ];
 
 const getStepColor = (
