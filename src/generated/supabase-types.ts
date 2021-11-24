@@ -807,6 +807,108 @@ export interface paths {
             };
         };
     };
+    "/rpc/update_track_sections_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_tracks_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_projects_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_files_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_track_section_steps_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_users_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
 }
 
 export interface definitions {

@@ -1,38 +1,25 @@
+import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
-import { HookAction } from "../enums/hook-action";
+import { log } from "../log";
 import {
-    getFromFunctionName,
-    getHookImportPath,
-    getHookName,
-    getHookOptionsInterfaceName,
-    getHookPath,
-    getInterfaceImportPath,
     getInterfaceName,
-    getQueryKey,
-    getRecordImportPath,
+    getInterfaceImportPath,
+    getFromFunctionName,
     getRecordName,
+    getRecordImportPath,
     getRecordSourceFile,
-    getTableName,
-    toKebabCase,
+    getHookOptionsInterfaceName,
+    getHookName,
+    getQueryKey,
+    getHookPath,
 } from "../utils";
-import upath from "upath";
-import { Paths } from "../constants/paths";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
-import { log } from "../log";
+import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
-import _ from "lodash";
+import { Paths } from "../constants/paths";
 
-const {
-    createOrUpdate,
-    id,
-    isNilOrEmpty,
-    isTemporaryId,
-    onError,
-    onSettled,
-    onSuccess,
-    mutateAsync,
-} = Variables;
+const { onError, onSettled, onSuccess, SupabaseClient } = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
@@ -49,7 +36,6 @@ const generateUseCreateOrUpdate = (
         );
         return;
     }
-
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
         recordSourceFile != null
@@ -79,6 +65,11 @@ const generateUseCreateOrUpdate = (
     });
 
     file.addImportDeclaration({
+        namedImports: [SupabaseClient],
+        moduleSpecifier: Paths.supabaseClientImport,
+    });
+
+    file.addImportDeclaration({
         namedImports: [useQueryClient],
         moduleSpecifier: Hooks.useQueryClient.importPath,
     });
@@ -88,28 +79,18 @@ const generateUseCreateOrUpdate = (
         moduleSpecifier: Hooks.useMutation.importPath,
     });
 
-    file.addImportDeclaration({
-        namedImports: [isNilOrEmpty, isTemporaryId],
-        moduleSpecifier: "utils/core-utils",
-    });
-
-    file.addImportDeclaration({
-        namedImports: [getHookName(property, HookAction.Create)],
-        moduleSpecifier: getHookImportPath(property, HookAction.Create),
-    });
-
-    file.addImportDeclaration({
-        namedImports: [getHookName(property, HookAction.Update)],
-        moduleSpecifier: getHookImportPath(property, HookAction.Update),
-    });
-
     file.addInterface({
-        name: `UseCreateOrUpdate${getInterfaceName(property)}Options`,
+        name: getHookOptionsInterfaceName(property, HookAction.CreateOrUpdate),
         properties: [
             {
                 name: onError,
                 hasQuestionToken: true,
                 type: "(error: Error) => void",
+            },
+            {
+                name: onSettled,
+                hasQuestionToken: true,
+                type: "() => void",
             },
             {
                 name: onSuccess,
@@ -143,30 +124,37 @@ const useCreateOrUpdateInitializer = (
 ) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
-    const variableName = _.camelCase(interfaceName);
+    const fromTable = getFromFunctionName(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.CreateOrUpdate
     );
     const returnType = useRecord ? recordName : interfaceName;
-    const useCreate = getHookName(property, HookAction.Create);
-    const useUpdate = getHookName(property, HookAction.Update);
-    const create = `create${interfaceName}`;
-    const update = `update${interfaceName}`;
+    const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
+    const variableName = _.camelCase(interfaceName);
+    const updateValue = useRecord
+        ? `${variableName} instanceof ${recordName} ? ${variableName}.toPOJO() : ${variableName}`
+        : variableName;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
-        const { ${onError}, ${onSuccess} } = options ?? {};
+        const { ${fromTable} } = ${SupabaseClient};
+        const { ${onError}, ${onSettled}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
-        const { ${mutateAsync}: ${create} } = ${useCreate}();
-        const { ${mutateAsync}: ${update} } = ${useUpdate}();
 
+        const update = async (${variableName}: ${interfaceName}) => {
+            const { data, error } = await ${fromTable}()
+                .upsert(${updateValue})
+                .limit(1)
+                .single();
 
-        const ${createOrUpdate} = async (${variableName}: ${interfaceName}) =>
-            ${isNilOrEmpty}(${variableName}.${id}) || ${isTemporaryId}(${variableName}.${id})
-                ? ${create}(${variableName})
-                : ${update}(${variableName})
+            if (error != null) {
+                throw error;
+            }
+
+            return ${returnValue};
+        };
 
         const result = ${useMutation}<${returnType}, Error, ${interfaceName}>({
-            fn: ${createOrUpdate},
+            fn: update,
             ${onSuccess},
             ${onError},
             ${onSettled}: () => {
@@ -174,6 +162,7 @@ const useCreateOrUpdateInitializer = (
                     HookAction.List,
                     property
                 )});
+                ${onSettled}?.();
             },
         });
 

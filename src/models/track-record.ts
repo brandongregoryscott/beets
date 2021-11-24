@@ -1,15 +1,11 @@
 import { Record } from "immutable";
-import { BaseRecord } from "models/base-record";
-import {
-    getTemporaryId,
-    isTemporaryId,
-    makeDefaultValues,
-} from "utils/core-utils";
+import { makeDefaultValues } from "utils/core-utils";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { Track } from "generated/interfaces/track";
 import { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { AuditableRecord } from "models/auditable-record";
+import { generateId } from "utils/id-utils";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
@@ -23,7 +19,7 @@ const defaultValues = makeDefaultValues<Track>({
 });
 
 class TrackRecord
-    extends AuditableRecord(BaseRecord(Record(defaultValues)))
+    extends AuditableRecord(Record(defaultValues))
     implements Track
 {
     constructor(values?: RecordParams<TrackRecord>) {
@@ -34,15 +30,10 @@ class TrackRecord
         }
 
         if (isNilOrEmpty(values?.id)) {
-            const id = getTemporaryId();
-            values = { ...values, id };
+            values = { ...values, id: generateId() };
         }
 
         super(values);
-
-        if (isTemporaryId(this.id)) {
-            this.temporaryId = this.id;
-        }
     }
 }
 

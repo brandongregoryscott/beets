@@ -6,9 +6,7 @@ import { generateSupabaseTypes } from "./generate-supabase-types";
 import { generateTablesEnum } from "./generate-tables-enum";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generateUseGet } from "./hooks/generate-use-get";
-import { generateUseCreate } from "./hooks/generate-use-create";
 import { generateUseDelete } from "./hooks/generate-use-delete";
-import { generateUseUpdate } from "./hooks/generate-use-update";
 import { generateUseCreateOrUpdate } from "./hooks/generate-use-create-or-update";
 import { generateSupabaseClient } from "./generate-supabase-client";
 
@@ -35,9 +33,7 @@ const main = async () => {
         generateInterface(project, property);
         generateUseList(project, property);
         generateUseGet(project, property);
-        generateUseCreate(project, property);
         generateUseDelete(project, property);
-        generateUseUpdate(project, property);
         generateUseCreateOrUpdate(project, property);
     });
 

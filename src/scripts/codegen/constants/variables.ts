@@ -16,6 +16,7 @@ const Variables = keyMirror({
     onSettled: null,
     onSuccess: null,
     resultObject: null,
+    stripTemporaryId: null,
     SupabaseClient: null,
 });
 

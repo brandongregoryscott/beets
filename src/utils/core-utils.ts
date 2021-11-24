@@ -1,7 +1,6 @@
 import { BorderPropsOptions } from "interfaces/border-props-options";
 import { BorderProps } from "interfaces/border-props";
 import { RequiredOrUndefined } from "types/required-or-undefined";
-import * as uuid from "uuid";
 import { List } from "immutable";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
@@ -45,8 +44,6 @@ const getBorderXProps = (options: BorderPropsOptions): BorderProps => {
     return borderProps;
 };
 
-const getTemporaryId = (): string => `temp-${uuid.v4()}`;
-
 const isNilOrEmpty = <T = string | any[] | List<any>>(
     value: T | any[] | List<any> | null | undefined
 ): value is null | undefined => {
@@ -65,8 +62,9 @@ const isNilOrEmpty = <T = string | any[] | List<any>>(
     return value == null;
 };
 
-const isTemporaryId = (value?: string): boolean =>
-    !isNilOrEmpty(value) && value!.startsWith("temp-");
+const isNotNilOrEmpty = <T = string | any[] | List<any>>(
+    value: T | any[] | List<any> | null | undefined
+): value is T => !isNilOrEmpty(value);
 
 const makeDefaultValues = <T>(defaultValues: RequiredOrUndefined<T>): T =>
     defaultValues as T;
@@ -83,9 +81,8 @@ const unixTime = (date?: Date): number =>
 export {
     getBorderYProps,
     getBorderXProps,
-    getTemporaryId,
     isNilOrEmpty,
-    isTemporaryId,
+    isNotNilOrEmpty,
     makeDefaultValues,
     randomFloat,
     randomInt,

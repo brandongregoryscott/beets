@@ -1,7 +1,7 @@
 import { Auditable } from "interfaces/auditable";
+import { BaseRecord } from "models/base-record";
 import { Constructor } from "types/constructor";
-import { isNilOrEmpty } from "utils/collection-utils";
-import { isTemporaryId } from "utils/core-utils";
+import { isPersisted } from "utils/auditable-utils";
 
 /**
  * Mixin class to hold base functionality of auditable Immutable.Record classes
@@ -14,27 +14,13 @@ import { isTemporaryId } from "utils/core-utils";
 function AuditableRecord<TRecord extends Constructor<Auditable>>(
     Base: TRecord
 ) {
-    return class AuditableRecord extends Base {
-        /**
-         * Placeholder id to associate entities before being persisted to the database
-         */
-        protected temporaryId: string | undefined;
-
+    return class AuditableRecord extends BaseRecord(Base) {
         public getUpdatedOn(): string | undefined {
             return this.updated_on ?? this.created_on;
         }
 
-        public getTemporaryId(): string | undefined {
-            return this.temporaryId;
-        }
-
         public isPersisted(): boolean {
-            return !isNilOrEmpty(this.id) && !isTemporaryId(this.id);
-        }
-
-        public setTemporaryId(temporaryId: string | undefined): this {
-            this.temporaryId = temporaryId;
-            return this;
+            return isPersisted(this);
         }
     };
 }

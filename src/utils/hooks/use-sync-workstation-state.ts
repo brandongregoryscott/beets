@@ -5,29 +5,18 @@ import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sect
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
-import { List } from "immutable";
 import { ProjectRecord } from "models/project-record";
-import { TrackRecord } from "models/track-record";
-import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import { hasValues, isNilOrEmpty } from "utils/collection-utils";
-import { isTemporaryId } from "utils/core-utils";
+import { hasValues } from "utils/collection-utils";
 import { useMutation } from "utils/hooks/use-mutation";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { getWorkstationByProjectId } from "utils/queries/get-workstation-by-project-id";
+import { isNotNilOrEmpty } from "utils/core-utils";
 
 interface UseSyncWorkstationState {
     onError?: (error: Error) => void;
     onSuccess?: (resultObject: WorkstationStateRecord) => void;
 }
-
-const MissingProjectIdError = new Error(
-    "ProjectId was not found on new Tracks"
-);
-const UnmatchedTemporaryIdError = new Error(
-    "Entity could not be matched by temporaryId"
-);
 
 const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { onError, onSuccess } = options ?? {};
@@ -53,9 +42,6 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             deletedTrackSectionSteps,
         } = initialState.diff(state);
         let project: ProjectRecord | undefined;
-        let tracks: List<TrackRecord> | undefined;
-        let trackSections: List<TrackSectionRecord> | undefined;
-        let trackSectionSteps: List<TrackSectionStepRecord> | undefined;
 
         if (createdOrUpdatedProject != null) {
             project = await createOrUpdateProject(createdOrUpdatedProject);
@@ -65,33 +51,15 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
             state.project.id,
             initialState.project.id,
             project?.id,
-        ].find((id?: string) => !isNilOrEmpty(id) && !isTemporaryId(id))!;
+        ].find(isNotNilOrEmpty)!;
 
         if (hasValues(createdOrUpdatedTracks)) {
-            tracks = List(createdOrUpdatedTracks);
-
-            const hasMissingProjectIds = tracks.some((track) =>
-                isNilOrEmpty(track.project_id)
+            const tracks = createdOrUpdatedTracks.map((track) =>
+                track.merge({ project_id: projectId })
             );
-            const projectIdFound = !isNilOrEmpty(projectId);
-            if (hasMissingProjectIds && !projectIdFound) {
-                throw MissingProjectIdError;
-            }
 
-            if (hasMissingProjectIds) {
-                tracks = tracks.map((track) =>
-                    track.merge({ project_id: projectId })
-                );
-            }
-
-            tracks = List(
-                await Promise.all(
-                    tracks.map(async (track) => {
-                        const result = await createOrUpdateTrack(track);
-
-                        return result.setTemporaryId(track.getTemporaryId());
-                    })
-                )
+            await Promise.all(
+                tracks.map((track) => createOrUpdateTrack(track))
             );
         }
 
@@ -102,41 +70,9 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
         }
 
         if (hasValues(createdOrUpdatedTrackSections)) {
-            trackSections = List(createdOrUpdatedTrackSections);
-            const hasMissingTrackId = trackSections.some(
-                (trackSection) => !trackSection.hasTrackId()
-            );
-
-            if (hasMissingTrackId) {
-                trackSections = trackSections.map((trackSection) => {
-                    if (trackSection.hasTrackId()) {
-                        return trackSection;
-                    }
-
-                    const originalTrack = tracks?.find(
-                        (track) =>
-                            track.getTemporaryId() === trackSection.track_id
-                    );
-
-                    if (originalTrack == null) {
-                        throw UnmatchedTemporaryIdError;
-                    }
-
-                    return trackSection.merge({ track_id: originalTrack?.id });
-                });
-            }
-
-            trackSections = List(
-                await Promise.all(
-                    trackSections.map(async (trackSection) => {
-                        const result = await createOrUpdateTrackSection(
-                            trackSection
-                        );
-
-                        return result.setTemporaryId(
-                            trackSection.getTemporaryId()
-                        );
-                    })
+            await Promise.all(
+                createdOrUpdatedTrackSections.map((trackSection) =>
+                    createOrUpdateTrackSection(trackSection)
                 )
             );
         }
@@ -150,40 +86,9 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
         }
 
         if (hasValues(createdOrUpdatedTrackSectionSteps)) {
-            trackSectionSteps = List(createdOrUpdatedTrackSectionSteps);
-            const hasMissingTrackSectionId = trackSectionSteps.some(
-                (trackSectionStep) => !trackSectionStep.hasTrackSectionId()
-            );
-
-            if (hasMissingTrackSectionId) {
-                trackSectionSteps = trackSectionSteps.map(
-                    (trackSectionStep) => {
-                        if (trackSectionStep.hasTrackSectionId()) {
-                            return trackSectionStep;
-                        }
-
-                        const originalTrackSection = trackSections?.find(
-                            (trackSection) =>
-                                trackSection.getTemporaryId() ===
-                                trackSectionStep.track_section_id
-                        );
-
-                        if (originalTrackSection == null) {
-                            throw UnmatchedTemporaryIdError;
-                        }
-
-                        return trackSectionStep.merge({
-                            track_section_id: originalTrackSection?.id,
-                        });
-                    }
-                );
-            }
-
-            trackSectionSteps = List(
-                await Promise.all(
-                    trackSectionSteps.map((trackSectionStep) =>
-                        createOrUpdateTrackSectionStep(trackSectionStep)
-                    )
+            await Promise.all(
+                createdOrUpdatedTrackSectionSteps.map((trackSectionStep) =>
+                    createOrUpdateTrackSectionStep(trackSectionStep)
                 )
             );
         }
