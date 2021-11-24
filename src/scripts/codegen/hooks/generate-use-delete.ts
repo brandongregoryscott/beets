@@ -9,6 +9,7 @@ import {
     getTablesEnumValue,
     getQueryKey,
     getHookPath,
+    getInterfaceName,
 } from "../utils";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
@@ -20,9 +21,16 @@ const { id, onError, onSettled, onSuccess, SupabaseClient } = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
+const excludedTypes = ["Pgmigration"];
 
 const generateUseDelete = (project: Project, property: PropertySignature) => {
     const name = getHookName(property, HookAction.Delete);
+    if (excludedTypes.includes(getInterfaceName(property))) {
+        log.warn(
+            `Skipping '${name}' as '${property.getName()}' was in the exclusion list.`
+        );
+        return;
+    }
     const file = project.createSourceFile(
         getHookPath(property, HookAction.Delete),
         undefined,

@@ -26,6 +26,7 @@ const up = (pgm: MigrationBuilder) => {
 
     config.rowLevelSecurity().up();
     config.softDeleteRule().up();
+    config.updateTrigger().up();
 
     config.authenticatedCreatePolicy().up();
     config.updateOwnRecordPolicy().up();
@@ -33,6 +34,9 @@ const up = (pgm: MigrationBuilder) => {
 };
 
 const down = (pgm: MigrationBuilder) => {
+    const config = configure({ pgm, tableName });
+    config.updateTrigger().down();
+
     pgm.dropTable(tableName);
 };
 

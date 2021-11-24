@@ -12,6 +12,11 @@ const up = (pgm: MigrationBuilder) => {
     pgm.createTable(tableName, {
         ...makeAuditableColumns(pgm),
         ...makeIdColumn(pgm),
+        index: {
+            type: "integer",
+            notNull: true,
+            default: 0,
+        },
         name: {
             type: "text",
             notNull: true,
@@ -47,6 +52,7 @@ const up = (pgm: MigrationBuilder) => {
 
     config.rowLevelSecurity().up();
     config.softDeleteRule().up();
+    config.updateTrigger().up();
 
     config.authenticatedCreatePolicy().up();
     config.deleteOwnRecordPolicy().up();
@@ -55,6 +61,9 @@ const up = (pgm: MigrationBuilder) => {
 };
 
 const down = (pgm: MigrationBuilder) => {
+    const config = configure({ pgm, tableName });
+    config.updateTrigger().down();
+
     pgm.dropTable(tableName);
 };
 

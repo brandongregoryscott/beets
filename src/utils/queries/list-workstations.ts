@@ -11,7 +11,7 @@ const listWorkstations = async (): Promise<List<WorkstationStateRecord>> => {
     ] = await Promise.all([
         SupabaseClient.fromProjects()
             .select("*")
-            .order("created_on", { ascending: false }),
+            .order("updated_on", { ascending: false }),
         SupabaseClient.fromTracks().select("*"),
         SupabaseClient.fromTrackSections().select("*"),
         SupabaseClient.fromTrackSectionSteps().select("*"),

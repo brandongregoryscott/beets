@@ -21,10 +21,16 @@ const useTracksState = (): UseTracksStateResult => {
         (track?: TrackRecord) =>
             setCurrentState((prev) =>
                 prev.merge({
-                    tracks: prev.tracks.push(track ?? new TrackRecord()),
+                    tracks: prev.tracks.push(
+                        track ??
+                            new TrackRecord({
+                                index: prev.tracks.count(),
+                                project_id: state.project.id,
+                            })
+                    ),
                 })
             ),
-        [setCurrentState]
+        [setCurrentState, state.project.id]
     );
 
     const get = useCallback(

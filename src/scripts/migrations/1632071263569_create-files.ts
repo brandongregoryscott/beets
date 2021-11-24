@@ -16,7 +16,7 @@ const up = (pgm: MigrationBuilder) => {
             notNull: true,
             primaryKey: true,
         },
-        bucketid: {
+        bucket_id: {
             type: "text",
             references: "storage.buckets",
             notNull: true,
@@ -45,6 +45,7 @@ const up = (pgm: MigrationBuilder) => {
 
     config.rowLevelSecurity().up();
     config.softDeleteRule().up();
+    config.updateTrigger().up();
 
     config.authenticatedCreatePolicy().up();
     config.deleteOwnRecordPolicy().up();
@@ -53,6 +54,9 @@ const up = (pgm: MigrationBuilder) => {
 };
 
 const down = (pgm: MigrationBuilder) => {
+    const config = configure({ pgm, tableName });
+    config.updateTrigger().down();
+
     pgm.dropTable(tableName);
 };
 

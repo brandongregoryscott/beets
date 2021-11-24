@@ -92,7 +92,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     const handleSaveClick = useCallback(
         (closePopover: () => void) => () => {
             if (isProjectOpen) {
-                sync();
+                sync(state);
                 closePopover();
                 return;
             }
@@ -100,7 +100,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             handleOpenSaveProjectDialog();
             closePopover();
         },
-        [isProjectOpen, handleOpenSaveProjectDialog, sync]
+        [isProjectOpen, handleOpenSaveProjectDialog, state, sync]
     );
 
     const handleRevertClick = useCallback(

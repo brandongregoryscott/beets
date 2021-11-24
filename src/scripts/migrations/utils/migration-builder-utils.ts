@@ -14,6 +14,18 @@ interface Migration {
 }
 
 const notDeleted = "deleted_on is null";
+const updateTriggerSql = `
+
+    BEGIN
+
+    NEW.${auditableColumns.updated_on} := current_timestamp;
+    NEW.${auditableColumns.updated_by_id} := auth.uid();
+
+    RETURN NEW;
+
+    END;
+
+`;
 
 const authenticatedCreatePolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
@@ -98,6 +110,31 @@ const softDeleteRule =
         };
     };
 
+const updateTrigger =
+    (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
+        const triggerName = `update_${tableName}_auditable_fields`;
+        return {
+            down: () => {
+                pgm.dropTrigger(tableName, triggerName);
+                pgm.dropFunction(triggerName, []);
+            },
+            policyOrRuleName: triggerName,
+            up: () =>
+                pgm.createTrigger(
+                    tableName,
+                    triggerName,
+                    {
+                        when: "BEFORE",
+                        operation: "UPDATE",
+                        level: "ROW",
+                        language: "plpgsql",
+                        replace: true,
+                    },
+                    updateTriggerSql
+                ),
+        };
+    };
+
 const updateOwnRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
         const policyName = q("Users can update their own records.");
@@ -121,14 +158,6 @@ const uniqueNonDeletedIndex =
     (column: string, options?: { dropFkConstraint: boolean }): Migration => {
         const dropFkConstraint = options?.dropFkConstraint ?? false;
         const constraint = `${tableName}_${column}_fkey`;
-        if (dropFkConstraint) {
-            pgm.dropConstraint(tableName, constraint);
-        }
-
-        pgm.addIndex(tableName, [column, auditableColumns.deleted_on], {
-            unique: true,
-            where: notDeleted,
-        });
 
         return {
             down: () => {
@@ -141,10 +170,7 @@ const uniqueNonDeletedIndex =
             },
             up: () => {
                 if (dropFkConstraint) {
-                    pgm.dropConstraint(
-                        tableName,
-                        `${tableName}_${column}_fkey`
-                    );
+                    pgm.dropConstraint(tableName, constraint);
                 }
 
                 pgm.addIndex(tableName, [column, auditableColumns.deleted_on], {
@@ -166,6 +192,7 @@ const configure = (options: MigrationBuilderUtilsOptions) => {
         rowLevelSecurity: rowLevelSecurity(pgm, tableName),
         softDeleteRule: softDeleteRule(pgm, tableName),
         updateOwnRecordPolicy: updateOwnRecordPolicy(pgm, tableName),
+        updateTrigger: updateTrigger(pgm, tableName),
         uniqueNonDeletedIndex: uniqueNonDeletedIndex(pgm, tableName),
     };
 };

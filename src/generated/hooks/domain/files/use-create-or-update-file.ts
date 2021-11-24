@@ -1,29 +1,35 @@
 import { FileRecord } from "models/file-record";
 import { File } from "generated/interfaces/file";
 import { Tables } from "generated/enums/tables";
+import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
-import { isNilOrEmpty, isTemporaryId } from "utils/core-utils";
-import { useCreateFile } from "generated/hooks/domain/files/use-create-file";
-import { useUpdateFile } from "generated/hooks/domain/files/use-update-file";
 
 interface UseCreateOrUpdateFileOptions {
     onError?: (error: Error) => void;
+    onSettled?: () => void;
     onSuccess?: (resultObject: FileRecord) => void;
 }
 
 const useCreateOrUpdateFile = (
     options?: UseCreateOrUpdateFileOptions
 ): UseMutationResult<FileRecord, Error, File> => {
-    const { onError, onSuccess } = options ?? {};
+    const { fromFiles } = SupabaseClient;
+    const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
-    const { mutateAsync: createFile } = useCreateFile();
-    const { mutateAsync: updateFile } = useUpdateFile();
 
-    const createOrUpdate = async (file: File) =>
-        isNilOrEmpty(file.id) || isTemporaryId(file.id)
-            ? createFile(file)
-            : updateFile(file);
+    const createOrUpdate = async (file: File) => {
+        const { data, error } = await fromFiles()
+            .upsert(file instanceof FileRecord ? file.toPOJO() : file)
+            .limit(1)
+            .single();
+
+        if (error != null) {
+            throw error;
+        }
+
+        return new FileRecord(data!);
+    };
 
     const result = useMutation<FileRecord, Error, File>({
         fn: createOrUpdate,
@@ -31,6 +37,7 @@ const useCreateOrUpdateFile = (
         onError,
         onSettled: () => {
             queryClient.invalidateQueries(["List", Tables.Files]);
+            onSettled?.();
         },
     });
 

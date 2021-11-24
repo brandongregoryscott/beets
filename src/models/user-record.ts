@@ -1,8 +1,8 @@
 import { User } from "generated/interfaces/user";
 import { Record } from "immutable";
-import { BaseRecord } from "models/base-record";
 import { RecordParams } from "types/record-params";
 import { makeDefaultValues } from "utils/core-utils";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<User>({
     id: "",
@@ -15,7 +15,10 @@ const defaultValues = makeDefaultValues<User>({
     updated_by_id: undefined,
 });
 
-class UserRecord extends BaseRecord(Record(defaultValues)) implements User {
+class UserRecord
+    extends AuditableRecord(Record(defaultValues))
+    implements User
+{
     constructor(values?: RecordParams<UserRecord>) {
         super(values ?? defaultValues);
     }

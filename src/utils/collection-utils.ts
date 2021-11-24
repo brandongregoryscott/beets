@@ -1,11 +1,11 @@
 import { List, Record } from "immutable";
 import { Auditable } from "interfaces/auditable";
-import { Entity } from "interfaces/entity";
 import _ from "lodash";
 import { Grouping } from "types/grouping";
-import { isTemporaryId, isNilOrEmpty } from "utils/core-utils";
+import { isPersisted } from "utils/auditable-utils";
+import { isNilOrEmpty } from "utils/core-utils";
 
-const diffDeletedEntities = <T extends Entity>(
+const diffDeletedEntities = <T extends Auditable>(
     initialValues: List<T>,
     values: List<T>
 ): List<T> =>
@@ -15,7 +15,7 @@ const diffDeletedEntities = <T extends Entity>(
             values.toArray(),
             (a, b) => a.id === b.id
             // No need to delete entities that were never persisted
-        ).filter((entities) => !isTemporaryId(entities.id))
+        ).filter(isPersisted)
     );
 
 const diffUpdatedEntities = <T extends Auditable>(
@@ -24,10 +24,9 @@ const diffUpdatedEntities = <T extends Auditable>(
 ): List<T> =>
     List(
         _.differenceWith(values.toArray(), initialValues.toArray(), (a, b) => {
-            const isNew = isTemporaryId(a.id);
             const isDifferent =
                 Record.isRecord(a) && Record.isRecord(b) && !a.equals(b);
-            if (isNew || isDifferent) {
+            if (!isPersisted(a) || isDifferent) {
                 return false; // Returning 'false' marks it as different/updated
             }
 
@@ -116,7 +115,6 @@ export {
     initializeList,
     intersectionWith,
     isNilOrEmpty,
-    isTemporaryId,
     mapTo,
     sortByIndex,
 };

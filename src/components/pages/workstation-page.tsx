@@ -1,4 +1,4 @@
-import { Song } from "components/song";
+import { SongControls } from "components/song-controls";
 import { TrackList } from "components/track-list";
 import { majorScale, Pane } from "evergreen-ui";
 
@@ -9,9 +9,9 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 ) => {
     return (
         <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
-            <Song>
+            <SongControls>
                 <TrackList />
-            </Song>
+            </SongControls>
         </Pane>
     );
 };

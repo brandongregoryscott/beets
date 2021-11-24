@@ -1,17 +1,15 @@
 import { Record } from "immutable";
-import { BaseRecord } from "models/base-record";
-import {
-    getTemporaryId,
-    isTemporaryId,
-    makeDefaultValues,
-} from "utils/core-utils";
+import { makeDefaultValues } from "utils/core-utils";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { Track } from "generated/interfaces/track";
 import { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
+import { AuditableRecord } from "models/auditable-record";
+import { generateId } from "utils/id-utils";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
+    index: 0,
     mute: false,
     name: "New Track",
     pan: 0,
@@ -20,9 +18,10 @@ const defaultValues = makeDefaultValues<Track>({
     volume: 0,
 });
 
-class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
-    private temporaryId: string | undefined;
-
+class TrackRecord
+    extends AuditableRecord(Record(defaultValues))
+    implements Track
+{
     constructor(values?: RecordParams<TrackRecord>) {
         values = values ?? defaultValues;
 
@@ -31,24 +30,10 @@ class TrackRecord extends BaseRecord(Record(defaultValues)) implements Track {
         }
 
         if (isNilOrEmpty(values?.id)) {
-            const id = getTemporaryId();
-            values = { ...values, id };
+            values = { ...values, id: generateId() };
         }
 
         super(values);
-
-        if (isTemporaryId(this.id)) {
-            this.temporaryId = this.id;
-        }
-    }
-
-    public getTemporaryId(): string | undefined {
-        return this.temporaryId;
-    }
-
-    public setTemporaryId(temporaryId: string | undefined): TrackRecord {
-        this.temporaryId = temporaryId;
-        return this;
     }
 }
 

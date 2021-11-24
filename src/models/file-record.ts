@@ -2,15 +2,15 @@ import { List, Record as ImmutableRecord } from "immutable";
 import { File } from "generated/interfaces/file";
 import { makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
-import { BaseRecord } from "models/base-record";
 import { SelectMenuItem } from "components/select-menu";
 import { MidiNote } from "reactronica";
 import { MidiNotes } from "constants/midi-notes";
 import { valueByHash } from "utils/hash-utils";
 import { FileUtils } from "utils/file-utils";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<File>({
-    bucketid: "",
+    bucket_id: "",
     created_by_id: undefined,
     created_on: undefined,
     deleted_by_id: undefined,
@@ -26,7 +26,7 @@ const defaultValues = makeDefaultValues<File>({
 });
 
 class FileRecord
-    extends BaseRecord(ImmutableRecord(defaultValues))
+    extends AuditableRecord(ImmutableRecord(defaultValues))
     implements File
 {
     public static toMidiNoteMap(
@@ -68,7 +68,7 @@ class FileRecord
 
     public getPublicUrl(): string {
         const { REACT_APP_SUPABASE_STORAGE_PUBLIC_URL: publicUrl } = env;
-        return `${publicUrl}/${this.bucketid}/${this.getPath()}`;
+        return `${publicUrl}/${this.bucket_id}/${this.getPath()}`;
     }
 }
 
