@@ -7,7 +7,6 @@ const Variables = keyMirror({
     env: null,
     id: null,
     isNilOrEmpty: null,
-    isTemporaryId: null,
     enabled: null,
     defaultFilter: null,
     filter: null,
@@ -16,7 +15,6 @@ const Variables = keyMirror({
     onSettled: null,
     onSuccess: null,
     resultObject: null,
-    stripTemporaryId: null,
     SupabaseClient: null,
 });
 

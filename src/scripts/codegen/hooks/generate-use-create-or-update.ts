@@ -19,7 +19,8 @@ import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
 import { Paths } from "../constants/paths";
 
-const { onError, onSettled, onSuccess, SupabaseClient } = Variables;
+const { createOrUpdate, onError, onSettled, onSuccess, SupabaseClient } =
+    Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
@@ -132,7 +133,7 @@ const useCreateOrUpdateInitializer = (
     const returnType = useRecord ? recordName : interfaceName;
     const returnValue = !useRecord ? "data!" : `new ${recordName}(data!)`;
     const variableName = _.camelCase(interfaceName);
-    const updateValue = useRecord
+    const upsertValue = useRecord
         ? `${variableName} instanceof ${recordName} ? ${variableName}.toPOJO() : ${variableName}`
         : variableName;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
@@ -140,9 +141,9 @@ const useCreateOrUpdateInitializer = (
         const { ${onError}, ${onSettled}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
 
-        const update = async (${variableName}: ${interfaceName}) => {
+        const ${createOrUpdate} = async (${variableName}: ${interfaceName}) => {
             const { data, error } = await ${fromTable}()
-                .upsert(${updateValue})
+                .upsert(${upsertValue})
                 .limit(1)
                 .single();
 
@@ -154,7 +155,7 @@ const useCreateOrUpdateInitializer = (
         };
 
         const result = ${useMutation}<${returnType}, Error, ${interfaceName}>({
-            fn: update,
+            fn: ${createOrUpdate},
             ${onSuccess},
             ${onError},
             ${onSettled}: () => {

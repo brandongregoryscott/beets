@@ -1,7 +1,6 @@
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { TrackSection } from "generated/interfaces/track-section";
 import { Record } from "immutable";
-import { BaseRecord } from "models/base-record";
 import { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
@@ -16,7 +15,7 @@ const defaultValues = makeDefaultValues<TrackSection>({
 });
 
 class TrackSectionRecord
-    extends AuditableRecord(BaseRecord(Record(defaultValues)))
+    extends AuditableRecord(Record(defaultValues))
     implements TrackSection
 {
     constructor(values?: RecordParams<TrackSectionRecord>) {
@@ -31,10 +30,6 @@ class TrackSectionRecord
         }
 
         super(values);
-    }
-
-    public hasTrackId(): boolean {
-        return !isNilOrEmpty(this.track_id);
     }
 }
 

@@ -2,7 +2,6 @@ import { List, Record as ImmutableRecord } from "immutable";
 import { File } from "generated/interfaces/file";
 import { makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
-import { BaseRecord } from "models/base-record";
 import { SelectMenuItem } from "components/select-menu";
 import { MidiNote } from "reactronica";
 import { MidiNotes } from "constants/midi-notes";
@@ -27,7 +26,7 @@ const defaultValues = makeDefaultValues<File>({
 });
 
 class FileRecord
-    extends AuditableRecord(BaseRecord(ImmutableRecord(defaultValues)))
+    extends AuditableRecord(ImmutableRecord(defaultValues))
     implements File
 {
     public static toMidiNoteMap(
