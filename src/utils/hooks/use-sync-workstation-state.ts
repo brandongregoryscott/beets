@@ -29,9 +29,9 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
     const { mutateAsync: deleteTrack } = useDeleteTrack();
     const { mutateAsync: deleteTrackSection } = useDeleteTrackSection();
     const { mutateAsync: deleteTrackSectionStep } = useDeleteTrackSectionStep();
-    const { initialState, state } = useWorkstationState();
+    const { initialState } = useWorkstationState();
 
-    const sync = async () => {
+    const sync = async (state: WorkstationStateRecord) => {
         const {
             createdOrUpdatedProject,
             createdOrUpdatedTracks,

@@ -6,10 +6,10 @@ import {
     toaster,
 } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import React, { ChangeEvent, useCallback, useState } from "react";
-import { isNilOrEmpty } from "utils/collection-utils";
+import React, { useState } from "react";
+import { useInput } from "rooks";
+import { isNilOrEmpty } from "utils/core-utils";
 import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
-import { useProjectState } from "utils/hooks/use-project-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface SaveProjectDialogProps
@@ -21,24 +21,18 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     props: SaveProjectDialogProps
 ) => {
     const { isShown, onCloseComplete } = props;
-    const { setState: setWorkstationState } = useWorkstationState();
-    const { state, setCurrentState } = useProjectState();
+    const { state, setState } = useWorkstationState();
     const title = "New Project";
+    const { value: name, onChange } = useInput();
     const [validationMessage, setValidationMessage] = useState<
         string | undefined
     >(undefined);
-
-    const handleChangeName = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) =>
-            setCurrentState((prev) => prev.merge({ name: event.target.value })),
-        [setCurrentState]
-    );
 
     const handleSuccess = (workstationState: WorkstationStateRecord) => {
         toaster.success(
             `Successfully created Project '${workstationState.project.name}'`
         );
-        setWorkstationState(workstationState);
+        setState(workstationState);
         onCloseComplete?.();
     };
 
@@ -47,7 +41,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     });
 
     const validate = (): boolean => {
-        if (isNilOrEmpty(state.name)) {
+        if (isNilOrEmpty(name)) {
             setValidationMessage(ERROR_NAME_IS_REQUIRED);
             return false;
         }
@@ -61,7 +55,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             return;
         }
 
-        mutate();
+        mutate(state.merge({ project: state.project.merge({ name }) }));
     };
 
     return (
@@ -75,9 +69,9 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             title={title}>
             <TextInputField
                 label="Name"
-                onChange={handleChangeName}
+                onChange={onChange}
                 required={true}
-                value={state.name}
+                value={name}
                 isInvalid={validationMessage != null}
                 validationMessage={validationMessage}
             />
