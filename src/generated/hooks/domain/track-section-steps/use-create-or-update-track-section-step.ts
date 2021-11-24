@@ -18,7 +18,7 @@ const useCreateOrUpdateTrackSectionStep = (
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
-    const update = async (trackSectionStep: TrackSectionStep) => {
+    const createOrUpdate = async (trackSectionStep: TrackSectionStep) => {
         const { data, error } = await fromTrackSectionSteps()
             .upsert(
                 trackSectionStep instanceof TrackSectionStepRecord
@@ -37,7 +37,7 @@ const useCreateOrUpdateTrackSectionStep = (
 
     const result = useMutation<TrackSectionStepRecord, Error, TrackSectionStep>(
         {
-            fn: update,
+            fn: createOrUpdate,
             onSuccess,
             onError,
             onSettled: () => {

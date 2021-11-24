@@ -18,7 +18,7 @@ const useCreateOrUpdateUser = (
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
-    const update = async (user: User) => {
+    const createOrUpdate = async (user: User) => {
         const { data, error } = await fromUsers()
             .upsert(user instanceof UserRecord ? user.toPOJO() : user)
             .limit(1)
@@ -32,7 +32,7 @@ const useCreateOrUpdateUser = (
     };
 
     const result = useMutation<UserRecord, Error, User>({
-        fn: update,
+        fn: createOrUpdate,
         onSuccess,
         onError,
         onSettled: () => {

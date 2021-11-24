@@ -18,7 +18,7 @@ const useCreateOrUpdateTrack = (
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
-    const update = async (track: Track) => {
+    const createOrUpdate = async (track: Track) => {
         const { data, error } = await fromTracks()
             .upsert(track instanceof TrackRecord ? track.toPOJO() : track)
             .limit(1)
@@ -32,7 +32,7 @@ const useCreateOrUpdateTrack = (
     };
 
     const result = useMutation<TrackRecord, Error, Track>({
-        fn: update,
+        fn: createOrUpdate,
         onSuccess,
         onError,
         onSettled: () => {

@@ -18,7 +18,7 @@ const useCreateOrUpdateProject = (
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
-    const update = async (project: Project) => {
+    const createOrUpdate = async (project: Project) => {
         const { data, error } = await fromProjects()
             .upsert(
                 project instanceof ProjectRecord ? project.toPOJO() : project
@@ -34,7 +34,7 @@ const useCreateOrUpdateProject = (
     };
 
     const result = useMutation<ProjectRecord, Error, Project>({
-        fn: update,
+        fn: createOrUpdate,
         onSuccess,
         onError,
         onSettled: () => {

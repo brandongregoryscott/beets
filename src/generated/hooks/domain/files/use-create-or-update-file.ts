@@ -18,7 +18,7 @@ const useCreateOrUpdateFile = (
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
-    const update = async (file: File) => {
+    const createOrUpdate = async (file: File) => {
         const { data, error } = await fromFiles()
             .upsert(file instanceof FileRecord ? file.toPOJO() : file)
             .limit(1)
@@ -32,7 +32,7 @@ const useCreateOrUpdateFile = (
     };
 
     const result = useMutation<FileRecord, Error, File>({
-        fn: update,
+        fn: createOrUpdate,
         onSuccess,
         onError,
         onSettled: () => {
