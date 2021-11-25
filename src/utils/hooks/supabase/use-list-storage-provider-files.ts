@@ -35,7 +35,7 @@ const useListStorageProviderFiles = (
 
     const listQuery = useQuery<StorageProviderFileRecord[], Error>({
         enabled,
-        key: storageProviderFilesKey(),
+        key: [storageProviderFilesKey(), bucketName, path, sortBy],
         fn: async () => {
             const listResult = await bucket.list(path, {
                 sortBy,

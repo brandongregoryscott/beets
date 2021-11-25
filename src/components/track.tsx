@@ -112,7 +112,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                 </Pane>
                 <ReactronicaTrack mute={mute} solo={solo} steps={steps}>
                     <Instrument
-                        samples={FileRecord.toMidiNoteMap(List(files))}
+                        samples={FileRecord.toMidiNoteMap(files ?? List())}
                         type="sampler"
                     />
                 </ReactronicaTrack>
