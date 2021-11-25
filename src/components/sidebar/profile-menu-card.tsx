@@ -7,6 +7,8 @@ import {
     Popover,
     Position,
 } from "evergreen-ui";
+import { useRouteMatch } from "react-router";
+import { Sitemap } from "sitemap";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTheme } from "utils/hooks/use-theme";
@@ -23,7 +25,14 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
         setTrue: handleOpen,
         setFalse: handleClose,
     } = useBoolean(false);
-    const background = isOpen ? theme.colors.gray300 : theme.colors.gray100;
+    const isLoginOrRegisterRoute =
+        useRouteMatch([Sitemap.login, Sitemap.register])?.isExact ?? false;
+
+    const background =
+        isOpen || isLoginOrRegisterRoute
+            ? theme.colors.gray300
+            : theme.colors.gray100;
+
     return (
         <Popover
             content={({ close: handleClosePopover }) => (
