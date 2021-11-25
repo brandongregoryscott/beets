@@ -3,6 +3,7 @@ import { Record } from "immutable";
 import { RecordParams } from "types/record-params";
 import { makeDefaultValues } from "utils/core-utils";
 import { AuditableRecord } from "models/auditable-record";
+import { SupabaseUser } from "types/supabase-user";
 
 const defaultValues = makeDefaultValues<User>({
     id: "",
@@ -21,6 +22,19 @@ class UserRecord
 {
     constructor(values?: RecordParams<UserRecord>) {
         super(values ?? defaultValues);
+    }
+
+    public static fromSupabaseUser(supabaseUser: SupabaseUser): UserRecord {
+        const { created_at, updated_at, id, email } = supabaseUser;
+        return new UserRecord({
+            ...defaultValues,
+            created_on: created_at,
+            created_by_id: id,
+            email,
+            id,
+            updated_on: updated_at,
+            updated_by_id: id,
+        });
     }
 }
 

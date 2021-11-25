@@ -10,7 +10,6 @@ import {
 import { useRouteMatch } from "react-router";
 import { Sitemap } from "sitemap";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface ProfileMenuCardProps {}
@@ -19,12 +18,12 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     props: ProfileMenuCardProps
 ) => {
     const theme = useTheme();
-    const { globalState } = useGlobalState();
     const {
         value: isOpen,
         setTrue: handleOpen,
         setFalse: handleClose,
     } = useBoolean(false);
+
     const isLoginOrRegisterRoute =
         useRouteMatch([Sitemap.login, Sitemap.register])?.isExact ?? false;
 
@@ -36,10 +35,7 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     return (
         <Popover
             content={({ close: handleClosePopover }) => (
-                <ProfileMenu
-                    isAuthenticated={globalState.isAuthenticated()}
-                    onClose={handleClosePopover}
-                />
+                <ProfileMenu onClose={handleClosePopover} />
             )}
             onClose={handleClose}
             onOpen={handleOpen}

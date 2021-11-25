@@ -8,7 +8,9 @@ import { SupabaseUser } from "types/supabase-user";
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useLocalstorage } from "utils/hooks/use-local-storage";
-import { useGetUser } from "utils/hooks/domain/users/use-get-user";
+import { useCreateOrUpdateUser } from "generated/hooks/domain/users/use-create-or-update-user";
+import { UserRecord } from "models/user-record";
+import { toaster } from "evergreen-ui";
 
 interface LocalStorageSession {
     currentSession: {
@@ -25,11 +27,33 @@ interface LocalStorageSession {
 const useSubscribeToAuthStatus = () => {
     const auth = useAuth();
     const { globalState, setGlobalState } = useGlobalState();
-    const [session] = useLocalstorage<LocalStorageSession>(
+    const [localStorageSession] = useLocalstorage<LocalStorageSession>(
         "supabase.auth.token"
     );
-    const { resultObject: user } = useGetUser(globalState.supabaseUser?.id);
+
+    const { mutate: createOrUpdateUser } = useCreateOrUpdateUser();
     const history = useHistory();
+
+    const setUserFromSession = useCallback(
+        (session: Session | null) => {
+            if (session == null || session.user == null) {
+                setGlobalState((prev) =>
+                    prev.merge({ supabaseUser: undefined, user: undefined })
+                );
+
+                return;
+            }
+
+            const { user } = session;
+            setGlobalState((prev: GlobalStateRecord) =>
+                prev.merge({
+                    user: UserRecord.fromSupabaseUser(user),
+                    supabaseUser: new SupabaseUserRecord(user),
+                })
+            );
+        },
+        [setGlobalState]
+    );
 
     const handleAuthStateChange = useCallback(
         (event: AuthChangeEvent, session: Session | null) => {
@@ -38,10 +62,9 @@ const useSubscribeToAuthStatus = () => {
             }
 
             if (event === "SIGNED_OUT") {
-                setGlobalState((prev) =>
-                    prev.merge({ supabaseUser: undefined, user: undefined })
-                );
-                history.push(Sitemap.home);
+                toaster.notify("You were signed out.");
+                setUserFromSession(null);
+                history.push(Sitemap.login);
                 return;
             }
 
@@ -49,16 +72,15 @@ const useSubscribeToAuthStatus = () => {
                 return;
             }
 
-            const { user } = session;
-            setGlobalState((prev: GlobalStateRecord) =>
-                prev.merge({
-                    supabaseUser: new SupabaseUserRecord(user),
-                })
-            );
+            const { user: supabaseUser } = session;
 
+            // Ensure user is persisted on our side
+            const user = UserRecord.fromSupabaseUser(supabaseUser);
+            createOrUpdateUser(user);
+            setUserFromSession(session);
             history.push(Sitemap.home);
         },
-        [history, setGlobalState]
+        [createOrUpdateUser, history, setUserFromSession]
     );
 
     useEffect(() => {
@@ -68,52 +90,9 @@ const useSubscribeToAuthStatus = () => {
         return authStateListener?.unsubscribe;
     }, [auth, handleAuthStateChange, setGlobalState]);
 
-    useEffect(() => {
-        setGlobalState((prev: GlobalStateRecord) => {
-            let updated = prev;
-            if (prev.user != null && user == null) {
-                updated = updated.merge({ user: undefined });
-            }
-
-            if (prev.user == null && user != null) {
-                updated = updated.merge({ user });
-            }
-
-            return updated;
-        });
-    }, [user, setGlobalState]);
-
-    useEffect(() => {
-        if (session == null) {
-            setGlobalState((prev: GlobalStateRecord) =>
-                prev.merge({ supabaseUser: undefined, user: undefined })
-            );
-            return;
-        }
-
-        setGlobalState((prev: GlobalStateRecord) => {
-            let updated = prev;
-
-            const { currentSession } = session;
-            if (currentSession?.user == null) {
-                return prev;
-            }
-
-            const { user: supabaseUser } = currentSession;
-
-            if (prev.supabaseUser != null && supabaseUser == null) {
-                updated = updated.merge({ supabaseUser: undefined });
-            }
-
-            if (prev.supabaseUser == null && supabaseUser != null) {
-                updated = updated.merge({
-                    supabaseUser: new SupabaseUserRecord(supabaseUser),
-                });
-            }
-
-            return updated;
-        });
-    }, [session, setGlobalState]);
+    if (!globalState.isAuthenticated() && localStorageSession != null) {
+        setUserFromSession(localStorageSession.currentSession);
+    }
 };
 
 export { useSubscribeToAuthStatus };
