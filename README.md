@@ -1,6 +1,7 @@
 # beets 🥁 🎛️ 🎹
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/577171ad-5dab-42f6-9f2e-8a4088452771/deploy-status)](https://app.netlify.com/sites/beets/deploys)
+![build status](https://github.com/brandongregoryscott/beets/actions/workflows/build.yaml/badge.svg)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
