@@ -7,6 +7,13 @@ create policy "Users can delete their own records." on storage.objects for delet
 create policy "Users can read their own records." on storage.objects for
 select
     using (
-        auth.uid() = owner
-        and (storage.foldername(name)) [1] = auth.uid()
-    );
+        (
+            auth.uid() = owner
+            and (storage.foldername(name)) [1] = auth.uid() :: text
+        )
+        or (
+            owner is null
+            and (storage.foldername(name)) [1] = 'public'
+        )
+    )
+);

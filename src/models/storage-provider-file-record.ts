@@ -4,14 +4,15 @@ import { BaseRecord } from "models/base-record";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<StorageProviderFile>({
-    bucket_id: "",
-    buckets: undefined,
     created_at: "",
     id: "",
     last_accessed_at: "",
-    metadata: {},
+    metadata: {
+        cacheControl: "",
+        mimetype: "",
+        size: 0,
+    },
     name: "",
-    owner: "",
     updated_at: "",
     signedURL: undefined,
 });

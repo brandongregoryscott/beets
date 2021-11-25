@@ -1,14 +1,13 @@
-import { Bucket } from "interfaces/supabase/bucket";
-
 interface StorageProviderFile {
-    bucket_id: string;
-    buckets?: Bucket;
     created_at: string;
     id: string;
     last_accessed_at: string;
-    metadata: {};
+    metadata: {
+        cacheControl: string;
+        mimetype: string;
+        size: number;
+    };
     name: string;
-    owner: string;
     updated_at: string;
 
     // Navigation Properties

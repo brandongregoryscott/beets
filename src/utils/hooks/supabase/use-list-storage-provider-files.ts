@@ -10,7 +10,10 @@ import { storageProviderFilesKey } from "utils/query-key-utils";
 
 interface UseListStorageProviderFilesOptions {
     bucketName: BucketName;
+    enabled?: boolean;
     includeSignedUrl?: boolean;
+    onError?: (error: Error) => void;
+    onSuccess?: (resultObjects: StorageProviderFileRecord[]) => void;
     path?: string;
     sortBy?: SortOptions<StorageProviderFile>;
 }
@@ -18,10 +21,20 @@ interface UseListStorageProviderFilesOptions {
 const useListStorageProviderFiles = (
     options: UseListStorageProviderFilesOptions
 ): UseQueryResult<StorageProviderFileRecord[], Error> => {
-    const { bucketName, includeSignedUrl, path, sortBy } = options;
+    const {
+        bucketName,
+        enabled,
+        includeSignedUrl,
+        onError,
+        onSuccess,
+        path,
+        sortBy,
+    } = options;
     const { storage } = useStorageProvider();
     const bucket = storage.from(bucketName);
+
     const listQuery = useQuery<StorageProviderFileRecord[], Error>({
+        enabled,
         key: storageProviderFilesKey(),
         fn: async () => {
             const listResult = await bucket.list(path, {
@@ -54,6 +67,8 @@ const useListStorageProviderFiles = (
 
             return mapTo(signedUrlPromises, StorageProviderFileRecord);
         },
+        onError,
+        onSuccess,
     });
 
     return { ...listQuery };

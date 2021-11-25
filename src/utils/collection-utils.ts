@@ -98,11 +98,16 @@ const intersectionWith = <TLeft, TRight>(
 const mapTo = <TSource, TDestination>(
     collection: Array<TSource> | List<TSource>,
     constructor: new (...args: any[]) => TDestination
-) =>
+): TDestination[] =>
     _.map<TSource, TDestination>(
         List.isList(collection) ? collection.toArray() : collection,
         (source) => new constructor(source)
     );
+
+const mapToList = <TSource, TDestination>(
+    collection: Array<TSource> | List<TSource>,
+    constructor: new (...args: any[]) => TDestination
+): List<TDestination> => List(mapTo(collection, constructor));
 
 const sortByIndex = <T extends { index: number }>(values: List<T>): List<T> =>
     values.sortBy((value) => value.index);
@@ -116,5 +121,6 @@ export {
     intersectionWith,
     isNilOrEmpty,
     mapTo,
+    mapToList,
     sortByIndex,
 };

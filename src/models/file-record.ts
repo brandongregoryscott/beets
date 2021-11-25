@@ -1,6 +1,6 @@
 import { List, Record as ImmutableRecord } from "immutable";
 import { File } from "generated/interfaces/file";
-import { makeDefaultValues } from "utils/core-utils";
+import { isNilOrEmpty, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
 import { SelectMenuItem } from "components/select-menu";
 import { MidiNote } from "reactronica";
@@ -8,6 +8,8 @@ import { MidiNotes } from "constants/midi-notes";
 import { valueByHash } from "utils/hash-utils";
 import { FileUtils } from "utils/file-utils";
 import { AuditableRecord } from "models/auditable-record";
+import { BucketName } from "enums/bucket-name";
+import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 
 const defaultValues = makeDefaultValues<File>({
     bucket_id: "",
@@ -29,6 +31,24 @@ class FileRecord
     extends AuditableRecord(ImmutableRecord(defaultValues))
     implements File
 {
+    public static fromStorageProvderFile(
+        storageProviderFile: StorageProviderFileRecord,
+        bucket: BucketName,
+        path?: string
+    ): FileRecord {
+        const { name } = storageProviderFile;
+        return new FileRecord({
+            bucket_id: bucket,
+            created_on: storageProviderFile.created_at,
+            id: storageProviderFile.id,
+            name,
+            path: isNilOrEmpty(path) ? name : `${path}/${name}`,
+            size: storageProviderFile.metadata?.size,
+            type: storageProviderFile.metadata?.mimetype,
+            updated_on: storageProviderFile.updated_at,
+        });
+    }
+
     public static toMidiNoteMap(
         files: List<FileRecord>
     ): Record<MidiNote, string> {
@@ -63,6 +83,10 @@ class FileRecord
     }
 
     public getPath(): string {
+        if (isNilOrEmpty(this.created_by_id)) {
+            return this.path;
+        }
+
         return `${this.created_by_id}/${this.path}`;
     }
 

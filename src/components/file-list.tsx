@@ -4,8 +4,8 @@ import { Pane } from "evergreen-ui";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
 import { FileListItem } from "components/file-list-item";
 import { useGlobalState } from "utils/hooks/use-global-state";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { groupBy } from "utils/collection-utils";
+import { useListFiles } from "generated/hooks/domain/files/use-list-files";
 
 interface FileListProps {
     bucketName: BucketName;

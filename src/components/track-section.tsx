@@ -54,11 +54,10 @@ const TrackSection: React.FC<TrackSectionProps> = (
         setState: handleTrackSectionStepsChange,
         state: trackSectionSteps,
     } = useTrackSectionStepsState({ trackSectionId: trackSection.id });
-
-    const groupedTrackSectionSteps = trackSectionSteps.groupBy((e) => e.index);
-
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
+
+    const groupedTrackSectionSteps = trackSectionSteps.groupBy((e) => e.index);
 
     const handleRemove = useCallback(() => {
         remove(trackSection);
@@ -137,7 +136,7 @@ const TrackSection: React.FC<TrackSectionProps> = (
             </Pane>
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
-                    files={List(files)}
+                    files={files}
                     onStepChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}
                     onClose={handleCloseSequencerDialog}

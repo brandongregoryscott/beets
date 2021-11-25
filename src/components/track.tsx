@@ -23,8 +23,8 @@ import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { TrackSectionStepUtils } from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { FileRecord } from "models/file-record";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { List } from "immutable";
+import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 
 interface TrackProps {
     track: TrackRecord;
@@ -71,7 +71,7 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     const steps = TrackSectionStepUtils.toStepTypes(
         trackSections,
         state.trackSectionSteps,
-        List(files)
+        files ?? List()
     );
 
     return (
