@@ -9,6 +9,7 @@ import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state"
 import { useTheme } from "utils/hooks/use-theme";
 import { ConfirmationDialog } from "components/confirmation-dialog";
 import { WorkstationStateRecord } from "models/workstation-state-record";
+import { useGlobalState } from "utils/hooks/use-global-state";
 
 interface WorkstationTabProps {}
 
@@ -22,6 +23,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
 ) => {
     const { initialState, isDirty, state, setCurrentState, setState } =
         useWorkstationState();
+    const { isAuthenticated } = useGlobalState();
     const { project } = state;
     const isProjectOpen = project.isPersisted();
     const {
@@ -134,7 +136,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 content={({ close: closePopover }) => (
                     <Menu>
                         <Menu.Item onClick={handleNewClick(closePopover)}>
-                            New
+                            {isAuthenticated ? "New" : "Reset"}
                         </Menu.Item>
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
                             Open
@@ -142,11 +144,13 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         <Menu.Item onClick={handleSaveClick(closePopover)}>
                             Save
                         </Menu.Item>
-                        <Menu.Item
-                            disabled={!isDirty}
-                            onClick={handleRevertClick(closePopover)}>
-                            Revert to saved
-                        </Menu.Item>
+                        {isAuthenticated && (
+                            <Menu.Item
+                                disabled={!isDirty}
+                                onClick={handleRevertClick(closePopover)}>
+                                Revert to saved
+                            </Menu.Item>
+                        )}
                     </Menu>
                 )}
                 position={Position.TOP_RIGHT}>

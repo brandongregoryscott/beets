@@ -29,7 +29,7 @@ const useListFiles = (
     const handleStorageProviderSuccess = useCallback(
         (files: StorageProviderFileRecord[]) =>
             onSuccess?.(mapStorageProviderFiles(files)),
-        [mapStorageProviderFiles, onSuccess]
+        [onSuccess]
     );
 
     const storageProviderFilesResult = useListStorageProviderFiles({
