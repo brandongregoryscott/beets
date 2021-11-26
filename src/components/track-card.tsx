@@ -16,7 +16,7 @@ import {
 import React, { useCallback } from "react";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { TrackSection } from "components/track-section-card";
+import { TrackSectionCard } from "components/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
@@ -122,7 +122,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 </ReactronicaTrack>
             </Card>
             {trackSections?.map((trackSection, index) => (
-                <TrackSection
+                <TrackSectionCard
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
                     key={trackSection.id}

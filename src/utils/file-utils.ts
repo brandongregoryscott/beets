@@ -10,7 +10,6 @@ const FileUtils = {
             ?.filter((file) => !FileUtils.isOpenHat(file))
             .find(this.isHat);
 
-        console.log("closedHat", closedHat);
         return closedHat;
     },
     findKick<T extends AnyFile>(files?: List<T>): T | undefined {

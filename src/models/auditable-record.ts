@@ -3,8 +3,6 @@ import { BaseRecord } from "models/base-record";
 import { Constructor } from "types/constructor";
 import { isPersisted } from "utils/auditable-utils";
 
-export type AuditableRecordType = Immutable.Record<Auditable>;
-
 /**
  * Mixin class to hold base functionality of auditable Immutable.Record classes
  *
@@ -23,12 +21,6 @@ function AuditableRecord<TRecord extends Constructor<Auditable>>(
 
         public isPersisted(): boolean {
             return isPersisted(this);
-        }
-
-        public removeId(): this {
-            return this.asRecord<Auditable>().merge({
-                id: undefined,
-            }) as any;
         }
     };
 }
