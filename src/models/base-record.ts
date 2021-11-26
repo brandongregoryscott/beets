@@ -17,6 +17,10 @@ function BaseRecord<TRecord extends Constructor>(Base: TRecord) {
             return this.asTypedRecord().toJS() as TypeOf<TRecord>;
         }
 
+        protected asRecord<T extends object = {}>(): Record<T> {
+            return this as any as Record<T>;
+        }
+
         /**
          * Cast hack to get correct typing for base `Record` functions. Can revisit later.
          */

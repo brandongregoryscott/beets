@@ -21,7 +21,7 @@ import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-s
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
 
-interface TrackSectionProps {
+interface TrackSectionCardProps {
     isFirst?: boolean;
     isLast?: boolean;
     trackSection: TrackSectionRecord;
@@ -32,8 +32,8 @@ const iconMarginRight = majorScale(8);
 const stepHeight = majorScale(2);
 const stepWidth = majorScale(2);
 
-const TrackSection: React.FC<TrackSectionProps> = (
-    props: TrackSectionProps
+const TrackSectionCard: React.FC<TrackSectionCardProps> = (
+    props: TrackSectionCardProps
 ) => {
     const {
         value: sequencerDialogOpen,
@@ -97,6 +97,7 @@ const TrackSection: React.FC<TrackSectionProps> = (
                 <Tooltip content="Remove section">
                     <IconButton
                         icon={DeleteIcon}
+                        intent="danger"
                         marginRight={iconMarginRight}
                         onClick={handleRemove}
                     />
@@ -148,4 +149,4 @@ const TrackSection: React.FC<TrackSectionProps> = (
     );
 };
 
-export { TrackSection };
+export { TrackSectionCard };

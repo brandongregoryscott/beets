@@ -1,5 +1,5 @@
 import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
-import { Track } from "components/track";
+import { TrackCard } from "components/track-card";
 import { useCallback } from "react";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 
@@ -12,7 +12,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         <Pane>
             <Pane display="flex" flexDirection="column">
                 {tracks.map((track) => (
-                    <Track key={track.id} track={track} />
+                    <TrackCard key={track.id} track={track} />
                 ))}
             </Pane>
             <Pane display="flex" flexDirection="row" marginRight="auto">

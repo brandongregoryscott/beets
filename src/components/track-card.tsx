@@ -16,7 +16,7 @@ import {
 import React, { useCallback } from "react";
 import { Track as ReactronicaTrack, Instrument } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { TrackSection } from "components/track-section";
+import { TrackSection } from "components/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
@@ -26,13 +26,13 @@ import { FileRecord } from "models/file-record";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 
-interface TrackProps {
+interface TrackCardProps {
     track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
 
-const Track: React.FC<TrackProps> = (props: TrackProps) => {
+const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { track } = props;
     const { id, name, mute, solo } = track;
     const { state } = useWorkstationState();
@@ -110,7 +110,11 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
                         />
                     </Tooltip>
                 </Pane>
-                <ReactronicaTrack mute={mute} solo={solo} steps={steps}>
+                <ReactronicaTrack
+                    mute={mute}
+                    solo={solo}
+                    steps={steps}
+                    subdivision="8n">
                     <Instrument
                         samples={FileRecord.toMidiNoteMap(files ?? List())}
                         type="sampler"
@@ -137,5 +141,5 @@ const Track: React.FC<TrackProps> = (props: TrackProps) => {
     );
 };
 
-export { Track };
-export type { TrackProps };
+export { TrackCard };
+export type { TrackCardProps };

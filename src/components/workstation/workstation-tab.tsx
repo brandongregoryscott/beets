@@ -10,11 +10,13 @@ import { useTheme } from "utils/hooks/use-theme";
 import { ConfirmationDialog } from "components/confirmation-dialog";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useGlobalState } from "utils/hooks/use-global-state";
+import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 
 interface WorkstationTabProps {}
 
 enum ConfirmationAction {
     NewProject,
+    RevertToDemo,
     RevertToSaved,
 }
 
@@ -43,6 +45,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     } = useBoolean();
     const [confirmationAction, setConfirmationAction] =
         useState<ConfirmationAction>(ConfirmationAction.NewProject);
+    const { resultObject: files } = useListFiles();
     const alertDecription =
         confirmationAction === ConfirmationAction.NewProject
             ? "Opening a new project will wipe out any unsaved changes."
@@ -105,9 +108,18 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         [isProjectOpen, handleOpenSaveProjectDialog, state, sync]
     );
 
-    const handleRevertClick = useCallback(
+    const handleRevertToSavedClick = useCallback(
         (closePopover: () => void) => () => {
             setConfirmationAction(ConfirmationAction.RevertToSaved);
+            handleOpenConfirmDialog();
+            closePopover();
+        },
+        [setConfirmationAction, handleOpenConfirmDialog]
+    );
+
+    const handleRevertToDemoClick = useCallback(
+        (closePopover: () => void) => () => {
+            setConfirmationAction(ConfirmationAction.RevertToDemo);
             handleOpenConfirmDialog();
             closePopover();
         },
@@ -120,10 +132,15 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             update = () => setCurrentState(initialState);
         }
 
+        if (confirmationAction === ConfirmationAction.RevertToDemo) {
+            update = () => setCurrentState(WorkstationStateRecord.demo(files));
+        }
+
         update();
         handleCloseConfirmDialog();
     }, [
         confirmationAction,
+        files,
         handleCloseConfirmDialog,
         initialState,
         setCurrentState,
@@ -136,7 +153,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 content={({ close: closePopover }) => (
                     <Menu>
                         <Menu.Item onClick={handleNewClick(closePopover)}>
-                            {isAuthenticated ? "New" : "Reset"}
+                            New
                         </Menu.Item>
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
                             Open
@@ -147,8 +164,17 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         {isAuthenticated && (
                             <Menu.Item
                                 disabled={!isDirty}
-                                onClick={handleRevertClick(closePopover)}>
+                                onClick={handleRevertToSavedClick(
+                                    closePopover
+                                )}>
                                 Revert to saved
+                            </Menu.Item>
+                        )}
+                        {!isAuthenticated && (
+                            <Menu.Item
+                                disabled={!isDirty}
+                                onClick={handleRevertToDemoClick(closePopover)}>
+                                Revert to initial demo
                             </Menu.Item>
                         )}
                     </Menu>
