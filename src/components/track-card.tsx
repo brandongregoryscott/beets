@@ -28,8 +28,6 @@ import { TrackSectionStepUtils } from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { TrackSectionRecord } from "models/track-section-record";
-import _ from "lodash";
 import { FileUtils } from "utils/file-utils";
 import { TrackSectionUtils } from "utils/track-section-utils";
 
