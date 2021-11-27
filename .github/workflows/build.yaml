@@ -45,6 +45,9 @@ jobs:
             - name: npm run build
               run: npm run build
 
+            - name: npm run test
+              run: npm run test -- --verbose
+
     notify_success:
         runs-on: ubuntu-latest
         needs: [build]

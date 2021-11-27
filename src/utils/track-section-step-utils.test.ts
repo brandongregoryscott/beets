@@ -6,9 +6,6 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { randomInt } from "utils/core-utils";
 import { TrackSectionStepUtils } from "utils/track-section-step-utils";
 
-const sumStepCount = (trackSections: List<TrackSectionRecord>): number =>
-    _.sumBy(trackSections.toArray(), (trackSection) => trackSection.step_count);
-
 describe("TrackSectionStepUtils", () => {
     const files = List(
         _.range(0, 8).map(
@@ -23,6 +20,12 @@ describe("TrackSectionStepUtils", () => {
             index,
             track_section_id: trackSectionId,
         });
+
+    const sumStepCount = (trackSections: List<TrackSectionRecord>): number =>
+        _.sumBy(
+            trackSections.toArray(),
+            (trackSection) => trackSection.step_count
+        );
 
     describe("toStepTypes", () => {
         it("returns sum of TrackSection.step_count", () => {
