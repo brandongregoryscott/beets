@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import pluralize from "pluralize";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
+import { FileUtils } from "utils/file-utils";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -31,7 +32,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         List()
     );
     const sampleOptions: Array<SelectMenuItem<FileRecord>> = useMemo(
-        () => FileRecord.toSelectMenuItems(files),
+        () => FileUtils.toSelectMenuItems(files),
         [files]
     );
     const stepCountOptions: Array<SelectMenuItem<number>> = _.range(1, 65).map(

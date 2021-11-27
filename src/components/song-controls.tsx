@@ -18,6 +18,7 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { Song as ReactronicaSong } from "reactronica";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
+import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 
 interface SongControlsProps {}
 
@@ -28,6 +29,7 @@ const SongControls: React.FC<SongControlsProps> = (
 ) => {
     const { children } = props;
     const { state: project, setCurrentState } = useProjectState();
+    const { onPause } = useReactronicaState();
     const { bpm, swing, volume } = project;
     const { value: isMuted, toggle: toggleIsMuted } = useBoolean(false);
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean(false);
@@ -78,6 +80,14 @@ const SongControls: React.FC<SongControlsProps> = (
         [setCurrentState]
     );
 
+    const handlePlayingClick = useCallback(() => {
+        if (isPlaying) {
+            onPause();
+        }
+
+        toggleIsPlaying();
+    }, [isPlaying, onPause, toggleIsPlaying]);
+
     return (
         <Pane>
             <Heading size={500} marginBottom={majorScale(1)}>
@@ -91,7 +101,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 <IconButton
                     icon={isPlaying ? PauseIcon : PlayIcon}
                     marginRight={marginRight}
-                    onClick={toggleIsPlaying}
+                    onClick={handlePlayingClick}
                 />
                 <IconButton
                     icon={isMuted ? VolumeOffIcon : VolumeUpIcon}

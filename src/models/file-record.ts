@@ -1,12 +1,10 @@
-import { List, Record as ImmutableRecord } from "immutable";
+import { Record as ImmutableRecord } from "immutable";
 import { File } from "generated/interfaces/file";
 import { isNilOrEmpty, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
-import { SelectMenuItem } from "components/select-menu";
 import { MidiNote } from "reactronica";
 import { MidiNotes } from "constants/midi-notes";
 import { valueByHash } from "utils/hash-utils";
-import { FileUtils } from "utils/file-utils";
 import { AuditableRecord } from "models/auditable-record";
 import { BucketName } from "enums/bucket-name";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
@@ -47,35 +45,6 @@ class FileRecord
             type: storageProviderFile.metadata?.mimetype,
             updated_on: storageProviderFile.updated_at,
         });
-    }
-
-    public static toMidiNoteMap(
-        files: List<FileRecord>
-    ): Record<MidiNote, string> {
-        const fileMap = FileUtils.mapToMidiNotes(files);
-
-        const midiNoteMap: Record<string, string> = {};
-        Object.entries(fileMap.toJSON()).forEach(([note, file]) => {
-            midiNoteMap[note] = file.getPublicUrl();
-        });
-
-        return midiNoteMap;
-    }
-
-    public static toSelectMenuItems(
-        files?: Array<FileRecord> | List<FileRecord>
-    ): Array<SelectMenuItem<FileRecord>> {
-        if (List.isList(files)) {
-            files = files.toArray();
-        }
-
-        return (
-            files?.map((file) => ({
-                label: file.name,
-                id: file.id,
-                value: file,
-            })) ?? []
-        );
     }
 
     public getMidiNote(): MidiNote {

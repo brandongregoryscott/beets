@@ -13,8 +13,12 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { useCallback } from "react";
-import { Track as ReactronicaTrack, Instrument } from "reactronica";
+import React, { useCallback, useMemo } from "react";
+import {
+    Track as ReactronicaTrack,
+    Instrument,
+    StepNoteType,
+} from "reactronica";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionCard } from "components/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
@@ -22,18 +26,22 @@ import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { TrackSectionStepUtils } from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { FileRecord } from "models/file-record";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { TrackSectionRecord } from "models/track-section-record";
+import _ from "lodash";
+import { FileUtils } from "utils/file-utils";
+import { TrackSectionUtils } from "utils/track-section-utils";
 
 interface TrackCardProps {
+    onStepPlay: (steps: StepNoteType[], index: number) => void;
     track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
-    const { track } = props;
+    const { onStepPlay, track } = props;
     const { id, name, mute, solo } = track;
     const { state } = useWorkstationState();
     const { update, remove } = useTracksState();
@@ -68,10 +76,14 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
-    const steps = TrackSectionStepUtils.toStepTypes(
-        trackSections,
-        state.trackSectionSteps,
-        files ?? List()
+    const steps = useMemo(
+        () =>
+            TrackSectionStepUtils.toStepTypes(
+                trackSections,
+                state.trackSectionSteps,
+                files ?? List()
+            ),
+        [trackSections, state.trackSectionSteps, files]
     );
 
     return (
@@ -112,11 +124,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 </Pane>
                 <ReactronicaTrack
                     mute={mute}
+                    onStepPlay={onStepPlay}
                     solo={solo}
                     steps={steps}
                     subdivision="8n">
                     <Instrument
-                        samples={FileRecord.toMidiNoteMap(files ?? List())}
+                        samples={FileUtils.toMidiNoteMap(files)}
                         type="sampler"
                     />
                 </ReactronicaTrack>
@@ -126,8 +139,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
                     key={trackSection.id}
-                    trackSection={trackSection}
                     onChange={updateTrackSection}
+                    trackSection={trackSection}
+                    stepCountOffset={TrackSectionUtils.getStepCountOffset(
+                        trackSections,
+                        index
+                    )}
                 />
             ))}
             <Tooltip content="Add Section">

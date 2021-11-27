@@ -1,6 +1,7 @@
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
     DeleteIcon,
+    Elevation,
     HeatGridIcon,
     IconButton,
     majorScale,
@@ -16,6 +17,7 @@ import { useCallback } from "react";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
+import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
@@ -24,8 +26,9 @@ import { getStepColor } from "utils/theme-utils";
 interface TrackSectionCardProps {
     isFirst?: boolean;
     isLast?: boolean;
-    trackSection: TrackSectionRecord;
     onChange: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
+    stepCountOffset: number;
+    trackSection: TrackSectionRecord;
 }
 
 const iconMarginRight = majorScale(8);
@@ -40,12 +43,19 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         setTrue: handleOpenSequencerDialog,
         setFalse: handleCloseSequencerDialog,
     } = useBoolean(false);
-    const { isFirst = false, isLast = false, trackSection, onChange } = props;
+    const {
+        stepCountOffset,
+        isFirst = false,
+        isLast = false,
+        trackSection,
+        onChange,
+    } = props;
     const borderProps = getBorderXProps({
         isFirst,
         isLast,
         borderRadius: minorScale(1),
     });
+    const { state: reactronicaState } = useReactronicaState();
     const { remove } = useTrackSectionsState({
         trackId: trackSection.track_id,
     });
@@ -111,26 +121,40 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         _.sortBy(steps.toArray(), "file_id")
                     );
 
+                    const isPlaying =
+                        index + stepCountOffset === reactronicaState?.index;
+
+                    const activeProps = isPlaying
+                        ? {
+                              elevation: 4 as Elevation,
+                              transform: "translateY(-2px)",
+                          }
+                        : {};
+
                     return (
                         <Pane
+                            {...activeProps}
                             display="flex"
                             flexDirection="column"
                             key={index}
                             minHeight={stepHeight}
                             minWidth={stepWidth}
                             width={stepWidth}>
-                            {_.range(0, 4).map((row: number) => (
-                                <Pane
-                                    height={stepHeight}
-                                    minHeight={stepHeight}
-                                    minWidth={stepWidth}
-                                    width={stepWidth}
-                                    backgroundColor={getStepColor(
-                                        stepsSortedByFileId.get(row)?.file_id,
-                                        theme
-                                    )}
-                                />
-                            ))}
+                            {_.range(0, 4).map((row: number) => {
+                                const backgroundColor = getStepColor(
+                                    stepsSortedByFileId.get(row)?.file_id,
+                                    theme
+                                );
+                                return (
+                                    <Pane
+                                        height={stepHeight}
+                                        minHeight={stepHeight}
+                                        minWidth={stepWidth}
+                                        width={stepWidth}
+                                        backgroundColor={backgroundColor}
+                                    />
+                                );
+                            })}
                         </Pane>
                     );
                 })}

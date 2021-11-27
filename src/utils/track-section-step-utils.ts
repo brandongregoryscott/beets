@@ -1,4 +1,4 @@
-import { List, Map } from "immutable";
+import { List } from "immutable";
 import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
@@ -9,7 +9,6 @@ import {
     intersectionWith,
     sortByIndex,
 } from "utils/collection-utils";
-import { FileUtils } from "utils/file-utils";
 import { TrackSectionUtils } from "utils/track-section-utils";
 
 const TrackSectionStepUtils = {
@@ -26,6 +25,7 @@ const TrackSectionStepUtils = {
             (trackSection) => trackSection.step_count
         );
         let steps = initializeList<StepType>(total, []);
+        let indexAccumulator = 0;
 
         trackSections.forEach((trackSection) => {
             const trackSectionsStepsForTrackSection =
@@ -49,15 +49,19 @@ const TrackSectionStepUtils = {
                     (file, trackSection) => trackSection.file_id === file.id
                 );
 
-                const fileMap = Map(FileUtils.mapToMidiNotes(files));
                 const midiNotes = filesForTrackSectionSteps
                     .map((file) => ({
-                        name: fileMap.keyOf(file)!,
+                        name: file.getMidiNote(),
                     }))
                     .toArray();
 
-                steps = steps.set(index, midiNotes as StepType);
+                steps = steps.set(
+                    index + indexAccumulator,
+                    midiNotes as StepType
+                );
             });
+
+            indexAccumulator += trackSection.step_count;
         });
 
         return steps.toArray();

@@ -1,6 +1,8 @@
+import { SelectMenuItem } from "components/select-menu";
 import { List, Map } from "immutable";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import { MidiNote } from "reactronica";
 
 type AnyFile = FileRecord | StorageProviderFileRecord;
 
@@ -37,9 +39,28 @@ const FileUtils = {
         const pattern = /[sS][nN][aA][rR][eE]/;
         return pattern.test(getFileName(file));
     },
-    mapToMidiNotes(files: List<FileRecord>): Map<string, FileRecord> {
-        return Map<string, FileRecord>(
-            files.map((file) => [file.getMidiNote(), file])
+    toMidiNoteMap(files?: List<FileRecord>): Record<MidiNote, string> {
+        if (files == null || files.isEmpty()) {
+            return {} as Record<MidiNote, string>;
+        }
+
+        return Map(
+            files.map((file) => [file.getMidiNote(), file.getPublicUrl()])
+        ).toObject() as Record<MidiNote, string>;
+    },
+    toSelectMenuItems(
+        files?: Array<FileRecord> | List<FileRecord>
+    ): Array<SelectMenuItem<FileRecord>> {
+        if (List.isList(files)) {
+            files = files.toArray();
+        }
+
+        return (
+            files?.map((file) => ({
+                label: file.name,
+                id: file.id,
+                value: file,
+            })) ?? []
         );
     },
 };
