@@ -12,6 +12,8 @@ import { useInput } from "rooks";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useLogin } from "utils/hooks/supabase/use-login";
 import { useRegister } from "utils/hooks/supabase/use-register";
+import { useCallback } from "react";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface LoginOrRegisterProps {
     initialShowRegister: boolean;
@@ -23,6 +25,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
     props: LoginOrRegisterProps
 ) => {
     const { initialShowRegister } = props;
+    const { clearState, state } = useWorkstationState();
     const { value: showRegister, toggle: toggleShowRegister } =
         useBoolean(initialShowRegister);
     const { value: email, onChange: handleEmailChange } = useInput("");
@@ -31,6 +34,13 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
         useBoolean(false);
     const { value: passwordIsInvalid, setValue: setPasswordIsInvalid } =
         useBoolean(false);
+    const handleLoginSuccess = useCallback(() => {
+        if (!state.isDemo()) {
+            return;
+        }
+
+        clearState();
+    }, [clearState, state]);
     const {
         mutate: register,
         reset: resetRegister,
@@ -43,7 +53,9 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
         reset: resetLogin,
         isLoading: isLoginLoading,
         error: loginError,
-    } = useLogin();
+    } = useLogin({
+        onSuccess: handleLoginSuccess,
+    });
 
     const error = loginError ?? registerError;
 

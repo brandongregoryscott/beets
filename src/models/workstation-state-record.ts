@@ -27,8 +27,8 @@ interface WorkstationStateDiff {
 }
 
 const defaultValues = makeDefaultValues<WorkstationState>({
-    project: new ProjectRecord(),
-    tracks: List.of(new TrackRecord()),
+    project: undefined,
+    tracks: List(),
     trackSections: List(),
     trackSectionSteps: List(),
 });
@@ -121,7 +121,11 @@ class WorkstationStateRecord
     }
 
     constructor(values?: RecordParams<WorkstationStateRecord>) {
-        values = values ?? defaultValues;
+        values = values ?? {
+            ...defaultValues,
+            project: new ProjectRecord(),
+            tracks: List.of(new TrackRecord()),
+        };
 
         if (values.project != null) {
             values.project = new ProjectRecord(values.project);

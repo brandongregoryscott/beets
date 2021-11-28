@@ -6,6 +6,10 @@ import { WorkstationStateAtomFamily } from "utils/atoms/workstation-state-atom-f
 
 interface UseWorkstationStateResult {
     /**
+     * Sets both state values to a new WorkstationStateRecord instance
+     */
+    clearState: () => void;
+    /**
      * **Initial** state value (at time of load, last save, etc.)
      */
     initialState: WorkstationStateRecord;
@@ -33,11 +37,23 @@ interface UseWorkstationStateResult {
 
 const useWorkstationState = (): UseWorkstationStateResult => {
     const [initialState, setInitialState] = useAtom(
-        WorkstationStateAtomFamily(DiffableState.Initial)
+        WorkstationStateAtomFamily({
+            initialValue: new WorkstationStateRecord(),
+            state: DiffableState.Initial,
+        })
     );
     const [state, setCurrentState] = useAtom(
-        WorkstationStateAtomFamily(DiffableState.Current)
+        WorkstationStateAtomFamily({
+            initialValue: initialState,
+            state: DiffableState.Current,
+        })
     );
+
+    const clearState = useCallback(() => {
+        const state = new WorkstationStateRecord();
+        setInitialState(state);
+        setCurrentState(state);
+    }, [setCurrentState, setInitialState]);
 
     const setState = useCallback(
         (updatedWorkstationState: SetStateAction<WorkstationStateRecord>) => {
@@ -50,6 +66,7 @@ const useWorkstationState = (): UseWorkstationStateResult => {
     const isDirty = !state.equals(initialState);
 
     return {
+        clearState,
         initialState,
         isDirty,
         setCurrentState,

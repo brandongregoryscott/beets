@@ -3,6 +3,7 @@ import { List, Map } from "immutable";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { MidiNote } from "reactronica";
+import { isNilOrEmpty } from "utils/core-utils";
 
 type AnyFile = FileRecord | StorageProviderFileRecord;
 
@@ -40,7 +41,7 @@ const FileUtils = {
         return pattern.test(getFileName(file));
     },
     toMidiNoteMap(files?: List<FileRecord>): Record<MidiNote, string> {
-        if (files == null || files.isEmpty()) {
+        if (isNilOrEmpty(files)) {
             return {} as Record<MidiNote, string>;
         }
 

@@ -1,7 +1,14 @@
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
 
-const useLogout = () => {
+interface UseLogoutOptions {
+    onError?: (error: Error) => void;
+    onSuccess?: () => void;
+    onSettled?: () => void;
+}
+
+const useLogout = (options?: UseLogoutOptions) => {
+    const { onError, onSettled, onSuccess } = options ?? {};
     const auth = useAuth();
 
     const result = useMutation<void, Error>({
@@ -12,6 +19,9 @@ const useLogout = () => {
                 throw error;
             }
         },
+        onError,
+        onSuccess,
+        onSettled,
     });
 
     return result;

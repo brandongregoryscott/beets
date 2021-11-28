@@ -12,8 +12,18 @@ interface ProfileMenuProps {
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
     const { onClose } = props;
-    const { isAuthenticated } = useGlobalState();
-    const { mutate: logout } = useLogout();
+    const { isAuthenticated, setGlobalState } = useGlobalState();
+    const handleLogoutsettled = useCallback(
+        () =>
+            setGlobalState((prev) =>
+                prev.merge({
+                    supabaseUser: undefined,
+                    user: undefined,
+                })
+            ),
+        [setGlobalState]
+    );
+    const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
     const history = useHistory();
 
     const handleLogoutSelect = useCallback(() => {

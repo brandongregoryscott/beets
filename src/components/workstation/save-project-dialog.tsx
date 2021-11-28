@@ -1,3 +1,4 @@
+import { ErrorMessages } from "constants/error-messages";
 import {
     Alert,
     BanCircleIcon,
@@ -21,8 +22,6 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface SaveProjectDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
-
-const ERROR_NAME_IS_REQUIRED = "Name is required";
 
 const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     props: SaveProjectDialogProps
@@ -51,7 +50,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
 
     const validate = (): boolean => {
         if (isNilOrEmpty(name)) {
-            setValidationMessage(ERROR_NAME_IS_REQUIRED);
+            setValidationMessage(ErrorMessages.REQUIRED_FIELD);
             return false;
         }
 

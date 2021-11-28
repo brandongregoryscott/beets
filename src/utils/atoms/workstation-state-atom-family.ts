@@ -3,12 +3,19 @@ import { atom, SetStateAction } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { DiffableState } from "enums/diffable-state";
 
+interface WorkstationStateAtom {
+    initialValue: WorkstationStateRecord;
+    state: DiffableState;
+}
+
 const WorkstationStateAtomFamily = atomFamily<
-    DiffableState,
+    WorkstationStateAtom,
     WorkstationStateRecord,
     SetStateAction<WorkstationStateRecord>
->((_state: DiffableState) =>
-    atom<WorkstationStateRecord>(new WorkstationStateRecord())
+>(
+    (params: WorkstationStateAtom) =>
+        atom<WorkstationStateRecord>(params.initialValue),
+    (a, b) => a.state === b.state
 );
 
 export { WorkstationStateAtomFamily };

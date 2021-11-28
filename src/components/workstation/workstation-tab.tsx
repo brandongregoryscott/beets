@@ -3,7 +3,6 @@ import { OpenProjectDialog } from "components/workstation/open-project-dialog";
 import { SaveProjectDialog } from "components/workstation/save-project-dialog";
 import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
 import React, { useCallback, useState } from "react";
-import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
 import { useTheme } from "utils/hooks/use-theme";
@@ -11,6 +10,9 @@ import { ConfirmationDialog } from "components/confirmation-dialog";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useDialog } from "utils/hooks/use-dialog";
+import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
+import { isNotNilOrEmpty } from "utils/core-utils";
 
 interface WorkstationTabProps {}
 
@@ -27,22 +29,27 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         useWorkstationState();
     const { isAuthenticated } = useGlobalState();
     const { project } = state;
-    const isProjectOpen = project.isPersisted();
-    const {
-        value: isSaveProjectDialogOpen,
-        setFalse: handleCloseSaveProjectDialog,
-        setTrue: handleOpenSaveProjectDialog,
-    } = useBoolean();
-    const {
-        value: isOpenProjectDialogOpen,
-        setFalse: handleCloseOpenProjectDialog,
-        setTrue: handleOpenOpenProjectDialog,
-    } = useBoolean();
-    const {
-        value: isConfirmDialogOpen,
-        setFalse: handleCloseConfirmDialog,
-        setTrue: handleOpenConfirmDialog,
-    } = useBoolean();
+    const projectIsPersisted = project.isPersisted();
+    const [
+        isSaveProjectDialogOpen,
+        handleOpenSaveProjectDialog,
+        handleCloseSaveProjectDialog,
+    ] = useDialog();
+    const [
+        isOpenProjectDialogOpen,
+        handleOpenOpenProjectDialog,
+        handleCloseOpenProjectDialog,
+    ] = useDialog();
+    const [
+        isConfirmDialogOpen,
+        handleOpenConfirmDialog,
+        handleCloseConfirmDialog,
+    ] = useDialog();
+    const [
+        isSettingsDialogOpen,
+        handleOpenSettingsDialog,
+        handleCloseSettingsDialog,
+    ] = useDialog();
     const [confirmationAction, setConfirmationAction] =
         useState<ConfirmationAction>(ConfirmationAction.NewProject);
     const { resultObject: files } = useListFiles();
@@ -96,7 +103,9 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
 
     const handleSaveClick = useCallback(
         (closePopover: () => void) => () => {
-            if (isProjectOpen) {
+            const newProjectHasName =
+                !state.isDemo() && isNotNilOrEmpty(project.name);
+            if (projectIsPersisted || newProjectHasName) {
                 sync(state);
                 closePopover();
                 return;
@@ -105,7 +114,13 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             handleOpenSaveProjectDialog();
             closePopover();
         },
-        [isProjectOpen, handleOpenSaveProjectDialog, state, sync]
+        [
+            projectIsPersisted,
+            project.name,
+            handleOpenSaveProjectDialog,
+            state,
+            sync,
+        ]
     );
 
     const handleRevertToSavedClick = useCallback(
@@ -147,6 +162,14 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         setState,
     ]);
 
+    const handleSettingsClick = useCallback(
+        (closePopover: () => void) => () => {
+            handleOpenSettingsDialog();
+            closePopover();
+        },
+        [handleOpenSettingsDialog]
+    );
+
     return (
         <React.Fragment>
             <Popover
@@ -160,6 +183,9 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         </Menu.Item>
                         <Menu.Item onClick={handleSaveClick(closePopover)}>
                             Save
+                        </Menu.Item>
+                        <Menu.Item onClick={handleSettingsClick(closePopover)}>
+                            Settings
                         </Menu.Item>
                         {isAuthenticated && (
                             <Menu.Item
@@ -181,7 +207,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                 )}
                 position={Position.TOP_RIGHT}>
                 <Button
-                    appearance={"tab" as any}
+                    appearance="tab"
                     iconBefore={
                         <DocumentIcon
                             color={
@@ -213,6 +239,12 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                     isShown={isConfirmDialogOpen}
                     onConfirm={handleDirtyConfirm}
                     onCloseComplete={handleCloseConfirmDialog}
+                />
+            )}
+            {isSettingsDialogOpen && (
+                <ProjectSettingsDialog
+                    isShown={isSettingsDialogOpen}
+                    onCloseComplete={handleCloseSettingsDialog}
                 />
             )}
         </React.Fragment>

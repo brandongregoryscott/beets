@@ -6,6 +6,12 @@ const defaultTheme = _defaultTheme as DefaultEvergreenTheme;
 const theme = _.merge(defaultTheme, {
     components: {
         Button: {
+            baseStyle: {
+                _disabled: {
+                    cursor: "not-allowed",
+                    pointerEvents: "auto",
+                },
+            },
             appearances: {
                 tab: {
                     _hover: {
