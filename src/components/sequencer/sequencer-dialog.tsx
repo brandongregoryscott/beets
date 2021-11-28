@@ -55,7 +55,6 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
 
     return (
         <Dialog
-            confirmLabel="Save"
             isShown={true}
             onCloseComplete={onClose}
             onConfirm={handleConfirm}
