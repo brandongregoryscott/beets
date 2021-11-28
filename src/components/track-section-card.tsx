@@ -136,7 +136,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             {...activeProps}
                             display="flex"
                             flexDirection="column"
-                            key={index}
+                            key={`track-section-${trackSection.id}-column-${index}`}
                             minHeight={stepHeight}
                             minWidth={stepWidth}
                             width={stepWidth}>
@@ -147,6 +147,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                 );
                                 return (
                                     <Pane
+                                        key={`track-section-${trackSection.id}-row-${row}`}
                                         height={stepHeight}
                                         minHeight={stepHeight}
                                         minWidth={stepWidth}

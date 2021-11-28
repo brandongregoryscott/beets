@@ -93,7 +93,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 background={theme.colors.gray200}
                 width={majorScale(21)}
                 marginY={majorScale(1)}
-                marginRight={majorScale(1)}
+                marginRight={majorScale(2)}
                 padding={majorScale(1)}>
                 <EditableParagraph onChange={setName} value={name} />
                 <Pane display="flex" flexDirection="row">
@@ -148,7 +148,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
             <Tooltip content="Add Section">
                 <IconButton
                     icon={PlusIcon}
-                    marginLeft={majorScale(1)}
+                    marginLeft={
+                        trackSections.isEmpty() ? undefined : majorScale(2)
+                    }
                     onClick={handleAddTrackSection}
                 />
             </Tooltip>
