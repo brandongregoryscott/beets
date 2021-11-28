@@ -22,8 +22,6 @@ const useDeleteWorkstationState = (
     const deleteFn = async (workstationState: WorkstationStateRecord) => {
         const { project, tracks, trackSections, trackSectionSteps } =
             workstationState;
-        console.log("delete state.project", workstationState.project);
-        console.log("delete state.tracks", workstationState.tracks);
         await Promise.all(
             trackSectionSteps
                 .map((trackSectionStep) =>
