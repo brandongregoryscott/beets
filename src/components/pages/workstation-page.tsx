@@ -1,5 +1,5 @@
-import { SongControls } from "components/song-controls";
-import { TrackList } from "components/track-list";
+import { SongControls } from "components/workstation/song-controls";
+import { TrackList } from "components/tracks/track-list";
 import { majorScale, Pane, Spinner } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useEffect } from "react";

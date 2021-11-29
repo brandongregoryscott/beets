@@ -1,4 +1,4 @@
-import { FileUpload } from "components/file-upload";
+import { FileUpload } from "components/files/file-upload";
 import { BucketName } from "enums/bucket-name";
 import {
     BanCircleIcon,
@@ -7,7 +7,7 @@ import {
     majorScale,
     Pane,
 } from "evergreen-ui";
-import { FileList } from "components/file-list";
+import { FileList } from "components/files/file-list";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTheme } from "utils/hooks/use-theme";
 

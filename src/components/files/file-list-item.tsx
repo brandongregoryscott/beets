@@ -11,7 +11,7 @@ import {
 } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { FileDialog } from "components/file-dialog";
+import { FileDialog } from "components/files/file-dialog";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useDeleteFile } from "utils/hooks/domain/files/use-delete-file";
 import { useCallback, Fragment } from "react";

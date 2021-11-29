@@ -1,5 +1,5 @@
 import { Pane, IconButton, PlusIcon, minorScale, Tooltip } from "evergreen-ui";
-import { TrackCard } from "components/track-card";
+import { TrackCard } from "components/tracks/track-card";
 import { useCallback } from "react";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";

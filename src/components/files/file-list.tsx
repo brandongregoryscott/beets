@@ -2,7 +2,7 @@ import { BucketName } from "enums/bucket-name";
 import { SortOrder } from "enums/sort-order";
 import { Pane } from "evergreen-ui";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
-import { FileListItem } from "components/file-list-item";
+import { FileListItem } from "components/files/file-list-item";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { groupBy } from "utils/collection-utils";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";

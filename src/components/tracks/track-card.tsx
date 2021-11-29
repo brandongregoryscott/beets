@@ -20,7 +20,7 @@ import {
     StepNoteType,
 } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { TrackSectionCard } from "components/track-section-card";
+import { TrackSectionCard } from "components/tracks/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
