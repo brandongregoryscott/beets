@@ -1,4 +1,4 @@
-import { MigrationBuilder } from "node-pg-migrate";
+import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
 
 const auditableColumns = {
     created_on: "created_on",

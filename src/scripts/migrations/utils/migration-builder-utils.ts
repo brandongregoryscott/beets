@@ -1,4 +1,4 @@
-import { MigrationBuilder, Name } from "node-pg-migrate";
+import { MigrationBuilder, Name } from "@brandongregoryscott/node-pg-migrate";
 import { auditableColumns } from "./auditable-columns";
 import { q } from "./quote";
 
