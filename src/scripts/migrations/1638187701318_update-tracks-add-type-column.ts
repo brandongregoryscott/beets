@@ -1,9 +1,8 @@
 import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
-import { tables } from "./utils/tables";
-// import { TrackType } from "./utils/track-type";
-import { TrackType } from "../../../src/enums/track-type";
+import { Tables } from "./enums/tables";
+import { TrackType } from "./enums/track-type";
 
-const tableName = tables.files;
+const tableName = Tables.Tracks;
 
 const up = (pgm: MigrationBuilder) => {
     pgm.addColumn(tableName, {

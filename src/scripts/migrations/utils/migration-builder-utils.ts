@@ -1,5 +1,5 @@
 import { MigrationBuilder, Name } from "@brandongregoryscott/node-pg-migrate";
-import { auditableColumns } from "./auditable-columns";
+import { AuditableColumns } from "../enums/auditable-columns";
 import { q } from "./quote";
 
 interface MigrationBuilderUtilsOptions {
@@ -13,13 +13,13 @@ interface Migration {
     up: (...args: any[]) => void;
 }
 
-const notDeleted = "deleted_on is null";
+const notDeleted = `${AuditableColumns.DeletedOn} is null`;
 const updateTriggerSql = `
 
     BEGIN
 
-    NEW.${auditableColumns.updated_on} := current_timestamp;
-    NEW.${auditableColumns.updated_by_id} := auth.uid();
+    NEW.${AuditableColumns.UpdatedOn} := current_timestamp;
+    NEW.${AuditableColumns.UpdatedById} := auth.uid();
 
     RETURN NEW;
 
@@ -51,7 +51,7 @@ const deleteOwnRecordPolicy =
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
-                    using: `auth.uid() = ${auditableColumns.created_by_id}`,
+                    using: `auth.uid() = ${AuditableColumns.CreatedById}`,
                     command: "DELETE",
                 }),
         };
@@ -79,7 +79,7 @@ const readOwnRecordPolicy =
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
-                    using: `auth.uid() = ${auditableColumns.created_by_id} AND ${notDeleted}`,
+                    using: `auth.uid() = ${AuditableColumns.CreatedById} AND ${notDeleted}`,
                     command: "SELECT",
                 }),
         };
@@ -105,7 +105,7 @@ const softDeleteRule =
             policyOrRuleName: ruleName,
             up: () =>
                 pgm.sql(
-                    `CREATE RULE ${ruleName} AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${auditableColumns.deleted_on} = current_timestamp, ${auditableColumns.deleted_by_id} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
+                    `CREATE RULE ${ruleName} AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${AuditableColumns.DeletedOn} = current_timestamp, ${AuditableColumns.DeletedById} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
                 ),
         };
     };
@@ -143,7 +143,7 @@ const updateOwnRecordPolicy =
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
-                    using: `auth.uid() = ${auditableColumns.created_by_id}`,
+                    using: `auth.uid() = ${AuditableColumns.CreatedById}`,
                     command: "UPDATE",
                 }),
         };
@@ -166,14 +166,14 @@ const uniqueNonDeletedIndex =
                         ifExists: true,
                     });
                 }
-                pgm.dropIndex(tableName, [column, auditableColumns.deleted_on]);
+                pgm.dropIndex(tableName, [column, AuditableColumns.DeletedOn]);
             },
             up: () => {
                 if (dropFkConstraint) {
                     pgm.dropConstraint(tableName, constraint);
                 }
 
-                pgm.addIndex(tableName, [column, auditableColumns.deleted_on], {
+                pgm.addIndex(tableName, [column, AuditableColumns.DeletedOn], {
                     unique: true,
                     where: notDeleted,
                 });
