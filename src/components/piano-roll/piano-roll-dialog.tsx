@@ -1,3 +1,4 @@
+import { PianoRoll } from "components/piano-roll/piano-roll";
 import { Dialog, DialogProps } from "evergreen-ui";
 
 interface PianoRollDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
@@ -10,7 +11,9 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
         <Dialog
             isShown={true}
             onCloseComplete={onCloseComplete}
-            title="Piano Roll"></Dialog>
+            title="Piano Roll">
+            <PianoRoll />
+        </Dialog>
     );
 };
 
