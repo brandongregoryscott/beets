@@ -124,6 +124,8 @@ const snakeToTitleCase = (value: string) => {
     return value.split("_").map(_.capitalize).join("");
 };
 
+const stripQuotes = (value: string): string => value.replace(/"/g, "");
+
 const toKebabCase = (value: string) => {
     const hasOneCapitalLetter = value.match(/[A-Z]/g)?.length === 1;
     const firstLetterIsCapitalized = value[0].match(/[A-Z]/g) != null;
@@ -142,6 +144,8 @@ const toKebabCase = (value: string) => {
     return kebabCaseString;
 };
 
+const withExt = (filename: string): string => `${filename}.ts`;
+
 export {
     getFromFunctionName,
     getInterfaceImportPath,
@@ -159,5 +163,7 @@ export {
     getTablesEnumValue,
     getTableName,
     keyMirror,
+    stripQuotes,
     toKebabCase,
+    withExt,
 };
