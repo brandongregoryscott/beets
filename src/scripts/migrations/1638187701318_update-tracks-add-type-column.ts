@@ -3,11 +3,12 @@ import { Tables } from "./enums/tables";
 import { TrackType } from "./enums/track-type";
 
 const tableName = Tables.Tracks;
-
+const typeName = "TrackType";
 const up = (pgm: MigrationBuilder) => {
+    pgm.addType(typeName, Object.values(TrackType));
     pgm.addColumn(tableName, {
         type: {
-            type: "integer",
+            type: typeName,
             notNull: true,
             default: TrackType.Sequencer,
         },
@@ -15,6 +16,7 @@ const up = (pgm: MigrationBuilder) => {
 };
 
 const down = (pgm: MigrationBuilder) => {
+    pgm.dropType(typeName);
     pgm.dropColumn(tableName, "type");
 };
 

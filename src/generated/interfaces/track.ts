@@ -12,6 +12,7 @@ interface Track extends Auditable {
      */
     project_id: string;
     volume: number;
+    type: "sequencer" | "instrument";
 }
 
 export type { Track };

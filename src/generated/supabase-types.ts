@@ -591,6 +591,7 @@ export interface paths {
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
                     volume?: parameters["rowFilter.tracks.volume"];
+                    type?: parameters["rowFilter.tracks.type"];
                     /** Filtering Columns */
                     select?: parameters["select"];
                     /** Ordering */
@@ -655,6 +656,7 @@ export interface paths {
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
                     volume?: parameters["rowFilter.tracks.volume"];
+                    type?: parameters["rowFilter.tracks.type"];
                 };
                 header: {
                     /** Preference */
@@ -683,6 +685,7 @@ export interface paths {
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
                     volume?: parameters["rowFilter.tracks.volume"];
+                    type?: parameters["rowFilter.tracks.type"];
                 };
                 body: {
                     /** tracks */
@@ -807,23 +810,6 @@ export interface paths {
             };
         };
     };
-    "/rpc/update_track_sections_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
     "/rpc/update_tracks_auditable_fields": {
         post: {
             parameters: {
@@ -841,7 +827,7 @@ export interface paths {
             };
         };
     };
-    "/rpc/update_projects_auditable_fields": {
+    "/rpc/update_track_sections_auditable_fields": {
         post: {
             parameters: {
                 body: {
@@ -859,6 +845,23 @@ export interface paths {
         };
     };
     "/rpc/update_files_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_projects_auditable_fields": {
         post: {
             parameters: {
                 body: {
@@ -1028,6 +1031,7 @@ export interface definitions {
          */
         project_id: string;
         volume: number;
+        type: "sequencer" | "instrument";
     };
     users: {
         created_on?: string;
@@ -1139,6 +1143,7 @@ export interface parameters {
     "rowFilter.tracks.pan": string;
     "rowFilter.tracks.project_id": string;
     "rowFilter.tracks.volume": string;
+    "rowFilter.tracks.type": string;
     /** users */
     "body.users": definitions["users"];
     "rowFilter.users.created_on": string;

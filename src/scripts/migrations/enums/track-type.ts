@@ -3,8 +3,8 @@
  * kept in sync
  */
 enum TrackType {
-    Sequencer = 0,
-    Instrument = 1,
+    Sequencer = "sequencer",
+    Instrument = "instrument",
 }
 
 export { TrackType };
