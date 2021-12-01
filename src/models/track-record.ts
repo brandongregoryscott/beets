@@ -6,6 +6,7 @@ import { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { AuditableRecord } from "models/auditable-record";
 import { generateId } from "utils/id-utils";
+import { TrackType } from "generated/enums/track-type";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
@@ -15,6 +16,7 @@ const defaultValues = makeDefaultValues<Track>({
     pan: 0,
     solo: false,
     project_id: undefined,
+    type: TrackType.Sequencer,
     volume: 0,
 });
 
