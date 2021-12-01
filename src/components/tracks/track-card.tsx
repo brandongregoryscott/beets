@@ -138,6 +138,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     isLast={index === trackSections.count() - 1}
                     key={trackSection.id}
                     onChange={updateTrackSection}
+                    track={track}
                     trackSection={trackSection}
                     stepCountOffset={TrackSectionUtils.getStepCountOffset(
                         trackSections,

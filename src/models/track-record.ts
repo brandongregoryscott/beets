@@ -37,6 +37,10 @@ class TrackRecord
 
         super(values);
     }
+
+    public isSequencer(): boolean {
+        return this.type === TrackType.Sequencer;
+    }
 }
 
 export { TrackRecord };
