@@ -19,7 +19,6 @@ import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useBoolean } from "utils/hooks/use-boolean";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
@@ -195,7 +194,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                 />
             )}
             {pianoRollDialogOpen && (
-                <PianoRollDialog onCloseComplete={handleClosePianoRollDialog} />
+                <PianoRollDialog
+                    onCloseComplete={handleClosePianoRollDialog}
+                    trackSection={trackSection}
+                />
             )}
         </Pane>
     );

@@ -74,6 +74,8 @@
         "codegen": "ts-node src/scripts/codegen/main.ts",
         "eject": "react-scripts eject",
         "postcodegen": "prettier --write src/generated",
+        "postmigrations:down": "npm run codegen",
+        "postmigrations:up": "npm run codegen",
         "prebuild:migrations": "npm run clean:migrations",
         "precodegen": "npm run clean:generated",
         "premigrations:create": "npm run build:migrations",

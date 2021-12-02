@@ -1,12 +1,13 @@
 import { PianoKey } from "components/piano-roll/piano-key";
 import { MidiNotes } from "constants/midi-notes";
 import { Pane } from "evergreen-ui";
-import { useTheme } from "utils/hooks/use-theme";
+import { TrackSectionRecord } from "models/track-section-record";
 
-interface PianoRollProps {}
+interface PianoRollProps {
+    trackSection?: TrackSectionRecord;
+}
 
 const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
-    const theme = useTheme();
     return (
         <Pane display="flex" flexDirection="column">
             {MidiNotes.map((note) => (

@@ -1,9 +1,9 @@
 import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
 import { configure } from "./utils/migration-builder-utils";
-import { auditableColumns } from "./utils/auditable-columns";
-import { tables } from "./utils/tables";
+import { AuditableColumns } from "./enums/auditable-columns";
+import { Tables } from "./enums/tables";
 
-const tableName = tables.files;
+const tableName = Tables.Files;
 
 const up = (pgm: MigrationBuilder) => {
     const config = configure({ pgm, tableName });

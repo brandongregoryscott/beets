@@ -359,6 +359,7 @@ export interface paths {
                     file_id?: parameters["rowFilter.track_section_steps.file_id"];
                     index?: parameters["rowFilter.track_section_steps.index"];
                     track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                    note?: parameters["rowFilter.track_section_steps.note"];
                     /** Filtering Columns */
                     select?: parameters["select"];
                     /** Ordering */
@@ -419,6 +420,7 @@ export interface paths {
                     file_id?: parameters["rowFilter.track_section_steps.file_id"];
                     index?: parameters["rowFilter.track_section_steps.index"];
                     track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                    note?: parameters["rowFilter.track_section_steps.note"];
                 };
                 header: {
                     /** Preference */
@@ -443,6 +445,7 @@ export interface paths {
                     file_id?: parameters["rowFilter.track_section_steps.file_id"];
                     index?: parameters["rowFilter.track_section_steps.index"];
                     track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                    note?: parameters["rowFilter.track_section_steps.note"];
                 };
                 body: {
                     /** track_section_steps */
@@ -980,13 +983,14 @@ export interface definitions {
          * Note:
          * This is a Foreign Key to `files.id`.<fk table='files' column='id'/>
          */
-        file_id: string;
+        file_id?: string;
         index: number;
         /**
          * Note:
          * This is a Foreign Key to `track_sections.id`.<fk table='track_sections' column='id'/>
          */
         track_section_id: string;
+        note?: string;
     };
     track_sections: {
         created_on?: string;
@@ -1115,6 +1119,7 @@ export interface parameters {
     "rowFilter.track_section_steps.file_id": string;
     "rowFilter.track_section_steps.index": string;
     "rowFilter.track_section_steps.track_section_id": string;
+    "rowFilter.track_section_steps.note": string;
     /** track_sections */
     "body.track_sections": definitions["track_sections"];
     "rowFilter.track_sections.created_on": string;

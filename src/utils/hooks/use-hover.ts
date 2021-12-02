@@ -23,7 +23,8 @@ const useHover = <T extends HTMLElement = HTMLElement>(): [
                 };
             }
         },
-        [ref.current] // Recall only if ref changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [ref.current]
     );
     return [ref, value];
 };
