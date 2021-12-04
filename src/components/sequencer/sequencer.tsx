@@ -9,14 +9,15 @@ import pluralize from "pluralize";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { FileUtils } from "utils/file-utils";
+import { StepCountSelectMenu } from "components/step-count-select-menu";
 
 interface SequencerProps {
     files: List<FileRecord>;
     onStepCountChange: (stepCount: number) => void;
     onStepChange: (index: number, value: List<TrackSectionStepRecord>) => void;
     stepCount: number;
-    steps: List<TrackSectionStepRecord>;
     trackSection: TrackSectionRecord;
+    trackSectionSteps: List<TrackSectionStepRecord>;
 }
 
 const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
@@ -25,7 +26,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         onStepCountChange,
         files,
         stepCount,
-        steps,
+        trackSectionSteps: steps,
         trackSection,
     } = props;
     const [selectedFiles, setSelectedFiles] = useState<List<FileRecord>>(
@@ -35,14 +36,6 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         () => FileUtils.toSelectMenuItems(files),
         [files]
     );
-    const stepCountOptions: Array<SelectMenuItem<number>> = _.range(1, 65).map(
-        (stepCount: number) => ({
-            label: `${stepCount} ${pluralize("steps", stepCount)}`,
-            id: stepCount.toString(),
-            value: stepCount,
-        })
-    );
-
     const handleDeselectSample = (item: SelectMenuItem<FileRecord>) =>
         setSelectedFiles((prev) =>
             prev.includes(item.value)
@@ -54,9 +47,6 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         setSelectedFiles((prev) =>
             prev.includes(item.value) ? prev : prev.push(item.value)
         );
-
-    const handleSelectStepCount = (item: SelectMenuItem<number>) =>
-        onStepCountChange(item.value);
 
     return (
         <Pane>
@@ -73,17 +63,10 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                         {pluralize("Sample", selectedFiles.count())}
                     </Button>
                 </SelectMenu>
-                <SelectMenu
-                    isMultiSelect={false}
-                    hasFilter={false}
-                    onSelect={handleSelectStepCount}
-                    options={stepCountOptions}
-                    selected={stepCount}
-                    title="Number of steps">
-                    <Button>
-                        {stepCount} {pluralize("Step", stepCount)}
-                    </Button>
-                </SelectMenu>
+                <StepCountSelectMenu
+                    onChange={onStepCountChange}
+                    stepCount={stepCount}
+                />
             </Pane>
             <Pane
                 marginX="auto"

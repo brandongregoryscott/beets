@@ -16,7 +16,7 @@ const defaultValues = makeDefaultValues<Track>({
     pan: 0,
     solo: false,
     project_id: undefined,
-    type: TrackType.Sequencer,
+    type: TrackType.Instrument,
     volume: 0,
 });
 

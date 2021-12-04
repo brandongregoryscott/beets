@@ -1,4 +1,5 @@
 import { majorScale, Text, Pane } from "evergreen-ui";
+import { memo } from "react";
 import { MidiNote } from "reactronica";
 import { MidiNoteUtils } from "utils/midi-note-utils";
 
@@ -15,11 +16,14 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
     const width = majorScale(6);
     return (
         <Pane
+            alignItems="center"
             background={background}
             display="flex"
-            alignItems="center"
-            justifyContent="center"
+            flexGrow={1}
             height={height}
+            justifyContent="center"
+            minHeight={height}
+            minWidth={width}
             width={width}>
             <Text color={textColor} size={300}>
                 {note}
@@ -28,4 +32,6 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
     );
 };
 
-export { PianoKey };
+const MemoizedPianoKey = memo(PianoKey);
+
+export { MemoizedPianoKey as PianoKey };

@@ -1,14 +1,13 @@
 import { Sequencer } from "components/sequencer/sequencer";
-import { Dialog } from "evergreen-ui";
+import { Dialog, DialogProps } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
 
-interface SequencerDialogProps {
+interface SequencerDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     files: List<FileRecord>;
-    onClose: () => void;
     onStepChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
     trackSectionSteps: List<TrackSectionStepRecord>;
@@ -21,7 +20,7 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
     const {
         onStepChange,
         onStepCountChange,
-        onClose,
+        onCloseComplete,
         files,
         trackSectionSteps: initialValue,
         trackSection,
@@ -43,27 +42,33 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
         [setTrackSectionSteps]
     );
 
-    const handleConfirm = () => {
+    const handleConfirm = useCallback(() => {
         onStepChange(
             trackSectionSteps.filter(
                 (trackSectionStep) => trackSectionStep.index <= stepCount
             )
         );
         onStepCountChange(stepCount);
-        onClose();
-    };
+        onCloseComplete?.();
+    }, [
+        onCloseComplete,
+        onStepChange,
+        onStepCountChange,
+        stepCount,
+        trackSectionSteps,
+    ]);
 
     return (
         <Dialog
             isShown={true}
-            onCloseComplete={onClose}
+            onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
             title="Sequencer">
             <Sequencer
                 files={files}
                 onStepChange={handleStepChange}
                 onStepCountChange={setStepCount}
-                steps={trackSectionSteps}
+                trackSectionSteps={trackSectionSteps}
                 stepCount={stepCount}
                 trackSection={trackSection}
             />

@@ -186,9 +186,9 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
                     files={files}
+                    onCloseComplete={handleCloseSequencerDialog}
                     onStepChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}
-                    onClose={handleCloseSequencerDialog}
                     trackSectionSteps={trackSectionSteps}
                     trackSection={trackSection}
                 />
@@ -196,6 +196,9 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
             {pianoRollDialogOpen && (
                 <PianoRollDialog
                     onCloseComplete={handleClosePianoRollDialog}
+                    onStepChange={handleTrackSectionStepsChange}
+                    onStepCountChange={handleStepCountChange}
+                    trackSectionSteps={trackSectionSteps}
                     trackSection={trackSection}
                 />
             )}

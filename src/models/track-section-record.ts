@@ -10,7 +10,7 @@ import { generateId } from "utils/id-utils";
 const defaultValues = makeDefaultValues<TrackSection>({
     ...AuditableDefaultValues,
     index: 0,
-    step_count: 8,
+    step_count: 32,
     track_id: undefined,
 });
 
