@@ -1,4 +1,5 @@
 import { Auditable } from "interfaces/auditable";
+import { TrackType } from "generated/enums/track-type";
 
 interface Track extends Auditable {
     index: number;
@@ -12,7 +13,7 @@ interface Track extends Auditable {
      */
     project_id: string;
     volume: number;
-    type: "sequencer" | "instrument";
+    type: TrackType;
 }
 
 export type { Track };

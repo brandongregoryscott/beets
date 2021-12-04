@@ -1,5 +1,10 @@
 import _, { capitalize, isEmpty } from "lodash";
-import { Project, PropertySignature, SyntaxKind } from "ts-morph";
+import {
+    InterfaceDeclaration,
+    Project,
+    PropertySignature,
+    SyntaxKind,
+} from "ts-morph";
 import { log } from "./log";
 import {
     getInterfaceName,
@@ -13,11 +18,9 @@ import { Paths } from "./constants/paths";
 
 const generateEnumsFromUnions = (
     project: Project,
-    property: PropertySignature
+    _interface: InterfaceDeclaration
 ) => {
-    const interfaceName = getInterfaceName(property);
-    const typeLiteral = property.getChildrenOfKind(SyntaxKind.TypeLiteral)[0];
-    const properties = typeLiteral.getProperties();
+    const properties = _interface.getProperties();
 
     const unionTypeProperty = properties.filter((property) => {
         const type = property.getType();
@@ -29,7 +32,7 @@ const generateEnumsFromUnions = (
     }
 
     unionTypeProperty.forEach((property) => {
-        const name = `${interfaceName}${capitalize(property.getName())}`;
+        const name = `${_interface.getName()}${capitalize(property.getName())}`;
 
         // Reference: https://ts-morph.com/details/types
         const values = property
@@ -45,6 +48,17 @@ const generateEnumsFromUnions = (
                 overwrite: true,
             }
         );
+
+        // Replace original union with enum
+        property.setType(name);
+        _interface.getSourceFile().addImportDeclaration({
+            namedImports: [name],
+            moduleSpecifier: upath.join(
+                Paths.baseImport,
+                "enums",
+                toKebabCase(name)
+            ),
+        });
 
         file.addEnum({
             name,

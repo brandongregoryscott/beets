@@ -31,8 +31,8 @@ const main = async () => {
     generateTablesEnum(project, properties);
 
     properties.forEach((property) => {
-        generateInterface(project, property);
-        generateEnumsFromUnions(project, property);
+        const _interface = generateInterface(project, property);
+        generateEnumsFromUnions(project, _interface);
         generateUseList(project, property);
         generateUseGet(project, property);
         generateUseDelete(project, property);

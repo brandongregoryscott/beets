@@ -1,12 +1,21 @@
 import _ from "lodash";
-import { Project, PropertySignature, SyntaxKind } from "ts-morph";
+import {
+    InterfaceDeclaration,
+    Project,
+    PropertySignature,
+    SyntaxKind,
+} from "ts-morph";
 import { AuditableColumns } from "./constants/auditable-columns";
 import { Variables } from "./constants/variables";
 import { log } from "./log";
 import { getInterfaceName, getInterfacePath } from "./utils";
 
 const { Auditable } = Variables;
-const generateInterface = (project: Project, property: PropertySignature) => {
+
+const generateInterface = (
+    project: Project,
+    property: PropertySignature
+): InterfaceDeclaration => {
     const name = getInterfaceName(property);
 
     const file = project.createSourceFile(
@@ -48,6 +57,8 @@ const generateInterface = (project: Project, property: PropertySignature) => {
     file.addExportDeclaration({ namedExports: [name], isTypeOnly: true });
 
     log.info(`Writing interface '${name}' to ${file.getBaseName()}...`);
+
+    return _interface;
 };
 
 export { generateInterface };
