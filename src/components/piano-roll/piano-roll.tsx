@@ -7,7 +7,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React from "react";
 
 interface PianoRollProps {
-    onStepChange: (index: number, value: List<TrackSectionStepRecord>) => void;
+    onChange: (value: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
     stepCount: number;
     trackSection: TrackSectionRecord;
@@ -15,7 +15,13 @@ interface PianoRollProps {
 }
 
 const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
-    const { onStepCountChange, stepCount } = props;
+    const {
+        onChange,
+        onStepCountChange,
+        stepCount,
+        trackSection,
+        trackSectionSteps,
+    } = props;
     return (
         <React.Fragment>
             <Pane marginBottom={majorScale(1)}>
@@ -29,7 +35,12 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                 flexDirection="column"
                 width="100%"
                 flexGrow={1}>
-                <PianoSteps stepCount={stepCount} />
+                <PianoSteps
+                    onChange={onChange}
+                    stepCount={stepCount}
+                    trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
+                />
             </Pane>
         </React.Fragment>
     );

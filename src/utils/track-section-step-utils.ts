@@ -3,7 +3,7 @@ import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { StepType } from "reactronica";
+import { MidiNote, StepType } from "reactronica";
 import {
     initializeList,
     intersectionWith,
@@ -11,61 +11,66 @@ import {
 } from "utils/collection-utils";
 import { TrackSectionUtils } from "utils/track-section-utils";
 
-const TrackSectionStepUtils = {
-    toStepTypes(
-        trackSections: List<TrackSectionRecord>,
-        trackSectionSteps: List<TrackSectionStepRecord>,
-        files: List<FileRecord>
-    ): Array<StepType> {
-        trackSections = sortByIndex(trackSections);
-        trackSectionSteps = sortByIndex(trackSectionSteps);
+const isSelected = (
+    trackSectionSteps: List<TrackSectionStepRecord>,
+    index: number,
+    note: MidiNote
+): boolean =>
+    trackSectionSteps.some(
+        (trackSectionStep) =>
+            trackSectionStep.index === index && trackSectionStep.note === note
+    );
 
-        const total = _.sumBy(
-            trackSections.toArray(),
-            (trackSection) => trackSection.step_count
-        );
-        let steps = initializeList<StepType>(total, []);
-        let indexAccumulator = 0;
+const toStepTypes = (
+    trackSections: List<TrackSectionRecord>,
+    trackSectionSteps: List<TrackSectionStepRecord>,
+    files: List<FileRecord>
+): Array<StepType> => {
+    trackSections = sortByIndex(trackSections);
+    trackSectionSteps = sortByIndex(trackSectionSteps);
 
-        trackSections.forEach((trackSection) => {
-            const trackSectionsStepsForTrackSection =
-                TrackSectionUtils.getByTrackSection(
-                    trackSection,
-                    trackSectionSteps
-                );
+    const total = _.sumBy(
+        trackSections.toArray(),
+        (trackSection) => trackSection.step_count
+    );
+    let steps = initializeList<StepType>(total, []);
+    let indexAccumulator = 0;
 
-            _.range(0, trackSection.step_count).forEach((index) => {
-                const stepsByIndex = trackSectionsStepsForTrackSection.filter(
-                    (trackSectionStep) => trackSectionStep.index === index
-                );
+    trackSections.forEach((trackSection) => {
+        const trackSectionsStepsForTrackSection =
+            TrackSectionUtils.getByTrackSection(
+                trackSection,
+                trackSectionSteps
+            );
 
-                if (stepsByIndex.isEmpty()) {
-                    return;
-                }
+        _.range(0, trackSection.step_count).forEach((index) => {
+            const stepsByIndex = trackSectionsStepsForTrackSection.filter(
+                (trackSectionStep) => trackSectionStep.index === index
+            );
 
-                const filesForTrackSectionSteps = intersectionWith(
-                    files,
-                    stepsByIndex,
-                    (file, trackSection) => trackSection.file_id === file.id
-                );
+            if (stepsByIndex.isEmpty()) {
+                return;
+            }
 
-                const midiNotes = filesForTrackSectionSteps
-                    .map((file) => ({
-                        name: file.getMidiNote(),
-                    }))
-                    .toArray();
+            const filesForTrackSectionSteps = intersectionWith(
+                files,
+                stepsByIndex,
+                (file, trackSection) => trackSection.file_id === file.id
+            );
 
-                steps = steps.set(
-                    index + indexAccumulator,
-                    midiNotes as StepType
-                );
-            });
+            const midiNotes = filesForTrackSectionSteps
+                .map((file) => ({
+                    name: file.getMidiNote(),
+                }))
+                .toArray();
 
-            indexAccumulator += trackSection.step_count;
+            steps = steps.set(index + indexAccumulator, midiNotes as StepType);
         });
 
-        return steps.toArray();
-    },
+        indexAccumulator += trackSection.step_count;
+    });
+
+    return steps.toArray();
 };
 
-export { TrackSectionStepUtils };
+export { isSelected, toStepTypes };

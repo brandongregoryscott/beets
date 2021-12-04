@@ -24,6 +24,8 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
             justifyContent="center"
             minHeight={height}
             minWidth={width}
+            maxHeight={height}
+            maxWidth={width}
             width={width}>
             <Text color={textColor} size={300}>
                 {note}

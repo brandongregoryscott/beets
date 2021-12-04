@@ -24,21 +24,10 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
     } = props;
     const [trackSectionSteps, setTrackSectionSteps] =
         useState<List<TrackSectionStepRecord>>(initialValue);
+    console.log("trackSectionSteps", trackSectionSteps);
     const [stepCount, setStepCount] = useState<number>(trackSection.step_count);
 
-    const handleStepChange = useCallback(
-        (index, trackSectionSteps) =>
-            setTrackSectionSteps((prev) =>
-                prev
-                    .filter(
-                        (existingTrackSectionStep) =>
-                            existingTrackSectionStep.index !== index
-                    )
-                    .concat(trackSectionSteps)
-            ),
-        [setTrackSectionSteps]
-    );
-
+    console.log("stepCount", stepCount);
     const handleConfirm = useCallback(() => {
         onStepChange(
             trackSectionSteps.filter(
@@ -62,7 +51,7 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
             onConfirm={handleConfirm}
             title="Piano Roll">
             <PianoRoll
-                onStepChange={handleStepChange}
+                onChange={setTrackSectionSteps}
                 onStepCountChange={setStepCount}
                 stepCount={stepCount}
                 trackSectionSteps={trackSectionSteps}

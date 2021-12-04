@@ -24,7 +24,7 @@ import { TrackSectionCard } from "components/tracks/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import { TrackSectionStepUtils } from "utils/track-section-step-utils";
+import { toStepTypes } from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
@@ -76,7 +76,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const steps = useMemo(
         () =>
-            TrackSectionStepUtils.toStepTypes(
+            toStepTypes(
                 trackSections,
                 state.trackSectionSteps,
                 files ?? List()
