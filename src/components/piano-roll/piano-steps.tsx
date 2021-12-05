@@ -4,6 +4,7 @@ import { MidiNotes } from "constants/midi-notes";
 import { Pane } from "evergreen-ui";
 import { List } from "immutable";
 import _ from "lodash";
+import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useMemo } from "react";
@@ -12,6 +13,7 @@ import { useTheme } from "utils/hooks/use-theme";
 import { isSelected } from "utils/track-section-step-utils";
 
 interface PianoStepsProps {
+    file?: FileRecord;
     onChange: (value: List<TrackSectionStepRecord>) => void;
     stepCount: number;
     trackSection: TrackSectionRecord;
@@ -19,7 +21,9 @@ interface PianoStepsProps {
 }
 
 const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
-    const { onChange, stepCount, trackSection, trackSectionSteps } = props;
+    const { file, onChange, stepCount, trackSection, trackSectionSteps } =
+        props;
+
     const theme = useTheme();
     const handleClick = useCallback(
         (index: number, note: MidiNote) => {
@@ -38,6 +42,7 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
             onChange(
                 trackSectionSteps.push(
                     new TrackSectionStepRecord({
+                        file_id: file?.id,
                         index,
                         note,
                         track_section_id: trackSection.id,
@@ -45,7 +50,7 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
                 )
             );
         },
-        [onChange, trackSection, trackSectionSteps]
+        [file, onChange, trackSection, trackSectionSteps]
     );
     const innerContent = useMemo(
         () =>

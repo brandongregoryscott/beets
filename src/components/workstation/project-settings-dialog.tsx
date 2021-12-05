@@ -36,8 +36,6 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
     const handleDeleteSuccess = useCallback(() => {
         toaster.success("Project successfully deleted");
         const newState = new WorkstationStateRecord();
-        console.log("newState.project", newState.project);
-        console.log("newState.tracks", newState.tracks);
         setState(newState);
         onCloseComplete?.();
     }, [onCloseComplete, setState]);

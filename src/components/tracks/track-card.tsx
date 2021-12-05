@@ -30,7 +30,7 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { FileUtils } from "utils/file-utils";
-import { TrackSectionUtils } from "utils/track-section-utils";
+import { getByTrack, getStepCountOffset } from "utils/track-section-utils";
 import { FileSelectMenu } from "components/file-select-menu";
 import { FileRecord } from "models/file-record";
 
@@ -44,7 +44,7 @@ const iconMarginRight = minorScale(2);
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { onStepPlay, track } = props;
     const { id, name, mute, solo } = track;
-    const { state } = useWorkstationState();
+    const { state, setCurrentState } = useWorkstationState();
     const { update, remove } = useTracksState();
     const {
         add: addTrackSection,
@@ -78,8 +78,33 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
     const handleSelect = useCallback(
-        (file: FileRecord) => setSelectedSample(file),
-        [setSelectedSample]
+        (file: FileRecord) => {
+            setSelectedSample(file);
+            setCurrentState((prev) => {
+                const trackSectionIds = getByTrack(
+                    track,
+                    prev.trackSections
+                ).map((trackSection) => trackSection.id);
+                const updatedTrackSectionSteps = prev.trackSectionSteps.map(
+                    (trackSectionStep) => {
+                        if (
+                            !trackSectionIds.includes(
+                                trackSectionStep.track_section_id
+                            )
+                        ) {
+                            return trackSectionStep;
+                        }
+
+                        return trackSectionStep.merge({ file_id: file.id });
+                    }
+                );
+
+                return prev.merge({
+                    trackSectionSteps: updatedTrackSectionSteps,
+                });
+            });
+        },
+        [track, setCurrentState, setSelectedSample]
     );
 
     const steps = useMemo(
@@ -162,16 +187,14 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
             </Card>
             {trackSections?.map((trackSection, index) => (
                 <TrackSectionCard
+                    file={selectedSample}
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
                     key={trackSection.id}
                     onChange={updateTrackSection}
                     track={track}
                     trackSection={trackSection}
-                    stepCountOffset={TrackSectionUtils.getStepCountOffset(
-                        trackSections,
-                        index
-                    )}
+                    stepCountOffset={getStepCountOffset(trackSections, index)}
                 />
             ))}
             <Tooltip content="Add Section">

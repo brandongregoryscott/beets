@@ -14,6 +14,7 @@ import {
 import { List } from "immutable";
 import { SetStateAction } from "jotai";
 import _ from "lodash";
+import { FileRecord } from "models/file-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
@@ -27,6 +28,7 @@ import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
 
 interface TrackSectionCardProps {
+    file?: FileRecord;
     isFirst?: boolean;
     isLast?: boolean;
     onChange: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
@@ -55,12 +57,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     ] = useDialog();
 
     const {
-        stepCountOffset,
+        file,
         isFirst = false,
         isLast = false,
+        onChange,
+        stepCountOffset,
         track,
         trackSection,
-        onChange,
     } = props;
     const borderProps = getBorderXProps({
         isFirst,
@@ -195,6 +198,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
             )}
             {pianoRollDialogOpen && (
                 <PianoRollDialog
+                    file={file}
                     onCloseComplete={handleClosePianoRollDialog}
                     onChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}

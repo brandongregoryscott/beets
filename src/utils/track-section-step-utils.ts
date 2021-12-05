@@ -9,7 +9,16 @@ import {
     intersectionWith,
     sortByIndex,
 } from "utils/collection-utils";
-import { TrackSectionUtils } from "utils/track-section-utils";
+import { getTotalStepCount } from "utils/track-section-utils";
+
+const getByTrackSection = (
+    trackSection: TrackSectionRecord,
+    trackSectionSteps: List<TrackSectionStepRecord>
+): List<TrackSectionStepRecord> =>
+    trackSectionSteps.filter(
+        (trackSectionStep) =>
+            trackSectionStep.track_section_id === trackSection.id
+    );
 
 const isSelected = (
     trackSectionSteps: List<TrackSectionStepRecord>,
@@ -29,19 +38,15 @@ const toStepTypes = (
     trackSections = sortByIndex(trackSections);
     trackSectionSteps = sortByIndex(trackSectionSteps);
 
-    const total = _.sumBy(
-        trackSections.toArray(),
-        (trackSection) => trackSection.step_count
-    );
+    const total = getTotalStepCount(trackSections);
     let steps = initializeList<StepType>(total, []);
     let indexAccumulator = 0;
 
     trackSections.forEach((trackSection) => {
-        const trackSectionsStepsForTrackSection =
-            TrackSectionUtils.getByTrackSection(
-                trackSection,
-                trackSectionSteps
-            );
+        const trackSectionsStepsForTrackSection = getByTrackSection(
+            trackSection,
+            trackSectionSteps
+        );
 
         _.range(0, trackSection.step_count).forEach((index) => {
             const stepsByIndex = trackSectionsStepsForTrackSection.filter(

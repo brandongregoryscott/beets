@@ -51,12 +51,21 @@ const useTrackSectionsState = (
     const remove = useCallback(
         (trackSection: TrackSectionRecord) =>
             setCurrentState((prev) => {
-                const updated = prev.trackSections.filter(
+                const updatedTrackSections = prev.trackSections.filter(
                     (existingTrackSection) =>
                         existingTrackSection.id !== trackSection.id
                 );
 
-                return prev.merge({ trackSections: updated });
+                // Additionally remove any TrackSectionSteps
+                const updatedTrackSectionSteps = prev.trackSectionSteps.filter(
+                    (trackSectionStep) =>
+                        trackSectionStep.track_section_id !== trackSection.id
+                );
+
+                return prev.merge({
+                    trackSections: updatedTrackSections,
+                    trackSectionSteps: updatedTrackSectionSteps,
+                });
             }),
         [setCurrentState]
     );
