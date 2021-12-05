@@ -7,66 +7,83 @@ import { isNilOrEmpty } from "utils/core-utils";
 
 type AnyFile = FileRecord | StorageProviderFileRecord;
 
-const FileUtils = {
-    findHat<T extends AnyFile>(files?: List<T>): T | undefined {
-        const closedHat = files
-            ?.filter((file) => !FileUtils.isOpenHat(file))
-            .find(this.isHat);
+const findHat = <T extends AnyFile>(files?: List<T>): T | undefined =>
+    files?.filter((file) => !isOpenHat(file)).find(isHat);
 
-        return closedHat;
-    },
-    findKick<T extends AnyFile>(files?: List<T>): T | undefined {
-        return files?.find(this.isKick);
-    },
-    findOpenHat<T extends AnyFile>(files?: List<T>): T | undefined {
-        return files?.find(this.isOpenHat);
-    },
-    findSnare<T extends AnyFile>(files?: List<T>): T | undefined {
-        return files?.find(this.isSnare);
-    },
-    isHat(file: AnyFile): boolean {
-        const pattern = /[hH][aA][tT]/;
-        return pattern.test(getFileName(file));
-    },
-    isOpenHat(file: AnyFile): boolean {
-        const pattern = /[oO][pP][eE][nN]/;
-        return pattern.test(getFileName(file));
-    },
-    isKick(file: AnyFile): boolean {
-        const pattern = /[kK][iI][cC][kK]/;
-        return pattern.test(getFileName(file));
-    },
-    isSnare(file: AnyFile): boolean {
-        const pattern = /[sS][nN][aA][rR][eE]/;
-        return pattern.test(getFileName(file));
-    },
-    toMidiNoteMap(files?: List<FileRecord>): Record<MidiNote, string> {
-        if (isNilOrEmpty(files)) {
-            return {} as Record<MidiNote, string>;
-        }
+const findKick = <T extends AnyFile>(files?: List<T>): T | undefined =>
+    files?.find(isKick);
 
-        return Map(
-            files.map((file) => [file.getMidiNote(), file.getPublicUrl()])
-        ).toObject() as Record<MidiNote, string>;
-    },
-    toSelectMenuItems(
-        files?: Array<FileRecord> | List<FileRecord>
-    ): Array<SelectMenuItem<FileRecord>> {
-        if (List.isList(files)) {
-            files = files.toArray();
-        }
+const findOpenHat = <T extends AnyFile>(files?: List<T>): T | undefined =>
+    files?.find(isOpenHat);
 
-        return (
-            files?.map((file) => ({
-                label: file.name,
-                id: file.id,
-                value: file,
-            })) ?? []
-        );
-    },
-};
+const findSnare = <T extends AnyFile>(files?: List<T>): T | undefined =>
+    files?.find(isSnare);
 
 const getFileName = (file: AnyFile): string =>
     file instanceof FileRecord ? file.path : file.name;
 
-export { FileUtils };
+const isHat = (file: AnyFile): boolean => {
+    const pattern = /[hH][aA][tT]/;
+    return pattern.test(getFileName(file));
+};
+
+const isOpenHat = (file: AnyFile): boolean => {
+    const pattern = /[oO][pP][eE][nN]/;
+    return pattern.test(getFileName(file));
+};
+
+const isKick = (file: AnyFile): boolean => {
+    const pattern = /[kK][iI][cC][kK]/;
+    return pattern.test(getFileName(file));
+};
+
+const isSnare = (file: AnyFile): boolean => {
+    const pattern = /[sS][nN][aA][rR][eE]/;
+    return pattern.test(getFileName(file));
+};
+
+const toInstrumentMap = (file?: FileRecord): Record<MidiNote, string> => {
+    if (file == null) {
+        return {} as Record<MidiNote, string>;
+    }
+
+    return {
+        C4: file.getPublicUrl(),
+    } as Record<MidiNote, string>;
+};
+
+const toSelectMenuItems = (
+    files?: Array<FileRecord> | List<FileRecord>
+): Array<SelectMenuItem<FileRecord>> => {
+    if (List.isList(files)) {
+        files = files.toArray();
+    }
+
+    return (
+        files?.map((file) => ({
+            label: file.name,
+            id: file.id,
+            value: file,
+        })) ?? []
+    );
+};
+
+const toSequencerMap = (files?: List<FileRecord>): Record<MidiNote, string> => {
+    if (isNilOrEmpty(files)) {
+        return {} as Record<MidiNote, string>;
+    }
+
+    return Map(
+        files.map((file) => [file.getMidiNote(), file.getPublicUrl()])
+    ).toObject() as Record<MidiNote, string>;
+};
+
+export {
+    findHat,
+    findKick,
+    findOpenHat,
+    findSnare,
+    toInstrumentMap,
+    toSelectMenuItems,
+    toSequencerMap,
+};

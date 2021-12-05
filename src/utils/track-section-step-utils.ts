@@ -30,7 +30,48 @@ const isSelected = (
             trackSectionStep.index === index && trackSectionStep.note === note
     );
 
-const toStepTypes = (
+const toInstrumentStepTypes = (
+    trackSections: List<TrackSectionRecord>,
+    trackSectionSteps: List<TrackSectionStepRecord>
+): Array<StepType> => {
+    trackSections = sortByIndex(trackSections);
+    trackSectionSteps = sortByIndex(trackSectionSteps);
+
+    const total = getTotalStepCount(trackSections);
+    let steps = initializeList<StepType>(total, []);
+    let indexAccumulator = 0;
+
+    trackSections.forEach((trackSection) => {
+        const trackSectionsStepsForTrackSection = getByTrackSection(
+            trackSection,
+            trackSectionSteps
+        );
+
+        _.range(0, trackSection.step_count).forEach((index) => {
+            const stepsByIndex = trackSectionsStepsForTrackSection.filter(
+                (trackSectionStep) => trackSectionStep.index === index
+            );
+
+            if (stepsByIndex.isEmpty()) {
+                return;
+            }
+
+            const midiNotes = stepsByIndex
+                .map((trackSectionStep) => ({
+                    name: trackSectionStep.note,
+                }))
+                .toArray();
+
+            steps = steps.set(index + indexAccumulator, midiNotes as StepType);
+        });
+
+        indexAccumulator += trackSection.step_count;
+    });
+
+    return steps.toArray();
+};
+
+const toSequencerStepTypes = (
     trackSections: List<TrackSectionRecord>,
     trackSectionSteps: List<TrackSectionStepRecord>,
     files: List<FileRecord>
@@ -78,4 +119,9 @@ const toStepTypes = (
     return steps.toArray();
 };
 
-export { isSelected, toStepTypes };
+export {
+    getByTrackSection,
+    isSelected,
+    toInstrumentStepTypes,
+    toSequencerStepTypes,
+};

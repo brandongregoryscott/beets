@@ -6,7 +6,7 @@ import {
 import { Spinner, majorScale, Pane } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { PropsWithChildren, useCallback, useMemo } from "react";
-import { FileUtils } from "utils/file-utils";
+import { toSelectMenuItems } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 
 interface FileSelectMenuProps
@@ -34,7 +34,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     const { resultObject: files, isLoading } = useListFiles();
 
     const options: Array<SelectMenuItem<FileRecord>> = useMemo(
-        () => FileUtils.toSelectMenuItems(files),
+        () => toSelectMenuItems(files),
         [files]
     );
 

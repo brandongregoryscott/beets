@@ -14,7 +14,9 @@ import {
     diffUpdatedEntities,
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
-import { FileUtils } from "utils/file-utils";
+import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
+import { getByTrackSection } from "utils/track-section-step-utils";
+import { getByTrack } from "utils/track-section-utils";
 
 interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;
@@ -40,10 +42,10 @@ class WorkstationStateRecord
     implements WorkstationState
 {
     public static demo(files?: List<FileRecord>): WorkstationStateRecord {
-        const kick = FileUtils.findKick(files);
-        const closedHat = FileUtils.findHat(files);
-        const openHat = FileUtils.findOpenHat(files);
-        const snare = FileUtils.findSnare(files);
+        const kick = findKick(files);
+        const closedHat = findHat(files);
+        const openHat = findOpenHat(files);
+        const snare = findSnare(files);
 
         const project = new ProjectRecord().merge({
             id: getDemoId(ProjectRecord),
@@ -192,6 +194,25 @@ class WorkstationStateRecord
         );
 
         return diff;
+    }
+
+    public getTrackSectionsByTrack(
+        track: TrackRecord
+    ): List<TrackSectionRecord> {
+        return getByTrack(track, this.trackSections);
+    }
+
+    public getTrackSectionStepsByTrack(
+        track: TrackRecord
+    ): List<TrackSectionStepRecord> {
+        const trackSections = this.getTrackSectionsByTrack(track);
+        const trackSectionSteps = trackSections
+            .map((trackSection) =>
+                getByTrackSection(trackSection, this.trackSectionSteps)
+            )
+            .flatten()
+            .toList() as List<TrackSectionStepRecord>;
+        return trackSectionSteps;
     }
 
     public isDemo(): boolean {

@@ -25,14 +25,18 @@ import { TrackSectionCard } from "components/tracks/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import { toStepTypes } from "utils/track-section-step-utils";
+import {
+    toInstrumentStepTypes,
+    toSequencerStepTypes,
+} from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { FileUtils } from "utils/file-utils";
+import { toInstrumentMap, toSequencerMap } from "utils/file-utils";
 import { getByTrack, getStepCountOffset } from "utils/track-section-utils";
 import { FileSelectMenu } from "components/file-select-menu";
 import { FileRecord } from "models/file-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -52,7 +56,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
-    const [selectedSample, setSelectedSample] = useState<FileRecord>();
+    const [selectedSample, setSelectedSample] = useState<
+        FileRecord | undefined
+    >(getDefaultSampleState(state.getTrackSectionStepsByTrack(track), files));
     const theme = useTheme();
 
     const setName = useCallback(
@@ -107,14 +113,23 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         [track, setCurrentState, setSelectedSample]
     );
 
+    const samples = useMemo(
+        () =>
+            track.isSequencer()
+                ? toSequencerMap(files)
+                : toInstrumentMap(selectedSample),
+        [files, selectedSample, track]
+    );
     const steps = useMemo(
         () =>
-            toStepTypes(
-                trackSections,
-                state.trackSectionSteps,
-                files ?? List()
-            ),
-        [trackSections, state.trackSectionSteps, files]
+            track.isSequencer()
+                ? toSequencerStepTypes(
+                      trackSections,
+                      state.trackSectionSteps,
+                      files ?? List()
+                  )
+                : toInstrumentStepTypes(trackSections, state.trackSectionSteps),
+        [track, trackSections, state.trackSectionSteps, files]
     );
 
     return (
@@ -179,10 +194,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     solo={solo}
                     steps={steps}
                     subdivision="8n">
-                    <Instrument
-                        samples={FileUtils.toMidiNoteMap(files)}
-                        type="sampler"
-                    />
+                    <Instrument samples={samples} type="sampler" />
                 </ReactronicaTrack>
             </Card>
             {trackSections?.map((trackSection, index) => (
@@ -209,6 +221,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         </Pane>
     );
 };
+
+const getDefaultSampleState = (
+    trackSectionSteps: List<TrackSectionStepRecord>,
+    files: List<FileRecord> | undefined
+): FileRecord | undefined =>
+    files?.find((file) => file.id === trackSectionSteps.first()?.file_id);
 
 export { TrackCard };
 export type { TrackCardProps };
