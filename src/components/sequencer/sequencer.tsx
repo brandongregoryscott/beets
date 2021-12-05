@@ -2,14 +2,13 @@ import { SequencerStep } from "components/sequencer/sequencer-step";
 import { Button, majorScale, Pane } from "evergreen-ui";
 import _ from "lodash";
 import { List } from "immutable";
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { FileRecord } from "models/file-record";
-import { useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import pluralize from "pluralize";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { FileUtils } from "utils/file-utils";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
+import { FileSelectMenu } from "components/file-select-menu";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -29,40 +28,38 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         trackSectionSteps: steps,
         trackSection,
     } = props;
-    const [selectedFiles, setSelectedFiles] = useState<List<FileRecord>>(
-        List()
-    );
-    const sampleOptions: Array<SelectMenuItem<FileRecord>> = useMemo(
-        () => FileUtils.toSelectMenuItems(files),
-        [files]
-    );
-    const handleDeselectSample = (item: SelectMenuItem<FileRecord>) =>
-        setSelectedFiles((prev) =>
-            prev.includes(item.value)
-                ? prev.remove(prev.indexOf(item.value))
-                : prev
-        );
+    const [selected, setSelected] = useState<List<FileRecord>>(List());
 
-    const handleSelectSample = (item: SelectMenuItem<FileRecord>) =>
-        setSelectedFiles((prev) =>
-            prev.includes(item.value) ? prev : prev.push(item.value)
-        );
+    const handleDeselect = useCallback(
+        (file: FileRecord) =>
+            setSelected((prev) =>
+                prev.includes(file) ? prev.remove(prev.indexOf(file)) : prev
+            ),
+        [setSelected]
+    );
+
+    const handleSelect = useCallback(
+        (file: FileRecord) =>
+            setSelected((prev) =>
+                prev.includes(file) ? prev : prev.push(file)
+            ),
+        [setSelected]
+    );
 
     return (
         <Pane>
             <Pane marginBottom={majorScale(1)}>
-                <SelectMenu
+                <FileSelectMenu
                     isMultiSelect={true}
-                    onDeselect={handleDeselectSample}
-                    onSelect={handleSelectSample}
-                    options={sampleOptions}
-                    selected={selectedFiles}
+                    onDeselect={handleDeselect}
+                    onSelect={handleSelect}
+                    selected={selected}
                     title="Current Samples">
                     <Button marginRight={majorScale(1)}>
-                        {selectedFiles.count()}{" "}
-                        {pluralize("Sample", selectedFiles.count())}
+                        {selected.count()}{" "}
+                        {pluralize("Sample", selected.count())}
                     </Button>
-                </SelectMenu>
+                </FileSelectMenu>
                 <StepCountSelectMenu
                     onChange={onStepCountChange}
                     stepCount={stepCount}
@@ -80,7 +77,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                         files={files}
                         key={index}
                         onChange={onStepChange}
-                        selected={selectedFiles}
+                        selected={selected}
                         trackSection={trackSection}
                         value={steps.filter(
                             (trackSectionStep) =>

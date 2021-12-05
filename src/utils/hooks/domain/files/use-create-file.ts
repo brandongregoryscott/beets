@@ -4,13 +4,19 @@ import _ from "lodash";
 import { useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
-import { filesKey, storageProviderFilesKey } from "utils/query-key-utils";
+import { storageProviderFilesKey } from "utils/query-key-utils";
 import { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useMutation } from "utils/hooks/use-mutation";
 import { SupabaseClient } from "generated/supabase-client";
+import { Tables } from "generated/enums/tables";
 
-const useCreateFile = (bucketName: BucketName) => {
+interface UseCreateFileOptions {
+    bucketName: BucketName;
+}
+
+const useCreateFile = (options: UseCreateFileOptions) => {
+    const { bucketName } = options;
     const { globalState } = useGlobalState();
     const userId = globalState.userId();
     const { from: fromBucket } = useStorageProvider();
@@ -75,7 +81,7 @@ const useCreateFile = (bucketName: BucketName) => {
     const uploadMutation = useMutation({
         fn: uploadAndCreate,
         onSettled: () => {
-            queryClient.invalidateQueries(filesKey());
+            queryClient.invalidateQueries(["List", Tables.Files]);
             queryClient.invalidateQueries(storageProviderFilesKey());
         },
     });

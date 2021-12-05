@@ -15,7 +15,7 @@ interface SelectMenuItem<T> extends Omit<EvergreenSelectMenuItem, "value"> {
 interface SelectMenuProps<T>
     extends Omit<
         EvergreenSelectMenuProps,
-        "selected" | "onSelect" | "onDeselect" | "options"
+        "onDeselect" | "onSelect" | "options" | "selected"
     > {
     onDeselect?: (item: SelectMenuItem<T>) => void;
     onSelect?: (item: SelectMenuItem<T>) => void;
@@ -25,6 +25,8 @@ interface SelectMenuProps<T>
 
 const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     const {
+        closeOnSelect,
+        isMultiSelect = false,
         onDeselect: onDeselectValue,
         onSelect: onSelectValue,
         options: optionValues,
@@ -87,6 +89,8 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     return (
         <EvergreenSelectMenu
             {...restProps}
+            closeOnSelect={closeOnSelect ?? !isMultiSelect}
+            isMultiSelect={isMultiSelect}
             onDeselect={onDeselect}
             onSelect={onSelect}
             options={options}

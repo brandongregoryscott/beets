@@ -5,6 +5,7 @@ import {
     IconButton,
     majorScale,
     minorScale,
+    MusicIcon,
     Pane,
     PlusIcon,
     PropertiesIcon,
@@ -13,7 +14,7 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     Track as ReactronicaTrack,
     Instrument,
@@ -30,6 +31,8 @@ import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { FileUtils } from "utils/file-utils";
 import { TrackSectionUtils } from "utils/track-section-utils";
+import { FileSelectMenu } from "components/file-select-menu";
+import { FileRecord } from "models/file-record";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -49,7 +52,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
-
+    const [selectedSample, setSelectedSample] = useState<FileRecord>();
     const theme = useTheme();
 
     const setName = useCallback(
@@ -73,6 +76,11 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     );
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
+
+    const handleSelect = useCallback(
+        (file: FileRecord) => setSelectedSample(file),
+        [setSelectedSample]
+    );
 
     const steps = useMemo(
         () =>
@@ -119,6 +127,26 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             onClick={handleRemove}
                         />
                     </Tooltip>
+                    {track.isInstrument() && (
+                        <FileSelectMenu
+                            hasTitle={false}
+                            onDeselect={handleSelect}
+                            onSelect={handleSelect}
+                            selected={selectedSample}>
+                            <IconButton
+                                icon={
+                                    <MusicIcon
+                                        color={
+                                            selectedSample == null
+                                                ? "muted"
+                                                : "selected"
+                                        }
+                                    />
+                                }
+                                marginRight={iconMarginRight}
+                            />
+                        </FileSelectMenu>
+                    )}
                 </Pane>
                 <ReactronicaTrack
                     mute={mute}

@@ -1,9 +1,10 @@
 import { FileRecord } from "models/file-record";
-import { storageProviderFilesKey, filesKey } from "utils/query-key-utils";
+import { storageProviderFilesKey } from "utils/query-key-utils";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { useQueryClient } from "react-query";
 import { SupabaseClient } from "generated/supabase-client";
+import { Tables } from "generated/enums/tables";
 
 const useDeleteFile = (): UseMutationResult<void, Error, string> => {
     const queryClient = useQueryClient();
@@ -41,10 +42,9 @@ const useDeleteFile = (): UseMutationResult<void, Error, string> => {
     };
 
     const mutation = useMutation<void, Error, string>({
-        key: filesKey(),
         fn: deleteFile,
         onSettled: () => {
-            queryClient.invalidateQueries(filesKey());
+            queryClient.invalidateQueries(["List", Tables.Files]);
             queryClient.invalidateQueries(storageProviderFilesKey());
         },
     });

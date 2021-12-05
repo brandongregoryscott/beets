@@ -6,7 +6,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
 
 interface PianoRollDialogProps extends Pick<DialogProps, "onCloseComplete"> {
-    onStepChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
+    onChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
@@ -16,7 +16,7 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
     props: PianoRollDialogProps
 ) => {
     const {
-        onStepChange,
+        onChange,
         onStepCountChange,
         onCloseComplete,
         trackSectionSteps: initialValue,
@@ -24,12 +24,10 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
     } = props;
     const [trackSectionSteps, setTrackSectionSteps] =
         useState<List<TrackSectionStepRecord>>(initialValue);
-    console.log("trackSectionSteps", trackSectionSteps);
     const [stepCount, setStepCount] = useState<number>(trackSection.step_count);
 
-    console.log("stepCount", stepCount);
     const handleConfirm = useCallback(() => {
-        onStepChange(
+        onChange(
             trackSectionSteps.filter(
                 (trackSectionStep) => trackSectionStep.index <= stepCount
             )
@@ -37,8 +35,8 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
         onStepCountChange(stepCount);
         onCloseComplete?.();
     }, [
+        onChange,
         onCloseComplete,
-        onStepChange,
         onStepCountChange,
         stepCount,
         trackSectionSteps,

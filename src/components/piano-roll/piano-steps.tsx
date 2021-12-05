@@ -20,7 +20,6 @@ interface PianoStepsProps {
 
 const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
     const { onChange, stepCount, trackSection, trackSectionSteps } = props;
-    console.log("PianoSteps stepCount", stepCount);
     const theme = useTheme();
     const handleClick = useCallback(
         (index: number, note: MidiNote) => {

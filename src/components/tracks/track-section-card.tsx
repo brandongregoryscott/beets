@@ -196,7 +196,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
             {pianoRollDialogOpen && (
                 <PianoRollDialog
                     onCloseComplete={handleClosePianoRollDialog}
-                    onStepChange={handleTrackSectionStepsChange}
+                    onChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}
                     trackSectionSteps={trackSectionSteps}
                     trackSection={trackSection}

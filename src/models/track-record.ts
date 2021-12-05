@@ -38,6 +38,10 @@ class TrackRecord
         super(values);
     }
 
+    public isInstrument(): boolean {
+        return this.type === TrackType.Instrument;
+    }
+
     public isSequencer(): boolean {
         return this.type === TrackType.Sequencer;
     }
