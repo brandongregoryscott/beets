@@ -42,7 +42,7 @@ const useListTrackSections = (
 
     const result = useQuery<TrackSectionRecord[], Error>({
         enabled,
-        key: ["List", Tables.TrackSections],
+        key: Tables.TrackSections,
         fn: list,
         onError,
         onSuccess,

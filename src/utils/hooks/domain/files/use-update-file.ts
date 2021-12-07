@@ -31,7 +31,7 @@ const useUpdateFile = (
     const mutation = useMutation<FileRecord, Error, FileRecord>({
         fn: updateFile,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Files]);
+            queryClient.invalidateQueries([Tables.Files]);
             onSettled?.();
         },
     });

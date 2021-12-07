@@ -39,7 +39,7 @@ const useListUsers = (
 
     const result = useQuery<UserRecord[], Error>({
         enabled,
-        key: ["List", Tables.Users],
+        key: Tables.Users,
         fn: list,
         onError,
         onSuccess,

@@ -44,7 +44,7 @@ const useDeleteFile = (): UseMutationResult<void, Error, string> => {
     const mutation = useMutation<void, Error, string>({
         fn: deleteFile,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Files]);
+            queryClient.invalidateQueries([Tables.Files]);
             queryClient.invalidateQueries(storageProviderFilesKey());
         },
     });

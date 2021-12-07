@@ -56,19 +56,6 @@ const getHookOptionsInterfaceName = (
     return `${hookName}Options`;
 };
 
-const getQueryKey = (
-    action: HookAction,
-    property: PropertySignature
-): string => {
-    const queryKey = `"${action}", ${getTablesEnumValue(property)}`;
-
-    if (action === HookAction.Get) {
-        return `[${queryKey}, id]`;
-    }
-
-    return `[${queryKey}]`;
-};
-
 const getRecordImportPath = (property: PropertySignature): string =>
     upath.join("models", removeExt(getRecordFileName(property)));
 
@@ -155,7 +142,6 @@ export {
     getHookName,
     getHookOptionsInterfaceName,
     getHookPath,
-    getQueryKey,
     getRecordFileName,
     getRecordImportPath,
     getRecordName,

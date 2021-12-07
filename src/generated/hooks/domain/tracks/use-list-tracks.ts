@@ -39,7 +39,7 @@ const useListTracks = (
 
     const result = useQuery<TrackRecord[], Error>({
         enabled,
-        key: ["List", Tables.Tracks],
+        key: Tables.Tracks,
         fn: list,
         onError,
         onSuccess,

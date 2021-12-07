@@ -10,8 +10,8 @@ import {
     getRecordSourceFile,
     getHookOptionsInterfaceName,
     getHookName,
-    getQueryKey,
     getHookPath,
+    getTablesEnumValue,
 } from "../utils";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
@@ -159,10 +159,7 @@ const useCreateOrUpdateInitializer = (
             ${onSuccess},
             ${onError},
             ${onSettled}: () => {
-                queryClient.invalidateQueries(${getQueryKey(
-                    HookAction.List,
-                    property
-                )});
+                queryClient.invalidateQueries(${getTablesEnumValue(property)});
                 ${onSettled}?.();
             },
         });

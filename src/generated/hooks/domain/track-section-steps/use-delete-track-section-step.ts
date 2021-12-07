@@ -28,7 +28,7 @@ const useDeleteTrackSectionStep = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.TrackSectionSteps]);
+            queryClient.invalidateQueries(Tables.TrackSectionSteps);
         },
     });
 

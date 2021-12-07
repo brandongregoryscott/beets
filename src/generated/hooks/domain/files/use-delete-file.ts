@@ -28,7 +28,7 @@ const useDeleteFile = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Files]);
+            queryClient.invalidateQueries(Tables.Files);
         },
     });
 

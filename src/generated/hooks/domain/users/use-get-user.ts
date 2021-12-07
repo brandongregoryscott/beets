@@ -30,7 +30,7 @@ const useGetUser = (
 
     const result = useQuery<UserRecord | undefined, Error>({
         enabled,
-        key: ["Get", Tables.Users, id],
+        key: [Tables.Users, id],
         fn: get,
     });
 

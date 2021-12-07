@@ -34,7 +34,7 @@ const useGetTrackSectionStep = (
 
     const result = useQuery<TrackSectionStepRecord | undefined, Error>({
         enabled,
-        key: ["Get", Tables.TrackSectionSteps, id],
+        key: [Tables.TrackSectionSteps, id],
         fn: get,
     });
 

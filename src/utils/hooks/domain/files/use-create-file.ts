@@ -81,7 +81,7 @@ const useCreateFile = (options: UseCreateFileOptions) => {
     const uploadMutation = useMutation({
         fn: uploadAndCreate,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Files]);
+            queryClient.invalidateQueries([Tables.Files]);
             queryClient.invalidateQueries(storageProviderFilesKey());
         },
     });

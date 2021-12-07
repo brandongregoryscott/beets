@@ -39,7 +39,7 @@ const useListProjects = (
 
     const result = useQuery<ProjectRecord[], Error>({
         enabled,
-        key: ["List", Tables.Projects],
+        key: Tables.Projects,
         fn: list,
         onError,
         onSuccess,

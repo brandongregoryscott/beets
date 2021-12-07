@@ -36,7 +36,7 @@ const useCreateOrUpdateTrack = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Tracks]);
+            queryClient.invalidateQueries(Tables.Tracks);
             onSettled?.();
         },
     });

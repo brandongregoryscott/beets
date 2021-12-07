@@ -34,7 +34,7 @@ const useGetTrackSection = (
 
     const result = useQuery<TrackSectionRecord | undefined, Error>({
         enabled,
-        key: ["Get", Tables.TrackSections, id],
+        key: [Tables.TrackSections, id],
         fn: get,
     });
 

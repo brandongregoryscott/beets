@@ -3,11 +3,9 @@ import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "../log";
 import {
     getFromFunctionName,
-    toKebabCase,
     getHookOptionsInterfaceName,
     getHookName,
     getTablesEnumValue,
-    getQueryKey,
     getHookPath,
     getInterfaceName,
 } from "../utils";
@@ -115,10 +113,7 @@ const useDeleteInitializer = (property: PropertySignature) => {
             ${onSuccess},
             ${onError},
             ${onSettled}: () => {
-                queryClient.invalidateQueries(${getQueryKey(
-                    HookAction.List,
-                    property
-                )});
+                queryClient.invalidateQueries(${getTablesEnumValue(property)});
             },
         });
 

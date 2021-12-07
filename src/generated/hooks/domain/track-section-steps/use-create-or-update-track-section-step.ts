@@ -41,10 +41,7 @@ const useCreateOrUpdateTrackSectionStep = (
             onSuccess,
             onError,
             onSettled: () => {
-                queryClient.invalidateQueries([
-                    "List",
-                    Tables.TrackSectionSteps,
-                ]);
+                queryClient.invalidateQueries(Tables.TrackSectionSteps);
                 onSettled?.();
             },
         }

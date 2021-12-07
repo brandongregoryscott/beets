@@ -57,6 +57,10 @@ const deleteOwnRecordPolicy =
         };
     };
 
+const dropColumnIfExists =
+    (pgm: MigrationBuilder, tableName: Name) => (columnName: string) =>
+        pgm.sql(`ALTER TABLE ${tableName} DROP COLUMN IF EXISTS ${columnName}`);
+
 const readAnyRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
         const policyName = q("Users can read any record.");
@@ -105,7 +109,7 @@ const softDeleteRule =
             policyOrRuleName: ruleName,
             up: () =>
                 pgm.sql(
-                    `CREATE RULE ${ruleName} AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${AuditableColumns.DeletedOn} = current_timestamp, ${AuditableColumns.DeletedById} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
+                    `CREATE OR REPLACE RULE ${ruleName} AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${AuditableColumns.DeletedOn} = current_timestamp, ${AuditableColumns.DeletedById} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
                 ),
         };
     };
@@ -187,6 +191,7 @@ const configure = (options: MigrationBuilderUtilsOptions) => {
     return {
         authenticatedCreatePolicy: authenticatedCreatePolicy(pgm, tableName),
         deleteOwnRecordPolicy: deleteOwnRecordPolicy(pgm, tableName),
+        dropColumnIfExists: dropColumnIfExists(pgm, tableName),
         readAnyRecordPolicy: readAnyRecordPolicy(pgm, tableName),
         readOwnRecordPolicy: readOwnRecordPolicy(pgm, tableName),
         rowLevelSecurity: rowLevelSecurity(pgm, tableName),
