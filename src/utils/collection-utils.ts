@@ -92,7 +92,11 @@ const intersectionWith = <TLeft, TRight>(
         rightValues = rightValues.toArray();
     }
 
-    return List(_.intersectionWith(leftValues, rightValues, comparator));
+    return List(
+        leftValues.filter((left) =>
+            rightValues.some((right) => comparator(left, right))
+        )
+    );
 };
 
 const mapTo = <TSource, TDestination>(
