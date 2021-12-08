@@ -23,7 +23,10 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         });
 
     useEffect(() => {
-        if (isAuthenticated && isLoadingWorkstations) {
+        if (
+            (isAuthenticated && isLoadingWorkstations) ||
+            state.project.isPersisted()
+        ) {
             return;
         }
 
