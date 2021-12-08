@@ -7,6 +7,7 @@ import { isNilOrEmpty } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useListWorkstations } from "utils/hooks/use-list-workstations";
 
 interface WorkstationPageProps {}
 
@@ -15,18 +16,45 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 ) => {
     const { isAuthenticated } = useGlobalState();
     const { state, setState } = useWorkstationState();
-    const { resultObject: files } = useListFiles();
+    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { resultObject: workstations, isLoading: isLoadingWorkstations } =
+        useListWorkstations({
+            enabled: isAuthenticated,
+        });
 
     useEffect(() => {
-        if (isAuthenticated || isNilOrEmpty(files) || state.isDemo()) {
+        if (isAuthenticated && isLoadingWorkstations) {
+            return;
+        }
+
+        if (
+            !isAuthenticated &&
+            (isLoadingFiles || isNilOrEmpty(files) || state.isDemo())
+        ) {
+            return;
+        }
+
+        // Load the most recently updated workstation if authenticated
+        if (isAuthenticated) {
+            setState(workstations?.first() ?? new WorkstationStateRecord());
             return;
         }
 
         const demoState = WorkstationStateRecord.demo(files);
         setState(demoState);
-    }, [files, isAuthenticated, setState, state]);
+    }, [
+        files,
+        isAuthenticated,
+        isLoadingFiles,
+        isLoadingWorkstations,
+        setState,
+        state,
+        workstations,
+    ]);
 
-    const renderSpinner = !isAuthenticated && !state.isDemo();
+    const renderSpinner =
+        (!isAuthenticated && isLoadingFiles) ||
+        (isAuthenticated && isLoadingWorkstations);
     const renderControls = !renderSpinner;
     return (
         <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
