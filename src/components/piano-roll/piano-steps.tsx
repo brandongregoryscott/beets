@@ -1,13 +1,19 @@
 import { PianoKey } from "components/piano-roll/piano-key";
 import { PianoStep } from "components/piano-roll/piano-step";
 import { MidiNotes } from "constants/midi-notes";
-import { Pane } from "evergreen-ui";
+import {
+    Pane,
+    IconButton,
+    CaretUpIcon,
+    CaretDownIcon,
+    majorScale,
+} from "evergreen-ui";
 import { List } from "immutable";
 import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { MidiNote } from "reactronica";
 import { useTheme } from "utils/hooks/use-theme";
 import { isSelected } from "utils/track-section-step-utils";
@@ -20,9 +26,22 @@ interface PianoStepsProps {
     trackSectionSteps: List<TrackSectionStepRecord>;
 }
 
+const defaultNoteIndex = MidiNotes.indexOf("C5");
+const indexRange = 12; // Chromatic scale
+
 const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
     const { file, onChange, stepCount, trackSection, trackSectionSteps } =
         props;
+    const [viewableIndex, setViewableIndex] =
+        useState<number>(defaultNoteIndex);
+    const handleScaleDown = useCallback(
+        () => setViewableIndex((prev) => prev - indexRange),
+        [setViewableIndex]
+    );
+    const handleScaleUp = useCallback(
+        () => setViewableIndex((prev) => prev + indexRange),
+        [setViewableIndex]
+    );
 
     const theme = useTheme();
     const handleClick = useCallback(
@@ -54,7 +73,10 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
     );
     const innerContent = useMemo(
         () =>
-            MidiNotes.map((note) => (
+            MidiNotes.slice(
+                Math.max(viewableIndex, 0),
+                viewableIndex + indexRange
+            ).map((note) => (
                 <Pane
                     backgroundColor={theme.colors.gray300}
                     display="flex"
@@ -78,9 +100,29 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
                     ))}
                 </Pane>
             )),
-        [handleClick, stepCount, theme.colors.gray300, trackSectionSteps]
+        [
+            handleClick,
+            stepCount,
+            theme.colors.gray300,
+            trackSectionSteps,
+            viewableIndex,
+        ]
     );
-    return <React.Fragment>{innerContent}</React.Fragment>;
+    return (
+        <React.Fragment>
+            <IconButton
+                icon={CaretUpIcon}
+                onClick={handleScaleDown}
+                width={majorScale(6)}
+            />
+            {innerContent}
+            <IconButton
+                icon={CaretDownIcon}
+                onClick={handleScaleUp}
+                width={majorScale(6)}
+            />
+        </React.Fragment>
+    );
 };
 
 export { PianoSteps };
