@@ -34,7 +34,6 @@
         "web-vitals": "1.1.2"
     },
     "devDependencies": {
-        "@brandongregoryscott/node-pg-migrate": "6.0.1",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/react": "11.2.7",
         "@testing-library/user-event": "12.8.3",
@@ -52,6 +51,7 @@
         "@types/uuid": "8.3.1",
         "chalk": "4.1.2",
         "dotenv": "10.0.0",
+        "node-pg-migrate": "6.0.0",
         "openapi-typescript": "4.4.0",
         "pluralize": "8.0.0",
         "ts-morph": "12.0.0",
@@ -81,9 +81,9 @@
         "premigrations:create": "npm run build:migrations",
         "premigrations:down": "npm run build:migrations",
         "premigrations:up": "npm run build:migrations",
-        "migrations:create": "node-pg-migrate  --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts --quote-escape false create",
-        "migrations:down": "node-pg-migrate --migrations-dir src/scripts/migrations/dist --quote-escape false down",
-        "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist --quote-escape false up",
+        "migrations:create": "node-pg-migrate  --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts create",
+        "migrations:down": "node-pg-migrate --migrations-dir src/scripts/migrations/dist down",
+        "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist up",
         "start": "react-scripts start",
         "test": "react-scripts test"
     },
