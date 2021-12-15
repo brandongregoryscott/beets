@@ -1,4 +1,4 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 
 const id = "id";
 

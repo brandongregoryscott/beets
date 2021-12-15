@@ -1,4 +1,4 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 import { configure } from "./utils/migration-builder-utils";
 import { AuditableColumns } from "./enums/auditable-columns";
 import { Tables } from "./enums/tables";

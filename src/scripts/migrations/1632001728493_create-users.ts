@@ -1,4 +1,4 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 import { makeAuditableColumns } from "./utils/auditable-columns";
 import { configure } from "./utils/migration-builder-utils";
 import { Tables } from "./enums/tables";
@@ -15,7 +15,10 @@ const up = (pgm: MigrationBuilder) => {
             type: "uuid",
             notNull: true,
             primaryKey: true,
-            references: `${quote("auth")}.users`,
+            references: {
+                name: "users",
+                schema: "auth",
+            },
         },
         email: {
             type: "text",

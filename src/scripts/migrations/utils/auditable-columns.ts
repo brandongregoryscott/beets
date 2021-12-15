@@ -1,4 +1,4 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 import { AuditableColumns } from "../enums/auditable-columns";
 
 const makeAuditableColumns = (pgm: MigrationBuilder) => ({
