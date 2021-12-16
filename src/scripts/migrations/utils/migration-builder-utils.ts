@@ -29,7 +29,7 @@ const updateTriggerSql = `
 
 const authenticatedCreatePolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
-        const policyName = q("Authenticated users can create records.");
+        const policyName = "Authenticated users can create records.";
 
         return {
             down: () => pgm.dropPolicy(tableName, policyName),
@@ -44,7 +44,7 @@ const authenticatedCreatePolicy =
 
 const deleteOwnRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
-        const policyName = q("Users can delete their own records.");
+        const policyName = "Users can delete their own records.";
 
         return {
             down: () => pgm.dropPolicy(tableName, policyName),
@@ -63,7 +63,7 @@ const dropColumnIfExists =
 
 const readAnyRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
-        const policyName = q("Users can read any record.");
+        const policyName = "Users can read any record.";
         return {
             down: () => pgm.dropPolicy(tableName, policyName),
             policyOrRuleName: policyName,
@@ -77,7 +77,7 @@ const readAnyRecordPolicy =
 
 const readOwnRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
-        const policyName = q("Users can read their own records.");
+        const policyName = "Users can read their own records.";
         return {
             down: () => pgm.dropPolicy(tableName, policyName),
             policyOrRuleName: policyName,
@@ -141,7 +141,7 @@ const updateTrigger =
 
 const updateOwnRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
-        const policyName = q("Users can update their own records.");
+        const policyName = "Users can update their own records.";
         return {
             down: () => pgm.dropPolicy(tableName, policyName),
             policyOrRuleName: policyName,

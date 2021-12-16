@@ -6,8 +6,6 @@ const tableName = Tables.TrackSectionSteps;
 const columnName = "note";
 
 const up = (pgm: MigrationBuilder) => {
-    const config = configure({ pgm, tableName });
-
     pgm.addColumn(tableName, {
         [columnName]: {
             type: "string",
@@ -16,9 +14,6 @@ const up = (pgm: MigrationBuilder) => {
         },
     });
     pgm.alterColumn(tableName, "file_id", { notNull: false });
-
-    // Rules need to be recreated after columns are changed
-    config.softDeleteRule().up();
 };
 
 const down = (pgm: MigrationBuilder) => {

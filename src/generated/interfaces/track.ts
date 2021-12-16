@@ -1,5 +1,4 @@
 import { Auditable } from "interfaces/auditable";
-import { TrackType } from "generated/enums/track-type";
 
 interface Track extends Auditable {
     index: number;
@@ -13,7 +12,11 @@ interface Track extends Auditable {
      */
     project_id: string;
     volume: number;
-    type: TrackType;
+    /**
+     * Note:
+     * This is a Foreign Key to `instruments.id`.<fk table='instruments' column='id'/>
+     */
+    instrument_id?: string;
 }
 
 export type { Track };

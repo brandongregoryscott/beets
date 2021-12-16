@@ -135,6 +135,126 @@ export interface paths {
             };
         };
     };
+    "/instruments": {
+        get: {
+            parameters: {
+                query: {
+                    created_on?: parameters["rowFilter.instruments.created_on"];
+                    created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+                    deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.instruments.updated_on"];
+                    updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+                    id?: parameters["rowFilter.instruments.id"];
+                    curve?: parameters["rowFilter.instruments.curve"];
+                    file_id?: parameters["rowFilter.instruments.file_id"];
+                    name?: parameters["rowFilter.instruments.name"];
+                    release?: parameters["rowFilter.instruments.release"];
+                    root_note?: parameters["rowFilter.instruments.root_note"];
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                    /** Ordering */
+                    order?: parameters["order"];
+                    /** Limiting and Pagination */
+                    offset?: parameters["offset"];
+                    /** Limiting and Pagination */
+                    limit?: parameters["limit"];
+                };
+                header: {
+                    /** Limiting and Pagination */
+                    Range?: parameters["range"];
+                    /** Limiting and Pagination */
+                    "Range-Unit"?: parameters["rangeUnit"];
+                    /** Preference */
+                    Prefer?: parameters["preferCount"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["instruments"][];
+                };
+                /** Partial Content */
+                206: unknown;
+            };
+        };
+        post: {
+            parameters: {
+                body: {
+                    /** instruments */
+                    instruments?: definitions["instruments"];
+                };
+                query: {
+                    /** Filtering Columns */
+                    select?: parameters["select"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** Created */
+                201: unknown;
+            };
+        };
+        delete: {
+            parameters: {
+                query: {
+                    created_on?: parameters["rowFilter.instruments.created_on"];
+                    created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+                    deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.instruments.updated_on"];
+                    updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+                    id?: parameters["rowFilter.instruments.id"];
+                    curve?: parameters["rowFilter.instruments.curve"];
+                    file_id?: parameters["rowFilter.instruments.file_id"];
+                    name?: parameters["rowFilter.instruments.name"];
+                    release?: parameters["rowFilter.instruments.release"];
+                    root_note?: parameters["rowFilter.instruments.root_note"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+        patch: {
+            parameters: {
+                query: {
+                    created_on?: parameters["rowFilter.instruments.created_on"];
+                    created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+                    deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+                    deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+                    updated_on?: parameters["rowFilter.instruments.updated_on"];
+                    updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+                    id?: parameters["rowFilter.instruments.id"];
+                    curve?: parameters["rowFilter.instruments.curve"];
+                    file_id?: parameters["rowFilter.instruments.file_id"];
+                    name?: parameters["rowFilter.instruments.name"];
+                    release?: parameters["rowFilter.instruments.release"];
+                    root_note?: parameters["rowFilter.instruments.root_note"];
+                };
+                body: {
+                    /** instruments */
+                    instruments?: definitions["instruments"];
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferReturn"];
+                };
+            };
+            responses: {
+                /** No Content */
+                204: never;
+            };
+        };
+    };
     "/pgmigrations": {
         get: {
             parameters: {
@@ -594,7 +714,7 @@ export interface paths {
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
                     volume?: parameters["rowFilter.tracks.volume"];
-                    type?: parameters["rowFilter.tracks.type"];
+                    instrument_id?: parameters["rowFilter.tracks.instrument_id"];
                     /** Filtering Columns */
                     select?: parameters["select"];
                     /** Ordering */
@@ -659,7 +779,7 @@ export interface paths {
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
                     volume?: parameters["rowFilter.tracks.volume"];
-                    type?: parameters["rowFilter.tracks.type"];
+                    instrument_id?: parameters["rowFilter.tracks.instrument_id"];
                 };
                 header: {
                     /** Preference */
@@ -688,7 +808,7 @@ export interface paths {
                     pan?: parameters["rowFilter.tracks.pan"];
                     project_id?: parameters["rowFilter.tracks.project_id"];
                     volume?: parameters["rowFilter.tracks.volume"];
-                    type?: parameters["rowFilter.tracks.type"];
+                    instrument_id?: parameters["rowFilter.tracks.instrument_id"];
                 };
                 body: {
                     /** tracks */
@@ -847,6 +967,23 @@ export interface paths {
             };
         };
     };
+    "/rpc/update_instruments_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
     "/rpc/update_files_auditable_fields": {
         post: {
             parameters: {
@@ -940,6 +1077,28 @@ export interface definitions {
         path: string;
         size?: number;
         type: string;
+    };
+    instruments: {
+        created_on?: string;
+        created_by_id?: string;
+        deleted_on?: string;
+        deleted_by_id?: string;
+        updated_on?: string;
+        updated_by_id?: string;
+        /**
+         * Note:
+         * This is a Primary Key.<pk/>
+         */
+        id: string;
+        curve: "exponential" | "linear";
+        /**
+         * Note:
+         * This is a Foreign Key to `files.id`.<fk table='files' column='id'/>
+         */
+        file_id: string;
+        name: string;
+        release?: number;
+        root_note?: string;
     };
     pgmigrations: {
         /**
@@ -1035,7 +1194,11 @@ export interface definitions {
          */
         project_id: string;
         volume: number;
-        type: "sequencer" | "instrument";
+        /**
+         * Note:
+         * This is a Foreign Key to `instruments.id`.<fk table='instruments' column='id'/>
+         */
+        instrument_id?: string;
     };
     users: {
         created_on?: string;
@@ -1089,6 +1252,20 @@ export interface parameters {
     "rowFilter.files.path": string;
     "rowFilter.files.size": string;
     "rowFilter.files.type": string;
+    /** instruments */
+    "body.instruments": definitions["instruments"];
+    "rowFilter.instruments.created_on": string;
+    "rowFilter.instruments.created_by_id": string;
+    "rowFilter.instruments.deleted_on": string;
+    "rowFilter.instruments.deleted_by_id": string;
+    "rowFilter.instruments.updated_on": string;
+    "rowFilter.instruments.updated_by_id": string;
+    "rowFilter.instruments.id": string;
+    "rowFilter.instruments.curve": string;
+    "rowFilter.instruments.file_id": string;
+    "rowFilter.instruments.name": string;
+    "rowFilter.instruments.release": string;
+    "rowFilter.instruments.root_note": string;
     /** pgmigrations */
     "body.pgmigrations": definitions["pgmigrations"];
     "rowFilter.pgmigrations.id": string;
@@ -1148,7 +1325,7 @@ export interface parameters {
     "rowFilter.tracks.pan": string;
     "rowFilter.tracks.project_id": string;
     "rowFilter.tracks.volume": string;
-    "rowFilter.tracks.type": string;
+    "rowFilter.tracks.instrument_id": string;
     /** users */
     "body.users": definitions["users"];
     "rowFilter.users.created_on": string;

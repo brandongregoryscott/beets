@@ -1,5 +1,6 @@
 enum Tables {
     Files = "files",
+    Instruments = "instruments",
     Pgmigrations = "pgmigrations",
     Projects = "projects",
     TrackSectionSteps = "track_section_steps",
