@@ -1,3 +1,4 @@
+import { InstrumentRecord } from "models/instrument-record";
 import { Instrument } from "generated/interfaces/instrument";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
@@ -10,14 +11,14 @@ interface UseListInstrumentsOptions {
         query: PostgrestFilterBuilder<Instrument>
     ) => PostgrestFilterBuilder<Instrument>;
     onError?: (error: Error) => void;
-    onSuccess?: (resultObjects: Instrument[]) => void;
+    onSuccess?: (resultObjects: InstrumentRecord[]) => void;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<Instrument>) => query;
 
 const useListInstruments = (
     options?: UseListInstrumentsOptions
-): UseQueryResult<Instrument[], Error> => {
+): UseQueryResult<InstrumentRecord[], Error> => {
     const { fromInstruments } = SupabaseClient;
     const {
         enabled,
@@ -33,10 +34,12 @@ const useListInstruments = (
             throw error;
         }
 
-        return data ?? [];
+        return (
+            data?.map((instrument) => new InstrumentRecord(instrument)) ?? []
+        );
     };
 
-    const result = useQuery<Instrument[], Error>({
+    const result = useQuery<InstrumentRecord[], Error>({
         enabled,
         key: Tables.Instruments,
         fn: list,

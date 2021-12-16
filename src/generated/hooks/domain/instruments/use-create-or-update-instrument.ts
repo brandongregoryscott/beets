@@ -1,3 +1,4 @@
+import { InstrumentRecord } from "models/instrument-record";
 import { Instrument } from "generated/interfaces/instrument";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
@@ -7,19 +8,23 @@ import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 interface UseCreateOrUpdateInstrumentOptions {
     onError?: (error: Error) => void;
     onSettled?: () => void;
-    onSuccess?: (resultObject: Instrument) => void;
+    onSuccess?: (resultObject: InstrumentRecord) => void;
 }
 
 const useCreateOrUpdateInstrument = (
     options?: UseCreateOrUpdateInstrumentOptions
-): UseMutationResult<Instrument, Error, Instrument> => {
+): UseMutationResult<InstrumentRecord, Error, Instrument> => {
     const { fromInstruments } = SupabaseClient;
     const { onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
     const createOrUpdate = async (instrument: Instrument) => {
         const { data, error } = await fromInstruments()
-            .upsert(instrument)
+            .upsert(
+                instrument instanceof InstrumentRecord
+                    ? instrument.toPOJO()
+                    : instrument
+            )
             .limit(1)
             .single();
 
@@ -27,10 +32,10 @@ const useCreateOrUpdateInstrument = (
             throw error;
         }
 
-        return data!;
+        return new InstrumentRecord(data!);
     };
 
-    const result = useMutation<Instrument, Error, Instrument>({
+    const result = useMutation<InstrumentRecord, Error, Instrument>({
         fn: createOrUpdate,
         onSuccess,
         onError,

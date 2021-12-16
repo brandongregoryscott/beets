@@ -1,4 +1,4 @@
-import { Instrument } from "generated/interfaces/instrument";
+import { InstrumentRecord } from "models/instrument-record";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
@@ -10,7 +10,7 @@ interface UseGetInstrumentOptions {
 
 const useGetInstrument = (
     options: UseGetInstrumentOptions
-): UseQueryResult<Instrument | undefined, Error> => {
+): UseQueryResult<InstrumentRecord | undefined, Error> => {
     const { fromInstruments } = SupabaseClient;
     const { id, enabled } = options;
 
@@ -29,10 +29,10 @@ const useGetInstrument = (
             return undefined;
         }
 
-        return data;
+        return new InstrumentRecord(data);
     };
 
-    const result = useQuery<Instrument | undefined, Error>({
+    const result = useQuery<InstrumentRecord | undefined, Error>({
         enabled,
         key: [Tables.Instruments, id],
         fn: get,
