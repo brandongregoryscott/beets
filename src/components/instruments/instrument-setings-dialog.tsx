@@ -1,21 +1,25 @@
+import { FileSelectMenu } from "components/file-select-menu";
 import { FormDialog } from "components/form-dialog";
-import {
-    Dialog,
-    DialogProps,
-    Pane,
-    TextInputField,
-    toaster,
-} from "evergreen-ui";
+import { FormField } from "components/form-field";
+import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { Button, DialogProps, TextInputField } from "evergreen-ui";
+import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
+import { capitalize } from "lodash";
+import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
+import { enumToSelectMenuItems } from "utils/select-menu-utils";
 
 interface InstrumentSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
     instrument?: InstrumentRecord;
 }
+
+const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
+    enumToSelectMenuItems(InstrumentCurve);
 
 const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     props: InstrumentSettingsDialogProps
@@ -31,6 +35,12 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     const { value: release, onChange: onReleaseChange } = useNumberInput({
         initialValue: initialInstrument?.release,
     });
+    const [selectedSample, setSelectedSample] = useState<
+        FileRecord | undefined
+    >();
+    const [curve, setCurve] = useState<InstrumentCurve>(
+        InstrumentCurve.Exponential
+    );
 
     const handleSubmit = useCallback(() => {
         if (nameValidation.isInvalid) {
@@ -52,7 +62,6 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                 {...nameValidation}
                 label="Name"
                 onChange={onNameChange}
-                required={true}
                 value={name}
             />
             <TextInputField
@@ -60,6 +69,29 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                 onChange={onReleaseChange}
                 value={release ?? ""}
             />
+            <FormField label="Curve">
+                <SelectMenu
+                    calculateHeight={true}
+                    hasFilter={false}
+                    hasTitle={false}
+                    onValueDeselect={setCurve}
+                    onValueSelect={setCurve}
+                    options={curveOptions}
+                    selected={curve}>
+                    <Button width="100%">{capitalize(curve)}</Button>
+                </SelectMenu>
+            </FormField>
+            <FormField label="Sample">
+                <FileSelectMenu
+                    hasTitle={false}
+                    onDeselect={setSelectedSample}
+                    onSelect={setSelectedSample}
+                    selected={selectedSample}>
+                    <Button width="100%">
+                        {selectedSample?.name ?? "No sample selected"}
+                    </Button>
+                </FileSelectMenu>
+            </FormField>
         </FormDialog>
     );
 };

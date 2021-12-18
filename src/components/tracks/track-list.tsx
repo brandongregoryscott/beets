@@ -72,9 +72,9 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
             <Pane display="flex" flexDirection="row" marginRight="auto">
                 <Tooltip content="Add Track">
                     <SelectMenu
+                        calculateHeight={true}
                         closeOnSelect={true}
                         hasFilter={false}
-                        height={108}
                         width={majorScale(16)}
                         isMultiSelect={false}
                         onSelect={handleSelect}

@@ -1,4 +1,6 @@
 import {
+    majorScale,
+    minorScale,
     SelectMenu as EvergreenSelectMenu,
     SelectMenuItem as EvergreenSelectMenuItem,
     SelectMenuProps as EvergreenSelectMenuProps,
@@ -6,29 +8,37 @@ import {
 import { List } from "immutable";
 import _ from "lodash";
 import { useCallback, useMemo } from "react";
+import { isNotNilOrEmpty } from "utils/core-utils";
 
 interface SelectMenuItem<T> extends Omit<EvergreenSelectMenuItem, "value"> {
     id: string;
     value: T;
 }
 
+const defaultHeight = majorScale(31); // Value from base component
+const footerHeight = 6;
+
 interface SelectMenuProps<T>
     extends Omit<
         EvergreenSelectMenuProps,
         "onDeselect" | "onSelect" | "options" | "selected"
     > {
+    /** Calculate height of menu based on # of items */
+    calculateHeight?: boolean;
     onDeselect?: (item: SelectMenuItem<T>) => void;
     onSelect?: (item: SelectMenuItem<T>) => void;
+    onValueDeselect?: (value: T) => void;
+    onValueSelect?: (value: T) => void;
     options?: Array<SelectMenuItem<T>>;
     selected?: T | T[] | List<T>;
 }
 
 const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     const {
+        calculateHeight = false,
         closeOnSelect,
+        height = defaultHeight,
         isMultiSelect = false,
-        onDeselect: onDeselectValue,
-        onSelect: onSelectValue,
         options: optionValues,
         selected: selectedValues,
         ...restProps
@@ -68,28 +78,38 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     }, [optionValues, selectedValues]);
 
     const handleSelect = useCallback(
-        (callback?: (item: SelectMenuItem<T>) => void) =>
+        (
+                callback?: (item: SelectMenuItem<T>) => void,
+                valueCallback?: (value: T) => void
+            ) =>
             (item: EvergreenSelectMenuItem) => {
-                const selectedValue = optionValues?.find(
+                const selected = optionValues?.find(
                     (option) => option.id === item.value
                 );
 
-                if (selectedValue == null) {
+                if (selected == null) {
                     return;
                 }
 
-                callback?.(selectedValue);
+                callback?.(selected);
+                valueCallback?.(selected.value);
             },
         [optionValues]
     );
 
-    const onDeselect = handleSelect(onDeselectValue);
-    const onSelect = handleSelect(onSelectValue);
+    const onDeselect = handleSelect(props?.onDeselect, props?.onValueDeselect);
+    const onSelect = handleSelect(props?.onSelect, props?.onValueSelect);
 
     return (
         <EvergreenSelectMenu
             {...restProps}
             closeOnSelect={closeOnSelect ?? !isMultiSelect}
+            height={calculateHeightFromProps({
+                calculateHeight,
+                height,
+                options: optionValues ?? [],
+                hasTitle: isNotNilOrEmpty(props.title),
+            })}
             isMultiSelect={isMultiSelect}
             onDeselect={onDeselect}
             onSelect={onSelect}
@@ -97,6 +117,31 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
             selected={selected}
         />
     );
+};
+
+const calculateHeightFromProps = <T,>(
+    props: Required<
+        Pick<
+            SelectMenuProps<T>,
+            "calculateHeight" | "hasTitle" | "height" | "options"
+        >
+    >
+): number | string | undefined => {
+    const { calculateHeight, hasTitle, height: exactHeight, options } = props;
+
+    if (!calculateHeight) {
+        return Number(exactHeight) - footerHeight;
+    }
+
+    const headerHeight = minorScale(10);
+    const itemHeight = minorScale(9);
+    const optionCount = options?.length ?? 0;
+    let height = itemHeight * optionCount;
+    if (hasTitle) {
+        height = height + headerHeight;
+    }
+
+    return height - footerHeight;
 };
 
 export type { SelectMenuItem, SelectMenuProps };
