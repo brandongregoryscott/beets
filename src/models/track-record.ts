@@ -6,17 +6,16 @@ import { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { AuditableRecord } from "models/auditable-record";
 import { generateId } from "utils/id-utils";
-import { TrackType } from "generated/enums/track-type";
 
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
     index: 0,
+    instrument_id: undefined,
     mute: false,
     name: "New Track",
     pan: 0,
     solo: false,
     project_id: undefined,
-    type: TrackType.Instrument,
     volume: 0,
 });
 
@@ -39,11 +38,11 @@ class TrackRecord
     }
 
     public isInstrument(): boolean {
-        return this.type === TrackType.Instrument;
+        return !isNilOrEmpty(this.instrument_id);
     }
 
     public isSequencer(): boolean {
-        return this.type === TrackType.Sequencer;
+        return !this.isInstrument();
     }
 }
 

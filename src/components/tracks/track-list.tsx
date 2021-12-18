@@ -11,34 +11,52 @@ import { useCallback } from "react";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { SelectMenuItem, SelectMenu } from "components/select-menu";
-import { TrackType } from "generated/enums/track-type";
 import { TrackRecord } from "models/track-record";
 import { useProjectState } from "utils/hooks/use-project-state";
+import { useDialog } from "utils/hooks/use-dialog";
+import { InstrumentSettingsDialog } from "components/instruments/instrument-setings-dialog";
 
 interface TrackListProps {}
+
+const options: Array<SelectMenuItem<boolean>> = [
+    {
+        label: "Sequencer",
+        id: "sequencer",
+        value: false,
+    },
+    {
+        label: "Instrument",
+        id: "instrument",
+        value: true,
+    },
+];
 
 const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
     const { state: project } = useProjectState();
     const { state: tracks, add } = useTracksState();
     const { onStepPlay } = useReactronicaState();
-    const options: Array<SelectMenuItem<TrackType>> = Object.entries(
-        TrackType
-    ).map(([label, value]) => ({
-        id: value,
-        label,
-        value,
-    }));
+    const [
+        instrumentDialogOpen,
+        handleOpenInstrumentDialog,
+        handleCloseInstrumentDialog,
+    ] = useDialog();
 
     const handleSelect = useCallback(
-        (item: SelectMenuItem<TrackType>) =>
+        (item: SelectMenuItem<boolean>) => {
+            const { value: isInstrument } = item;
+            if (isInstrument) {
+                handleOpenInstrumentDialog();
+                return;
+            }
+
             add(
                 new TrackRecord().merge({
                     index: tracks.count(),
                     project_id: project.id,
-                    type: item.value,
                 })
-            ),
-        [add, project, tracks]
+            );
+        },
+        [add, handleOpenInstrumentDialog, project, tracks]
     );
     return (
         <Pane>
@@ -66,6 +84,12 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                     </SelectMenu>
                 </Tooltip>
             </Pane>
+            {instrumentDialogOpen && (
+                <InstrumentSettingsDialog
+                    isShown={true}
+                    onCloseComplete={handleCloseInstrumentDialog}
+                />
+            )}
         </Pane>
     );
 };

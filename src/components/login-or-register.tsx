@@ -14,6 +14,7 @@ import { useLogin } from "utils/hooks/supabase/use-login";
 import { useRegister } from "utils/hooks/supabase/use-register";
 import { useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { Form } from "components/form";
 
 interface LoginOrRegisterProps {
     initialShowRegister: boolean;
@@ -106,8 +107,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
     };
 
     return (
-        <Pane
-            is="form"
+        <Form
             display="flex"
             flexDirection="column"
             onSubmit={handleSubmit}
@@ -147,7 +147,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
                     confirmation link to sign in.
                 </Alert>
             )}
-        </Pane>
+        </Form>
     );
 };
 
