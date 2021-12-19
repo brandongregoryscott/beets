@@ -6,6 +6,8 @@ interface UseNumberInputOptions {
     allowFloating?: boolean;
     isRequired?: boolean;
     initialValue?: number;
+    min?: number;
+    max?: number;
 }
 
 interface UseNumberInputResult extends ValidationState {
@@ -14,13 +16,15 @@ interface UseNumberInputResult extends ValidationState {
 }
 
 const useNumberInput = (
-    input?: UseNumberInputOptions
+    options?: UseNumberInputOptions
 ): UseNumberInputResult => {
     const {
         allowFloating = false,
         isRequired = false,
         initialValue,
-    } = input ?? {};
+        min,
+        max,
+    } = options ?? {};
     const [validation, setValidation] = useState<ValidationState | undefined>();
     const [value, setValue] = useState<number | undefined>(initialValue);
 
@@ -32,18 +36,19 @@ const useNumberInput = (
 
     const handleValueChange = useCallback(
         (value?: number) => {
-            if (isRequired && value == null) {
-                setValidation(ValueRequiredState);
-            }
-
+            setValidation(getValidationState(value, { min, max, isRequired }));
             setValue(value);
         },
-        [isRequired, setValidation, setValue]
+        [isRequired, min, max, setValidation, setValue]
     );
 
     const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             const { value: rawValue } = event.target;
+            if (rawValue === "-") {
+                handleValueChange(-1);
+                return;
+            }
             const parsedValue = parseNumber(rawValue);
             handleValueChange(isNaN(parsedValue) ? undefined : parsedValue);
         },
@@ -55,6 +60,44 @@ const useNumberInput = (
         onChange: handleChange,
         value,
     };
+};
+
+const getValidationState = (
+    value: number | undefined,
+    options: Pick<UseNumberInputOptions, "isRequired" | "min" | "max">
+): ValidationState | undefined => {
+    const { isRequired, min, max } = options;
+    if (isRequired && value == null) {
+        return ValueRequiredState;
+    }
+
+    const hasMin = min != null;
+    const hasMax = max != null;
+    const isLessThanMin = min != null && value != null && value < min;
+    const isGreaterThanMax = max != null && value != null && value > max;
+
+    if (hasMin && hasMax && (isLessThanMin || isGreaterThanMax)) {
+        return {
+            isInvalid: true,
+            validationMessage: `Value must be between ${min} and ${max}.`,
+        };
+    }
+
+    if (hasMin && isLessThanMin) {
+        return {
+            isInvalid: true,
+            validationMessage: `Value must be greater than ${min}.`,
+        };
+    }
+
+    if (hasMax && isGreaterThanMax) {
+        return {
+            isInvalid: true,
+            validationMessage: `Value must be less than ${max}.`,
+        };
+    }
+
+    return undefined;
 };
 
 export { useNumberInput };

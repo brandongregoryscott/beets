@@ -1,12 +1,5 @@
 import { ErrorMessages } from "constants/error-messages";
-import {
-    Pane,
-    TextInputField,
-    majorScale,
-    Button,
-    Alert,
-    Link,
-} from "evergreen-ui";
+import { TextInputField, majorScale, Button, Alert, Link } from "evergreen-ui";
 import _ from "lodash";
 import { useInput } from "rooks";
 import { useBoolean } from "utils/hooks/use-boolean";

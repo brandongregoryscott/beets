@@ -20,10 +20,11 @@ const useInput = (input?: UseInputOptions): useInputResult => {
 
     const handleValueChange = useCallback(
         (value?: string) => {
-            if (isRequired && isNilOrEmpty(value)) {
-                setValidation(ValueRequiredState);
-            }
-
+            setValidation(
+                isRequired && isNilOrEmpty(value)
+                    ? ValueRequiredState
+                    : undefined
+            );
             setValue(value);
         },
         [isRequired, setValidation, setValue]
