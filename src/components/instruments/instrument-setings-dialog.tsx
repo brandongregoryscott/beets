@@ -1,9 +1,10 @@
+import { ErrorAlert } from "components/error-alert";
 import { FileSelectMenu } from "components/file-select-menu";
-import { FormDialog } from "components/form-dialog";
-import { FormField } from "components/form-field";
+import { FormDialog } from "components/forms/form-dialog";
+import { FormField } from "components/forms/form-field";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { ValueRequiredState } from "constants/validation-states";
-import { Button, DialogProps, TextInputField } from "evergreen-ui";
+import { Button, DialogProps, TextInputField, toaster } from "evergreen-ui";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
 import { Instrument } from "generated/interfaces/instrument";
@@ -12,6 +13,7 @@ import { capitalize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useState } from "react";
+import { isNilOrEmpty } from "utils/core-utils";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
@@ -28,13 +30,26 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     props: InstrumentSettingsDialogProps
 ) => {
     const { instrument: initialInstrument, isShown, onCloseComplete } = props;
-    const { mutate: createOrUpdateInstrument, isLoading } =
-        useCreateOrUpdateInstrument();
+    const {
+        error,
+        mutate: createOrUpdateInstrument,
+        isLoading,
+    } = useCreateOrUpdateInstrument({
+        onSuccess: (instrument: InstrumentRecord) => {
+            toaster.success(
+                `Instrument '${instrument.name}' successfully created!`
+            );
+            onCloseComplete?.();
+        },
+    });
     const {
         value: name,
         onChange: onNameChange,
+        setValidation: setNameValidation,
         ...nameValidation
-    } = useInput({ initialValue: initialInstrument?.name, isRequired: true });
+    } = useInput({
+        initialValue: initialInstrument?.name,
+    });
     const {
         value: release,
         onChange: onReleaseChange,
@@ -61,12 +76,20 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     );
 
     const handleSubmit = useCallback(() => {
-        if (nameValidation.isInvalid || releaseValidation.isInvalid) {
+        if (nameValidation?.isInvalid || releaseValidation.isInvalid) {
             return;
+        }
+
+        const hasSubmissionErrors = isNilOrEmpty(name) || file == null;
+        if (isNilOrEmpty(name)) {
+            setNameValidation(ValueRequiredState);
         }
 
         if (file == null) {
             setFileValidation(ValueRequiredState);
+        }
+
+        if (hasSubmissionErrors) {
             return;
         }
 
@@ -91,6 +114,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         releaseValidation,
         setFileValidation,
         createOrUpdateInstrument,
+        setNameValidation,
         initialInstrument,
     ]);
 
@@ -143,6 +167,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                     </Button>
                 </FileSelectMenu>
             </FormField>
+            <ErrorAlert error={error} />
         </FormDialog>
     );
 };

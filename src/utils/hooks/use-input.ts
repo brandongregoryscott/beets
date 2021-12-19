@@ -10,6 +10,7 @@ interface UseInputOptions {
 
 interface useInputResult extends ValidationState {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    setValidation: (validation?: ValidationState) => void;
     value?: string;
 }
 
@@ -39,6 +40,7 @@ const useInput = (input?: UseInputOptions): useInputResult => {
     return {
         ...validation,
         onChange: handleChange,
+        setValidation,
         value,
     };
 };

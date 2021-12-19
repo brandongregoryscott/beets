@@ -12,6 +12,7 @@ interface UseNumberInputOptions {
 
 interface UseNumberInputResult extends ValidationState {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    setValidation: (validation?: ValidationState) => void;
     value?: number;
 }
 
@@ -58,6 +59,7 @@ const useNumberInput = (
     return {
         ...validation,
         onChange: handleChange,
+        setValidation,
         value,
     };
 };

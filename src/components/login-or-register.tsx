@@ -7,7 +7,7 @@ import { useLogin } from "utils/hooks/supabase/use-login";
 import { useRegister } from "utils/hooks/supabase/use-register";
 import { useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { Form } from "components/form";
+import { Form } from "components/forms/form";
 
 interface LoginOrRegisterProps {
     initialShowRegister: boolean;

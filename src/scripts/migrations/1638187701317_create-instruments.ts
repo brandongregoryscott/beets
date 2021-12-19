@@ -39,7 +39,7 @@ const up = (pgm: MigrationBuilder) => {
         },
         release: {
             default: 0.1,
-            type: "int",
+            type: "double",
         },
         root_note: {
             type: "string",

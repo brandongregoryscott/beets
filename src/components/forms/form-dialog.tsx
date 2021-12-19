@@ -1,4 +1,4 @@
-import { Form, FormProps } from "components/form";
+import { Form, FormProps } from "components/forms/form";
 import { Button, Dialog, DialogProps, majorScale, Pane } from "evergreen-ui";
 import React, { useCallback } from "react";
 
