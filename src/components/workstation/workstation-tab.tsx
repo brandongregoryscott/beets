@@ -190,23 +190,22 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         {isAuthenticated && (
                             <Menu.Item
                                 disabled={!isDirty}
-                                onClick={handleRevertToSavedClick(closePopover)}
-                            >
+                                onClick={handleRevertToSavedClick(
+                                    closePopover
+                                )}>
                                 Revert to saved
                             </Menu.Item>
                         )}
                         {!isAuthenticated && (
                             <Menu.Item
                                 disabled={!isDirty}
-                                onClick={handleRevertToDemoClick(closePopover)}
-                            >
+                                onClick={handleRevertToDemoClick(closePopover)}>
                                 Revert to initial demo
                             </Menu.Item>
                         )}
                     </Menu>
                 )}
-                position={Position.TOP_RIGHT}
-            >
+                position={Position.TOP_RIGHT}>
                 <Button
                     appearance="tab"
                     iconBefore={
@@ -217,8 +216,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         />
                     }
                     intent="none"
-                    isLoading={isSyncing}
-                >
+                    isLoading={isSyncing}>
                     File
                 </Button>
             </Popover>

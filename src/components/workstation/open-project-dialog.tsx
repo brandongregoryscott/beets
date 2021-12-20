@@ -74,8 +74,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                 onCloseComplete={onCloseComplete}
                 onConfirm={handleConfirm}
                 shouldCloseOnOverlayClick={false}
-                title={title}
-            >
+                title={title}>
                 <Table>
                     <Table.Head>
                         <Table.TextHeaderCell>Name</Table.TextHeaderCell>
@@ -96,8 +95,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                                         onDeselect={handleDeselect}
                                         onSelect={() =>
                                             setSelected(workstation)
-                                        }
-                                    >
+                                        }>
                                         <Table.TextCell>
                                             {workstation.project.name}
                                         </Table.TextCell>

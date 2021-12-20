@@ -33,8 +33,7 @@ const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
             onCloseComplete={onCloseComplete}
             onConfirm={handleSave}
             shouldCloseOnOverlayClick={false}
-            title={title}
-        >
+            title={title}>
             <TextInputField
                 label="Name"
                 onChange={handleNameChange}

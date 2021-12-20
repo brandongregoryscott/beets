@@ -80,8 +80,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
             shouldCloseOnOverlayClick={false}
-            title={title}
-        >
+            title={title}>
             {isAuthenticated && (
                 <React.Fragment>
                     <TextInputField

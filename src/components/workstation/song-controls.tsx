@@ -97,8 +97,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 alignItems="center"
                 display="flex"
                 flexDirection="row"
-                marginBottom={majorScale(1)}
-            >
+                marginBottom={majorScale(1)}>
                 <IconButton
                     icon={isPlaying ? PauseIcon : PlayIcon}
                     marginRight={marginRight}
@@ -112,8 +111,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    textTransform="uppercase"
-                >
+                    textTransform="uppercase">
                     BPM
                 </Label>
                 <TextInput
@@ -125,8 +123,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    textTransform="uppercase"
-                >
+                    textTransform="uppercase">
                     Swing
                 </Label>
                 <TextInput
@@ -138,15 +135,13 @@ const SongControls: React.FC<SongControlsProps> = (
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    textTransform="uppercase"
-                >
+                    textTransform="uppercase">
                     Vol
                 </Label>
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    width={minorScale(3)}
-                >
+                    width={minorScale(3)}>
                     {volume}
                 </Label>
                 <IconButton
@@ -165,8 +160,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 isMuted={isMuted}
                 isPlaying={isPlaying}
                 swing={swing / 100}
-                volume={volume}
-            >
+                volume={volume}>
                 {children}
             </ReactronicaSong>
         </Pane>

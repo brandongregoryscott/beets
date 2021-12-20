@@ -60,8 +60,7 @@ const SequencerStep: React.FC<SequencerStepProps> = (
     return (
         <ConditionalTooltip
             content="Select one or more samples to drop in"
-            shouldRender={!hasSamples && value.isEmpty()}
-        >
+            shouldRender={!hasSamples && value.isEmpty()}>
             <Card
                 border={true}
                 cursor={hasSamples ? "pointer" : "not-allowed"}
@@ -69,8 +68,7 @@ const SequencerStep: React.FC<SequencerStepProps> = (
                 hoverElevation={1}
                 margin={majorScale(1)}
                 onClick={handleAdd}
-                width={majorScale(12)}
-            >
+                width={majorScale(12)}>
                 {value.map((step) => (
                     <SequencerStepRow
                         file={files.find((file) => file.id === step.file_id)!}

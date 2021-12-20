@@ -23,8 +23,7 @@ const TimeGrid: React.FC<TimeGridProps> = (props: TimeGridProps) => {
                         borderLeftWidth={2}
                         height={majorScale(4)}
                         key={beat}
-                        width={majorScale(4)}
-                    >
+                        width={majorScale(4)}>
                         {is4thBeat && (
                             <Text fontSize="x-small">{beat + 1}</Text>
                         )}

@@ -10,8 +10,7 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
             display="flex"
             flexDirection="column"
             height={`calc(100% - ${majorScale(12)}px)`}
-            justifyContent="center"
-        >
+            justifyContent="center">
             <LoginOrRegister initialShowRegister={false} />
         </Pane>
     );

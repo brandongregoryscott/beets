@@ -15,8 +15,7 @@ const LogoutPage: React.FC<LogoutPageProps> = (props: LogoutPageProps) => {
             display="flex"
             flexDirection="column"
             justifyContent="center"
-            minHeight="100%"
-        >
+            minHeight="100%">
             <Spinner />
             <Paragraph>Logging out...</Paragraph>
         </Pane>

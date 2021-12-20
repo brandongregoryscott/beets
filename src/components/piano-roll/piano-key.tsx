@@ -26,8 +26,7 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
             maxWidth={width}
             minHeight={height}
             minWidth={width}
-            width={width}
-        >
+            width={width}>
             <Text color={textColor} size={300}>
                 {note}
             </Text>

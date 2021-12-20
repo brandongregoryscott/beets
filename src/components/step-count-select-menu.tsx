@@ -36,8 +36,7 @@ const StepCountSelectMenu: React.FC<StepCountSelectMenurops> = (
             onSelect={handleSelect}
             options={options}
             selected={stepCount}
-            width={majorScale(11)}
-        >
+            width={majorScale(11)}>
             <Button>
                 {stepCount} {pluralize("Step", stepCount)}
             </Button>

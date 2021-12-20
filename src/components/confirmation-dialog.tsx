@@ -30,8 +30,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = (
             onCloseComplete={onCloseComplete}
             onConfirm={onConfirm}
             shouldCloseOnOverlayClick={false}
-            title={title}
-        >
+            title={title}>
             <Alert intent={alertIntent} title={alertTitle}>
                 {alertDescription}
             </Alert>

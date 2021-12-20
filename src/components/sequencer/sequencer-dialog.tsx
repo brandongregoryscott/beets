@@ -63,8 +63,7 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
             isShown={true}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
-            title="Sequencer"
-        >
+            title="Sequencer">
             <Sequencer
                 files={files}
                 onStepChange={handleStepChange}

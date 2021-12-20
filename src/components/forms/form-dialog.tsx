@@ -51,15 +51,13 @@ const FormDialog: React.FC<FormDialogProps> = (props: FormDialogProps) => {
                         display="flex"
                         justifyContent="flex-end"
                         paddingBottom={majorScale(4)}
-                        paddingTop={majorScale(3)}
-                    >
+                        paddingTop={majorScale(3)}>
                         {hasFooter && (
                             <React.Fragment>
                                 {hasCancel && (
                                     <Button
                                         onClick={handleCancel(close)}
-                                        tabIndex={0}
-                                    >
+                                        tabIndex={0}>
                                         {cancelLabel}
                                     </Button>
                                 )}
@@ -70,8 +68,7 @@ const FormDialog: React.FC<FormDialogProps> = (props: FormDialogProps) => {
                                     isLoading={isConfirmLoading}
                                     marginLeft={majorScale(1)}
                                     onClick={handleSubmit(close)}
-                                    tabIndex={0}
-                                >
+                                    tabIndex={0}>
                                     {confirmLabel}
                                 </Button>
                             </React.Fragment>

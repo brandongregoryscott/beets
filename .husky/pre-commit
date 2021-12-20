@@ -6,4 +6,4 @@ TS_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -e .ts -e .ts
 
 npx collation --files $TS_FILES
 npm run format -- $ALL_CHANGED_FILES
-git add -A
+git add $ALL_CHANGED_FILES

@@ -38,8 +38,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                 display="flex"
                 flexDirection="column"
                 flexGrow={1}
-                width="100%"
-            >
+                width="100%">
                 <PianoSteps
                     file={file}
                     onChange={onChange}

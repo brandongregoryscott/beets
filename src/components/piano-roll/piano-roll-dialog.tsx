@@ -50,8 +50,7 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
             isShown={true}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
-            title="Piano Roll"
-        >
+            title="Piano Roll">
             <PianoRoll
                 file={file}
                 onChange={setTrackSectionSteps}

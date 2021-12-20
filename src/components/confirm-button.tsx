@@ -36,8 +36,7 @@ const ConfirmButton: React.FC<PropsWithChildren<ConfirmButtonProps>> = (
                 {...restProps}
                 appearance={isConfirmed ? "primary" : undefined}
                 intent={intent}
-                onClick={handleClick}
-            >
+                onClick={handleClick}>
                 {children}
             </Button>
             {(alertDescription != null || alertTitle != null) && isConfirmed && (
@@ -45,8 +44,7 @@ const ConfirmButton: React.FC<PropsWithChildren<ConfirmButtonProps>> = (
                     appearance="default"
                     intent={intent}
                     marginTop={majorScale(3)}
-                    title={alertTitle}
-                >
+                    title={alertTitle}>
                     {alertDescription}
                 </Alert>
             )}

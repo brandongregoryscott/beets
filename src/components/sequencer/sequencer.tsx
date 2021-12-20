@@ -54,8 +54,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     onDeselect={handleDeselect}
                     onSelect={handleSelect}
                     selected={selected}
-                    title="Current Samples"
-                >
+                    title="Current Samples">
                     <Button marginRight={majorScale(1)}>
                         {selected.count()}{" "}
                         {pluralize("Sample", selected.count())}
@@ -71,8 +70,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 flexDirection="row"
                 flexWrap="wrap"
                 justifyContent="center"
-                marginX="auto"
-            >
+                marginX="auto">
                 {_.range(0, stepCount).map((index: number) => (
                     <SequencerStep
                         index={index}

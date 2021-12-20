@@ -79,8 +79,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                         onSelect={handleSelect}
                         options={options}
                         title="Track Type"
-                        width={majorScale(16)}
-                    >
+                        width={majorScale(16)}>
                         <IconButton icon={PlusIcon} marginTop={minorScale(2)} />
                     </SelectMenu>
                 </Tooltip>

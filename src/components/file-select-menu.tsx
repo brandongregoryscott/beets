@@ -57,16 +57,14 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
             onSelect={handleSelect}
             options={options}
             selected={selected}
-            title={title}
-        >
+            title={title}>
             {isLoading ? (
                 <Pane
                     alignItems="center"
                     display="flex"
                     height={majorScale(4)}
                     justifyContent="center"
-                    width={majorScale(4)}
-                >
+                    width={majorScale(4)}>
                     <Spinner size={majorScale(3)} />
                 </Pane>
             ) : (

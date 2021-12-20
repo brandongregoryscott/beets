@@ -142,8 +142,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 marginRight={majorScale(2)}
                 marginY={majorScale(1)}
                 padding={majorScale(1)}
-                width={majorScale(21)}
-            >
+                width={majorScale(21)}>
                 <EditableParagraph onChange={setName} value={name} />
                 <Pane display="flex" flexDirection="row">
                     <Tooltip content="Mute Track">
@@ -173,8 +172,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             hasTitle={false}
                             onDeselect={handleSelect}
                             onSelect={handleSelect}
-                            selected={selectedSample}
-                        >
+                            selected={selectedSample}>
                             <IconButton
                                 icon={
                                     <MusicIcon
@@ -195,8 +193,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     onStepPlay={onStepPlay}
                     solo={solo}
                     steps={steps}
-                    subdivision="8n"
-                >
+                    subdivision="8n">
                     <Instrument samples={samples} type="sampler" />
                 </ReactronicaTrack>
             </Card>

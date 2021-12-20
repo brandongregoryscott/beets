@@ -83,8 +83,7 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
                     flexDirection="row"
                     flexGrow={1}
                     key={`piano-steps-pane-${note}`}
-                    width="min-content"
-                >
+                    width="min-content">
                     <PianoKey key={`piano-steps-key-${note}`} note={note} />
                     {_.range(0, stepCount).map((index: number) => (
                         <PianoStep

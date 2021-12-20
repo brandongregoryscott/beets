@@ -125,8 +125,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
             isShown={isShown}
             onCloseComplete={onCloseComplete}
             onSubmit={handleSubmit}
-            title="Instrument Settings"
-        >
+            title="Instrument Settings">
             <TextInputField
                 {...nameValidation}
                 label="Name"
@@ -147,8 +146,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                     onValueDeselect={setCurve}
                     onValueSelect={setCurve}
                     options={curveOptions}
-                    selected={curve}
-                >
+                    selected={curve}>
                     <Button type="button" width="100%">
                         {capitalize(curve)}
                     </Button>
@@ -159,15 +157,13 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                     hasTitle={false}
                     onDeselect={handleFileSelected}
                     onSelect={handleFileSelected}
-                    selected={file}
-                >
+                    selected={file}>
                     <Button
                         intent={
                             fileValidation?.isInvalid ? "danger" : undefined
                         }
                         type="button"
-                        width="100%"
-                    >
+                        width="100%">
                         {file?.name ?? "No sample selected"}
                     </Button>
                 </FileSelectMenu>

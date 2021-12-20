@@ -104,8 +104,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
             display="flex"
             flexDirection="column"
             onSubmit={handleSubmit}
-            width={majorScale(30)}
-        >
+            width={majorScale(30)}>
             <TextInputField
                 disabled={showRegister ? isRegisterLoading : isLoginLoading}
                 label="Email"
@@ -128,8 +127,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
             <Button
                 isLoading={showRegister ? isRegisterLoading : isLoginLoading}
                 marginBottom={marginBottom}
-                onClick={handleSubmit}
-            >
+                onClick={handleSubmit}>
                 {buttonText}
             </Button>
             <Link marginBottom={marginBottom} onClick={toggleAndReset}>
