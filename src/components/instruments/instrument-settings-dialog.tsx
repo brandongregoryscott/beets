@@ -20,7 +20,9 @@ import { enumToSelectMenuItems } from "utils/select-menu-utils";
 
 interface InstrumentSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
+        example?: boolean;
     instrument?: InstrumentRecord;
+        justForTheSakeOfIt?: number;
 }
 
 const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
