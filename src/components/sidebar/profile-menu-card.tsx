@@ -39,12 +39,14 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
             )}
             onClose={handleClose}
             onOpen={handleOpen}
-            position={Position.RIGHT}>
+            position={Position.RIGHT}
+        >
             <Card
                 background={background}
                 borderRadius={minorScale(2)}
                 cursor="pointer"
-                padding={majorScale(2)}>
+                padding={majorScale(2)}
+            >
                 <PersonIcon />
             </Card>
         </Popover>

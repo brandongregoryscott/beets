@@ -60,7 +60,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         (isAuthenticated && isLoadingWorkstations);
     const renderControls = !renderSpinner;
     return (
-        <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
+        <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
             {renderSpinner && <Spinner />}
             {renderControls && (
                 <SongControls>

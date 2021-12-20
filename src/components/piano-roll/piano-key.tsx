@@ -22,11 +22,12 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
             flexGrow={1}
             height={height}
             justifyContent="center"
-            minHeight={height}
-            minWidth={width}
             maxHeight={height}
             maxWidth={width}
-            width={width}>
+            minHeight={height}
+            minWidth={width}
+            width={width}
+        >
             <Text color={textColor} size={300}>
                 {note}
             </Text>

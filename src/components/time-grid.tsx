@@ -14,16 +14,17 @@ const TimeGrid: React.FC<TimeGridProps> = (props: TimeGridProps) => {
                 const is4thBeat = beat % 4 === 0;
                 return (
                     <Pane
-                        borderLeftWidth={2}
                         borderLeft={beat !== 0}
                         borderLeftColor={
                             is4thBeat
                                 ? theme.colors.gray700
                                 : theme.colors.gray500
                         }
+                        borderLeftWidth={2}
+                        height={majorScale(4)}
                         key={beat}
                         width={majorScale(4)}
-                        height={majorScale(4)}>
+                    >
                         {is4thBeat && (
                             <Text fontSize="x-small">{beat + 1}</Text>
                         )}

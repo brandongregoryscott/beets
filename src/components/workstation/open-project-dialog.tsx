@@ -64,17 +64,18 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
         <React.Fragment>
             <Dialog
                 confirmLabel={confirmLabel}
-                isConfirmLoading={false}
                 isConfirmDisabled={
                     !hasProjects ||
                     selected == null ||
                     selected?.equals(state.project)
                 }
+                isConfirmLoading={false}
                 isShown={isShown}
-                onConfirm={handleConfirm}
                 onCloseComplete={onCloseComplete}
+                onConfirm={handleConfirm}
                 shouldCloseOnOverlayClick={false}
-                title={title}>
+                title={title}
+            >
                 <Table>
                     <Table.Head>
                         <Table.TextHeaderCell>Name</Table.TextHeaderCell>
@@ -87,15 +88,16 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                             {hasProjects &&
                                 workstations?.map((workstation) => (
                                     <Table.Row
-                                        key={workstation.project.id}
                                         isSelectable={true}
                                         isSelected={selected?.equals(
                                             workstation
                                         )}
+                                        key={workstation.project.id}
                                         onDeselect={handleDeselect}
                                         onSelect={() =>
                                             setSelected(workstation)
-                                        }>
+                                        }
+                                    >
                                         <Table.TextCell>
                                             {workstation.project.name}
                                         </Table.TextCell>

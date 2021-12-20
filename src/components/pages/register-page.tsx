@@ -8,11 +8,12 @@ const RegisterPage: React.FC<RegisterPageProps> = (
 ) => {
     return (
         <Pane
+            alignItems="center"
             display="flex"
             flexDirection="column"
-            alignItems="center"
+            height={`calc(100% - ${majorScale(12)}px)`}
             justifyContent="center"
-            height={`calc(100% - ${majorScale(12)}px)`}>
+        >
             <LoginOrRegister initialShowRegister={true} />
         </Pane>
     );

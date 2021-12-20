@@ -68,10 +68,11 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
         <Dialog
             isConfirmDisabled={isAttemptingDelete}
             isShown={isShown}
-            onConfirm={handleConfirm}
             onCloseComplete={onCloseComplete}
+            onConfirm={handleConfirm}
             shouldCloseOnOverlayClick={false}
-            title={title}>
+            title={title}
+        >
             <TextInputField
                 label="Name"
                 onChange={onChange}
@@ -89,7 +90,8 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
                     isLoading={isDeleting}
                     onClick={handleDeleteClick}
                     onConfirm={handleDeleteConfirm}
-                    width="100%">
+                    width="100%"
+                >
                     Delete Project
                 </ConfirmButton>
             )}

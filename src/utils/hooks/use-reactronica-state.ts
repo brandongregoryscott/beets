@@ -5,10 +5,10 @@ import { StepNoteType } from "reactronica";
 import { ReactronicaStateAtom } from "utils/atoms/reactronica-atom";
 
 interface UseReactronicaStateResult {
-    state: ReactronicaState | undefined;
-    setState: (update?: SetStateAction<ReactronicaState | undefined>) => void;
     onPause: () => void;
     onStepPlay: (notes: StepNoteType[], index: number) => void;
+    setState: (update?: SetStateAction<ReactronicaState | undefined>) => void;
+    state: ReactronicaState | undefined;
 }
 
 const useReactronicaState = (): UseReactronicaStateResult => {

@@ -3,8 +3,8 @@ import { useMutation } from "utils/hooks/use-mutation";
 
 interface UseLogoutOptions {
     onError?: (error: Error) => void;
-    onSuccess?: () => void;
     onSettled?: () => void;
+    onSuccess?: () => void;
 }
 
 const useLogout = (options?: UseLogoutOptions) => {

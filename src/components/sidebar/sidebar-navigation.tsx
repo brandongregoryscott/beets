@@ -13,17 +13,19 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
 
     return (
         <Pane
+            background={theme.colors.gray100}
             display="flex"
             flexDirection="column"
-            background={theme.colors.gray100}
-            height="100vh">
+            height="100vh"
+        >
             <SidebarLink route={Routes.root.routes.workstation} />
             <SidebarLink route={Routes.root.routes.library} />
             <Pane
                 display="flex"
                 flexDirection="column"
+                flexGrow={1}
                 justifyContent="flex-end"
-                flexGrow={1}>
+            >
                 <ProfileMenuCard />
             </Pane>
         </Pane>

@@ -4,10 +4,10 @@ import { useCallback, useState } from "react";
 
 interface UseNumberInputOptions {
     allowFloating?: boolean;
-    isRequired?: boolean;
     initialValue?: number;
-    min?: number;
+    isRequired?: boolean;
     max?: number;
+    min?: number;
 }
 
 interface UseNumberInputResult extends ValidationState {

@@ -90,14 +90,15 @@ const SongControls: React.FC<SongControlsProps> = (
 
     return (
         <Pane>
-            <Heading size={500} marginBottom={majorScale(1)}>
+            <Heading marginBottom={majorScale(1)} size={500}>
                 {project.name}
             </Heading>
             <Pane
+                alignItems="center"
                 display="flex"
                 flexDirection="row"
-                alignItems="center"
-                marginBottom={majorScale(1)}>
+                marginBottom={majorScale(1)}
+            >
                 <IconButton
                     icon={isPlaying ? PauseIcon : PlayIcon}
                     marginRight={marginRight}
@@ -111,7 +112,8 @@ const SongControls: React.FC<SongControlsProps> = (
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    textTransform="uppercase">
+                    textTransform="uppercase"
+                >
                     BPM
                 </Label>
                 <TextInput
@@ -123,7 +125,8 @@ const SongControls: React.FC<SongControlsProps> = (
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    textTransform="uppercase">
+                    textTransform="uppercase"
+                >
                     Swing
                 </Label>
                 <TextInput
@@ -135,13 +138,15 @@ const SongControls: React.FC<SongControlsProps> = (
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    textTransform="uppercase">
+                    textTransform="uppercase"
+                >
                     Vol
                 </Label>
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
-                    width={minorScale(3)}>
+                    width={minorScale(3)}
+                >
                     {volume}
                 </Label>
                 <IconButton
@@ -156,11 +161,12 @@ const SongControls: React.FC<SongControlsProps> = (
                 />
             </Pane>
             <ReactronicaSong
+                bpm={bpm}
                 isMuted={isMuted}
                 isPlaying={isPlaying}
-                bpm={bpm}
+                swing={swing / 100}
                 volume={volume}
-                swing={swing / 100}>
+            >
                 {children}
             </ReactronicaSong>
         </Pane>

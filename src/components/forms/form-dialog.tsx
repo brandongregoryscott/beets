@@ -50,25 +50,28 @@ const FormDialog: React.FC<FormDialogProps> = (props: FormDialogProps) => {
                     <Pane
                         display="flex"
                         justifyContent="flex-end"
+                        paddingBottom={majorScale(4)}
                         paddingTop={majorScale(3)}
-                        paddingBottom={majorScale(4)}>
+                    >
                         {hasFooter && (
                             <React.Fragment>
                                 {hasCancel && (
                                     <Button
+                                        onClick={handleCancel(close)}
                                         tabIndex={0}
-                                        onClick={handleCancel(close)}>
+                                    >
                                         {cancelLabel}
                                     </Button>
                                 )}
                                 <Button
-                                    tabIndex={0}
-                                    marginLeft={majorScale(1)}
                                     appearance="primary"
+                                    disabled={isConfirmDisabled}
                                     intent={intent}
                                     isLoading={isConfirmLoading}
-                                    disabled={isConfirmDisabled}
-                                    onClick={handleSubmit(close)}>
+                                    marginLeft={majorScale(1)}
+                                    onClick={handleSubmit(close)}
+                                    tabIndex={0}
+                                >
                                     {confirmLabel}
                                 </Button>
                             </React.Fragment>

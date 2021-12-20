@@ -23,7 +23,8 @@ const SidebarLink: React.FC<PropsWithChildren<SidebarLinkProps>> = (
             hoverElevation={1}
             is={Link}
             padding={majorScale(2)}
-            to={route.path}>
+            to={route.path}
+        >
             {route.icon != null && (
                 <Icon icon={route.icon} color={theme.colors.gray900} />
             )}

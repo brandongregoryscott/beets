@@ -4,8 +4,8 @@ import { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 
 interface UseInputOptions {
-    isRequired?: boolean;
     initialValue?: string;
+    isRequired?: boolean;
 }
 
 interface useInputResult extends ValidationState {

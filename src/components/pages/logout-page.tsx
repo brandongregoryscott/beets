@@ -11,11 +11,12 @@ const LogoutPage: React.FC<LogoutPageProps> = (props: LogoutPageProps) => {
     }, [logout]);
     return (
         <Pane
-            flexDirection="column"
-            display="flex"
-            justifyContent="center"
             alignItems="center"
-            minHeight="100%">
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            minHeight="100%"
+        >
             <Spinner />
             <Paragraph>Logging out...</Paragraph>
         </Pane>

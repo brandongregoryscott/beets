@@ -17,7 +17,7 @@ const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
     const { globalState } = useGlobalState();
     const theme = useTheme();
     return (
-        <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
+        <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
             <Pane marginTop={majorScale(1)}>
                 <FileList bucketName={BucketName.Samples} />
             </Pane>

@@ -12,8 +12,8 @@ import { FileSelectMenu } from "components/file-select-menu";
 
 interface SequencerProps {
     files: List<FileRecord>;
-    onStepCountChange: (stepCount: number) => void;
     onStepChange: (index: number, value: List<TrackSectionStepRecord>) => void;
+    onStepCountChange: (stepCount: number) => void;
     stepCount: number;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
@@ -54,7 +54,8 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     onDeselect={handleDeselect}
                     onSelect={handleSelect}
                     selected={selected}
-                    title="Current Samples">
+                    title="Current Samples"
+                >
                     <Button marginRight={majorScale(1)}>
                         {selected.count()}{" "}
                         {pluralize("Sample", selected.count())}
@@ -66,11 +67,12 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 />
             </Pane>
             <Pane
-                marginX="auto"
                 display="flex"
                 flexDirection="row"
                 flexWrap="wrap"
-                justifyContent="center">
+                justifyContent="center"
+                marginX="auto"
+            >
                 {_.range(0, stepCount).map((index: number) => (
                     <SequencerStep
                         index={index}

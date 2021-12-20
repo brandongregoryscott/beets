@@ -18,8 +18,8 @@ interface FileUploadProps {
 }
 
 interface FilePickerState {
-    id: string;
     fileList?: FileList;
+    id: string;
 }
 
 const height = majorScale(3);
@@ -98,7 +98,8 @@ const FileUpload: React.FC<FileUploadProps> = (props: FileUploadProps) => {
                     alignItems="center"
                     display="flex"
                     flexDirection="row"
-                    key={filePicker.id}>
+                    key={filePicker.id}
+                >
                     <FilePicker
                         disabled={isLoading}
                         height={height}

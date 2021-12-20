@@ -75,11 +75,11 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                         calculateHeight={true}
                         closeOnSelect={true}
                         hasFilter={false}
-                        width={majorScale(16)}
                         isMultiSelect={false}
                         onSelect={handleSelect}
                         options={options}
                         title="Track Type"
+                        width={majorScale(16)}
                     >
                         <IconButton icon={PlusIcon} marginTop={minorScale(2)} />
                     </SelectMenu>

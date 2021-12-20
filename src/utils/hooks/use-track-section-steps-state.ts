@@ -10,8 +10,8 @@ interface UseTrackSectionStepsStateOptions {
 
 interface UseTrackSectionStepsStateResult {
     initialState: List<TrackSectionStepRecord>;
-    state: List<TrackSectionStepRecord>;
     setState: (update: SetStateAction<List<TrackSectionStepRecord>>) => void;
+    state: List<TrackSectionStepRecord>;
 }
 
 const useTrackSectionStepsState = (

@@ -47,7 +47,8 @@ const SequencerStepRow: React.FC<SequencerStepRowProps> = (
             {...borderProps}
             height={height}
             isSelectable={true}
-            onClick={handleClick}>
+            onClick={handleClick}
+        >
             <TextTableCell>
                 <Pane alignItems="center" display="flex">
                     <Text fontSize="x-small">{file.name}</Text>

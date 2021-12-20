@@ -10,8 +10,8 @@ interface SequencerDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     files: List<FileRecord>;
     onStepChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
-    trackSectionSteps: List<TrackSectionStepRecord>;
     trackSection: TrackSectionRecord;
+    trackSectionSteps: List<TrackSectionStepRecord>;
 }
 
 const SequencerDialog: React.FC<SequencerDialogProps> = (
@@ -63,7 +63,8 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
             isShown={true}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
-            title="Sequencer">
+            title="Sequencer"
+        >
             <Sequencer
                 files={files}
                 onStepChange={handleStepChange}

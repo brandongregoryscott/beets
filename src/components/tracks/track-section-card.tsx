@@ -108,11 +108,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
             display="flex"
             flexDirection="row"
             height={majorScale(10)}
-            padding={majorScale(1)}>
+            padding={majorScale(1)}
+        >
             <Pane
                 display="flex"
                 flexDirection="column"
-                maxWidth={majorScale(5)}>
+                maxWidth={majorScale(5)}
+            >
                 {track.isSequencer() ? (
                     <Tooltip content="Sequencer">
                         <IconButton
@@ -165,7 +167,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             key={`track-section-${trackSection.id}-column-${index}`}
                             minHeight={stepHeight}
                             minWidth={stepWidth}
-                            width={stepWidth}>
+                            width={stepWidth}
+                        >
                             {_.range(0, 4).map((row: number) => {
                                 const backgroundColor = getStepColor(
                                     stepsSortedByFileId.get(row)?.file_id,

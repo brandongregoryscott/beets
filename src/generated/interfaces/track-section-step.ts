@@ -7,12 +7,12 @@ interface TrackSectionStep extends Auditable {
      */
     file_id?: string;
     index: number;
+    note?: string;
     /**
      * Note:
      * This is a Foreign Key to `track_sections.id`.<fk table='track_sections' column='id'/>
      */
     track_section_id: string;
-    note?: string;
 }
 
 export type { TrackSectionStep };

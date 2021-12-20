@@ -20,12 +20,12 @@ import { getByTrack } from "utils/track-section-utils";
 
 interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;
-    createdOrUpdatedTracks?: List<TrackRecord>;
-    createdOrUpdatedTrackSections?: List<TrackSectionRecord>;
     createdOrUpdatedTrackSectionSteps?: List<TrackSectionStepRecord>;
-    deletedTracks?: List<TrackRecord>;
-    deletedTrackSections?: List<TrackSectionRecord>;
+    createdOrUpdatedTrackSections?: List<TrackSectionRecord>;
+    createdOrUpdatedTracks?: List<TrackRecord>;
     deletedTrackSectionSteps?: List<TrackSectionStepRecord>;
+    deletedTrackSections?: List<TrackSectionRecord>;
+    deletedTracks?: List<TrackRecord>;
 }
 
 const defaultValues = makeDefaultValues<WorkstationState>({

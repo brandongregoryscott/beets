@@ -55,7 +55,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
                     </Menu.Item>
                     <Menu.Item
                         icon={NewPersonIcon}
-                        onSelect={handleRegisterSelect}>
+                        onSelect={handleRegisterSelect}
+                    >
                         Register
                     </Menu.Item>
                 </Fragment>
