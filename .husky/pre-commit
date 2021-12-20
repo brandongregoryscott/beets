@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run pre-commit -- $(git diff --cached --name-only --diff-filter=ACMR | grep -e .json -e .ts -e .tsx -e .md | sed 's| |\\ |g')

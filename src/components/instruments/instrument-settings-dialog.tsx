@@ -119,12 +119,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     ]);
 
     return (
-        <FormDialog
-            isConfirmLoading={isLoading}
-            isShown={isShown}
-            onCloseComplete={onCloseComplete}
-            title="Instrument Settings"
-            onSubmit={handleSubmit}>
+        <FormDialog isConfirmLoading={isLoading} isShown={isShown} onCloseComplete={onCloseComplete} onSubmit={handleSubmit} title="Instrument Settings">
             <TextInputField
                 {...nameValidation}
                 label="Name"
