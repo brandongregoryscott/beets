@@ -5,7 +5,11 @@ import {
 } from "evergreen-ui";
 import { PropsWithChildren } from "react";
 
-interface FormFieldProps extends EvergreenFormFieldProps {}
+interface FormFieldProps extends EvergreenFormFieldProps {
+    outOfOrder: number;
+    test: string;
+    justATest: string;
+}
 
 const FormField: React.FC<PropsWithChildren<FormFieldProps>> = (
     props: PropsWithChildren<FormFieldProps>

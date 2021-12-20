@@ -4,6 +4,6 @@
 ALL_CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -e .ts -e .tsx -e .json -e .md | sed 's| |\\ |g')
 TS_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -e .ts -e .tsx | sed 's| |\\ |g')
 
-ez2readts --files $TS_FILES
+npx collation --files $TS_FILES
 npm run format -- $ALL_CHANGED_FILES
 git add -A

@@ -14,7 +14,7 @@ import { SelectMenuItem, SelectMenu } from "components/select-menu";
 import { TrackRecord } from "models/track-record";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useDialog } from "utils/hooks/use-dialog";
-import { InstrumentSettingsDialog } from "components/instruments/instrument-setings-dialog";
+import { InstrumentSettingsDialog } from "components/instruments/instrument-settings-dialog";
 
 interface TrackListProps {}
 
@@ -79,7 +79,8 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                         isMultiSelect={false}
                         onSelect={handleSelect}
                         options={options}
-                        title="Track Type">
+                        title="Track Type"
+                    >
                         <IconButton icon={PlusIcon} marginTop={minorScale(2)} />
                     </SelectMenu>
                 </Tooltip>
