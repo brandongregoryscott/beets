@@ -20,9 +20,9 @@ import { enumToSelectMenuItems } from "utils/select-menu-utils";
 
 interface InstrumentSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
-        example?: boolean;
+    example?: boolean;
     instrument?: InstrumentRecord;
-        justForTheSakeOfIt?: number;
+    justForTheSakeOfIt?: number;
 }
 
 const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
@@ -121,7 +121,13 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     ]);
 
     return (
-        <FormDialog isConfirmLoading={isLoading} isShown={isShown} onCloseComplete={onCloseComplete} onSubmit={handleSubmit} title="Instrument Settings">
+        <FormDialog
+            isConfirmLoading={isLoading}
+            isShown={isShown}
+            onCloseComplete={onCloseComplete}
+            onSubmit={handleSubmit}
+            title="Instrument Settings"
+        >
             <TextInputField
                 {...nameValidation}
                 label="Name"
@@ -142,7 +148,8 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                     onValueDeselect={setCurve}
                     onValueSelect={setCurve}
                     options={curveOptions}
-                    selected={curve}>
+                    selected={curve}
+                >
                     <Button type="button" width="100%">
                         {capitalize(curve)}
                     </Button>
@@ -153,13 +160,15 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                     hasTitle={false}
                     onDeselect={handleFileSelected}
                     onSelect={handleFileSelected}
-                    selected={file}>
+                    selected={file}
+                >
                     <Button
                         intent={
                             fileValidation?.isInvalid ? "danger" : undefined
                         }
                         type="button"
-                        width="100%">
+                        width="100%"
+                    >
                         {file?.name ?? "No sample selected"}
                     </Button>
                 </FileSelectMenu>

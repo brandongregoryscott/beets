@@ -1,4 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run pre-commit -- $(git diff --cached --name-only --diff-filter=ACMR | grep -e .json -e .ts -e .tsx -e .md | sed 's| |\\ |g')
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -e .json -e .ts -e .tsx -e .md | sed 's| |\\ |g')
+ez2readts --files $FILES
+npm run format -- $(git diff --cached --name-only --diff-filter=ACMR | grep -e .json -e .ts -e .tsx -e .md | sed 's| |\\ |g')
+git add -A
