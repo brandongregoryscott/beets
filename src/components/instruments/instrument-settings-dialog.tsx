@@ -9,6 +9,8 @@ import {
     DialogProps,
     majorScale,
     Spinner,
+    StyleIcon,
+    EmptyState,
     Tab,
     Table,
     Tablist,
@@ -30,6 +32,7 @@ import { getFileById } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
+import { useTheme } from "utils/hooks/use-theme";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
 
 interface InstrumentSettingsDialogProps
@@ -57,6 +60,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         onCloseComplete,
         showTabs = true,
     } = props;
+    const theme = useTheme();
     const {
         error,
         mutate: createOrUpdateInstrument,
@@ -152,6 +156,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         initialInstrument,
     ]);
 
+    const hasInstruments = !isLoadingInstruments && !isEmpty(instruments);
     return (
         <FormDialog
             isConfirmLoading={isCreating}
@@ -180,8 +185,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                     </Table.Head>
                     <Table.Body>
                         {isLoadingInstruments && <Spinner margin="auto" />}
-                        {!isLoadingInstruments &&
-                            !isEmpty(instruments) &&
+                        {hasInstruments &&
                             instruments?.map((instrument) => (
                                 <Table.Row>
                                     <Table.TextCell>
@@ -202,6 +206,16 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                                     </Table.TextCell>
                                 </Table.Row>
                             ))}
+                        {!hasInstruments && (
+                            <EmptyState
+                                icon={
+                                    <StyleIcon color={theme.colors.gray800} />
+                                }
+                                title="No Instruments Found"
+                                description="Save a new instrument to begin"
+                                iconBgColor={theme.colors.gray100}
+                            />
+                        )}
                     </Table.Body>
                 </Table>
             )}

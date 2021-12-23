@@ -3,7 +3,7 @@ import {
     Dialog,
     DialogProps,
     EmptyState,
-    GitRepoIcon,
+    ProjectsIcon,
     Spinner,
     Table,
 } from "evergreen-ui";
@@ -112,7 +112,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                             {!hasProjects && (
                                 <EmptyState
                                     icon={
-                                        <GitRepoIcon
+                                        <ProjectsIcon
                                             color={theme.colors.gray800}
                                         />
                                     }
