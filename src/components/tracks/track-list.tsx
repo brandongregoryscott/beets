@@ -15,6 +15,7 @@ import { TrackRecord } from "models/track-record";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useDialog } from "utils/hooks/use-dialog";
 import { InstrumentSettingsDialog } from "components/instruments/instrument-settings-dialog";
+import { InstrumentRecord } from "models/instrument-record";
 
 interface TrackListProps {}
 
@@ -58,6 +59,19 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         },
         [add, handleOpenInstrumentDialog, project, tracks]
     );
+
+    const handleInstrumentSubmit = useCallback(
+        (instrument: InstrumentRecord) => {
+            add(
+                new TrackRecord().merge({
+                    index: tracks.count(),
+                    instrument_id: instrument.id,
+                    project_id: project.id,
+                })
+            );
+        },
+        [add, project, tracks]
+    );
     return (
         <Pane>
             <Pane display="flex" flexDirection="column">
@@ -88,6 +102,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                 <InstrumentSettingsDialog
                     isShown={true}
                     onCloseComplete={handleCloseInstrumentDialog}
+                    onSubmit={handleInstrumentSubmit}
                 />
             )}
         </Pane>

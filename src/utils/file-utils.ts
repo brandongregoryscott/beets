@@ -20,7 +20,7 @@ const findSnare = <T extends AnyFile>(files?: List<T>): T | undefined =>
     files?.find(isSnare);
 
 const getFileById = (
-    fileId: string,
+    fileId?: string,
     files?: FileRecord[] | List<FileRecord>
 ): FileRecord | undefined => files?.find((file) => file.id === fileId);
 

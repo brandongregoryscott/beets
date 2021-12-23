@@ -38,10 +38,11 @@ import { enumToSelectMenuItems } from "utils/select-menu-utils";
 interface InstrumentSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
     instrument?: InstrumentRecord;
+    onSubmit?: (instrument: InstrumentRecord) => void;
     showTabs?: boolean;
 }
 
-enum InstrumentSettingsDialogTab {
+enum DialogTab {
     CreateInstrument = "Create Instrument",
     ChooseInstrument = "Choose Instrument",
 }
@@ -49,7 +50,7 @@ enum InstrumentSettingsDialogTab {
 const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
     enumToSelectMenuItems(InstrumentCurve);
 
-const tabs = Object.values(InstrumentSettingsDialogTab);
+const tabs = Object.values(DialogTab);
 
 const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     props: InstrumentSettingsDialogProps
@@ -58,6 +59,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         instrument: initialInstrument,
         isShown,
         onCloseComplete,
+        onSubmit,
         showTabs = true,
     } = props;
     const theme = useTheme();
@@ -71,6 +73,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                 `Instrument '${instrument.name}' successfully created!`
             );
             onCloseComplete?.();
+            onSubmit?.(instrument);
         },
     });
 
@@ -102,9 +105,12 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     const [curve, setCurve] = useState<InstrumentCurve>(
         InstrumentCurve.Exponential
     );
-    const [selectedTab, setSelectedTab] = useState<InstrumentSettingsDialogTab>(
-        InstrumentSettingsDialogTab.CreateInstrument
+    const [selectedTab, setSelectedTab] = useState<DialogTab>(
+        DialogTab.CreateInstrument
     );
+    const [selectedInstrument, setSelectedInstrument] = useState<
+        InstrumentRecord | undefined
+    >();
     const handleFileSelected = useCallback(
         (file: FileRecord) => {
             setFileValidation(undefined);
@@ -113,7 +119,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         [setFile, setFileValidation]
     );
 
-    const handleSubmit = useCallback(() => {
+    const handleCreateInstrumentSubmit = useCallback(() => {
         if (nameValidation?.isInvalid || releaseValidation.isInvalid) {
             return;
         }
@@ -156,9 +162,40 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         initialInstrument,
     ]);
 
+    const handleTabSelected = useCallback(
+        (tab: DialogTab) => () => {
+            setSelectedTab(tab);
+            // Clear out selected instrument if switching between tabs
+            setSelectedInstrument(undefined);
+        },
+        [setSelectedTab, setSelectedInstrument]
+    );
+
+    const handleSelectInstrumentSubmit = useCallback(() => {
+        onCloseComplete?.();
+        onSubmit?.(selectedInstrument!);
+    }, [onCloseComplete, onSubmit, selectedInstrument]);
+
+    const handleSubmit = useCallback(() => {
+        if (selectedTab === DialogTab.ChooseInstrument) {
+            handleSelectInstrumentSubmit();
+            return;
+        }
+
+        handleCreateInstrumentSubmit();
+    }, [
+        selectedTab,
+        handleSelectInstrumentSubmit,
+        handleCreateInstrumentSubmit,
+    ]);
+
     const hasInstruments = !isLoadingInstruments && !isEmpty(instruments);
     return (
         <FormDialog
+            isConfirmDisabled={
+                selectedTab === DialogTab.ChooseInstrument &&
+                selectedInstrument == null
+            }
             isConfirmLoading={isCreating}
             isShown={isShown}
             onCloseComplete={onCloseComplete}
@@ -170,13 +207,13 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                         <Tab
                             isSelected={tab === selectedTab}
                             key={tab}
-                            onSelect={() => setSelectedTab(tab)}>
+                            onSelect={handleTabSelected(tab)}>
                             {tab}
                         </Tab>
                     ))}
                 </Tablist>
             )}
-            {selectedTab === InstrumentSettingsDialogTab.ChooseInstrument && (
+            {selectedTab === DialogTab.ChooseInstrument && (
                 <Table>
                     <Table.Head>
                         <Table.TextHeaderCell>Name</Table.TextHeaderCell>
@@ -187,7 +224,14 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                         {isLoadingInstruments && <Spinner margin="auto" />}
                         {hasInstruments &&
                             instruments?.map((instrument) => (
-                                <Table.Row>
+                                <Table.Row
+                                    isSelectable={true}
+                                    isSelected={instrument.equals(
+                                        selectedInstrument
+                                    )}
+                                    onSelect={() =>
+                                        setSelectedInstrument(instrument)
+                                    }>
                                     <Table.TextCell>
                                         {instrument.name}
                                     </Table.TextCell>
@@ -208,18 +252,18 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                             ))}
                         {!hasInstruments && (
                             <EmptyState
+                                description="Save a new instrument to begin"
                                 icon={
                                     <StyleIcon color={theme.colors.gray800} />
                                 }
-                                title="No Instruments Found"
-                                description="Save a new instrument to begin"
                                 iconBgColor={theme.colors.gray100}
+                                title="No Instruments Found"
                             />
                         )}
                     </Table.Body>
                 </Table>
             )}
-            {selectedTab === InstrumentSettingsDialogTab.CreateInstrument && (
+            {selectedTab === DialogTab.CreateInstrument && (
                 <React.Fragment>
                     <TextInputField
                         {...nameValidation}

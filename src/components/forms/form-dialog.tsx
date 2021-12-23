@@ -57,7 +57,8 @@ const FormDialog: React.FC<FormDialogProps> = (props: FormDialogProps) => {
                                 {hasCancel && (
                                     <Button
                                         onClick={handleCancel(close)}
-                                        tabIndex={0}>
+                                        tabIndex={0}
+                                        type="button">
                                         {cancelLabel}
                                     </Button>
                                 )}

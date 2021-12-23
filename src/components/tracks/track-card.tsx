@@ -5,7 +5,6 @@ import {
     IconButton,
     majorScale,
     minorScale,
-    MusicIcon,
     Pane,
     PlusIcon,
     PropertiesIcon,
@@ -14,7 +13,7 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     Track as ReactronicaTrack,
     Instrument,
@@ -32,11 +31,9 @@ import {
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { toInstrumentMap, toSequencerMap } from "utils/file-utils";
-import { getByTrack, getStepCountOffset } from "utils/track-section-utils";
-import { FileSelectMenu } from "components/file-select-menu";
-import { FileRecord } from "models/file-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
+import { getStepCountOffset } from "utils/track-section-utils";
+import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -47,8 +44,8 @@ const iconMarginRight = minorScale(2);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { onStepPlay, track } = props;
-    const { id, name, mute, solo } = track;
-    const { state, setCurrentState } = useWorkstationState();
+    const { id, name, mute, solo, instrument_id } = track;
+    const { state } = useWorkstationState();
     const { update, remove } = useTracksState();
     const {
         add: addTrackSection,
@@ -56,9 +53,19 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
-    const [selectedSample, setSelectedSample] = useState<
-        FileRecord | undefined
-    >(getDefaultSampleState(state.getTrackSectionStepsByTrack(track), files));
+    const { resultObject: instruments } = useListInstruments();
+    const instrumentFile = useMemo(() => {
+        if (instrument_id == null) {
+            return;
+        }
+
+        const instrument = instruments?.find(
+            (instrument) => instrument.id === instrument_id
+        );
+
+        return getFileById(instrument?.file_id, files);
+    }, [instrument_id, instruments, files]);
+
     const theme = useTheme();
 
     const setName = useCallback(
@@ -83,42 +90,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
-    const handleSelect = useCallback(
-        (file: FileRecord) => {
-            setSelectedSample(file);
-            setCurrentState((prev) => {
-                const trackSectionIds = getByTrack(
-                    track,
-                    prev.trackSections
-                ).map((trackSection) => trackSection.id);
-                const updatedTrackSectionSteps = prev.trackSectionSteps.map(
-                    (trackSectionStep) => {
-                        if (
-                            !trackSectionIds.includes(
-                                trackSectionStep.track_section_id
-                            )
-                        ) {
-                            return trackSectionStep;
-                        }
-
-                        return trackSectionStep.merge({ file_id: file.id });
-                    }
-                );
-
-                return prev.merge({
-                    trackSectionSteps: updatedTrackSectionSteps,
-                });
-            });
-        },
-        [track, setCurrentState, setSelectedSample]
-    );
-
     const samples = useMemo(
         () =>
             track.isSequencer()
                 ? toSequencerMap(files)
-                : toInstrumentMap(selectedSample),
-        [files, selectedSample, track]
+                : toInstrumentMap(instrumentFile),
+        [files, instrumentFile, track]
     );
     const steps = useMemo(
         () =>
@@ -167,26 +144,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             onClick={handleRemove}
                         />
                     </Tooltip>
-                    {track.isInstrument() && (
-                        <FileSelectMenu
-                            hasTitle={false}
-                            onDeselect={handleSelect}
-                            onSelect={handleSelect}
-                            selected={selectedSample}>
-                            <IconButton
-                                icon={
-                                    <MusicIcon
-                                        color={
-                                            selectedSample == null
-                                                ? "muted"
-                                                : "selected"
-                                        }
-                                    />
-                                }
-                                marginRight={iconMarginRight}
-                            />
-                        </FileSelectMenu>
-                    )}
                 </Pane>
                 <ReactronicaTrack
                     mute={mute}
@@ -199,14 +156,14 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
             </Card>
             {trackSections?.map((trackSection, index) => (
                 <TrackSectionCard
-                    file={selectedSample}
+                    file={instrumentFile}
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
                     key={trackSection.id}
                     onChange={updateTrackSection}
+                    stepCountOffset={getStepCountOffset(trackSections, index)}
                     track={track}
                     trackSection={trackSection}
-                    stepCountOffset={getStepCountOffset(trackSections, index)}
                 />
             ))}
             <Tooltip content="Add Section">
@@ -221,12 +178,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         </Pane>
     );
 };
-
-const getDefaultSampleState = (
-    trackSectionSteps: List<TrackSectionStepRecord>,
-    files: List<FileRecord> | undefined
-): FileRecord | undefined =>
-    files?.find((file) => file.id === trackSectionSteps.first()?.file_id);
 
 export { TrackCard };
 export type { TrackCardProps };
