@@ -1,10 +1,10 @@
 import { Record } from "immutable";
-import { BaseRecord } from "models/base-record";
 import { makeDefaultValues } from "utils/core-utils";
 import { RecordParams } from "types/record-params";
 import { Instrument } from "generated/interfaces/instrument";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
+import { AuditableRecord } from "models/auditable-record";
 
 const defaultValues = makeDefaultValues<Instrument>({
     ...AuditableDefaultValues,
@@ -16,7 +16,7 @@ const defaultValues = makeDefaultValues<Instrument>({
 });
 
 class InstrumentRecord
-    extends BaseRecord(Record(defaultValues))
+    extends AuditableRecord(Record(defaultValues))
     implements Instrument
 {
     public static defaultValues: Instrument = defaultValues;

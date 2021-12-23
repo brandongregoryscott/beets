@@ -19,6 +19,11 @@ const findOpenHat = <T extends AnyFile>(files?: List<T>): T | undefined =>
 const findSnare = <T extends AnyFile>(files?: List<T>): T | undefined =>
     files?.find(isSnare);
 
+const getFileById = (
+    fileId: string,
+    files?: FileRecord[] | List<FileRecord>
+): FileRecord | undefined => files?.find((file) => file.id === fileId);
+
 const getFileName = (file: AnyFile): string =>
     file instanceof FileRecord ? file.path : file.name;
 
@@ -83,6 +88,7 @@ export {
     findKick,
     findOpenHat,
     findSnare,
+    getFileById,
     toInstrumentMap,
     toSelectMenuItems,
     toSequencerMap,
