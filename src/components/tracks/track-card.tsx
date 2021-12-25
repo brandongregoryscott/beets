@@ -33,7 +33,8 @@ import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
 import { getStepCountOffset } from "utils/track-section-utils";
-import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
+import { useGetInstrument } from "generated/hooks/domain/instruments/use-get-instrument";
+import { isNotNilOrEmpty } from "utils/core-utils";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -53,18 +54,14 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
-    const { resultObject: instruments } = useListInstruments();
-    const instrumentFile = useMemo(() => {
-        if (instrument_id == null) {
-            return;
-        }
-
-        const instrument = instruments?.find(
-            (instrument) => instrument.id === instrument_id
-        );
-
-        return getFileById(instrument?.file_id, files);
-    }, [files, instrument_id, instruments]);
+    const { resultObject: instrument } = useGetInstrument({
+        id: instrument_id!,
+        enabled: isNotNilOrEmpty(instrument_id),
+    });
+    const instrumentFile = useMemo(
+        () => getFileById(instrument?.file_id, files),
+        [files, instrument]
+    );
 
     const theme = useTheme();
 
@@ -151,7 +148,19 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     solo={solo}
                     steps={steps}
                     subdivision="8n">
-                    <Instrument samples={samples} type="sampler" />
+                    {instrument != null && (
+                        <Instrument
+                            options={{
+                                curve: instrument.curve,
+                                release: instrument.release,
+                            }}
+                            samples={samples}
+                            type="sampler"
+                        />
+                    )}
+                    {instrument == null && (
+                        <Instrument samples={samples} type="sampler" />
+                    )}
                 </ReactronicaTrack>
             </Card>
             {trackSections?.map((trackSection, index) => (
