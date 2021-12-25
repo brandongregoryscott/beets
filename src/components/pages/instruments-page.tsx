@@ -1,29 +1,29 @@
-import React from "react";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { FileList } from "components/files/file-list";
-import { BucketName } from "enums/bucket-name";
 import {
-    BanCircleIcon,
+    Pane,
+    majorScale,
     EmptyState,
     Icon,
-    majorScale,
-    Pane,
+    BanCircleIcon,
+    Paragraph,
 } from "evergreen-ui";
-import { FileUpload } from "components/files/file-upload";
-import { useTheme } from "utils/hooks/use-theme";
 import { RouteProps } from "interfaces/route-props";
+import React from "react";
+import { theme } from "theme";
+import { useGlobalState } from "utils/hooks/use-global-state";
 
-interface FilesPageProps extends RouteProps {}
+interface InstrumentsPageProps extends RouteProps {}
 
-const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
+const InstrumentsPage: React.FC<InstrumentsPageProps> = (
+    props: InstrumentsPageProps
+) => {
     const { globalState } = useGlobalState();
-    const theme = useTheme();
     return (
         <React.Fragment>
-            <FileList bucketName={BucketName.Samples} />
             <Pane marginTop={majorScale(1)}>
                 {globalState.isAuthenticated() && (
-                    <FileUpload bucketName={BucketName.Samples} />
+                    <Pane>
+                        <Paragraph>Coming soon</Paragraph>
+                    </Pane>
                 )}
                 {!globalState.isAuthenticated() && (
                     <Pane maxWidth={majorScale(60)}>
@@ -36,7 +36,7 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
                                 />
                             }
                             iconBgColor={theme.intents.danger.background}
-                            title="Please register to upload files."
+                            title="Please register to create instruments."
                         />
                     </Pane>
                 )}
@@ -45,4 +45,4 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
     );
 };
 
-export { FilesPage };
+export { InstrumentsPage };

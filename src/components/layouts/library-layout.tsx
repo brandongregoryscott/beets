@@ -39,6 +39,7 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
                 {tabs.map((tab) => (
                     <Tab
                         isSelected={isTabSelected(tab)}
+                        key={tab}
                         onSelect={handleClick(tab)}>
                         {tab}
                     </Tab>

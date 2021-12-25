@@ -1,7 +1,8 @@
 import { LoginOrRegister } from "components/login-or-register";
 import { majorScale, Pane } from "evergreen-ui";
+import { RouteProps } from "interfaces/route-props";
 
-interface RegisterPageProps {}
+interface RegisterPageProps extends RouteProps {}
 
 const RegisterPage: React.FC<RegisterPageProps> = (
     props: RegisterPageProps

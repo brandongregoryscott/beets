@@ -17,7 +17,9 @@ const NestedRoutes: React.FC<NestedRoutesProps> = (
     const redirects = useMemo(
         () =>
             compact(
-                route?.redirects?.map((redirect) => <Redirect {...redirect} />)
+                route?.redirects?.map((redirect, index) => (
+                    <Redirect key={index} {...redirect} />
+                ))
             ),
         [route]
     );

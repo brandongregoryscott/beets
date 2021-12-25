@@ -8,9 +8,9 @@ import { RegisterPage } from "components/pages/register-page";
 import { WorkstationPage } from "components/pages/workstation-page";
 import { HomeIcon, LogInIcon, LogOutIcon, MusicIcon } from "evergreen-ui";
 import { Sitemap } from "sitemap";
-import React from "react";
 import { RouteDefinition } from "interfaces/route-definition";
 import { RouteMap as GenericRouteMap } from "interfaces/route-map";
+import { InstrumentsPage } from "components/pages/instruments-page";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
@@ -60,7 +60,7 @@ const Routes: RouteMap = {
                         path: Sitemap.library.files,
                     },
                     instruments: {
-                        component: React.Fragment,
+                        component: InstrumentsPage,
                         exact: true,
                         name: "Instruments",
                         path: Sitemap.library.instruments,

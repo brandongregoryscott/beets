@@ -8,8 +8,9 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
+import { RouteProps } from "interfaces/route-props";
 
-interface WorkstationPageProps {}
+interface WorkstationPageProps extends RouteProps {}
 
 const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
