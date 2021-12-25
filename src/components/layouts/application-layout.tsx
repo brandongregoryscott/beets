@@ -1,7 +1,7 @@
+import { NestedRoutes } from "components/nested-routes";
 import { SidebarNavigation } from "components/sidebar/sidebar-navigation";
 import { Pane } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
-import { renderRoutes } from "utils/route-utils";
 
 interface ApplicationLayoutProps extends RouteProps {}
 
@@ -14,7 +14,9 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = (
             <Pane>
                 <SidebarNavigation />
             </Pane>
-            <Pane width="100%">{renderRoutes(route.routes)}</Pane>
+            <Pane width="100%">
+                <NestedRoutes route={route} />
+            </Pane>
         </Pane>
     );
 };

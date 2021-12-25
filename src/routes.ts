@@ -1,12 +1,14 @@
+import { FilesPage } from "components/pages/files-page";
 import { ApplicationLayout } from "components/layouts/application-layout";
 import { WorkstationLayout } from "components/layouts/workstation-layout";
-import { LibraryPage } from "components/pages/library-page";
+import { LibraryLayout } from "components/layouts/library-layout";
 import { LoginPage } from "components/pages/login-page";
 import { LogoutPage } from "components/pages/logout-page";
 import { RegisterPage } from "components/pages/register-page";
 import { WorkstationPage } from "components/pages/workstation-page";
 import { HomeIcon, LogInIcon, LogOutIcon, MusicIcon } from "evergreen-ui";
 import { Sitemap } from "sitemap";
+import React from "react";
 
 const Routes = {
     root: {
@@ -16,11 +18,31 @@ const Routes = {
         path: Sitemap.home,
         routes: {
             library: {
-                component: LibraryPage,
-                exact: true,
+                component: LibraryLayout,
+                exact: false,
                 icon: MusicIcon,
                 name: "Library",
-                path: Sitemap.library,
+                path: Sitemap.library.home,
+                redirects: [
+                    {
+                        from: Sitemap.library.home,
+                        to: Sitemap.library.files,
+                    },
+                ],
+                routes: {
+                    files: {
+                        component: FilesPage,
+                        exact: true,
+                        name: "Files",
+                        path: Sitemap.library.files,
+                    },
+                    instruments: {
+                        component: React.Fragment,
+                        exact: true,
+                        name: "Instruments",
+                        path: Sitemap.library.instruments,
+                    },
+                },
             },
             login: {
                 component: LoginPage,

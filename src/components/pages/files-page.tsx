@@ -1,4 +1,6 @@
-import { FileUpload } from "components/files/file-upload";
+import React from "react";
+import { useGlobalState } from "utils/hooks/use-global-state";
+import { FileList } from "components/files/file-list";
 import { BucketName } from "enums/bucket-name";
 import {
     BanCircleIcon,
@@ -7,20 +9,17 @@ import {
     majorScale,
     Pane,
 } from "evergreen-ui";
-import { FileList } from "components/files/file-list";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { FileUpload } from "components/files/file-upload";
 import { useTheme } from "utils/hooks/use-theme";
 
-interface LibraryPageProps {}
+interface FilesPageProps {}
 
-const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
+const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
     const { globalState } = useGlobalState();
     const theme = useTheme();
     return (
-        <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
-            <Pane marginTop={majorScale(1)}>
-                <FileList bucketName={BucketName.Samples} />
-            </Pane>
+        <React.Fragment>
+            <FileList bucketName={BucketName.Samples} />
             <Pane marginTop={majorScale(1)}>
                 {globalState.isAuthenticated() && (
                     <FileUpload bucketName={BucketName.Samples} />
@@ -41,8 +40,8 @@ const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
                     </Pane>
                 )}
             </Pane>
-        </Pane>
+        </React.Fragment>
     );
 };
 
-export { LibraryPage };
+export { FilesPage };
