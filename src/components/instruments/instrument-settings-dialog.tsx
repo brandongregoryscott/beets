@@ -150,16 +150,16 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
 
         createOrUpdateInstrument(instrument);
     }, [
+        createOrUpdateInstrument,
         curve,
-        name,
-        release,
         file,
+        initialInstrument,
+        name,
         nameValidation,
+        release,
         releaseValidation,
         setFileValidation,
-        createOrUpdateInstrument,
         setNameValidation,
-        initialInstrument,
     ]);
 
     const handleTabSelected = useCallback(
@@ -168,7 +168,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
             // Clear out selected instrument if switching between tabs
             setSelectedInstrument(undefined);
         },
-        [setSelectedTab, setSelectedInstrument]
+        [setSelectedInstrument, setSelectedTab]
     );
 
     const handleSelectInstrumentSubmit = useCallback(() => {
@@ -184,9 +184,9 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
 
         handleCreateInstrumentSubmit();
     }, [
-        selectedTab,
-        handleSelectInstrumentSubmit,
         handleCreateInstrumentSubmit,
+        handleSelectInstrumentSubmit,
+        selectedTab,
     ]);
 
     const hasInstruments = !isLoadingInstruments && !isEmpty(instruments);

@@ -56,8 +56,8 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
                 onChange={setTrackSectionSteps}
                 onStepCountChange={setStepCount}
                 stepCount={stepCount}
-                trackSectionSteps={trackSectionSteps}
                 trackSection={trackSection}
+                trackSectionSteps={trackSectionSteps}
             />
         </Dialog>
     );

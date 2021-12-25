@@ -111,14 +111,14 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                                 ))}
                             {!hasProjects && (
                                 <EmptyState
+                                    description="Save a new project to begin"
                                     icon={
                                         <ProjectsIcon
                                             color={theme.colors.gray800}
                                         />
                                     }
-                                    title="No Projects Found"
-                                    description="Save a new project to begin"
                                     iconBgColor={theme.colors.gray100}
+                                    title="No Projects Found"
                                 />
                             )}
                         </Table.Body>
@@ -127,11 +127,11 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             </Dialog>
             {isConfirmDialogOpen && (
                 <ConfirmationDialog
-                    alertTitle="You currently have unsaved changes."
                     alertDescription="Opening a new project will wipe out any unsaved changes."
+                    alertTitle="You currently have unsaved changes."
                     isShown={isConfirmDialogOpen}
-                    onConfirm={handleDirtyConfirm}
                     onCloseComplete={handleCloseConfirmDialog}
+                    onConfirm={handleDirtyConfirm}
                 />
             )}
         </React.Fragment>

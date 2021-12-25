@@ -40,7 +40,7 @@ const useNumberInput = (
             setValidation(getValidationState(value, { min, max, isRequired }));
             setValue(value);
         },
-        [isRequired, min, max, setValidation, setValue]
+        [isRequired, max, min, setValidation, setValue]
     );
 
     const handleChange = useCallback(

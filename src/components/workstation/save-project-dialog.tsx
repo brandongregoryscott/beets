@@ -84,12 +84,12 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             {isAuthenticated && (
                 <React.Fragment>
                     <TextInputField
+                        isInvalid={validationMessage != null}
                         label="Name"
                         onChange={onChange}
                         required={true}
-                        value={name}
-                        isInvalid={validationMessage != null}
                         validationMessage={validationMessage}
+                        value={name}
                     />
                     {error != null && (
                         <Alert intent="danger">{error.message}</Alert>
@@ -99,7 +99,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             {!isAuthenticated && (
                 <Pane maxWidth={majorScale(60)}>
                     <EmptyState
-                        title="Please register to save projects."
+                        background="dark"
                         icon={
                             <Icon
                                 color={theme.intents.danger.icon}
@@ -107,7 +107,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
                             />
                         }
                         iconBgColor={theme.intents.danger.background}
-                        background="dark"
+                        title="Please register to save projects."
                     />
                 </Pane>
             )}

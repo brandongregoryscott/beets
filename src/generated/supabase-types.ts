@@ -533,6 +533,57 @@ export interface paths {
             };
         };
     };
+    "/rpc/update_track_sections_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_tracks_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_users_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
     "/track_section_steps": {
         get: {
             parameters: {
@@ -647,57 +698,6 @@ export interface paths {
             responses: {
                 /** No Content */
                 204: never;
-            };
-        };
-    };
-    "/rpc/update_track_sections_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_users_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_tracks_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
             };
         };
     };
@@ -1233,10 +1233,10 @@ export interface parameters {
     "body.tracks": definitions["tracks"];
     /** users */
     "body.users": definitions["users"];
+    "rowFilter.files.bucket_id": string;
     "rowFilter.files.created_by_id": string;
     "rowFilter.files.created_on": string;
     "rowFilter.files.deleted_by_id": string;
-    "rowFilter.files.bucket_id": string;
     "rowFilter.files.deleted_on": string;
     "rowFilter.files.description": string;
     "rowFilter.files.id": string;
@@ -1248,9 +1248,9 @@ export interface parameters {
     "rowFilter.files.updated_on": string;
     "rowFilter.instruments.created_by_id": string;
     "rowFilter.instruments.created_on": string;
+    "rowFilter.instruments.curve": string;
     "rowFilter.instruments.deleted_by_id": string;
     "rowFilter.instruments.deleted_on": string;
-    "rowFilter.instruments.curve": string;
     "rowFilter.instruments.file_id": string;
     "rowFilter.instruments.id": string;
     "rowFilter.instruments.name": string;
@@ -1261,10 +1261,10 @@ export interface parameters {
     "rowFilter.pgmigrations.id": string;
     "rowFilter.pgmigrations.name": string;
     "rowFilter.pgmigrations.run_on": string;
+    "rowFilter.projects.bpm": string;
     "rowFilter.projects.created_by_id": string;
     "rowFilter.projects.created_on": string;
     "rowFilter.projects.deleted_by_id": string;
-    "rowFilter.projects.bpm": string;
     "rowFilter.projects.deleted_on": string;
     "rowFilter.projects.id": string;
     "rowFilter.projects.name": string;
@@ -1299,8 +1299,8 @@ export interface parameters {
     "rowFilter.tracks.deleted_on": string;
     "rowFilter.tracks.id": string;
     "rowFilter.tracks.index": string;
-    "rowFilter.tracks.mute": string;
     "rowFilter.tracks.instrument_id": string;
+    "rowFilter.tracks.mute": string;
     "rowFilter.tracks.name": string;
     "rowFilter.tracks.pan": string;
     "rowFilter.tracks.project_id": string;
@@ -1313,21 +1313,21 @@ export interface parameters {
     "rowFilter.users.deleted_by_id": string;
     "rowFilter.users.deleted_on": string;
     "rowFilter.users.email": string;
-    /** Preference */
-    preferParams: "params=single-object";
     "rowFilter.users.id": string;
-    /** On Conflict */
-    on_conflict: string;
     "rowFilter.users.updated_by_id": string;
-    /** Preference */
-    preferCount: "count=none";
     "rowFilter.users.updated_on": string;
-    /** Ordering */
-    order: string;
     /** Limiting and Pagination */
     limit: string;
     /** Limiting and Pagination */
     offset: string;
+    /** On Conflict */
+    on_conflict: string;
+    /** Ordering */
+    order: string;
+    /** Preference */
+    preferCount: "count=none";
+    /** Preference */
+    preferParams: "params=single-object";
     /** Preference */
     preferReturn: "return=representation" | "return=minimal" | "return=none";
     /** Limiting and Pagination */

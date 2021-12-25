@@ -73,8 +73,8 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 marginX="auto">
                 {_.range(0, stepCount).map((index: number) => (
                     <SequencerStep
-                        index={index}
                         files={files}
+                        index={index}
                         key={index}
                         onChange={onStepChange}
                         selected={selected}

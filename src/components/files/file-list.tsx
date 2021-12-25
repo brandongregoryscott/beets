@@ -35,8 +35,8 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
         <Pane>
             {groupedFiles.map(({ left: storageProviderFile, right: file }) => (
                 <FileListItem
-                    key={file.id}
                     file={file}
+                    key={file.id}
                     storageProviderFile={storageProviderFile}
                 />
             ))}

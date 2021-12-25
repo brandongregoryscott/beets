@@ -68,9 +68,9 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
                 files={files}
                 onStepChange={handleStepChange}
                 onStepCountChange={setStepCount}
-                trackSectionSteps={trackSectionSteps}
                 stepCount={stepCount}
                 trackSection={trackSection}
+                trackSectionSteps={trackSectionSteps}
             />
         </Dialog>
     );

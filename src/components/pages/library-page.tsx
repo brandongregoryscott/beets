@@ -28,7 +28,7 @@ const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
                 {!globalState.isAuthenticated() && (
                     <Pane maxWidth={majorScale(60)}>
                         <EmptyState
-                            title="Please register to upload files."
+                            background="dark"
                             icon={
                                 <Icon
                                     color={theme.intents.danger.icon}
@@ -36,7 +36,7 @@ const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
                                 />
                             }
                             iconBgColor={theme.intents.danger.background}
-                            background="dark"
+                            title="Please register to upload files."
                         />
                     </Pane>
                 )}

@@ -173,12 +173,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                 );
                                 return (
                                     <Pane
-                                        key={`track-section-${trackSection.id}-row-${row}`}
+                                        backgroundColor={backgroundColor}
                                         height={stepHeight}
+                                        key={`track-section-${trackSection.id}-row-${row}`}
                                         minHeight={stepHeight}
                                         minWidth={stepWidth}
                                         width={stepWidth}
-                                        backgroundColor={backgroundColor}
                                     />
                                 );
                             })}
@@ -192,18 +192,18 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     onCloseComplete={handleCloseSequencerDialog}
                     onStepChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}
-                    trackSectionSteps={trackSectionSteps}
                     trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
                 />
             )}
             {pianoRollDialogOpen && (
                 <PianoRollDialog
                     file={file}
-                    onCloseComplete={handleClosePianoRollDialog}
                     onChange={handleTrackSectionStepsChange}
+                    onCloseComplete={handleClosePianoRollDialog}
                     onStepCountChange={handleStepCountChange}
-                    trackSectionSteps={trackSectionSteps}
                     trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
                 />
             )}
         </Pane>

@@ -31,10 +31,10 @@ const PianoStep: React.FC<PianoStepProps> = (props: PianoStepProps) => {
             height={height}
             hoverElevation={1}
             justifyContent="center"
-            minHeight={height}
-            minWidth={width}
             maxHeight={height}
             maxWidth={width}
+            minHeight={height}
+            minWidth={width}
             onClick={handleClick}
             width={width}
         />

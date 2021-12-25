@@ -108,21 +108,21 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
             <TextInputField
                 disabled={showRegister ? isRegisterLoading : isLoginLoading}
                 label="Email"
-                value={email}
+                onChange={handleEmailChange}
                 validationMessage={
                     emailIsInvalid ? ErrorMessages.REQUIRED_FIELD : undefined
                 }
-                onChange={handleEmailChange}
+                value={email}
             />
             <TextInputField
                 disabled={showRegister ? isRegisterLoading : isLoginLoading}
                 label="Password"
+                onChange={handlePasswordChange}
                 type="password"
-                value={password}
                 validationMessage={
                     passwordIsInvalid ? ErrorMessages.REQUIRED_FIELD : undefined
                 }
-                onChange={handlePasswordChange}
+                value={password}
             />
             <Button
                 isLoading={showRegister ? isRegisterLoading : isLoginLoading}

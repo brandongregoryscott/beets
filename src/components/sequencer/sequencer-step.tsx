@@ -72,10 +72,10 @@ const SequencerStep: React.FC<SequencerStepProps> = (
                 {value.map((step) => (
                     <SequencerStepRow
                         file={files.find((file) => file.id === step.file_id)!}
-                        trackSectionStep={step}
-                        trackSectionSteps={value}
                         key={step.id}
                         onClick={handleRemove}
+                        trackSectionStep={step}
+                        trackSectionSteps={value}
                     />
                 ))}
             </Card>

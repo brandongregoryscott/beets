@@ -64,7 +64,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         );
 
         return getFileById(instrument?.file_id, files);
-    }, [instrument_id, instruments, files]);
+    }, [files, instrument_id, instruments]);
 
     const theme = useTheme();
 
@@ -106,7 +106,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                       files ?? List()
                   )
                 : toInstrumentStepTypes(trackSections, state.trackSectionSteps),
-        [track, trackSections, state.trackSectionSteps, files]
+        [files, state.trackSectionSteps, track, trackSections]
     );
 
     return (

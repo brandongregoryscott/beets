@@ -40,20 +40,20 @@ const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
                 value={file.name}
             />
             <TextInputField
-                label="Path"
                 disabled={true}
+                label="Path"
                 readOnly={true}
                 value={file.getPath()}
             />
             <TextInputField
-                label="Type"
                 disabled={true}
+                label="Type"
                 readOnly={true}
                 value={file.type}
             />
             <TextInputField
-                label="Size"
                 disabled={true}
+                label="Size"
                 readOnly={true}
                 value={`${file.size} bytes`}
             />

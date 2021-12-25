@@ -73,12 +73,12 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
             shouldCloseOnOverlayClick={false}
             title={title}>
             <TextInputField
+                isInvalid={validationMessage != null}
                 label="Name"
                 onChange={onChange}
                 required={true}
-                value={name}
-                isInvalid={validationMessage != null}
                 validationMessage={validationMessage}
+                value={name}
             />
             {project.isPersisted() && (
                 <ConfirmButton

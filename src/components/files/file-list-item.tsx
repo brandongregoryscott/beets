@@ -33,7 +33,7 @@ const FileListItem: React.FC<FileListItemProps> = (
         setFalse: handleCloseDialog,
     } = useBoolean(false);
     const { mutate, isLoading } = useDeleteFile();
-    const handleDelete = useCallback(() => mutate(file.id), [mutate, file.id]);
+    const handleDelete = useCallback(() => mutate(file.id), [file.id, mutate]);
     return (
         <Pane display="flex">
             <TextInput
@@ -77,9 +77,9 @@ const FileListItem: React.FC<FileListItemProps> = (
             )}
             {isOpen && (
                 <FileDialog
+                    file={file}
                     isShown={isOpen}
                     onCloseComplete={handleCloseDialog}
-                    file={file}
                     storageProviderFile={storageProviderFile}
                 />
             )}

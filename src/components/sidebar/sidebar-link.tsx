@@ -25,7 +25,7 @@ const SidebarLink: React.FC<PropsWithChildren<SidebarLinkProps>> = (
             padding={majorScale(2)}
             to={route.path}>
             {route.icon != null && (
-                <Icon icon={route.icon} color={theme.colors.gray900} />
+                <Icon color={theme.colors.gray900} icon={route.icon} />
             )}
         </Card>
     );
