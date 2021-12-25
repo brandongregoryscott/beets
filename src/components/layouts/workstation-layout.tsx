@@ -2,7 +2,6 @@ import { NestedRoutes } from "components/nested-routes";
 import { WorkstationTab } from "components/workstation/workstation-tab";
 import { Pane } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
-import { renderRoutes } from "utils/route-utils";
 
 interface WorkstationLayoutProps extends RouteProps {}
 

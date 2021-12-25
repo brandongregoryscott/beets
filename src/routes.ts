@@ -9,8 +9,31 @@ import { WorkstationPage } from "components/pages/workstation-page";
 import { HomeIcon, LogInIcon, LogOutIcon, MusicIcon } from "evergreen-ui";
 import { Sitemap } from "sitemap";
 import React from "react";
+import { RouteDefinition } from "interfaces/route-definition";
+import { RouteMap as GenericRouteMap } from "interfaces/route-map";
 
-const Routes = {
+export interface RouteMap extends GenericRouteMap {
+    root: RouteDefinition & {
+        routes: {
+            library: RouteDefinition & {
+                routes: {
+                    files: RouteDefinition;
+                    instruments: RouteDefinition;
+                };
+            };
+            login: RouteDefinition;
+            logout: RouteDefinition;
+            register: RouteDefinition;
+            workstation: RouteDefinition & {
+                routes: {
+                    workstation: RouteDefinition;
+                };
+            };
+        };
+    };
+}
+
+const Routes: RouteMap = {
     root: {
         component: ApplicationLayout,
         exact: false,
