@@ -45,7 +45,7 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
                     </Tab>
                 ))}
             </TabNavigation>
-            <Pane marginTop={majorScale(1)}>
+            <Pane marginTop={majorScale(2)}>
                 <NestedRoutes route={route} />
             </Pane>
         </Pane>

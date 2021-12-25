@@ -48,6 +48,7 @@ const Routes: RouteMap = {
                 path: Sitemap.library.home,
                 redirects: [
                     {
+                        exact: true,
                         from: Sitemap.library.home,
                         to: Sitemap.library.files,
                     },

@@ -1,7 +1,7 @@
 import { RouteDefinition } from "interfaces/route-definition";
 import { RouteMap } from "interfaces/route-map";
 import { compact } from "lodash";
-import React, { useMemo } from "react";
+import React from "react";
 import { Redirect, Switch } from "react-router-dom";
 import { renderRoutes } from "utils/route-utils";
 
@@ -14,21 +14,17 @@ const NestedRoutes: React.FC<NestedRoutesProps> = (
     props: NestedRoutesProps
 ) => {
     const { route, routes } = props;
-    const redirects = useMemo(
-        () =>
-            compact(
-                route?.redirects?.map((redirect, index) => (
-                    <Redirect key={index} {...redirect} />
-                ))
-            ),
-        [route]
+    const redirects = compact(
+        route?.redirects?.map((redirect, index) => (
+            <Redirect key={index} {...redirect} />
+        ))
     );
 
     return (
-        <React.Fragment>
+        <Switch>
             {redirects}
-            <Switch>{renderRoutes(routes ?? route?.routes)}</Switch>
-        </React.Fragment>
+            {renderRoutes(routes ?? route?.routes)}
+        </Switch>
     );
 };
 
