@@ -105,7 +105,7 @@ const useTrackSectionsState = (
             workstationState.trackSections.filter(
                 (trackSection) => trackSection.track_id === trackId
             ),
-        [workstationState.trackSections, trackId]
+        [trackId, workstationState.trackSections]
     );
 
     return {
