@@ -101,7 +101,9 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     const [fileValidation, setFileValidation] = useState<
         ValidationState | undefined
     >();
-    const [file, setFile] = useState<FileRecord | undefined>();
+    const [file, setFile] = useState<FileRecord | undefined>(
+        getFileById(initialInstrument?.file_id, files)
+    );
     const [curve, setCurve] = useState<InstrumentCurve>(
         InstrumentCurve.Exponential
     );
