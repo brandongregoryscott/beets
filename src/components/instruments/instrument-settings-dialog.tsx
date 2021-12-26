@@ -24,7 +24,7 @@ import { ValidationState } from "interfaces/validation-state";
 import { capitalize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { getFileById } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
@@ -65,8 +65,11 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         isLoading: isCreating,
     } = useCreateOrUpdateInstrument({
         onSuccess: (instrument: InstrumentRecord) => {
+            const isUpdate = initialInstrument?.isPersisted() ?? false;
             toaster.success(
-                `Instrument '${instrument.name}' successfully created!`
+                `Instrument '${instrument.name}' successfully ${
+                    isUpdate ? "updated" : "created"
+                }!`
             );
             onCloseComplete?.();
             onSubmit?.(instrument);
@@ -210,6 +213,18 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         [deleteInstrument, initialInstrument]
     );
 
+    useEffect(() => {
+        if (file != null) {
+            return;
+        }
+
+        const foundFile = getFileById(initialInstrument?.file_id, files);
+        if (foundFile == null) {
+            return;
+        }
+
+        setFile(foundFile);
+    }, [file, files, initialInstrument?.file_id]);
     const error = createError ?? deleteError;
     const isLoading = isCreating || isDeleting;
     return (
