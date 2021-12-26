@@ -49,7 +49,7 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                             </Table.TextCell>
                         </Table.Row>
                     ))}
-                {!hasInstruments && (
+                {!hasInstruments && !isLoading && (
                     <EmptyState
                         description="Save a new instrument to begin"
                         icon={<StyleIcon color={theme.colors.gray800} />}

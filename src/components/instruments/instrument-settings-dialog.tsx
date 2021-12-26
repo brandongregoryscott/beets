@@ -1,3 +1,4 @@
+import { ConfirmButton } from "components/confirm-button";
 import { ErrorAlert } from "components/error-alert";
 import { FileSelectMenu } from "components/file-select-menu";
 import { FormDialog } from "components/forms/form-dialog";
@@ -13,9 +14,11 @@ import {
     Tablist,
     TextInputField,
     toaster,
+    TrashIcon,
 } from "evergreen-ui";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
+import { useDeleteInstrument } from "generated/hooks/domain/instruments/use-delete-instrument";
 import { Instrument } from "generated/interfaces/instrument";
 import { ValidationState } from "interfaces/validation-state";
 import { capitalize } from "lodash";
@@ -57,7 +60,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         showTabs = true,
     } = props;
     const {
-        error,
+        error: createError,
         mutate: createOrUpdateInstrument,
         isLoading: isCreating,
     } = useCreateOrUpdateInstrument({
@@ -67,6 +70,16 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
             );
             onCloseComplete?.();
             onSubmit?.(instrument);
+        },
+    });
+    const {
+        error: deleteError,
+        mutate: deleteInstrument,
+        isLoading: isDeleting,
+    } = useDeleteInstrument({
+        onSuccess: () => {
+            toaster.success("Instrument successfully deleted.");
+            onCloseComplete?.();
         },
     });
 
@@ -104,6 +117,9 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     const [selectedInstrument, setSelectedInstrument] = useState<
         InstrumentRecord | undefined
     >();
+    const [isAttemptingDelete, setIsAttemptingDelete] =
+        useState<boolean>(false);
+
     const handleFileSelected = useCallback(
         (file: FileRecord) => {
             setFileValidation(undefined);
@@ -182,13 +198,26 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         selectedTab,
     ]);
 
+    const handleDeleteClick = useCallback(
+        () => setIsAttemptingDelete(true),
+        [setIsAttemptingDelete]
+    );
+
+    const handleDeleteConfirm = useCallback(
+        () => deleteInstrument(initialInstrument?.id ?? ""),
+        [deleteInstrument, initialInstrument]
+    );
+
+    const error = createError ?? deleteError;
+    const isLoading = isCreating || isDeleting;
     return (
         <FormDialog
             isConfirmDisabled={
-                selectedTab === DialogTab.ChooseInstrument &&
-                selectedInstrument == null
+                (selectedTab === DialogTab.ChooseInstrument &&
+                    selectedInstrument == null) ||
+                isAttemptingDelete
             }
-            isConfirmLoading={isCreating}
+            isConfirmLoading={isLoading}
             isShown={isShown}
             onCloseComplete={onCloseComplete}
             onSubmit={handleSubmit}
@@ -258,6 +287,19 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                             </Button>
                         </FileSelectMenu>
                     </FormField>
+                    {initialInstrument?.isPersisted() && (
+                        <ConfirmButton
+                            alertDescription="Click Delete Instrument again to confirm this action."
+                            alertTitle="This will permanently delete your instrument and all of its tracks."
+                            iconBefore={TrashIcon}
+                            intent="danger"
+                            isLoading={isDeleting}
+                            onClick={handleDeleteClick}
+                            onConfirm={handleDeleteConfirm}
+                            width="100%">
+                            Delete Instrument
+                        </ConfirmButton>
+                    )}
                     <ErrorAlert error={error} />
                 </React.Fragment>
             )}
