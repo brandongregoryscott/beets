@@ -6,7 +6,6 @@ import {
     EmptyState,
     Icon,
     BanCircleIcon,
-    Paragraph,
 } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
 import { InstrumentRecord } from "models/instrument-record";

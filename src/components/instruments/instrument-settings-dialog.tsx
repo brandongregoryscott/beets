@@ -2,37 +2,31 @@ import { ErrorAlert } from "components/error-alert";
 import { FileSelectMenu } from "components/file-select-menu";
 import { FormDialog } from "components/forms/form-dialog";
 import { FormField } from "components/forms/form-field";
+import { InstrumentsTable } from "components/instruments/instruments-table";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { ValueRequiredState } from "constants/validation-states";
 import {
     Button,
     DialogProps,
     majorScale,
-    Spinner,
-    StyleIcon,
-    EmptyState,
     Tab,
-    Table,
     Tablist,
     TextInputField,
     toaster,
 } from "evergreen-ui";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
-import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
 import { Instrument } from "generated/interfaces/instrument";
 import { ValidationState } from "interfaces/validation-state";
-import { capitalize, isEmpty } from "lodash";
+import { capitalize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
-import { formatUpdatedOn } from "utils/date-utils";
 import { getFileById } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
-import { useTheme } from "utils/hooks/use-theme";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
 
 interface InstrumentSettingsDialogProps
@@ -62,7 +56,6 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         onSubmit,
         showTabs = true,
     } = props;
-    const theme = useTheme();
     const {
         error,
         mutate: createOrUpdateInstrument,
@@ -78,8 +71,6 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     });
 
     const { resultObject: files } = useListFiles();
-    const { resultObject: instruments, isLoading: isLoadingInstruments } =
-        useListInstruments();
 
     const {
         value: name,
@@ -191,7 +182,6 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         selectedTab,
     ]);
 
-    const hasInstruments = !isLoadingInstruments && !isEmpty(instruments);
     return (
         <FormDialog
             isConfirmDisabled={
@@ -216,54 +206,11 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                 </Tablist>
             )}
             {selectedTab === DialogTab.ChooseInstrument && (
-                <Table>
-                    <Table.Head>
-                        <Table.TextHeaderCell>Name</Table.TextHeaderCell>
-                        <Table.TextHeaderCell>Sample</Table.TextHeaderCell>
-                        <Table.TextHeaderCell>Updated On</Table.TextHeaderCell>
-                    </Table.Head>
-                    <Table.Body>
-                        {isLoadingInstruments && <Spinner margin="auto" />}
-                        {hasInstruments &&
-                            instruments?.map((instrument) => (
-                                <Table.Row
-                                    isSelectable={true}
-                                    isSelected={instrument.equals(
-                                        selectedInstrument
-                                    )}
-                                    onSelect={() =>
-                                        setSelectedInstrument(instrument)
-                                    }>
-                                    <Table.TextCell>
-                                        {instrument.name}
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        {
-                                            getFileById(
-                                                instrument.file_id,
-                                                files
-                                            )?.name
-                                        }
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        {formatUpdatedOn(
-                                            instrument.getUpdatedOn()
-                                        )}
-                                    </Table.TextCell>
-                                </Table.Row>
-                            ))}
-                        {!hasInstruments && (
-                            <EmptyState
-                                description="Save a new instrument to begin"
-                                icon={
-                                    <StyleIcon color={theme.colors.gray800} />
-                                }
-                                iconBgColor={theme.colors.gray100}
-                                title="No Instruments Found"
-                            />
-                        )}
-                    </Table.Body>
-                </Table>
+                <InstrumentsTable
+                    isSelectable={true}
+                    onSelect={setSelectedInstrument}
+                    selected={selectedInstrument}
+                />
             )}
             {selectedTab === DialogTab.CreateInstrument && (
                 <React.Fragment>
