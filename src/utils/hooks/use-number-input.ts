@@ -1,5 +1,6 @@
 import { ValueRequiredState } from "constants/validation-states";
 import { ValidationState } from "interfaces/validation-state";
+import { isEmpty } from "lodash";
 import { useCallback, useState } from "react";
 
 interface UseNumberInputOptions {
@@ -11,6 +12,7 @@ interface UseNumberInputOptions {
 }
 
 interface UseNumberInputResult extends ValidationState {
+    displayValue?: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     setValidation: (validation?: ValidationState) => void;
     value?: number;
@@ -27,6 +29,9 @@ const useNumberInput = (
         max,
     } = options ?? {};
     const [validation, setValidation] = useState<ValidationState | undefined>();
+    const [displayValue, setDisplayValue] = useState<string | undefined>(
+        initialValue?.toString()
+    );
     const [value, setValue] = useState<number | undefined>(initialValue);
 
     const parseNumber = useCallback(
@@ -46,11 +51,26 @@ const useNumberInput = (
     const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             const { value: rawValue } = event.target;
-            if (rawValue === "-") {
-                handleValueChange(-1);
+            const parsedValue = parseNumber(rawValue);
+
+            if (isEmpty(rawValue)) {
+                setDisplayValue(rawValue);
+                handleValueChange(undefined);
                 return;
             }
-            const parsedValue = parseNumber(rawValue);
+
+            if (!rawValue.match(/[0-9-.]+/)) {
+                return;
+            }
+
+            const isPartialDecimal = rawValue.endsWith(".");
+            const isPartialNegative = rawValue === "-";
+            if (isPartialDecimal || isPartialNegative) {
+                setDisplayValue(rawValue);
+                return;
+            }
+
+            setDisplayValue(rawValue);
             handleValueChange(isNaN(parsedValue) ? undefined : parsedValue);
         },
         [handleValueChange, parseNumber]
@@ -58,6 +78,7 @@ const useNumberInput = (
 
     return {
         ...validation,
+        displayValue,
         onChange: handleChange,
         setValidation,
         value,

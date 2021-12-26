@@ -94,11 +94,13 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         initialValue: initialInstrument?.name,
     });
     const {
+        displayValue: releaseDisplayValue,
         value: release,
         onChange: onReleaseChange,
         ...releaseValidation
     } = useNumberInput({
         initialValue: initialInstrument?.release,
+        allowFloating: true,
         min: 0,
         max: 1,
     });
@@ -253,7 +255,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                         {...releaseValidation}
                         label="Release"
                         onChange={onReleaseChange}
-                        value={release ?? ""}
+                        value={releaseDisplayValue}
                     />
                     <FormField label="Curve">
                         <SelectMenu
