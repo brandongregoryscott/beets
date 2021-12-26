@@ -44,6 +44,22 @@ const theme = _.merge(defaultTheme, {
                 },
             },
         },
+        Input: {
+            appearances: {
+                editableParagraph: {
+                    "&:hover": {
+                        border: `1px solid ${defaultTheme.colors.gray500}`,
+                    },
+                    backgroundColor: "inherit",
+                    height: 24,
+                },
+                editableParagraphEditing: {
+                    borderColor: defaultTheme.colors.gray500,
+                    backgroundColor: "white",
+                    height: 24,
+                },
+            },
+        },
     },
 });
 

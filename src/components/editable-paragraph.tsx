@@ -1,4 +1,4 @@
-import { majorScale, minorScale, Paragraph, TextInput } from "evergreen-ui";
+import { majorScale, TextInput } from "evergreen-ui";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useOutsideClick, useKey } from "rooks";
@@ -51,30 +51,27 @@ const EditableParagraph: React.FC<EditableParagraphProps> = (
     useEffect(() => {
         if (isEditing) {
             textInputRef.current?.focus();
+            return;
         }
+
+        textInputRef.current?.blur();
     }, [isEditing, textInputRef]);
 
-    if (isEditing) {
-        return (
-            <TextInput
-                marginBottom={majorScale(1)}
-                maxWidth={majorScale(14)}
-                onBlur={stopEditingOrDefault}
-                onChange={handleChange}
-                ref={textInputRef}
-                value={value}
-            />
-        );
-    }
+    const appearance = isEditing
+        ? "editableParagraphEditing"
+        : "editableParagraph";
 
     return (
-        <Paragraph
-            fontSize="small"
-            onClick={startEditing}
-            paddingBottom={minorScale(2)}
-            paddingX={minorScale(2)}>
-            {value}
-        </Paragraph>
+        <TextInput
+            appearance={appearance as any}
+            marginBottom={majorScale(1)}
+            maxWidth={majorScale(14)}
+            onBlur={stopEditingOrDefault}
+            onChange={handleChange}
+            onFocus={startEditing}
+            ref={textInputRef}
+            value={value}
+        />
     );
 };
 
