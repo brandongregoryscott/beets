@@ -34,6 +34,7 @@
         "web-vitals": "1.1.2"
     },
     "devDependencies": {
+        "@simbathesailor/use-what-changed": "2.0.0",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/react": "11.2.7",
         "@testing-library/user-event": "12.8.3",
@@ -81,8 +82,6 @@
         "migrations:down": "node-pg-migrate --migrations-dir src/scripts/migrations/dist down",
         "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist up",
         "postcodegen": "npm run format -- src/generated",
-        "postmigrations:down": "npm run codegen",
-        "postmigrations:up": "npm run codegen",
         "prebuild:migrations": "npm run clean:migrations",
         "precodegen": "npm run clean:generated",
         "premigrations:create": "npm run build:migrations",
