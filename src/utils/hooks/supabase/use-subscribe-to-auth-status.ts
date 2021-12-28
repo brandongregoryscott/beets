@@ -13,7 +13,10 @@ import { toaster } from "evergreen-ui";
 const useSubscribeToAuthStatus = () => {
     const auth = useAuth();
     const { setGlobalState } = useGlobalState();
-    const { mutate: createOrUpdateUser } = useCreateOrUpdateUser();
+    const { mutate: createOrUpdateUser } = useCreateOrUpdateUser({
+        onConflict: "id",
+    });
+
     const history = useHistory();
 
     const setUserFromSession = useCallback(
