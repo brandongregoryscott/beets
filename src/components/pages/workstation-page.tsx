@@ -24,10 +24,15 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         });
 
     useEffect(() => {
-        if (
-            (isAuthenticated && isLoadingWorkstations) ||
-            state.project.isPersisted()
-        ) {
+        if (isLoadingWorkstations) {
+            return;
+        }
+
+        const noWorkstationsFound =
+            !isLoadingWorkstations && workstations?.isEmpty();
+        const projectAlreadyLoaded = state.project.isPersisted();
+
+        if ((isAuthenticated && noWorkstationsFound) || projectAlreadyLoaded) {
             return;
         }
 
@@ -35,12 +40,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             !isAuthenticated &&
             (isLoadingFiles || isNilOrEmpty(files) || state.isDemo())
         ) {
-            return;
-        }
-
-        // Load the most recently updated workstation if authenticated
-        if (isAuthenticated) {
-            setState(workstations?.first() ?? new WorkstationStateRecord());
             return;
         }
 
