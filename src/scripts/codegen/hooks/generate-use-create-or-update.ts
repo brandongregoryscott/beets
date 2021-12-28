@@ -19,8 +19,14 @@ import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
 import { Paths } from "../constants/paths";
 
-const { createOrUpdate, onError, onSettled, onSuccess, SupabaseClient } =
-    Variables;
+const {
+    createOrUpdate,
+    onConflict,
+    onError,
+    onSettled,
+    onSuccess,
+    SupabaseClient,
+} = Variables;
 const { interfaceName: UseMutationResult, name: useMutation } =
     Hooks.useMutation;
 const { name: useQueryClient } = Hooks.useQueryClient;
@@ -31,7 +37,8 @@ const generateUseCreateOrUpdate = (
     property: PropertySignature
 ) => {
     const name = getHookName(property, HookAction.CreateOrUpdate);
-    if (excludedTypes.includes(getInterfaceName(property))) {
+    const interfaceName = getInterfaceName(property);
+    if (excludedTypes.includes(interfaceName)) {
         log.warn(
             `Skipping '${name}' as '${property.getName()}' was in the exclusion list.`
         );
@@ -39,9 +46,7 @@ const generateUseCreateOrUpdate = (
     }
     const recordSourceFile = getRecordSourceFile(project, property);
     const typeName =
-        recordSourceFile != null
-            ? getRecordName(property)
-            : getInterfaceName(property);
+        recordSourceFile != null ? getRecordName(property) : interfaceName;
     const file = project.createSourceFile(
         getHookPath(property, HookAction.CreateOrUpdate),
         undefined,
@@ -83,6 +88,11 @@ const generateUseCreateOrUpdate = (
     file.addInterface({
         name: getHookOptionsInterfaceName(property, HookAction.CreateOrUpdate),
         properties: [
+            {
+                name: "onConflict",
+                hasQuestionToken: true,
+                type: `keyof ${interfaceName}`,
+            },
             {
                 name: onError,
                 hasQuestionToken: true,
@@ -138,12 +148,12 @@ const useCreateOrUpdateInitializer = (
         : variableName;
     return `(options?: ${optionsInterfaceName}): ${UseMutationResult}<${returnType}, Error, ${interfaceName}> => {
         const { ${fromTable} } = ${SupabaseClient};
-        const { ${onError}, ${onSettled}, ${onSuccess} } = options ?? {};
+        const { ${onConflict}, ${onError}, ${onSettled}, ${onSuccess} } = options ?? {};
         const queryClient = ${useQueryClient}();
 
         const ${createOrUpdate} = async (${variableName}: ${interfaceName}) => {
             const { data, error } = await ${fromTable}()
-                .upsert(${upsertValue})
+                .upsert(${upsertValue}, { ${onConflict} })
                 .limit(1)
                 .single();
 

@@ -6,6 +6,7 @@ import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
 interface UseCreateOrUpdateInstrumentOptions {
+    onConflict?: keyof Instrument;
     onError?: (error: Error) => void;
     onSettled?: () => void;
     onSuccess?: (resultObject: InstrumentRecord) => void;
@@ -15,7 +16,7 @@ const useCreateOrUpdateInstrument = (
     options?: UseCreateOrUpdateInstrumentOptions
 ): UseMutationResult<InstrumentRecord, Error, Instrument> => {
     const { fromInstruments } = SupabaseClient;
-    const { onError, onSettled, onSuccess } = options ?? {};
+    const { onConflict, onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
     const createOrUpdate = async (instrument: Instrument) => {
@@ -23,7 +24,8 @@ const useCreateOrUpdateInstrument = (
             .upsert(
                 instrument instanceof InstrumentRecord
                     ? instrument.toPOJO()
-                    : instrument
+                    : instrument,
+                { onConflict }
             )
             .limit(1)
             .single();

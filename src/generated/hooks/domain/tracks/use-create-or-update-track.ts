@@ -6,6 +6,7 @@ import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
 interface UseCreateOrUpdateTrackOptions {
+    onConflict?: keyof Track;
     onError?: (error: Error) => void;
     onSettled?: () => void;
     onSuccess?: (resultObject: TrackRecord) => void;
@@ -15,12 +16,14 @@ const useCreateOrUpdateTrack = (
     options?: UseCreateOrUpdateTrackOptions
 ): UseMutationResult<TrackRecord, Error, Track> => {
     const { fromTracks } = SupabaseClient;
-    const { onError, onSettled, onSuccess } = options ?? {};
+    const { onConflict, onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
     const createOrUpdate = async (track: Track) => {
         const { data, error } = await fromTracks()
-            .upsert(track instanceof TrackRecord ? track.toPOJO() : track)
+            .upsert(track instanceof TrackRecord ? track.toPOJO() : track, {
+                onConflict,
+            })
             .limit(1)
             .single();
 

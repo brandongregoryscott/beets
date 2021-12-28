@@ -11,6 +11,7 @@ const Variables = keyMirror({
     defaultFilter: null,
     filter: null,
     mutateAsync: null,
+    onConflict: null,
     onError: null,
     onSettled: null,
     onSuccess: null,
