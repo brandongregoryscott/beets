@@ -3,61 +3,49 @@ import { TrackList } from "components/tracks/track-list";
 import { majorScale, Pane, Spinner } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useEffect } from "react";
-import { isNilOrEmpty } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useGlobalState } from "utils/hooks/use-global-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
 import { RouteProps } from "interfaces/route-props";
+import { useCurrentUser } from "utils/hooks/use-current-user";
 
 interface WorkstationPageProps extends RouteProps {}
 
 const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
 ) => {
-    const { isAuthenticated } = useGlobalState();
-    const { state, setState } = useWorkstationState();
+    const { user } = useCurrentUser();
+    const { setState } = useWorkstationState();
     const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
-        useListWorkstations({
-            enabled: isAuthenticated,
-        });
+        useListWorkstations();
 
     useEffect(() => {
-        if (isLoadingWorkstations) {
+        if (isLoadingFiles || isLoadingWorkstations) {
             return;
         }
 
-        const noWorkstationsFound =
-            !isLoadingWorkstations && workstations?.isEmpty();
-        const projectAlreadyLoaded = state.project.isPersisted();
-
-        if ((isAuthenticated && noWorkstationsFound) || projectAlreadyLoaded) {
+        if (user == null) {
+            setState(WorkstationStateRecord.demo(files));
             return;
         }
 
-        if (
-            !isAuthenticated &&
-            (isLoadingFiles || isNilOrEmpty(files) || state.isDemo())
-        ) {
+        if (workstations?.isEmpty()) {
+            setState(new WorkstationStateRecord());
             return;
         }
 
-        const demoState = WorkstationStateRecord.demo(files);
-        setState(demoState);
+        setState(workstations?.first()!);
     }, [
         files,
-        isAuthenticated,
         isLoadingFiles,
         isLoadingWorkstations,
         setState,
-        state,
+        user,
         workstations,
     ]);
 
-    const renderSpinner =
-        (!isAuthenticated && isLoadingFiles) ||
-        (isAuthenticated && isLoadingWorkstations);
+    const renderSpinner = isLoadingFiles || isLoadingWorkstations;
     const renderControls = !renderSpinner;
     return (
         <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
