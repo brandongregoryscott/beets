@@ -26,7 +26,11 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         }
 
         if (user == null) {
-            setState(WorkstationStateRecord.demo(files));
+            setState(
+                files?.isEmpty()
+                    ? new WorkstationStateRecord()
+                    : WorkstationStateRecord.demo(files)
+            );
             return;
         }
 
