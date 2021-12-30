@@ -52,7 +52,7 @@ const useListFiles = (
 
     const filesResult = useQuery<List<FileRecord>, Error>({
         enabled: enabled && globalState.isAuthenticated(),
-        key: ["List", Tables.Files],
+        key: [Tables.Files],
         fn: list,
         onError,
         onSuccess,

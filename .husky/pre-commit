@@ -4,8 +4,8 @@
 ALL_CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -e .ts -e .tsx -e .json -e .md | sed 's| |\\ |g')
 TS_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -e .ts -e .tsx | sed 's| |\\ |g')
 
-[ ! -v $TS_FILES ] && npx collation --files $TS_FILES
-[ ! -v $ALL_CHANGED_FILES ] && npm run format -- $ALL_CHANGED_FILES
-[ ! -v $ALL_CHANGED_FILES ] && git add $ALL_CHANGED_FILES
+[[ ! -z  "$TS_FILES" ]] && npx collation --files $TS_FILES
+[[ ! -z  "$ALL_CHANGED_FILES" ]] && npm run format -- $ALL_CHANGED_FILES
+[[ ! -z  "$ALL_CHANGED_FILES" ]] && git add $ALL_CHANGED_FILES
 
 exit 0
