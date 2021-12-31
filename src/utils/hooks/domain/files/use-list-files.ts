@@ -5,7 +5,7 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { mapToList } from "utils/collection-utils";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { BucketName } from "enums/bucket-name";
 import { List } from "immutable";
@@ -58,14 +58,25 @@ const useListFiles = (
         onSuccess,
     });
 
-    return globalState.isAuthenticated()
-        ? filesResult
-        : {
-              ...storageProviderFilesResult,
-              resultObject: mapStorageProviderFiles(
-                  storageProviderFilesResult.resultObject
-              ),
-          };
+    const resultObject = useMemo(() => {
+        if (globalState.isAuthenticated()) {
+            return filesResult.resultObject;
+        }
+
+        return mapStorageProviderFiles(storageProviderFilesResult.resultObject);
+    }, [
+        filesResult.resultObject,
+        globalState,
+        storageProviderFilesResult.resultObject,
+    ]);
+
+    return {
+        ...mergeUseQueryProperties(filesResult, storageProviderFilesResult),
+        refetch: globalState.isAuthenticated()
+            ? filesResult.refetch
+            : storageProviderFilesResult.refetch,
+        resultObject: resultObject,
+    };
 };
 
 const mapStorageProviderFiles = (
@@ -80,5 +91,22 @@ const mapStorageProviderFiles = (
             )
         )
     );
+
+const mergeUseQueryProperties = (
+    first: UseQueryResult<unknown, Error>,
+    ...others: UseQueryResult<unknown, Error>[]
+): Pick<
+    UseQueryResult<unknown, Error>,
+    "isError" | "isIdle" | "isLoading" | "isSuccess" | "error"
+> => ({
+    isError: first.isError || others.some((result) => result.isError),
+    isIdle: first.isIdle || others.some((result) => result.isIdle),
+    isSuccess: first.isSuccess || others.some((result) => result.isSuccess),
+    isLoading: first.isLoading || others.some((result) => result.isLoading),
+    error:
+        first.error ??
+        others.find((result) => result.error != null)?.error ??
+        null,
+});
 
 export { useListFiles };
