@@ -26,7 +26,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const [hookTimedOut, setHookTimedOut] = useState(false);
     useTimeoutWhen(
         () => {
-            // If we're still seeing a loading state for either of these after 4s, assume react-query
+            // If we're still seeing a loading state for either of these after 1s, assume react-query
             // is stuck and set state manually
             if (isLoadingFiles || isLoadingWorkstations) {
                 setState(new WorkstationStateRecord());
@@ -34,7 +34,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 
             setHookTimedOut(true);
         },
-        4000,
+        1000,
         !hookTimedOut
     );
 
