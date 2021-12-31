@@ -187,15 +187,24 @@ const uniqueNonDeletedIndex =
 
 const configure = (options: MigrationBuilderUtilsOptions) => {
     const { pgm, tableName } = options;
-
+    const _softDeleteRule = softDeleteRule(pgm, tableName);
     return {
         authenticatedCreatePolicy: authenticatedCreatePolicy(pgm, tableName),
         deleteOwnRecordPolicy: deleteOwnRecordPolicy(pgm, tableName),
         dropColumnIfExists: dropColumnIfExists(pgm, tableName),
         readAnyRecordPolicy: readAnyRecordPolicy(pgm, tableName),
         readOwnRecordPolicy: readOwnRecordPolicy(pgm, tableName),
+        /**
+         * Used to drop and recreate rules when columns are added or changed
+         * https://www.postgresql.org/message-id/16661-01a98a6c58c8054a%40postgresql.org
+         */
+        recreateRules: (callback: () => void) => {
+            _softDeleteRule().down();
+            callback();
+            _softDeleteRule().up();
+        },
         rowLevelSecurity: rowLevelSecurity(pgm, tableName),
-        softDeleteRule: softDeleteRule(pgm, tableName),
+        softDeleteRule: _softDeleteRule,
         updateOwnRecordPolicy: updateOwnRecordPolicy(pgm, tableName),
         updateTrigger: updateTrigger(pgm, tableName),
         uniqueNonDeletedIndex: uniqueNonDeletedIndex(pgm, tableName),
