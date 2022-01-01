@@ -7,6 +7,12 @@ import { isNilOrEmpty } from "utils/core-utils";
 
 type AnyFile = FileRecord | StorageProviderFileRecord;
 
+const findFileByName = <T extends AnyFile>(
+    nameOrPattern: string | RegExp,
+    files?: List<T>
+): T | undefined =>
+    files?.find((file) => getFileName(file).match(nameOrPattern) != null);
+
 const findHat = <T extends AnyFile>(files?: List<T>): T | undefined =>
     files?.filter((file) => !isOpenHat(file)).find(isHat);
 
@@ -84,6 +90,7 @@ const toSequencerMap = (files?: List<FileRecord>): Record<MidiNote, string> => {
 };
 
 export {
+    findFileByName,
     findHat,
     findKick,
     findOpenHat,

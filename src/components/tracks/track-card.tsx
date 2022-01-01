@@ -33,8 +33,8 @@ import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
 import { getStepCountOffset } from "utils/track-section-utils";
-import { useGetInstrument } from "generated/hooks/domain/instruments/use-get-instrument";
 import { isNotNilOrEmpty } from "utils/core-utils";
+import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -57,6 +57,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { resultObject: instrument } = useGetInstrument({
         id: instrument_id!,
         enabled: isNotNilOrEmpty(instrument_id),
+        files,
     });
     const instrumentFile = useMemo(
         () => getFileById(instrument?.file_id, files),

@@ -16,6 +16,7 @@ import { useProjectState } from "utils/hooks/use-project-state";
 import { useDialog } from "utils/hooks/use-dialog";
 import { InstrumentSettingsDialog } from "components/instruments/instrument-settings-dialog";
 import { InstrumentRecord } from "models/instrument-record";
+import { useGlobalState } from "utils/hooks/use-global-state";
 
 interface TrackListProps {}
 
@@ -41,6 +42,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         handleOpenInstrumentDialog,
         handleCloseInstrumentDialog,
     ] = useDialog();
+    const { globalState } = useGlobalState();
 
     const handleSelect = useCallback(
         (item: SelectMenuItem<boolean>) => {
@@ -67,6 +69,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                     index: tracks.count(),
                     instrument_id: instrument.id,
                     project_id: project.id,
+                    name: instrument?.name,
                 })
             );
         },
@@ -103,6 +106,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                     isShown={true}
                     onCloseComplete={handleCloseInstrumentDialog}
                     onSubmit={handleInstrumentSubmit}
+                    showTabs={globalState.isAuthenticated()}
                 />
             )}
         </Pane>

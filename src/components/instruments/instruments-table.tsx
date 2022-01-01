@@ -5,13 +5,13 @@ import {
     StyleIcon,
     TableRowProps,
 } from "evergreen-ui";
-import { useListFiles } from "generated/hooks/domain/files/use-list-files";
-import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
+import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { InstrumentRecord } from "models/instrument-record";
 import { theme } from "theme";
 import { hasValues } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { getFileById } from "utils/file-utils";
+import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 
 interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
     onSelect?: (instrument: InstrumentRecord) => void;
@@ -22,9 +22,13 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
     props: InstrumentsTableProps
 ) => {
     const { isSelectable, onSelect, selected } = props;
-    const { resultObject: files } = useListFiles();
-    const { resultObject: instruments, isLoading } = useListInstruments();
+    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { resultObject: instruments, isLoading: isLoadingInstruments } =
+        useListInstruments({ files });
+
+    const isLoading = isLoadingFiles || isLoadingInstruments;
     const hasInstruments = !isLoading && hasValues(instruments);
+
     return (
         <Table>
             <Table.Head>

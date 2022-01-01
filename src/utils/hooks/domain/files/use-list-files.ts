@@ -10,6 +10,7 @@ import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { BucketName } from "enums/bucket-name";
 import { List } from "immutable";
 import _ from "lodash";
+import { mergeUseQueryProperties } from "utils/use-query-utils";
 
 interface UseListFilesOptions {
     enabled?: boolean;
@@ -91,22 +92,5 @@ const mapStorageProviderFiles = (
             )
         )
     );
-
-const mergeUseQueryProperties = (
-    first: UseQueryResult<unknown, Error>,
-    ...others: UseQueryResult<unknown, Error>[]
-): Pick<
-    UseQueryResult<unknown, Error>,
-    "isError" | "isIdle" | "isLoading" | "isSuccess" | "error"
-> => ({
-    isError: first.isError || others.some((result) => result.isError),
-    isIdle: first.isIdle || others.some((result) => result.isIdle),
-    isSuccess: first.isSuccess || others.some((result) => result.isSuccess),
-    isLoading: first.isLoading || others.some((result) => result.isLoading),
-    error:
-        first.error ??
-        others.find((result) => result.error != null)?.error ??
-        null,
-});
 
 export { useListFiles };

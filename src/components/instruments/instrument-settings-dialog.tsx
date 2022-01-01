@@ -28,6 +28,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { getFileById } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useGlobalState } from "utils/hooks/use-global-state";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
@@ -59,6 +60,7 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         onSubmit,
         showTabs = true,
     } = props;
+    const { globalState } = useGlobalState();
     const {
         error: createError,
         mutate: createOrUpdateInstrument,
@@ -117,7 +119,9 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         InstrumentCurve.Exponential
     );
     const [selectedTab, setSelectedTab] = useState<DialogTab>(
-        DialogTab.CreateInstrument
+        globalState.isAuthenticated()
+            ? DialogTab.CreateInstrument
+            : DialogTab.ChooseInstrument
     );
     const [selectedInstrument, setSelectedInstrument] = useState<
         InstrumentRecord | undefined
