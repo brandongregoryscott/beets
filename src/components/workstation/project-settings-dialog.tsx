@@ -36,8 +36,6 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
     const handleDeleteSuccess = useCallback(() => {
         toaster.success("Project successfully deleted");
         const newState = new WorkstationStateRecord();
-        console.log("newState.project", newState.project);
-        console.log("newState.tracks", newState.tracks);
         setState(newState);
         onCloseComplete?.();
     }, [onCloseComplete, setState]);
@@ -70,17 +68,17 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
         <Dialog
             isConfirmDisabled={isAttemptingDelete}
             isShown={isShown}
-            onConfirm={handleConfirm}
             onCloseComplete={onCloseComplete}
+            onConfirm={handleConfirm}
             shouldCloseOnOverlayClick={false}
             title={title}>
             <TextInputField
+                isInvalid={validationMessage != null}
                 label="Name"
                 onChange={onChange}
                 required={true}
-                value={name}
-                isInvalid={validationMessage != null}
                 validationMessage={validationMessage}
+                value={name}
             />
             {project.isPersisted() && (
                 <ConfirmButton

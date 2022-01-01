@@ -90,13 +90,13 @@ const SongControls: React.FC<SongControlsProps> = (
 
     return (
         <Pane>
-            <Heading size={500} marginBottom={majorScale(1)}>
+            <Heading marginBottom={majorScale(1)} size={500}>
                 {project.name}
             </Heading>
             <Pane
+                alignItems="center"
                 display="flex"
                 flexDirection="row"
-                alignItems="center"
                 marginBottom={majorScale(1)}>
                 <IconButton
                     icon={isPlaying ? PauseIcon : PlayIcon}
@@ -156,11 +156,11 @@ const SongControls: React.FC<SongControlsProps> = (
                 />
             </Pane>
             <ReactronicaSong
+                bpm={bpm}
                 isMuted={isMuted}
                 isPlaying={isPlaying}
-                bpm={bpm}
-                volume={volume}
-                swing={swing / 100}>
+                swing={swing / 100}
+                volume={volume}>
                 {children}
             </ReactronicaSong>
         </Pane>

@@ -9,9 +9,9 @@ import {
     getRecordImportPath,
     getRecordSourceFile,
     getHookOptionsInterfaceName,
-    getQueryKey,
     getHookPath,
     getHookName,
+    getTablesEnumValue,
 } from "../utils";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
@@ -161,7 +161,7 @@ const useListInitializer = (
 
         const result = ${useQuery}<${returnType}[], Error>({
             ${enabled},
-            key: ${getQueryKey(HookAction.List, property)},
+            key: ${getTablesEnumValue(property)},
             fn: list,
             ${onError},
             ${onSuccess},

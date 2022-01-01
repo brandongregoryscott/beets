@@ -18,6 +18,9 @@ class TrackSectionRecord
     extends AuditableRecord(Record(defaultValues))
     implements TrackSection
 {
+    public static defaultValues: TrackSection = defaultValues;
+    public static maxStepCount: number = 16;
+
     constructor(values?: RecordParams<TrackSectionRecord>) {
         values = values ?? defaultValues;
 

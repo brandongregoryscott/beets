@@ -4,7 +4,7 @@ import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { randomInt } from "utils/core-utils";
-import { TrackSectionStepUtils } from "utils/track-section-step-utils";
+import { toSequencerStepTypes } from "utils/track-section-step-utils";
 
 describe("TrackSectionStepUtils", () => {
     const files = List(
@@ -27,7 +27,7 @@ describe("TrackSectionStepUtils", () => {
             (trackSection) => trackSection.step_count
         );
 
-    describe("toStepTypes", () => {
+    describe("toSequencerStepTypes", () => {
         it("returns sum of TrackSection.step_count", () => {
             // Arrange
             const trackSections = List(
@@ -41,11 +41,7 @@ describe("TrackSectionStepUtils", () => {
             );
 
             // Act
-            const result = TrackSectionStepUtils.toStepTypes(
-                trackSections,
-                List(),
-                List()
-            );
+            const result = toSequencerStepTypes(trackSections, List(), List());
 
             // Assert
             expect(result).toHaveLength(sumStepCount(trackSections));
@@ -76,7 +72,7 @@ describe("TrackSectionStepUtils", () => {
                 trackSection1Steps.concat(trackSection2Steps);
 
             // Act
-            const result = TrackSectionStepUtils.toStepTypes(
+            const result = toSequencerStepTypes(
                 trackSections,
                 trackSectionSteps,
                 files

@@ -1,9 +1,9 @@
 import { List } from "immutable";
 import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSectionUtils } from "utils/track-section-utils";
+import { getStepCountOffset } from "utils/track-section-utils";
 
 describe("TrackSectionUtils", () => {
-    describe("getIndexOffset", () => {
+    describe("getStepCountOffset", () => {
         test("given index, returns step_count sum of TrackSections prior", () => {
             // Arrange
             const trackSections = List.of(
@@ -22,10 +22,7 @@ describe("TrackSectionUtils", () => {
             );
 
             // Act
-            const result = TrackSectionUtils.getStepCountOffset(
-                trackSections,
-                2
-            );
+            const result = getStepCountOffset(trackSections, 2);
 
             // Assert
             expect(result).toBe(12);

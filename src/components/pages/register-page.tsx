@@ -1,18 +1,19 @@
 import { LoginOrRegister } from "components/login-or-register";
 import { majorScale, Pane } from "evergreen-ui";
+import { RouteProps } from "interfaces/route-props";
 
-interface RegisterPageProps {}
+interface RegisterPageProps extends RouteProps {}
 
 const RegisterPage: React.FC<RegisterPageProps> = (
     props: RegisterPageProps
 ) => {
     return (
         <Pane
+            alignItems="center"
             display="flex"
             flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            height={`calc(100% - ${majorScale(12)}px)`}>
+            height={`calc(100% - ${majorScale(12)}px)`}
+            justifyContent="center">
             <LoginOrRegister initialShowRegister={true} />
         </Pane>
     );

@@ -3,14 +3,17 @@ import {
     RouteConfig,
 } from "react-router-config";
 import { RouteMap } from "interfaces/route-map";
+import { RouteDefinition } from "interfaces/route-definition";
 
-const renderRoutes = (routes?: RouteMap): JSX.Element | null => {
+const renderRoutes = (routes?: RouteMap): JSX.Element | null =>
+    reactRouterRenderRoutes(flattenRoutes(routes) as RouteConfig[]);
+
+const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     if (routes == null) {
-        return null;
+        return [];
     }
 
-    const flattenedRoutes = Object.keys(routes).map((key) => routes[key]);
-    return reactRouterRenderRoutes(flattenedRoutes as RouteConfig[]);
+    return Object.keys(routes).map((key) => routes[key]);
 };
 
-export { renderRoutes };
+export { flattenRoutes, renderRoutes };

@@ -30,7 +30,7 @@ const useGetFile = (
 
     const result = useQuery<FileRecord | undefined, Error>({
         enabled,
-        key: ["Get", Tables.Files, id],
+        key: [Tables.Files, id],
         fn: get,
     });
 

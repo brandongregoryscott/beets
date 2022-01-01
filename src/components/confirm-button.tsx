@@ -36,7 +36,8 @@ const ConfirmButton: React.FC<PropsWithChildren<ConfirmButtonProps>> = (
                 {...restProps}
                 appearance={isConfirmed ? "primary" : undefined}
                 intent={intent}
-                onClick={handleClick}>
+                onClick={handleClick}
+                type="button">
                 {children}
             </Button>
             {(alertDescription != null || alertTitle != null) && isConfirmed && (

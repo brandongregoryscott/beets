@@ -1,14 +1,21 @@
+import { NestedRoutes } from "components/nested-routes";
 import { Pane } from "evergreen-ui";
-import { Switch } from "react-router-dom";
+import { useEffect } from "react";
+import { useQueryClient } from "react-query";
+import { BrowserRouter } from "react-router-dom";
 import { Routes } from "routes";
-import { useSubscribeToAuthStatus } from "utils/hooks/supabase/use-subscribe-to-auth-status";
-import { renderRoutes } from "utils/route-utils";
+import { useCurrentUser } from "utils/hooks/use-current-user";
 
 const App: React.FC = () => {
-    useSubscribeToAuthStatus();
+    const queryClient = useQueryClient();
+    const { user } = useCurrentUser();
+    useEffect(() => queryClient.clear(), [queryClient, user]);
+
     return (
         <Pane height="100vh" overflowY="hidden">
-            <Switch>{renderRoutes(Routes)}</Switch>
+            <BrowserRouter>
+                <NestedRoutes routes={Routes} />
+            </BrowserRouter>
         </Pane>
     );
 };

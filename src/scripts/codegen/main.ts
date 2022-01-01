@@ -9,6 +9,7 @@ import { generateUseGet } from "./hooks/generate-use-get";
 import { generateUseDelete } from "./hooks/generate-use-delete";
 import { generateUseCreateOrUpdate } from "./hooks/generate-use-create-or-update";
 import { generateSupabaseClient } from "./generate-supabase-client";
+import { generateEnumsFromUnions } from "./generate-enums-from-unions";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -30,7 +31,8 @@ const main = async () => {
     generateTablesEnum(project, properties);
 
     properties.forEach((property) => {
-        generateInterface(project, property);
+        const _interface = generateInterface(project, property);
+        generateEnumsFromUnions(project, _interface);
         generateUseList(project, property);
         generateUseGet(project, property);
         generateUseDelete(project, property);

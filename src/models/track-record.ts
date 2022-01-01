@@ -10,6 +10,7 @@ import { generateId } from "utils/id-utils";
 const defaultValues = makeDefaultValues<Track>({
     ...AuditableDefaultValues,
     index: 0,
+    instrument_id: undefined,
     mute: false,
     name: "New Track",
     pan: 0,
@@ -34,6 +35,14 @@ class TrackRecord
         }
 
         super(values);
+    }
+
+    public isInstrument(): boolean {
+        return !isNilOrEmpty(this.instrument_id);
+    }
+
+    public isSequencer(): boolean {
+        return !this.isInstrument();
     }
 }
 

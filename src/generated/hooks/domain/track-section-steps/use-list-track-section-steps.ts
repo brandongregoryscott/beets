@@ -45,7 +45,7 @@ const useListTrackSectionSteps = (
 
     const result = useQuery<TrackSectionStepRecord[], Error>({
         enabled,
-        key: ["List", Tables.TrackSectionSteps],
+        key: Tables.TrackSectionSteps,
         fn: list,
         onError,
         onSuccess,

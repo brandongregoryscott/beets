@@ -1,9 +1,9 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 import { makeAuditableColumns } from "./utils/auditable-columns";
 import { configure } from "./utils/migration-builder-utils";
-import { tables } from "./utils/tables";
+import { Tables } from "./enums/tables";
 
-const tableName = tables.files;
+const tableName = Tables.Files;
 
 const up = (pgm: MigrationBuilder) => {
     const config = configure({ pgm, tableName });
@@ -12,13 +12,19 @@ const up = (pgm: MigrationBuilder) => {
         ...makeAuditableColumns(pgm),
         id: {
             type: "uuid",
-            references: "storage.objects",
+            references: {
+                name: "objects",
+                schema: "storage",
+            },
             notNull: true,
             primaryKey: true,
         },
         bucket_id: {
             type: "text",
-            references: "storage.buckets",
+            references: {
+                name: "buckets",
+                schema: "storage",
+            },
             notNull: true,
         },
         description: {

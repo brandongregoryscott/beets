@@ -39,7 +39,7 @@ const useListFiles = (
 
     const result = useQuery<FileRecord[], Error>({
         enabled,
-        key: ["List", Tables.Files],
+        key: Tables.Files,
         fn: list,
         onError,
         onSuccess,

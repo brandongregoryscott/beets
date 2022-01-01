@@ -13,10 +13,10 @@ import { MouseEvent } from "react";
 import { getBorderYProps } from "utils/core-utils";
 
 interface SequencerStepRowProps {
-    step: TrackSectionStepRecord;
-    steps: List<TrackSectionStepRecord>;
     file: FileRecord;
-    onClick: (file: TrackSectionStepRecord) => void;
+    onClick: (trackSectionStep: TrackSectionStepRecord) => void;
+    trackSectionStep: TrackSectionStepRecord;
+    trackSectionSteps: List<TrackSectionStepRecord>;
 }
 
 const borderRadius = minorScale(1);
@@ -25,9 +25,11 @@ const height = majorScale(3);
 const SequencerStepRow: React.FC<SequencerStepRowProps> = (
     props: SequencerStepRowProps
 ) => {
-    const { step, steps, file, onClick } = props;
-    const isFirst = steps.indexOf(step) === 0;
-    const isLast = steps.indexOf(step) === steps.count() - 1;
+    const { trackSectionStep, trackSectionSteps, file, onClick } = props;
+    const isFirst = trackSectionSteps.indexOf(trackSectionStep) === 0;
+    const isLast =
+        trackSectionSteps.indexOf(trackSectionStep) ===
+        trackSectionSteps.count() - 1;
 
     const borderProps = getBorderYProps({
         isFirst,
@@ -37,7 +39,7 @@ const SequencerStepRow: React.FC<SequencerStepRowProps> = (
 
     const handleClick = (event: MouseEvent<HTMLDivElement>) => {
         event.stopPropagation();
-        onClick(step);
+        onClick(trackSectionStep);
     };
 
     return (

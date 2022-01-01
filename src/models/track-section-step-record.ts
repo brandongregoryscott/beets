@@ -11,6 +11,7 @@ const defaultValues = makeDefaultValues<TrackSectionStep>({
     ...AuditableDefaultValues,
     file_id: undefined,
     index: 0,
+    note: undefined,
     track_section_id: undefined,
 });
 

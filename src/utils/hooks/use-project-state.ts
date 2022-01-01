@@ -14,13 +14,13 @@ interface UseProjectStateResult {
      */
     setCurrentState: (update: SetStateAction<ProjectRecord>) => void;
     /**
-     * Sets the **initial** and **current** state
-     */
-    setState: (update: SetStateAction<ProjectRecord>) => void;
-    /**
      * Sets the **initial** state only
      */
     setInitialState: (update: SetStateAction<ProjectRecord>) => void;
+    /**
+     * Sets the **initial** and **current** state
+     */
+    setState: (update: SetStateAction<ProjectRecord>) => void;
     /**
      * **Current** state value
      */

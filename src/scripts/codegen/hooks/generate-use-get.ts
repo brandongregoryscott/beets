@@ -10,8 +10,8 @@ import {
     getRecordSourceFile,
     getHookName,
     getHookOptionsInterfaceName,
-    getQueryKey,
     getHookPath,
+    getTablesEnumValue,
 } from "../utils";
 import { Enums } from "../constants/enums";
 import { Hooks } from "../constants/hooks";
@@ -129,7 +129,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
 
         const result = ${useQuery}<${returnType}, Error>({
             ${enabled},
-            key: ${getQueryKey(HookAction.Get, property)},
+            key: [${getTablesEnumValue(property)}, id],
             fn: get,
         });
 

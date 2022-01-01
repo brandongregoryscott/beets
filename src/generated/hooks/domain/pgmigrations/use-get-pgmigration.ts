@@ -34,7 +34,7 @@ const useGetPgmigration = (
 
     const result = useQuery<Pgmigration | undefined, Error>({
         enabled,
-        key: ["Get", Tables.Pgmigrations, id],
+        key: [Tables.Pgmigrations, id],
         fn: get,
     });
 

@@ -3,7 +3,7 @@ import {
     Dialog,
     DialogProps,
     EmptyState,
-    GitRepoIcon,
+    ProjectsIcon,
     Spinner,
     Table,
 } from "evergreen-ui";
@@ -64,15 +64,15 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
         <React.Fragment>
             <Dialog
                 confirmLabel={confirmLabel}
-                isConfirmLoading={false}
                 isConfirmDisabled={
                     !hasProjects ||
                     selected == null ||
                     selected?.equals(state.project)
                 }
+                isConfirmLoading={false}
                 isShown={isShown}
-                onConfirm={handleConfirm}
                 onCloseComplete={onCloseComplete}
+                onConfirm={handleConfirm}
                 shouldCloseOnOverlayClick={false}
                 title={title}>
                 <Table>
@@ -87,11 +87,11 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                             {hasProjects &&
                                 workstations?.map((workstation) => (
                                     <Table.Row
-                                        key={workstation.project.id}
                                         isSelectable={true}
                                         isSelected={selected?.equals(
                                             workstation
                                         )}
+                                        key={workstation.project.id}
                                         onDeselect={handleDeselect}
                                         onSelect={() =>
                                             setSelected(workstation)
@@ -111,14 +111,14 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                                 ))}
                             {!hasProjects && (
                                 <EmptyState
+                                    description="Save a new project to begin"
                                     icon={
-                                        <GitRepoIcon
+                                        <ProjectsIcon
                                             color={theme.colors.gray800}
                                         />
                                     }
-                                    title="No Projects Found"
-                                    description="Save a new project to begin"
                                     iconBgColor={theme.colors.gray100}
+                                    title="No Projects Found"
                                 />
                             )}
                         </Table.Body>
@@ -127,11 +127,11 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             </Dialog>
             {isConfirmDialogOpen && (
                 <ConfirmationDialog
-                    alertTitle="You currently have unsaved changes."
                     alertDescription="Opening a new project will wipe out any unsaved changes."
+                    alertTitle="You currently have unsaved changes."
                     isShown={isConfirmDialogOpen}
-                    onConfirm={handleDirtyConfirm}
                     onCloseComplete={handleCloseConfirmDialog}
+                    onConfirm={handleDirtyConfirm}
                 />
             )}
         </React.Fragment>

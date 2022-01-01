@@ -9,10 +9,10 @@ import { TrackSectionRecord } from "models/track-section-record";
 interface SequencerStepProps {
     files: List<FileRecord>;
     index: number;
+    onChange: (index: number, steps: List<TrackSectionStepRecord>) => void;
     selected: List<FileRecord>;
     trackSection: TrackSectionRecord;
     value: List<TrackSectionStepRecord>;
-    onChange: (index: number, steps: List<TrackSectionStepRecord>) => void;
 }
 
 const maxCount = 4;
@@ -72,10 +72,10 @@ const SequencerStep: React.FC<SequencerStepProps> = (
                 {value.map((step) => (
                     <SequencerStepRow
                         file={files.find((file) => file.id === step.file_id)!}
-                        step={step}
-                        steps={value}
                         key={step.id}
                         onClick={handleRemove}
+                        trackSectionStep={step}
+                        trackSectionSteps={value}
                     />
                 ))}
             </Card>

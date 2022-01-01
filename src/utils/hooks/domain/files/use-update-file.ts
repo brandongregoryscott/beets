@@ -1,8 +1,8 @@
 import { FileRecord } from "models/file-record";
-import { filesKey } from "utils/query-key-utils";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { useQueryClient } from "react-query";
 import { SupabaseClient } from "generated/supabase-client";
+import { Tables } from "generated/enums/tables";
 
 interface UseUpdateFilesOptions {
     onSettled?: () => void;
@@ -11,6 +11,7 @@ interface UseUpdateFilesOptions {
 const useUpdateFile = (
     options?: UseUpdateFilesOptions
 ): UseMutationResult<FileRecord, Error, FileRecord> => {
+    const { onSettled } = options ?? {};
     const queryClient = useQueryClient();
     const { fromFiles } = SupabaseClient;
 
@@ -28,11 +29,10 @@ const useUpdateFile = (
     };
 
     const mutation = useMutation<FileRecord, Error, FileRecord>({
-        key: filesKey(),
         fn: updateFile,
         onSettled: () => {
-            queryClient.invalidateQueries(filesKey());
-            options?.onSettled?.();
+            queryClient.invalidateQueries([Tables.Files]);
+            onSettled?.();
         },
     });
 

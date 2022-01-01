@@ -1,10 +1,10 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 import { configure } from "./utils/migration-builder-utils";
 import { makeAuditableColumns } from "./utils/auditable-columns";
-import { tables } from "./utils/tables";
+import { Tables } from "./enums/tables";
 import { makeIdColumn } from "./utils/id-column";
 
-const tableName = tables.track_section_steps;
+const tableName = Tables.TrackSectionSteps;
 
 const up = (pgm: MigrationBuilder) => {
     const config = configure({ pgm, tableName });
@@ -15,7 +15,7 @@ const up = (pgm: MigrationBuilder) => {
         file_id: {
             type: "uuid",
             notNull: true,
-            references: tables.files,
+            references: Tables.Files,
         },
         index: {
             type: "integer",
@@ -25,7 +25,7 @@ const up = (pgm: MigrationBuilder) => {
         track_section_id: {
             type: "uuid",
             notNull: true,
-            references: tables.track_sections,
+            references: Tables.TrackSections,
         },
     });
 

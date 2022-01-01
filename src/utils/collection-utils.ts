@@ -73,7 +73,7 @@ const hasValues = <T extends any[] | List<any> = any[] | List<any>>(
         return true;
     }
 
-    return Array.isArray(value) && value.length > 1;
+    return Array.isArray(value) && value.length > 0;
 };
 
 const initializeList = <T>(count: number, value: T): List<T> =>
@@ -92,7 +92,11 @@ const intersectionWith = <TLeft, TRight>(
         rightValues = rightValues.toArray();
     }
 
-    return List(_.intersectionWith(leftValues, rightValues, comparator));
+    return List(
+        leftValues.filter((left) =>
+            rightValues.some((right) => comparator(left, right))
+        )
+    );
 };
 
 const mapTo = <TSource, TDestination>(

@@ -20,7 +20,7 @@ interface UseQueryOptions<
             TResultObject,
             TQueryKey
         >,
-        "enabled" | "onSuccess" | "onError" | "onSettled"
+        "enabled" | "onSuccess" | "onError" | "onSettled" | "staleTime"
     > {
     fn: QueryFunction<TResultObject, TQueryKey>;
     key?: TQueryKey | undefined;
@@ -53,7 +53,7 @@ const useQuery = <
                 TResultObject,
                 TQueryKey
             >
-        >(options, "enabled", "onError", "onSettled", "onSuccess"),
+        >(options, "enabled", "onError", "onSettled", "onSuccess", "staleTime"),
         queryFn: options.fn,
         queryKey: options.key,
     });

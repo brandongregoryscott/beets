@@ -5,8 +5,9 @@ interface TrackSectionStep extends Auditable {
      * Note:
      * This is a Foreign Key to `files.id`.<fk table='files' column='id'/>
      */
-    file_id: string;
+    file_id?: string;
     index: number;
+    note?: string;
     /**
      * Note:
      * This is a Foreign Key to `track_sections.id`.<fk table='track_sections' column='id'/>

@@ -6,9 +6,9 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 
 interface WorkstationState {
     project: ProjectRecord;
-    tracks: List<TrackRecord>;
-    trackSections: List<TrackSectionRecord>;
     trackSectionSteps: List<TrackSectionStepRecord>;
+    trackSections: List<TrackSectionRecord>;
+    tracks: List<TrackRecord>;
 }
 
 export type { WorkstationState };

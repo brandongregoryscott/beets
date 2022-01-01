@@ -18,8 +18,8 @@ interface FileUploadProps {
 }
 
 interface FilePickerState {
-    id: string;
     fileList?: FileList;
+    id: string;
 }
 
 const height = majorScale(3);
@@ -27,7 +27,7 @@ const height = majorScale(3);
 const FileUpload: React.FC<FileUploadProps> = (props: FileUploadProps) => {
     const { bucketName } = props;
     const { globalState } = useGlobalState();
-    const { mutate: uploadFiles, isLoading } = useCreateFile(bucketName);
+    const { mutate: uploadFiles, isLoading } = useCreateFile({ bucketName });
     const [filePickers, setFilePickers] = useState([newFilePickerState()]);
 
     if (!globalState.isAuthenticated()) {

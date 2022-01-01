@@ -115,9 +115,9 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             closePopover();
         },
         [
-            projectIsPersisted,
-            project.name,
             handleOpenSaveProjectDialog,
+            project.name,
+            projectIsPersisted,
             state,
             sync,
         ]
@@ -129,7 +129,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             handleOpenConfirmDialog();
             closePopover();
         },
-        [setConfirmationAction, handleOpenConfirmDialog]
+        [handleOpenConfirmDialog, setConfirmationAction]
     );
 
     const handleRevertToDemoClick = useCallback(
@@ -138,7 +138,7 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             handleOpenConfirmDialog();
             closePopover();
         },
-        [setConfirmationAction, handleOpenConfirmDialog]
+        [handleOpenConfirmDialog, setConfirmationAction]
     );
 
     const handleDirtyConfirm = useCallback(() => {
@@ -234,11 +234,11 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
             )}
             {isConfirmDialogOpen && (
                 <ConfirmationDialog
-                    alertTitle="You currently have unsaved changes."
                     alertDescription={alertDecription}
+                    alertTitle="You currently have unsaved changes."
                     isShown={isConfirmDialogOpen}
-                    onConfirm={handleDirtyConfirm}
                     onCloseComplete={handleCloseConfirmDialog}
+                    onConfirm={handleDirtyConfirm}
                 />
             )}
             {isSettingsDialogOpen && (

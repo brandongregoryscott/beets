@@ -20,16 +20,21 @@ import {
     StepNoteType,
 } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { TrackSectionCard } from "components/track-section-card";
+import { TrackSectionCard } from "components/tracks/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import { TrackSectionStepUtils } from "utils/track-section-step-utils";
+import {
+    toInstrumentStepTypes,
+    toSequencerStepTypes,
+} from "utils/track-section-step-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { FileUtils } from "utils/file-utils";
-import { TrackSectionUtils } from "utils/track-section-utils";
+import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
+import { getStepCountOffset } from "utils/track-section-utils";
+import { isNotNilOrEmpty } from "utils/core-utils";
+import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -40,7 +45,7 @@ const iconMarginRight = minorScale(2);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { onStepPlay, track } = props;
-    const { id, name, mute, solo } = track;
+    const { id, name, mute, solo, instrument_id } = track;
     const { state } = useWorkstationState();
     const { update, remove } = useTracksState();
     const {
@@ -49,6 +54,15 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
+    const { resultObject: instrument } = useGetInstrument({
+        id: instrument_id!,
+        enabled: isNotNilOrEmpty(instrument_id),
+        files,
+    });
+    const instrumentFile = useMemo(
+        () => getFileById(instrument?.file_id, files),
+        [files, instrument]
+    );
 
     const theme = useTheme();
 
@@ -74,27 +88,36 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
+    const samples = useMemo(
+        () =>
+            track.isSequencer()
+                ? toSequencerMap(files)
+                : toInstrumentMap(instrumentFile),
+        [files, instrumentFile, track]
+    );
     const steps = useMemo(
         () =>
-            TrackSectionStepUtils.toStepTypes(
-                trackSections,
-                state.trackSectionSteps,
-                files ?? List()
-            ),
-        [trackSections, state.trackSectionSteps, files]
+            track.isSequencer()
+                ? toSequencerStepTypes(
+                      trackSections,
+                      state.trackSectionSteps,
+                      files ?? List()
+                  )
+                : toInstrumentStepTypes(trackSections, state.trackSectionSteps),
+        [files, state.trackSectionSteps, track, trackSections]
     );
 
     return (
-        <Pane display="flex" flexDirection="row" alignItems="center">
+        <Pane alignItems="center" display="flex" flexDirection="row">
             <Card
-                display="flex"
-                flexDirection="column"
                 alignItems="flex-start"
                 background={theme.colors.gray200}
-                width={majorScale(21)}
-                marginY={majorScale(1)}
+                display="flex"
+                flexDirection="column"
                 marginRight={majorScale(2)}
-                padding={majorScale(1)}>
+                marginY={majorScale(1)}
+                padding={majorScale(1)}
+                width={majorScale(21)}>
                 <EditableParagraph onChange={setName} value={name} />
                 <Pane display="flex" flexDirection="row">
                     <Tooltip content="Mute Track">
@@ -126,23 +149,31 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     solo={solo}
                     steps={steps}
                     subdivision="8n">
-                    <Instrument
-                        samples={FileUtils.toMidiNoteMap(files)}
-                        type="sampler"
-                    />
+                    {instrument != null && (
+                        <Instrument
+                            options={{
+                                curve: instrument.curve,
+                                release: instrument.release,
+                            }}
+                            samples={samples}
+                            type="sampler"
+                        />
+                    )}
+                    {instrument == null && (
+                        <Instrument samples={samples} type="sampler" />
+                    )}
                 </ReactronicaTrack>
             </Card>
             {trackSections?.map((trackSection, index) => (
                 <TrackSectionCard
+                    file={instrumentFile}
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
                     key={trackSection.id}
                     onChange={updateTrackSection}
+                    stepCountOffset={getStepCountOffset(trackSections, index)}
+                    track={track}
                     trackSection={trackSection}
-                    stepCountOffset={TrackSectionUtils.getStepCountOffset(
-                        trackSections,
-                        index
-                    )}
                 />
             ))}
             <Tooltip content="Add Section">

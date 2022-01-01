@@ -5,11 +5,12 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { mapToList } from "utils/collection-utils";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { BucketName } from "enums/bucket-name";
 import { List } from "immutable";
 import _ from "lodash";
+import { mergeUseQueryProperties } from "utils/use-query-utils";
 
 interface UseListFilesOptions {
     enabled?: boolean;
@@ -52,20 +53,31 @@ const useListFiles = (
 
     const filesResult = useQuery<List<FileRecord>, Error>({
         enabled: enabled && globalState.isAuthenticated(),
-        key: ["List", Tables.Files],
+        key: [Tables.Files],
         fn: list,
         onError,
         onSuccess,
     });
 
-    return globalState.isAuthenticated()
-        ? filesResult
-        : {
-              ...storageProviderFilesResult,
-              resultObject: mapStorageProviderFiles(
-                  storageProviderFilesResult.resultObject
-              ),
-          };
+    const resultObject = useMemo(() => {
+        if (globalState.isAuthenticated()) {
+            return filesResult.resultObject;
+        }
+
+        return mapStorageProviderFiles(storageProviderFilesResult.resultObject);
+    }, [
+        filesResult.resultObject,
+        globalState,
+        storageProviderFilesResult.resultObject,
+    ]);
+
+    return {
+        ...mergeUseQueryProperties(filesResult, storageProviderFilesResult),
+        refetch: globalState.isAuthenticated()
+            ? filesResult.refetch
+            : storageProviderFilesResult.refetch,
+        resultObject: resultObject,
+    };
 };
 
 const mapStorageProviderFiles = (

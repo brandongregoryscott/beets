@@ -1,10 +1,10 @@
-import { MigrationBuilder } from "@brandongregoryscott/node-pg-migrate";
+import { MigrationBuilder } from "node-pg-migrate";
 import { configure } from "./utils/migration-builder-utils";
 import { makeAuditableColumns } from "./utils/auditable-columns";
 import { makeIdColumn } from "./utils/id-column";
-import { tables } from "./utils/tables";
+import { Tables } from "./enums/tables";
 
-const tableName = tables.tracks;
+const tableName = Tables.Tracks;
 
 const up = (pgm: MigrationBuilder) => {
     const config = configure({ pgm, tableName });
@@ -39,7 +39,7 @@ const up = (pgm: MigrationBuilder) => {
         project_id: {
             type: "uuid",
             notNull: true,
-            references: tables.projects,
+            references: Tables.Projects,
         },
         volume: {
             type: "integer",

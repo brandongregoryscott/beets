@@ -6,6 +6,7 @@ import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
 interface UseCreateOrUpdateUserOptions {
+    onConflict?: keyof User;
     onError?: (error: Error) => void;
     onSettled?: () => void;
     onSuccess?: (resultObject: UserRecord) => void;
@@ -15,12 +16,14 @@ const useCreateOrUpdateUser = (
     options?: UseCreateOrUpdateUserOptions
 ): UseMutationResult<UserRecord, Error, User> => {
     const { fromUsers } = SupabaseClient;
-    const { onError, onSettled, onSuccess } = options ?? {};
+    const { onConflict, onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
     const createOrUpdate = async (user: User) => {
         const { data, error } = await fromUsers()
-            .upsert(user instanceof UserRecord ? user.toPOJO() : user)
+            .upsert(user instanceof UserRecord ? user.toPOJO() : user, {
+                onConflict,
+            })
             .limit(1)
             .single();
 
@@ -36,7 +39,7 @@ const useCreateOrUpdateUser = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Users]);
+            queryClient.invalidateQueries(Tables.Users);
             onSettled?.();
         },
     });

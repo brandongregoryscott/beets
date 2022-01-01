@@ -6,6 +6,7 @@ import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
 interface UseCreateOrUpdateTrackSectionStepOptions {
+    onConflict?: keyof TrackSectionStep;
     onError?: (error: Error) => void;
     onSettled?: () => void;
     onSuccess?: (resultObject: TrackSectionStepRecord) => void;
@@ -15,7 +16,7 @@ const useCreateOrUpdateTrackSectionStep = (
     options?: UseCreateOrUpdateTrackSectionStepOptions
 ): UseMutationResult<TrackSectionStepRecord, Error, TrackSectionStep> => {
     const { fromTrackSectionSteps } = SupabaseClient;
-    const { onError, onSettled, onSuccess } = options ?? {};
+    const { onConflict, onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
     const createOrUpdate = async (trackSectionStep: TrackSectionStep) => {
@@ -23,7 +24,8 @@ const useCreateOrUpdateTrackSectionStep = (
             .upsert(
                 trackSectionStep instanceof TrackSectionStepRecord
                     ? trackSectionStep.toPOJO()
-                    : trackSectionStep
+                    : trackSectionStep,
+                { onConflict }
             )
             .limit(1)
             .single();
@@ -41,10 +43,7 @@ const useCreateOrUpdateTrackSectionStep = (
             onSuccess,
             onError,
             onSettled: () => {
-                queryClient.invalidateQueries([
-                    "List",
-                    Tables.TrackSectionSteps,
-                ]);
+                queryClient.invalidateQueries(Tables.TrackSectionSteps);
                 onSettled?.();
             },
         }

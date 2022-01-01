@@ -30,7 +30,7 @@ const useGetProject = (
 
     const result = useQuery<ProjectRecord | undefined, Error>({
         enabled,
-        key: ["Get", Tables.Projects, id],
+        key: [Tables.Projects, id],
         fn: get,
     });
 

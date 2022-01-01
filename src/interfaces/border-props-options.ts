@@ -1,7 +1,7 @@
 interface BorderPropsOptions {
+    borderRadius: number;
     isFirst?: boolean;
     isLast?: boolean;
-    borderRadius: number;
 }
 
 export type { BorderPropsOptions };

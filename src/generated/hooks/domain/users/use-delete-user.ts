@@ -28,7 +28,7 @@ const useDeleteUser = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Users]);
+            queryClient.invalidateQueries(Tables.Users);
         },
     });
 

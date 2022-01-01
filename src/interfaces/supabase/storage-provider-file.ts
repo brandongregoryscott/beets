@@ -8,10 +8,10 @@ interface StorageProviderFile {
         size: number;
     };
     name: string;
-    updated_at: string;
 
-    // Navigation Properties
     signedURL?: string | null;
+    // Navigation Properties
+    updated_at: string;
 }
 
 export type { StorageProviderFile };

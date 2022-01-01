@@ -1,3 +1,4 @@
+import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
     DeleteIcon,
@@ -7,16 +8,19 @@ import {
     majorScale,
     minorScale,
     Pane,
+    StepChartIcon,
     Tooltip,
 } from "evergreen-ui";
 import { List } from "immutable";
 import { SetStateAction } from "jotai";
 import _ from "lodash";
+import { FileRecord } from "models/file-record";
+import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useDialog } from "utils/hooks/use-dialog";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
@@ -24,10 +28,12 @@ import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
 
 interface TrackSectionCardProps {
+    file?: FileRecord;
     isFirst?: boolean;
     isLast?: boolean;
     onChange: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
     stepCountOffset: number;
+    track: TrackRecord;
     trackSection: TrackSectionRecord;
 }
 
@@ -38,17 +44,26 @@ const stepWidth = majorScale(2);
 const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     props: TrackSectionCardProps
 ) => {
+    const [
+        sequencerDialogOpen,
+        handleOpenSequencerDialog,
+        handleCloseSequencerDialog,
+    ] = useDialog();
+
+    const [
+        pianoRollDialogOpen,
+        handleOpenPianoRollDialog,
+        handleClosePianoRollDialog,
+    ] = useDialog();
+
     const {
-        value: sequencerDialogOpen,
-        setTrue: handleOpenSequencerDialog,
-        setFalse: handleCloseSequencerDialog,
-    } = useBoolean(false);
-    const {
-        stepCountOffset,
+        file,
         isFirst = false,
         isLast = false,
-        trackSection,
         onChange,
+        stepCountOffset,
+        track,
+        trackSection,
     } = props;
     const borderProps = getBorderXProps({
         isFirst,
@@ -69,9 +84,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
 
     const groupedTrackSectionSteps = trackSectionSteps.groupBy((e) => e.index);
 
-    const handleRemove = useCallback(() => {
-        remove(trackSection);
-    }, [remove, trackSection]);
+    const handleRemove = useCallback(
+        () => remove(trackSection),
+        [remove, trackSection]
+    );
 
     const handleStepCountChange = useCallback(
         (stepCount: number) => {
@@ -97,13 +113,23 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                 display="flex"
                 flexDirection="column"
                 maxWidth={majorScale(5)}>
-                <Tooltip content="Sequencer">
-                    <IconButton
-                        icon={HeatGridIcon}
-                        marginRight={iconMarginRight}
-                        onClick={handleOpenSequencerDialog}
-                    />
-                </Tooltip>
+                {track.isSequencer() ? (
+                    <Tooltip content="Sequencer">
+                        <IconButton
+                            icon={HeatGridIcon}
+                            marginRight={iconMarginRight}
+                            onClick={handleOpenSequencerDialog}
+                        />
+                    </Tooltip>
+                ) : (
+                    <Tooltip content="Piano Roll">
+                        <IconButton
+                            icon={StepChartIcon}
+                            marginRight={iconMarginRight}
+                            onClick={handleOpenPianoRollDialog}
+                        />
+                    </Tooltip>
+                )}
                 <Tooltip content="Remove section">
                     <IconButton
                         icon={DeleteIcon}
@@ -147,12 +173,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                 );
                                 return (
                                     <Pane
-                                        key={`track-section-${trackSection.id}-row-${row}`}
+                                        backgroundColor={backgroundColor}
                                         height={stepHeight}
+                                        key={`track-section-${trackSection.id}-row-${row}`}
                                         minHeight={stepHeight}
                                         minWidth={stepWidth}
                                         width={stepWidth}
-                                        backgroundColor={backgroundColor}
                                     />
                                 );
                             })}
@@ -163,11 +189,21 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
             {sequencerDialogOpen && files != null && (
                 <SequencerDialog
                     files={files}
+                    onCloseComplete={handleCloseSequencerDialog}
                     onStepChange={handleTrackSectionStepsChange}
                     onStepCountChange={handleStepCountChange}
-                    onClose={handleCloseSequencerDialog}
-                    trackSectionSteps={trackSectionSteps}
                     trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
+                />
+            )}
+            {pianoRollDialogOpen && (
+                <PianoRollDialog
+                    file={file}
+                    onChange={handleTrackSectionStepsChange}
+                    onCloseComplete={handleClosePianoRollDialog}
+                    onStepCountChange={handleStepCountChange}
+                    trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
                 />
             )}
         </Pane>

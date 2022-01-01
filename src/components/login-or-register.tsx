@@ -1,19 +1,11 @@
 import { ErrorMessages } from "constants/error-messages";
-import {
-    Pane,
-    TextInputField,
-    majorScale,
-    Button,
-    Alert,
-    Link,
-} from "evergreen-ui";
+import { TextInputField, majorScale, Button, Alert, Link } from "evergreen-ui";
 import _ from "lodash";
 import { useInput } from "rooks";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useLogin } from "utils/hooks/supabase/use-login";
 import { useRegister } from "utils/hooks/supabase/use-register";
-import { useCallback } from "react";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { Form } from "components/forms/form";
 
 interface LoginOrRegisterProps {
     initialShowRegister: boolean;
@@ -25,7 +17,6 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
     props: LoginOrRegisterProps
 ) => {
     const { initialShowRegister } = props;
-    const { clearState, state } = useWorkstationState();
     const { value: showRegister, toggle: toggleShowRegister } =
         useBoolean(initialShowRegister);
     const { value: email, onChange: handleEmailChange } = useInput("");
@@ -34,13 +25,6 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
         useBoolean(false);
     const { value: passwordIsInvalid, setValue: setPasswordIsInvalid } =
         useBoolean(false);
-    const handleLoginSuccess = useCallback(() => {
-        if (!state.isDemo()) {
-            return;
-        }
-
-        clearState();
-    }, [clearState, state]);
     const {
         mutate: register,
         reset: resetRegister,
@@ -53,9 +37,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
         reset: resetLogin,
         isLoading: isLoginLoading,
         error: loginError,
-    } = useLogin({
-        onSuccess: handleLoginSuccess,
-    });
+    } = useLogin();
 
     const error = loginError ?? registerError;
 
@@ -106,8 +88,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
     };
 
     return (
-        <Pane
-            is="form"
+        <Form
             display="flex"
             flexDirection="column"
             onSubmit={handleSubmit}
@@ -115,21 +96,21 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
             <TextInputField
                 disabled={showRegister ? isRegisterLoading : isLoginLoading}
                 label="Email"
-                value={email}
+                onChange={handleEmailChange}
                 validationMessage={
                     emailIsInvalid ? ErrorMessages.REQUIRED_FIELD : undefined
                 }
-                onChange={handleEmailChange}
+                value={email}
             />
             <TextInputField
                 disabled={showRegister ? isRegisterLoading : isLoginLoading}
                 label="Password"
+                onChange={handlePasswordChange}
                 type="password"
-                value={password}
                 validationMessage={
                     passwordIsInvalid ? ErrorMessages.REQUIRED_FIELD : undefined
                 }
-                onChange={handlePasswordChange}
+                value={password}
             />
             <Button
                 isLoading={showRegister ? isRegisterLoading : isLoginLoading}
@@ -147,7 +128,7 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
                     confirmation link to sign in.
                 </Alert>
             )}
-        </Pane>
+        </Form>
     );
 };
 

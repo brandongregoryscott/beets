@@ -38,7 +38,7 @@ const useListPgmigrations = (
 
     const result = useQuery<Pgmigration[], Error>({
         enabled,
-        key: ["List", Tables.Pgmigrations],
+        key: Tables.Pgmigrations,
         fn: list,
         onError,
         onSuccess,

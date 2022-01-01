@@ -1,4 +1,6 @@
-import { FileUpload } from "components/file-upload";
+import React from "react";
+import { useGlobalState } from "utils/hooks/use-global-state";
+import { FileList } from "components/files/file-list";
 import { BucketName } from "enums/bucket-name";
 import {
     BanCircleIcon,
@@ -7,20 +9,18 @@ import {
     majorScale,
     Pane,
 } from "evergreen-ui";
-import { FileList } from "components/file-list";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { FileUpload } from "components/files/file-upload";
 import { useTheme } from "utils/hooks/use-theme";
+import { RouteProps } from "interfaces/route-props";
 
-interface LibraryPageProps {}
+interface FilesPageProps extends RouteProps {}
 
-const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
+const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
     const { globalState } = useGlobalState();
     const theme = useTheme();
     return (
-        <Pane marginTop={majorScale(2)} marginLeft={majorScale(2)}>
-            <Pane marginTop={majorScale(1)}>
-                <FileList bucketName={BucketName.Samples} />
-            </Pane>
+        <React.Fragment>
+            <FileList bucketName={BucketName.Samples} />
             <Pane marginTop={majorScale(1)}>
                 {globalState.isAuthenticated() && (
                     <FileUpload bucketName={BucketName.Samples} />
@@ -28,7 +28,7 @@ const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
                 {!globalState.isAuthenticated() && (
                     <Pane maxWidth={majorScale(60)}>
                         <EmptyState
-                            title="Please register to upload files."
+                            background="dark"
                             icon={
                                 <Icon
                                     color={theme.intents.danger.icon}
@@ -36,13 +36,13 @@ const LibraryPage: React.FC<LibraryPageProps> = (props: LibraryPageProps) => {
                                 />
                             }
                             iconBgColor={theme.intents.danger.background}
-                            background="dark"
+                            title="Please register to upload files."
                         />
                     </Pane>
                 )}
             </Pane>
-        </Pane>
+        </React.Fragment>
     );
 };
 
-export { LibraryPage };
+export { FilesPage };

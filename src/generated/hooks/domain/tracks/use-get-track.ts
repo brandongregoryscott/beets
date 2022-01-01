@@ -30,7 +30,7 @@ const useGetTrack = (
 
     const result = useQuery<TrackRecord | undefined, Error>({
         enabled,
-        key: ["Get", Tables.Tracks, id],
+        key: [Tables.Tracks, id],
         fn: get,
     });
 

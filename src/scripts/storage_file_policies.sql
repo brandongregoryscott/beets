@@ -15,5 +15,4 @@ select
             owner is null
             and (storage.foldername(name)) [1] = 'public'
         )
-    )
-);
+    );

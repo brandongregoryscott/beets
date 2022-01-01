@@ -28,7 +28,7 @@ const useDeleteProject = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Projects]);
+            queryClient.invalidateQueries(Tables.Projects);
         },
     });
 

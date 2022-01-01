@@ -6,6 +6,7 @@ import { useQueryClient } from "react-query";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 
 interface UseCreateOrUpdateFileOptions {
+    onConflict?: keyof File;
     onError?: (error: Error) => void;
     onSettled?: () => void;
     onSuccess?: (resultObject: FileRecord) => void;
@@ -15,12 +16,14 @@ const useCreateOrUpdateFile = (
     options?: UseCreateOrUpdateFileOptions
 ): UseMutationResult<FileRecord, Error, File> => {
     const { fromFiles } = SupabaseClient;
-    const { onError, onSettled, onSuccess } = options ?? {};
+    const { onConflict, onError, onSettled, onSuccess } = options ?? {};
     const queryClient = useQueryClient();
 
     const createOrUpdate = async (file: File) => {
         const { data, error } = await fromFiles()
-            .upsert(file instanceof FileRecord ? file.toPOJO() : file)
+            .upsert(file instanceof FileRecord ? file.toPOJO() : file, {
+                onConflict,
+            })
             .limit(1)
             .single();
 
@@ -36,7 +39,7 @@ const useCreateOrUpdateFile = (
         onSuccess,
         onError,
         onSettled: () => {
-            queryClient.invalidateQueries(["List", Tables.Files]);
+            queryClient.invalidateQueries(Tables.Files);
             onSettled?.();
         },
     });
