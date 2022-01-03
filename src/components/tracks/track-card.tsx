@@ -41,7 +41,6 @@ interface TrackCardProps {
     track: TrackRecord;
 }
 
-const droppableId = "track-card-droppable";
 const iconMarginRight = minorScale(2);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
@@ -128,8 +127,13 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 }
 
                 return prev
-                    .set(destination.index, sourceValue)
-                    .set(source.index, destinationValue);
+                    .update(source.index, (source) =>
+                        source!.merge({ index: destination.index })
+                    )
+                    .update(destination.index, (destination) =>
+                        destination!.merge({ index: source.index })
+                    )
+                    .sortBy((trackSection) => trackSection.index);
             });
         },
         [setTrackSections]
@@ -193,7 +197,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 </ReactronicaTrack>
             </Card>
             <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable direction="horizontal" droppableId={droppableId}>
+                <Droppable direction="horizontal" droppableId={track.id}>
                     {(provided, snapshot) => (
                         <Pane
                             display="flex"
