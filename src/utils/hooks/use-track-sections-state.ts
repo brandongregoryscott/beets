@@ -13,6 +13,7 @@ interface UseTrackSectionsStateResult {
     get: (id: string) => TrackSectionRecord | undefined;
     initialState: List<TrackSectionRecord>;
     remove: (trackSection: TrackSectionRecord) => void;
+    setState: (update: SetStateAction<List<TrackSectionRecord>>) => void;
     state: List<TrackSectionRecord>;
     update: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
 }
@@ -33,7 +34,10 @@ const useTrackSectionsState = (
                 prev.merge({
                     trackSections: prev.trackSections.push(
                         trackSection?.merge({ track_id: trackId }) ??
-                            new TrackSectionRecord({ track_id: trackId })
+                            new TrackSectionRecord({
+                                track_id: trackId,
+                                index: prev.trackSections.count(),
+                            })
                     ),
                 })
             ),
@@ -92,6 +96,19 @@ const useTrackSectionsState = (
         [setCurrentState]
     );
 
+    const setState = useCallback(
+        (update: SetStateAction<List<TrackSectionRecord>>) => {
+            setCurrentState((prev) => {
+                const value = _.isFunction(update)
+                    ? update(prev.trackSections)
+                    : update;
+
+                return prev.merge({ trackSections: value });
+            });
+        },
+        [setCurrentState]
+    );
+
     const initialState = useMemo(
         () =>
             initialWorkstationState.trackSections.filter(
@@ -113,6 +130,7 @@ const useTrackSectionsState = (
         get,
         initialState,
         remove,
+        setState,
         state,
         update,
     };

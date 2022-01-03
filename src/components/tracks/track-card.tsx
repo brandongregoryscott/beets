@@ -20,7 +20,6 @@ import {
     StepNoteType,
 } from "reactronica";
 import { TrackRecord } from "models/track-record";
-import { TrackSectionCard } from "components/tracks/track-section-card";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
@@ -32,15 +31,17 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
-import { getStepCountOffset } from "utils/track-section-utils";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { TrackSectionList } from "components/tracks/track-section-list";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
     track: TrackRecord;
 }
 
+const droppableId = "track-card-droppable";
 const iconMarginRight = minorScale(2);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
@@ -50,6 +51,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { update, remove } = useTracksState();
     const {
         add: addTrackSection,
+        setState: setTrackSections,
         state: trackSections,
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
@@ -105,6 +107,32 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                   )
                 : toInstrumentStepTypes(trackSections, state.trackSectionSteps),
         [files, state.trackSectionSteps, track, trackSections]
+    );
+
+    const handleDragEnd = useCallback(
+        (result: DropResult) => {
+            const { destination, source } = result;
+            if (destination == null) {
+                return;
+            }
+
+            if (destination.index === source.index) {
+                return;
+            }
+
+            setTrackSections((prev) => {
+                const sourceValue = prev.get(source.index);
+                const destinationValue = prev.get(destination.index);
+                if (sourceValue == null || destinationValue == null) {
+                    return prev;
+                }
+
+                return prev
+                    .set(destination.index, sourceValue)
+                    .set(source.index, destinationValue);
+            });
+        },
+        [setTrackSections]
     );
 
     return (
@@ -164,18 +192,25 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     )}
                 </ReactronicaTrack>
             </Card>
-            {trackSections?.map((trackSection, index) => (
-                <TrackSectionCard
-                    file={instrumentFile}
-                    isFirst={index === 0}
-                    isLast={index === trackSections.count() - 1}
-                    key={trackSection.id}
-                    onChange={updateTrackSection}
-                    stepCountOffset={getStepCountOffset(trackSections, index)}
-                    track={track}
-                    trackSection={trackSection}
-                />
-            ))}
+            <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable direction="horizontal" droppableId={droppableId}>
+                    {(provided, snapshot) => (
+                        <Pane
+                            display="flex"
+                            flexDirection="row"
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}>
+                            <TrackSectionList
+                                instrumentFile={instrumentFile}
+                                onChange={updateTrackSection}
+                                track={track}
+                                trackSections={trackSections}
+                            />
+                            {provided.placeholder}
+                        </Pane>
+                    )}
+                </Droppable>
+            </DragDropContext>
             <Tooltip content="Add Section">
                 <IconButton
                     icon={PlusIcon}

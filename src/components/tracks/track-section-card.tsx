@@ -18,6 +18,7 @@ import { FileRecord } from "models/file-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
@@ -99,114 +100,130 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     );
 
     return (
-        <Pane
-            {...borderProps}
-            backgroundColor={theme.colors.gray200}
-            borderRight={!isLast}
-            borderRightColor={theme.colors.gray700}
-            borderRightWidth={1}
-            display="flex"
-            flexDirection="row"
-            height={majorScale(10)}
-            padding={majorScale(1)}>
-            <Pane
-                display="flex"
-                flexDirection="column"
-                maxWidth={majorScale(5)}>
-                {track.isSequencer() ? (
-                    <Tooltip content="Sequencer">
-                        <IconButton
-                            icon={HeatGridIcon}
-                            marginRight={iconMarginRight}
-                            onClick={handleOpenSequencerDialog}
-                        />
-                    </Tooltip>
-                ) : (
-                    <Tooltip content="Piano Roll">
-                        <IconButton
-                            icon={StepChartIcon}
-                            marginRight={iconMarginRight}
-                            onClick={handleOpenPianoRollDialog}
-                        />
-                    </Tooltip>
-                )}
-                <Tooltip content="Remove section">
-                    <IconButton
-                        icon={DeleteIcon}
-                        intent="danger"
-                        marginRight={iconMarginRight}
-                        onClick={handleRemove}
-                    />
-                </Tooltip>
-            </Pane>
-            <Pane display="flex" flexDirection="row">
-                {_.range(0, trackSection.step_count).map((index: number) => {
-                    const steps =
-                        groupedTrackSectionSteps.get(index)?.toList() ?? List();
-                    const stepsSortedByFileId = List(
-                        _.sortBy(steps.toArray(), "file_id")
-                    );
-
-                    const isPlaying =
-                        index + stepCountOffset === reactronicaState?.index;
-
-                    const activeProps = isPlaying
-                        ? {
-                              elevation: 4 as Elevation,
-                              transform: "translateY(-2px)",
-                          }
-                        : {};
-
-                    return (
-                        <Pane
-                            {...activeProps}
-                            display="flex"
-                            flexDirection="column"
-                            key={`track-section-${trackSection.id}-column-${index}`}
-                            minHeight={stepHeight}
-                            minWidth={stepWidth}
-                            width={stepWidth}>
-                            {_.range(0, 4).map((row: number) => {
-                                const backgroundColor = getStepColor(
-                                    stepsSortedByFileId.get(row)?.file_id,
-                                    theme
+        <Draggable draggableId={trackSection.id} index={trackSection.index}>
+            {(provided) => (
+                <Pane
+                    {...borderProps}
+                    backgroundColor={theme.colors.gray200}
+                    borderRight={!isLast}
+                    borderRightColor={theme.colors.gray700}
+                    borderRightWidth={1}
+                    display="flex"
+                    flexDirection="row"
+                    height={majorScale(10)}
+                    padding={majorScale(1)}
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}>
+                    <Pane
+                        display="flex"
+                        flexDirection="column"
+                        maxWidth={majorScale(5)}>
+                        {track.isSequencer() ? (
+                            <Tooltip content="Sequencer">
+                                <IconButton
+                                    icon={HeatGridIcon}
+                                    marginRight={iconMarginRight}
+                                    onClick={handleOpenSequencerDialog}
+                                />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip content="Piano Roll">
+                                <IconButton
+                                    icon={StepChartIcon}
+                                    marginRight={iconMarginRight}
+                                    onClick={handleOpenPianoRollDialog}
+                                />
+                            </Tooltip>
+                        )}
+                        <Tooltip content="Remove section">
+                            <IconButton
+                                icon={DeleteIcon}
+                                intent="danger"
+                                marginRight={iconMarginRight}
+                                onClick={handleRemove}
+                            />
+                        </Tooltip>
+                    </Pane>
+                    <Pane display="flex" flexDirection="row">
+                        {_.range(0, trackSection.step_count).map(
+                            (index: number) => {
+                                const steps =
+                                    groupedTrackSectionSteps
+                                        .get(index)
+                                        ?.toList() ?? List();
+                                const stepsSortedByFileId = List(
+                                    _.sortBy(steps.toArray(), "file_id")
                                 );
+
+                                const isPlaying =
+                                    index + stepCountOffset ===
+                                    reactronicaState?.index;
+
+                                const activeProps = isPlaying
+                                    ? {
+                                          elevation: 4 as Elevation,
+                                          transform: "translateY(-2px)",
+                                      }
+                                    : {};
+
                                 return (
                                     <Pane
-                                        backgroundColor={backgroundColor}
-                                        height={stepHeight}
-                                        key={`track-section-${trackSection.id}-row-${row}`}
+                                        {...activeProps}
+                                        display="flex"
+                                        flexDirection="column"
+                                        key={`track-section-${trackSection.id}-column-${index}`}
                                         minHeight={stepHeight}
                                         minWidth={stepWidth}
-                                        width={stepWidth}
-                                    />
+                                        width={stepWidth}>
+                                        {_.range(0, 4).map((row: number) => {
+                                            const backgroundColor =
+                                                getStepColor(
+                                                    stepsSortedByFileId.get(row)
+                                                        ?.file_id,
+                                                    theme
+                                                );
+                                            return (
+                                                <Pane
+                                                    backgroundColor={
+                                                        backgroundColor
+                                                    }
+                                                    height={stepHeight}
+                                                    key={`track-section-${trackSection.id}-row-${row}`}
+                                                    minHeight={stepHeight}
+                                                    minWidth={stepWidth}
+                                                    width={stepWidth}
+                                                />
+                                            );
+                                        })}
+                                    </Pane>
                                 );
-                            })}
-                        </Pane>
-                    );
-                })}
-            </Pane>
-            {sequencerDialogOpen && files != null && (
-                <SequencerDialog
-                    files={files}
-                    onCloseComplete={handleCloseSequencerDialog}
-                    onStepChange={handleTrackSectionStepsChange}
-                    onStepCountChange={handleStepCountChange}
-                    trackSection={trackSection}
-                    trackSectionSteps={trackSectionSteps}
-                />
+                            }
+                        )}
+                    </Pane>
+                    {sequencerDialogOpen && files != null && (
+                        <SequencerDialog
+                            files={files}
+                            onCloseComplete={handleCloseSequencerDialog}
+                            onStepChange={handleTrackSectionStepsChange}
+                            onStepCountChange={handleStepCountChange}
+                            trackSection={trackSection}
+                            trackSectionSteps={trackSectionSteps}
+                        />
+                    )}
+                    {pianoRollDialogOpen && (
+                        <PianoRollDialog
+                            file={file}
+                            onChange={handleTrackSectionStepsChange}
+                            onCloseComplete={handleClosePianoRollDialog}
+                            onStepCountChange={handleStepCountChange}
+                            trackSection={trackSection}
+                            trackSectionSteps={trackSectionSteps}
+                        />
+                    )}
+                </Pane>
             )}
-            {pianoRollDialogOpen && (
-                <PianoRollDialog
-                    file={file}
-                    onChange={handleTrackSectionStepsChange}
-                    onCloseComplete={handleClosePianoRollDialog}
-                    onStepCountChange={handleStepCountChange}
-                    trackSection={trackSection}
-                    trackSectionSteps={trackSectionSteps}
-                />
-            )}
-        </Pane>
+        </Draggable>
     );
 };
 
