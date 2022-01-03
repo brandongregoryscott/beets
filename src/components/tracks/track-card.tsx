@@ -200,6 +200,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 <Droppable direction="horizontal" droppableId={track.id}>
                     {(provided, snapshot) => (
                         <Pane
+                            border={
+                                snapshot.isDraggingOver
+                                    ? `2px dashed ${theme.colors.blue300}`
+                                    : undefined
+                            }
+                            borderRadius={minorScale(1)}
                             display="flex"
                             flexDirection="row"
                             ref={provided.innerRef}
