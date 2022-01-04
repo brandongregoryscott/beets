@@ -33,7 +33,12 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import {
+    DragDropContext,
+    Draggable,
+    Droppable,
+    DropResult,
+} from "react-beautiful-dnd";
 import { TrackSectionList } from "components/tracks/track-section-list";
 
 interface TrackCardProps {
@@ -140,96 +145,122 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     );
 
     return (
-        <Pane alignItems="center" display="flex" flexDirection="row">
-            <Card
-                alignItems="flex-start"
-                background={theme.colors.gray200}
-                display="flex"
-                flexDirection="column"
-                marginRight={majorScale(2)}
-                marginY={majorScale(1)}
-                padding={majorScale(1)}
-                width={majorScale(21)}>
-                <EditableParagraph onChange={setName} value={name} />
-                <Pane display="flex" flexDirection="row">
-                    <Tooltip content="Mute Track">
-                        <IconButton
-                            icon={mute ? VolumeOffIcon : VolumeUpIcon}
-                            marginRight={iconMarginRight}
-                            onClick={toggleMute}
-                        />
-                    </Tooltip>
-                    <Tooltip content="Solo Track">
-                        <IconButton
-                            icon={solo ? PropertyIcon : PropertiesIcon}
-                            marginRight={iconMarginRight}
-                            onClick={toggleSolo}
-                        />
-                    </Tooltip>
-                    <Tooltip content="Remove Track">
-                        <IconButton
-                            icon={DeleteIcon}
-                            intent="danger"
-                            marginRight={iconMarginRight}
-                            onClick={handleRemove}
-                        />
-                    </Tooltip>
-                </Pane>
-                <ReactronicaTrack
-                    mute={mute}
-                    onStepPlay={onStepPlay}
-                    solo={solo}
-                    steps={steps}
-                    subdivision="8n">
-                    {instrument != null && (
-                        <Instrument
-                            options={{
-                                curve: instrument.curve,
-                                release: instrument.release,
-                            }}
-                            samples={samples}
-                            type="sampler"
-                        />
-                    )}
-                    {instrument == null && (
-                        <Instrument samples={samples} type="sampler" />
-                    )}
-                </ReactronicaTrack>
-            </Card>
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable direction="horizontal" droppableId={track.id}>
-                    {(provided, snapshot) => (
-                        <Pane
-                            border={
-                                snapshot.isDraggingOver
-                                    ? `2px dashed ${theme.colors.blue300}`
-                                    : undefined
-                            }
-                            borderRadius={minorScale(1)}
+        <Pane>
+            <Draggable draggableId={track.id} index={track.index}>
+                {(provided) => (
+                    <Pane
+                        alignItems="center"
+                        display="flex"
+                        flexDirection="row"
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}>
+                        <Card
+                            {...provided.dragHandleProps}
+                            alignItems="flex-start"
+                            background={theme.colors.gray200}
                             display="flex"
-                            flexDirection="row"
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}>
-                            <TrackSectionList
-                                instrumentFile={instrumentFile}
-                                onChange={updateTrackSection}
-                                track={track}
-                                trackSections={trackSections}
+                            flexDirection="column"
+                            marginRight={majorScale(2)}
+                            marginY={majorScale(1)}
+                            padding={majorScale(1)}
+                            width={majorScale(21)}>
+                            <EditableParagraph
+                                onChange={setName}
+                                value={name}
                             />
-                            {provided.placeholder}
-                        </Pane>
-                    )}
-                </Droppable>
-            </DragDropContext>
-            <Tooltip content="Add Section">
-                <IconButton
-                    icon={PlusIcon}
-                    marginLeft={
-                        trackSections.isEmpty() ? undefined : majorScale(2)
-                    }
-                    onClick={handleAddTrackSection}
-                />
-            </Tooltip>
+                            <Pane display="flex" flexDirection="row">
+                                <Tooltip content="Mute Track">
+                                    <IconButton
+                                        icon={
+                                            mute ? VolumeOffIcon : VolumeUpIcon
+                                        }
+                                        marginRight={iconMarginRight}
+                                        onClick={toggleMute}
+                                    />
+                                </Tooltip>
+                                <Tooltip content="Solo Track">
+                                    <IconButton
+                                        icon={
+                                            solo ? PropertyIcon : PropertiesIcon
+                                        }
+                                        marginRight={iconMarginRight}
+                                        onClick={toggleSolo}
+                                    />
+                                </Tooltip>
+                                <Tooltip content="Remove Track">
+                                    <IconButton
+                                        icon={DeleteIcon}
+                                        intent="danger"
+                                        marginRight={iconMarginRight}
+                                        onClick={handleRemove}
+                                    />
+                                </Tooltip>
+                            </Pane>
+                            <ReactronicaTrack
+                                mute={mute}
+                                onStepPlay={onStepPlay}
+                                solo={solo}
+                                steps={steps}
+                                subdivision="8n">
+                                {instrument != null && (
+                                    <Instrument
+                                        options={{
+                                            curve: instrument.curve,
+                                            release: instrument.release,
+                                        }}
+                                        samples={samples}
+                                        type="sampler"
+                                    />
+                                )}
+                                {instrument == null && (
+                                    <Instrument
+                                        samples={samples}
+                                        type="sampler"
+                                    />
+                                )}
+                            </ReactronicaTrack>
+                        </Card>
+                        <DragDropContext onDragEnd={handleDragEnd}>
+                            <Droppable
+                                direction="horizontal"
+                                droppableId={track.id}>
+                                {(provided, snapshot) => (
+                                    <Pane
+                                        border={
+                                            snapshot.isDraggingOver
+                                                ? `2px dashed ${theme.colors.blue300}`
+                                                : undefined
+                                        }
+                                        borderRadius={minorScale(1)}
+                                        display="flex"
+                                        flexDirection="row"
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}>
+                                        <TrackSectionList
+                                            instrumentFile={instrumentFile}
+                                            onChange={updateTrackSection}
+                                            track={track}
+                                            trackSections={trackSections}
+                                        />
+                                        {provided.placeholder}
+                                    </Pane>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                        <Tooltip content="Add Section">
+                            <IconButton
+                                icon={PlusIcon}
+                                marginLeft={
+                                    trackSections.isEmpty()
+                                        ? undefined
+                                        : majorScale(2)
+                                }
+                                onClick={handleAddTrackSection}
+                            />
+                        </Tooltip>
+                    </Pane>
+                )}
+            </Draggable>
         </Pane>
     );
 };
