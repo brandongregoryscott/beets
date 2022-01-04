@@ -175,7 +175,10 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const renderSpinner = isLoadingFiles || isLoadingWorkstations;
     const renderControls = !renderSpinner;
     return (
-        <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
+        <Pane
+            marginLeft={majorScale(2)}
+            marginTop={majorScale(2)}
+            maxWidth={`calc(100% - ${majorScale(4)}px)`}>
             {renderSpinner && <Spinner />}
             {renderControls && (
                 <React.Fragment>
@@ -186,14 +189,15 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                                 droppableId={project.id}>
                                 {(provided, snapshot) => (
                                     <Pane
-                                        border={
+                                        border={`2px dashed ${
                                             snapshot.isDraggingOver
-                                                ? `2px dashed ${theme.colors.blue300}`
-                                                : undefined
-                                        }
+                                                ? theme.colors.blue300
+                                                : "transparent"
+                                        }`}
                                         borderRadius={minorScale(1)}
                                         display="flex"
                                         flexDirection="column"
+                                        margin={-2}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}>
                                         <TrackList tracks={tracks} />
@@ -216,7 +220,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                                 width={majorScale(16)}>
                                 <IconButton
                                     icon={PlusIcon}
-                                    marginTop={minorScale(2)}
+                                    marginTop={majorScale(2)}
                                 />
                             </SelectMenu>
                         </Tooltip>

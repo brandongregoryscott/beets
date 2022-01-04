@@ -50,9 +50,9 @@ const iconMarginRight = minorScale(2);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { onStepPlay, track } = props;
-    const { id, name, mute, solo, instrument_id } = track;
+    const { id, name, mute, solo, instrument_id, index } = track;
     const { state } = useWorkstationState();
-    const { update, remove } = useTracksState();
+    const { update, remove, state: tracks } = useTracksState();
     const {
         add: addTrackSection,
         setState: setTrackSections,
@@ -145,7 +145,11 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     );
 
     return (
-        <Pane>
+        <Pane
+            marginBottom={
+                index === tracks.count() - 1 ? undefined : majorScale(1)
+            }
+            marginTop={index === 0 ? undefined : majorScale(1)}>
             <Draggable draggableId={track.id} index={track.index}>
                 {(provided) => (
                     <Pane
@@ -161,7 +165,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             display="flex"
                             flexDirection="column"
                             marginRight={majorScale(2)}
-                            marginY={majorScale(1)}
                             padding={majorScale(1)}
                             width={majorScale(21)}>
                             <EditableParagraph
@@ -226,14 +229,15 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 droppableId={track.id}>
                                 {(provided, snapshot) => (
                                     <Pane
-                                        border={
+                                        border={`2px dashed ${
                                             snapshot.isDraggingOver
-                                                ? `2px dashed ${theme.colors.blue300}`
-                                                : undefined
-                                        }
+                                                ? theme.colors.blue300
+                                                : "transparent"
+                                        }`}
                                         borderRadius={minorScale(1)}
                                         display="flex"
                                         flexDirection="row"
+                                        margin={-2}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}>
                                         <TrackSectionList
