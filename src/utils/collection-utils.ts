@@ -114,6 +114,22 @@ const mapToList = <TSource, TDestination>(
     constructor: new (...args: any[]) => TDestination
 ): List<TDestination> => List(mapTo(collection, constructor));
 
+const rebaseIndexes = <T extends OrderableEntity>(
+    values: List<T>,
+    filter?: (value: T) => boolean
+): List<T> => {
+    if (filter == null) {
+        return values.map((value, index) =>
+            Record.isRecord(value)
+                ? value.merge({ index })
+                : _.merge(value, { index })
+        );
+    }
+
+    const filteredValues = values.filter(filter);
+    return values.filterNot(filter).concat(rebaseIndexes(filteredValues));
+};
+
 const reorder = <T extends OrderableEntity>(
     values: List<T>,
     sourceIndex: number,
@@ -141,8 +157,13 @@ const reorder = <T extends OrderableEntity>(
         .sortBy((value) => value.index);
 };
 
-const sortByIndex = <T extends OrderableEntity>(values: List<T>): List<T> =>
-    values.sortBy((value) => value.index);
+const sortBy = <T>(
+    collection: Array<T> | List<T>,
+    fields: Array<keyof T> | ((value: T) => number)
+): List<T> => {
+    const array = List.isList(collection) ? collection.toArray() : collection;
+    return List<T>(_.sortBy(array, fields));
+};
 
 export {
     diffDeletedEntities,
@@ -154,6 +175,7 @@ export {
     isNilOrEmpty,
     mapTo,
     mapToList,
+    rebaseIndexes,
     reorder,
-    sortByIndex,
+    sortBy,
 };

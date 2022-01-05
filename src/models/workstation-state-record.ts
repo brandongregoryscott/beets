@@ -14,7 +14,7 @@ import { buildDemoInstruments } from "utils/build-demo-instruments";
 import {
     diffDeletedEntities,
     diffUpdatedEntities,
-    sortByIndex,
+    sortBy,
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
@@ -162,29 +162,28 @@ class WorkstationStateRecord
         }
 
         if (values.tracks != null) {
-            values.tracks = sortByIndex(
-                List(values.tracks.map((track) => new TrackRecord(track)))
+            values.tracks = sortBy(
+                values.tracks.map((track) => new TrackRecord(track)),
+                (track) => track.index
             );
         }
 
         if (values.trackSections != null) {
-            values.trackSections = sortByIndex(
-                List(
-                    values.trackSections.map(
-                        (trackSection) => new TrackSectionRecord(trackSection)
-                    )
-                )
+            values.trackSections = sortBy(
+                values.trackSections.map(
+                    (trackSection) => new TrackSectionRecord(trackSection)
+                ),
+                ["track_id", "index"]
             );
         }
 
         if (values.trackSectionSteps != null) {
-            values.trackSectionSteps = sortByIndex(
-                List(
-                    values.trackSectionSteps.map(
-                        (trackSectionStep) =>
-                            new TrackSectionStepRecord(trackSectionStep)
-                    )
-                )
+            values.trackSectionSteps = sortBy(
+                values.trackSectionSteps.map(
+                    (trackSectionStep) =>
+                        new TrackSectionStepRecord(trackSectionStep)
+                ),
+                ["track_section_id", "index"]
             );
         }
 
