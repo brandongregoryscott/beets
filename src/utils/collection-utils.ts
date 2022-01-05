@@ -1,5 +1,6 @@
 import { List, Record } from "immutable";
 import { Auditable } from "interfaces/auditable";
+import { OrderableEntity } from "interfaces/orderable-entity";
 import _ from "lodash";
 import { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
@@ -113,7 +114,34 @@ const mapToList = <TSource, TDestination>(
     constructor: new (...args: any[]) => TDestination
 ): List<TDestination> => List(mapTo(collection, constructor));
 
-const sortByIndex = <T extends { index: number }>(values: List<T>): List<T> =>
+const reorder = <T extends OrderableEntity>(
+    values: List<T>,
+    sourceIndex: number,
+    destinationIndex: number
+): List<T> => {
+    const sourceValue = values.get(sourceIndex);
+    const destinationValue = values.get(destinationIndex);
+    if (sourceValue == null || destinationValue == null) {
+        return values;
+    }
+
+    const sourceUpdate = { index: destinationIndex };
+    const destinationUpdate = { index: sourceIndex };
+    return values
+        .update(sourceIndex, (source) =>
+            Record.isRecord(source)
+                ? source.merge(sourceUpdate)
+                : _.merge(source, sourceUpdate)
+        )
+        .update(destinationIndex, (destination) =>
+            Record.isRecord(destination)
+                ? destination.merge(destinationUpdate)
+                : _.merge(destination, destinationUpdate)
+        )
+        .sortBy((value) => value.index);
+};
+
+const sortByIndex = <T extends OrderableEntity>(values: List<T>): List<T> =>
     values.sortBy((value) => value.index);
 
 export {
@@ -126,5 +154,6 @@ export {
     isNilOrEmpty,
     mapTo,
     mapToList,
+    reorder,
     sortByIndex,
 };

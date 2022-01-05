@@ -40,6 +40,7 @@ import {
     DropResult,
 } from "react-beautiful-dnd";
 import { TrackSectionList } from "components/tracks/track-section-list";
+import { reorder } from "utils/collection-utils";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -124,22 +125,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 return;
             }
 
-            setTrackSections((prev) => {
-                const sourceValue = prev.get(source.index);
-                const destinationValue = prev.get(destination.index);
-                if (sourceValue == null || destinationValue == null) {
-                    return prev;
-                }
-
-                return prev
-                    .update(source.index, (source) =>
-                        source!.merge({ index: destination.index })
-                    )
-                    .update(destination.index, (destination) =>
-                        destination!.merge({ index: source.index })
-                    )
-                    .sortBy((trackSection) => trackSection.index);
-            });
+            setTrackSections((prev) =>
+                reorder(prev, source.index, destination.index)
+            );
         },
         [setTrackSections]
     );

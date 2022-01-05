@@ -28,6 +28,7 @@ import { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { DropResult, DragDropContext, Droppable } from "react-beautiful-dnd";
+import { reorder } from "utils/collection-utils";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -120,22 +121,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                 return;
             }
 
-            setTracks((prev) => {
-                const sourceValue = prev.get(source.index);
-                const destinationValue = prev.get(destination.index);
-                if (sourceValue == null || destinationValue == null) {
-                    return prev;
-                }
-
-                return prev
-                    .update(source.index, (source) =>
-                        source!.merge({ index: destination.index })
-                    )
-                    .update(destination.index, (destination) =>
-                        destination!.merge({ index: source.index })
-                    )
-                    .sortBy((track) => track.index);
-            });
+            setTracks((prev) => reorder(prev, source.index, destination.index));
         },
         [setTracks]
     );
