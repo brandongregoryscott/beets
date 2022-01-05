@@ -27,8 +27,8 @@ import { useTracksState } from "utils/hooks/use-tracks-state";
 import { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
-import { DropResult, DragDropContext, Droppable } from "react-beautiful-dnd";
-import { reorder } from "utils/collection-utils";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { useDraggable } from "utils/hooks/use-draggable";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -57,6 +57,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         handleOpenInstrumentDialog,
         handleCloseInstrumentDialog,
     ] = useDialog();
+    const { onDragEnd } = useDraggable({ setState: setTracks });
     const { globalState } = useGlobalState();
     const theme = useTheme();
     const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
@@ -109,23 +110,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         workstations,
     ]);
 
-    // TODO: Consolidate this handleDragEnd with function in TrackCard
-    const handleDragEnd = useCallback(
-        (result: DropResult) => {
-            const { destination, source } = result;
-            if (destination == null) {
-                return;
-            }
-
-            if (destination.index === source.index) {
-                return;
-            }
-
-            setTracks((prev) => reorder(prev, source.index, destination.index));
-        },
-        [setTracks]
-    );
-
     const handleSelect = useCallback(
         (item: SelectMenuItem<boolean>) => {
             const { value: isInstrument } = item;
@@ -169,7 +153,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderControls && (
                 <React.Fragment>
                     <SongControls>
-                        <DragDropContext onDragEnd={handleDragEnd}>
+                        <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 direction="vertical"
                                 droppableId={project.id}>

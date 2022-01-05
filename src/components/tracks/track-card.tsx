@@ -33,14 +33,9 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
-import {
-    DragDropContext,
-    Draggable,
-    Droppable,
-    DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { TrackSectionList } from "components/tracks/track-section-list";
-import { reorder } from "utils/collection-utils";
+import { useDraggable } from "utils/hooks/use-draggable";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -60,6 +55,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         state: trackSections,
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
+    const { onDragEnd } = useDraggable({ setState: setTrackSections });
     const { resultObject: files } = useListFiles();
     const { resultObject: instrument } = useGetInstrument({
         id: instrument_id!,
@@ -112,24 +108,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                   )
                 : toInstrumentStepTypes(trackSections, state.trackSectionSteps),
         [files, state.trackSectionSteps, track, trackSections]
-    );
-
-    const handleDragEnd = useCallback(
-        (result: DropResult) => {
-            const { destination, source } = result;
-            if (destination == null) {
-                return;
-            }
-
-            if (destination.index === source.index) {
-                return;
-            }
-
-            setTrackSections((prev) =>
-                reorder(prev, source.index, destination.index)
-            );
-        },
-        [setTrackSections]
     );
 
     return (
@@ -211,7 +189,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 )}
                             </ReactronicaTrack>
                         </Card>
-                        <DragDropContext onDragEnd={handleDragEnd}>
+                        <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 direction="horizontal"
                                 droppableId={track.id}>
