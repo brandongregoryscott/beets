@@ -1,15 +1,15 @@
 import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
+import { TrackSectionCardButton } from "components/tracks/track-section-card-button";
 import {
     DeleteIcon,
+    DragHandleHorizontalIcon,
     Elevation,
     HeatGridIcon,
-    IconButton,
     majorScale,
     minorScale,
     Pane,
     StepChartIcon,
-    Tooltip,
 } from "evergreen-ui";
 import { List } from "immutable";
 import { SetStateAction } from "jotai";
@@ -19,9 +19,11 @@ import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { sortBy } from "utils/collection-utils";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
+import { useIsHovering } from "utils/hooks/use-is-hovering";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
@@ -38,7 +40,6 @@ interface TrackSectionCardProps {
     trackSection: TrackSectionRecord;
 }
 
-const iconMarginRight = majorScale(8);
 const stepHeight = majorScale(2);
 const stepWidth = majorScale(2);
 
@@ -56,6 +57,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         handleOpenPianoRollDialog,
         handleClosePianoRollDialog,
     ] = useDialog();
+
+    const { isHovering, onMouseEnter, onMouseLeave } = useIsHovering();
 
     const {
         file,
@@ -99,51 +102,80 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         [onChange, trackSection.id]
     );
 
+    const handleButtonClick = useCallback(
+        (callback: () => void) => () => {
+            callback();
+            onMouseLeave();
+        },
+        [onMouseLeave]
+    );
+
+    const width = trackSection.step_count * stepWidth;
+
     return (
         <Draggable draggableId={trackSection.id} index={trackSection.index}>
             {(provided) => (
                 <Pane
                     {...borderProps}
+                    {...provided.draggableProps}
                     backgroundColor={theme.colors.gray200}
                     borderRight={!isLast}
-                    borderRightColor={theme.colors.gray700}
+                    borderRightColor={theme.colors.gray300}
                     borderRightWidth={1}
                     display="flex"
                     flexDirection="row"
                     height={majorScale(10)}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
                     padding={majorScale(1)}
                     ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}>
+                    width={width}>
                     <Pane
                         display="flex"
-                        flexDirection="column"
-                        maxWidth={majorScale(5)}>
-                        {track.isSequencer() ? (
-                            <Tooltip content="Sequencer">
-                                <IconButton
-                                    icon={HeatGridIcon}
-                                    marginRight={iconMarginRight}
-                                    onClick={handleOpenSequencerDialog}
-                                />
-                            </Tooltip>
-                        ) : (
-                            <Tooltip content="Piano Roll">
-                                <IconButton
-                                    icon={StepChartIcon}
-                                    marginRight={iconMarginRight}
-                                    onClick={handleOpenPianoRollDialog}
-                                />
-                            </Tooltip>
-                        )}
-                        <Tooltip content="Remove section">
-                            <IconButton
-                                icon={DeleteIcon}
-                                intent="danger"
-                                marginRight={iconMarginRight}
-                                onClick={handleRemove}
+                        flexDirection="row"
+                        justifyContent="flex-end"
+                        marginTop={-majorScale(1)}
+                        minWidth={width}
+                        position="absolute"
+                        width={width}>
+                        <TrackSectionCardButton
+                            icon={DeleteIcon}
+                            intent="danger"
+                            isHovering={isHovering}
+                            isLastCard={isLast}
+                            onClick={handleButtonClick(handleRemove)}
+                            tooltipText="Remove section"
+                        />
+                        {track.isSequencer() && (
+                            <TrackSectionCardButton
+                                icon={HeatGridIcon}
+                                isHovering={isHovering}
+                                isLastCard={isLast}
+                                onClick={handleButtonClick(
+                                    handleOpenSequencerDialog
+                                )}
+                                tooltipText="Sequencer"
                             />
-                        </Tooltip>
+                        )}
+                        {!track.isSequencer() && (
+                            <TrackSectionCardButton
+                                icon={StepChartIcon}
+                                isHovering={isHovering}
+                                isLastCard={isLast}
+                                onClick={handleButtonClick(
+                                    handleOpenPianoRollDialog
+                                )}
+                                tooltipText="Piano Roll"
+                            />
+                        )}
+                        <TrackSectionCardButton
+                            dragHandleProps={provided.dragHandleProps}
+                            icon={DragHandleHorizontalIcon}
+                            isCornerButton={true}
+                            isHovering={isHovering}
+                            isLastCard={isLast}
+                            tooltipText="Move section"
+                        />
                     </Pane>
                     <Pane display="flex" flexDirection="row">
                         {_.range(0, trackSection.step_count).map(
@@ -152,8 +184,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                     groupedTrackSectionSteps
                                         .get(index)
                                         ?.toList() ?? List();
-                                const stepsSortedByFileId = List(
-                                    _.sortBy(steps.toArray(), "file_id")
+                                const stepsSortedByFileId = sortBy(
+                                    steps,
+                                    (trackSectionStep) =>
+                                        trackSectionStep.file_id
                                 );
 
                                 const isPlaying =
@@ -180,8 +214,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                             const backgroundColor =
                                                 getStepColor(
                                                     stepsSortedByFileId.get(row)
-                                                        ?.file_id,
-                                                    theme
+                                                        ?.file_id
                                                 );
                                             return (
                                                 <Pane

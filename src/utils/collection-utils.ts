@@ -159,7 +159,7 @@ const reorder = <T extends OrderableEntity>(
 
 const sortBy = <T>(
     collection: Array<T> | List<T>,
-    fields: Array<keyof T> | ((value: T) => number)
+    fields: Array<keyof T> | ((value: T) => number | string | undefined)
 ): List<T> => {
     const array = List.isList(collection) ? collection.toArray() : collection;
     return List<T>(_.sortBy(array, fields));
