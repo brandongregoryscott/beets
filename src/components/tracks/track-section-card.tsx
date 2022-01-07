@@ -145,6 +145,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             isLastCard={isLast}
                             onClick={handleButtonClick(handleRemove)}
                             tooltipText="Remove section"
+                            trackSectionId={trackSection.id}
                         />
                         {track.isSequencer() && (
                             <TrackSectionCardButton
@@ -155,6 +156,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                     handleOpenSequencerDialog
                                 )}
                                 tooltipText="Sequencer"
+                                trackSectionId={trackSection.id}
                             />
                         )}
                         {!track.isSequencer() && (
@@ -166,6 +168,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                     handleOpenPianoRollDialog
                                 )}
                                 tooltipText="Piano Roll"
+                                trackSectionId={trackSection.id}
                             />
                         )}
                         <TrackSectionCardButton
@@ -175,6 +178,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             isHovering={isHovering}
                             isLastCard={isLast}
                             tooltipText="Move section"
+                            trackSectionId={trackSection.id}
                         />
                     </Pane>
                     <Pane display="flex" flexDirection="row">

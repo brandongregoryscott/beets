@@ -7,6 +7,7 @@ import {
 } from "evergreen-ui";
 import React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { useDraggable } from "utils/hooks/use-draggable";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface TrackSectionCardButtonProps
@@ -20,6 +21,7 @@ interface TrackSectionCardButtonProps
     /** Is this button for the last card in the row? */
     isLastCard?: boolean;
     tooltipText: string;
+    trackSectionId: string;
 }
 
 const TrackSectionCardButton: React.FC<TrackSectionCardButtonProps> = (
@@ -34,8 +36,19 @@ const TrackSectionCardButton: React.FC<TrackSectionCardButtonProps> = (
         isHovering,
         onClick,
         tooltipText,
+        trackSectionId,
     } = props;
     const theme = useTheme();
+    const { draggableId } = useDraggable();
+
+    let visibility: VisibilityState = "hidden";
+    if (isHovering || (draggableId != null && draggableId === trackSectionId)) {
+        visibility = "visible";
+    }
+
+    if (draggableId != null && draggableId !== trackSectionId) {
+        visibility = "hidden";
+    }
 
     return (
         <Tooltip content={tooltipText}>
@@ -55,7 +68,7 @@ const TrackSectionCardButton: React.FC<TrackSectionCardButtonProps> = (
                 marginRight={isCornerButton ? majorScale(1) : undefined}
                 onClick={onClick}
                 size="small"
-                visibility={isHovering ? "visible" : "hidden"}
+                visibility={visibility}
             />
         </Tooltip>
     );

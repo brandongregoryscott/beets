@@ -55,7 +55,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         state: trackSections,
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
-    const { onDragEnd } = useDraggable({ setState: setTrackSections });
+    const { onDragEnd, onDragStart } = useDraggable({
+        setState: setTrackSections,
+    });
     const { resultObject: files } = useListFiles();
     const { resultObject: instrument } = useGetInstrument({
         id: instrument_id!,
@@ -189,7 +191,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 )}
                             </ReactronicaTrack>
                         </Card>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                        <DragDropContext
+                            onDragEnd={onDragEnd}
+                            onDragStart={onDragStart}>
                             <Droppable
                                 direction="horizontal"
                                 droppableId={track.id}>
