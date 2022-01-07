@@ -2,6 +2,7 @@ import { EditableParagraph } from "components/editable-paragraph";
 import {
     Card,
     DeleteIcon,
+    DragHandleHorizontalIcon,
     IconButton,
     majorScale,
     minorScale,
@@ -36,6 +37,8 @@ import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrum
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { TrackSectionList } from "components/tracks/track-section-list";
 import { useDraggable } from "utils/hooks/use-draggable";
+import { ContextualIconButton } from "components/contextual-icon-button";
+import { useHoverable } from "utils/hooks/use-hoverable";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -43,6 +46,7 @@ interface TrackCardProps {
 }
 
 const iconMarginRight = minorScale(2);
+const width = majorScale(21);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { onStepPlay, track } = props;
@@ -55,6 +59,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         state: trackSections,
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
+    const { onMouseEnter, onMouseLeave, resetHoveringState } = useHoverable({
+        hoverableId: id,
+    });
     const { onDragEnd, onDragStart } = useDraggable({
         setState: setTrackSections,
     });
@@ -127,14 +134,41 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}>
                         <Card
-                            {...provided.dragHandleProps}
                             alignItems="flex-start"
                             background={theme.colors.gray200}
                             display="flex"
                             flexDirection="column"
                             marginRight={majorScale(2)}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
                             padding={majorScale(1)}
-                            width={majorScale(21)}>
+                            width={width}>
+                            <Pane
+                                display="flex"
+                                flexDirection="row"
+                                justifyContent="flex-end"
+                                marginTop={-majorScale(1)}
+                                minWidth={width}
+                                position="absolute"
+                                width={width}>
+                                <ContextualIconButton
+                                    icon={DeleteIcon}
+                                    id={track.id}
+                                    intent="danger"
+                                    isLastCard={true}
+                                    onClick={resetHoveringState(handleRemove)}
+                                    tooltipText="Remove section"
+                                />
+                                <ContextualIconButton
+                                    dragHandleProps={provided.dragHandleProps}
+                                    icon={DragHandleHorizontalIcon}
+                                    id={track.id}
+                                    isCornerButton={true}
+                                    isLastCard={true}
+                                    marginRight={majorScale(1)}
+                                    tooltipText="Move section"
+                                />
+                            </Pane>
                             <EditableParagraph
                                 onChange={setName}
                                 value={name}
@@ -156,14 +190,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                         }
                                         marginRight={iconMarginRight}
                                         onClick={toggleSolo}
-                                    />
-                                </Tooltip>
-                                <Tooltip content="Remove Track">
-                                    <IconButton
-                                        icon={DeleteIcon}
-                                        intent="danger"
-                                        marginRight={iconMarginRight}
-                                        onClick={handleRemove}
                                     />
                                 </Tooltip>
                             </Pane>

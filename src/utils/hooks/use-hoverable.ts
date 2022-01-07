@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { HoverableAtom } from "utils/atoms/hoverable-atom";
 
 interface UseHoverableOptions {
@@ -11,6 +11,7 @@ interface UseHoverableResult {
     isHovering: boolean;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
+    resetHoveringState: (callback: () => void) => () => void;
 }
 
 const useHoverable = (options: UseHoverableOptions): UseHoverableResult => {
@@ -18,10 +19,18 @@ const useHoverable = (options: UseHoverableOptions): UseHoverableResult => {
 
     const onMouseEnter = useCallback(
         () => setHoverableId(options.hoverableId),
-        [setHoverableId]
+        [options.hoverableId, setHoverableId]
     );
     const onMouseLeave = useCallback(
         () => setHoverableId(undefined),
+        [setHoverableId]
+    );
+
+    const resetHoveringState = useCallback(
+        (callback: () => void) => () => {
+            callback();
+            setHoverableId(undefined);
+        },
         [setHoverableId]
     );
 
@@ -30,6 +39,7 @@ const useHoverable = (options: UseHoverableOptions): UseHoverableResult => {
         hoverableId,
         onMouseEnter,
         onMouseLeave,
+        resetHoveringState,
     };
 };
 

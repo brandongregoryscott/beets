@@ -57,7 +57,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         handleOpenInstrumentDialog,
         handleCloseInstrumentDialog,
     ] = useDialog();
-    const { onDragEnd } = useDraggable({ setState: setTracks });
+    const { onDragEnd, onDragStart } = useDraggable({ setState: setTracks });
     const { globalState } = useGlobalState();
     const theme = useTheme();
     const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
@@ -153,7 +153,9 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderControls && (
                 <React.Fragment>
                     <SongControls>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                        <DragDropContext
+                            onDragEnd={onDragEnd}
+                            onDragStart={onDragStart}>
                             <Droppable
                                 direction="vertical"
                                 droppableId={project.id}>

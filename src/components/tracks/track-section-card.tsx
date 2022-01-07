@@ -67,7 +67,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         track,
         trackSection,
     } = props;
-    const { isHovering, onMouseEnter, onMouseLeave } = useHoverable({
+    const { onMouseEnter, onMouseLeave } = useHoverable({
         hoverableId: trackSection.id,
     });
 
@@ -176,6 +176,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             id={trackSection.id}
                             isCornerButton={true}
                             isLastCard={isLast}
+                            marginRight={majorScale(1)}
                             tooltipText="Move section"
                         />
                     </Pane>

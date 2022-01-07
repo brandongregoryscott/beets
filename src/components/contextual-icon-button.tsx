@@ -11,7 +11,7 @@ import { useHoverable } from "utils/hooks/use-hoverable";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface ContextualIconButtonProps
-    extends Pick<IconButtonProps, "intent" | "onClick">,
+    extends Omit<IconButtonProps, "icon">,
         Required<Pick<IconButtonProps, "icon">> {
     dragHandleProps?: DraggableProvidedDragHandleProps;
     /** Id of the related element that is hoverable/draggable */
@@ -35,6 +35,7 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
         isLastCard = false,
         onClick,
         tooltipText,
+        ...rest
     } = props;
     const theme = useTheme();
     const { draggableId } = useDraggable();
@@ -57,19 +58,17 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
                 {...dragHandleProps}
                 appearance="default"
                 backgroundColor={theme.colors.gray200}
-                borderBottomLeftRadius={false}
-                borderBottomRightRadius={false}
-                borderTopLeftRadius={false}
+                borderRadius={false}
                 borderTopRightRadius={
                     isLastCard && isCornerButton ? minorScale(1) : false
                 }
                 icon={icon}
                 iconSize={majorScale(2)}
                 intent={intent}
-                marginRight={isCornerButton ? majorScale(1) : undefined}
                 onClick={onClick}
                 size="small"
                 visibility={visibility}
+                {...rest}
             />
         </Tooltip>
     );
