@@ -5,48 +5,49 @@ import {
     minorScale,
     Tooltip,
 } from "evergreen-ui";
-import React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useDraggable } from "utils/hooks/use-draggable";
+import { useHoverable } from "utils/hooks/use-hoverable";
 import { useTheme } from "utils/hooks/use-theme";
 
-interface TrackSectionCardButtonProps
+interface ContextualIconButtonProps
     extends Pick<IconButtonProps, "intent" | "onClick">,
         Required<Pick<IconButtonProps, "icon">> {
     dragHandleProps?: DraggableProvidedDragHandleProps;
+    /** Id of the related element that is hoverable/draggable */
+    id: string;
     /** Is this the corner button for the card? */
     isCornerButton?: boolean;
-    /** Is the card currently being hovered? */
-    isHovering: boolean;
     /** Is this button for the last card in the row? */
     isLastCard?: boolean;
     tooltipText: string;
-    trackSectionId: string;
 }
 
-const TrackSectionCardButton: React.FC<TrackSectionCardButtonProps> = (
-    props: TrackSectionCardButtonProps
+const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
+    props: ContextualIconButtonProps
 ) => {
     const {
         dragHandleProps,
         icon,
         intent,
+        id,
         isCornerButton = false,
         isLastCard = false,
-        isHovering,
         onClick,
         tooltipText,
-        trackSectionId,
     } = props;
     const theme = useTheme();
     const { draggableId } = useDraggable();
-
+    const { isHovering, hoverableId } = useHoverable({ hoverableId: id });
     let visibility: VisibilityState = "hidden";
-    if (isHovering || (draggableId != null && draggableId === trackSectionId)) {
+    if (
+        (isHovering && hoverableId === id) ||
+        (draggableId != null && draggableId === id)
+    ) {
         visibility = "visible";
     }
 
-    if (draggableId != null && draggableId !== trackSectionId) {
+    if (draggableId != null && draggableId !== id) {
         visibility = "hidden";
     }
 
@@ -74,4 +75,4 @@ const TrackSectionCardButton: React.FC<TrackSectionCardButtonProps> = (
     );
 };
 
-export { TrackSectionCardButton };
+export { ContextualIconButton };

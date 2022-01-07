@@ -1,6 +1,6 @@
+import { ContextualIconButton } from "components/contextual-icon-button";
 import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
-import { TrackSectionCardButton } from "components/tracks/track-section-card-button";
 import {
     DeleteIcon,
     DragHandleHorizontalIcon,
@@ -23,7 +23,7 @@ import { sortBy } from "utils/collection-utils";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
-import { useIsHovering } from "utils/hooks/use-is-hovering";
+import { useHoverable } from "utils/hooks/use-hoverable";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
@@ -58,8 +58,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         handleClosePianoRollDialog,
     ] = useDialog();
 
-    const { isHovering, onMouseEnter, onMouseLeave } = useIsHovering();
-
     const {
         file,
         isFirst = false,
@@ -69,6 +67,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         track,
         trackSection,
     } = props;
+    const { isHovering, onMouseEnter, onMouseLeave } = useHoverable({
+        hoverableId: trackSection.id,
+    });
+
     const borderProps = getBorderXProps({
         isFirst,
         isLast,
@@ -138,47 +140,43 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         minWidth={width}
                         position="absolute"
                         width={width}>
-                        <TrackSectionCardButton
+                        <ContextualIconButton
                             icon={DeleteIcon}
+                            id={trackSection.id}
                             intent="danger"
-                            isHovering={isHovering}
                             isLastCard={isLast}
                             onClick={handleButtonClick(handleRemove)}
                             tooltipText="Remove section"
-                            trackSectionId={trackSection.id}
                         />
                         {track.isSequencer() && (
-                            <TrackSectionCardButton
+                            <ContextualIconButton
                                 icon={HeatGridIcon}
-                                isHovering={isHovering}
+                                id={trackSection.id}
                                 isLastCard={isLast}
                                 onClick={handleButtonClick(
                                     handleOpenSequencerDialog
                                 )}
                                 tooltipText="Sequencer"
-                                trackSectionId={trackSection.id}
                             />
                         )}
                         {!track.isSequencer() && (
-                            <TrackSectionCardButton
+                            <ContextualIconButton
                                 icon={StepChartIcon}
-                                isHovering={isHovering}
+                                id={trackSection.id}
                                 isLastCard={isLast}
                                 onClick={handleButtonClick(
                                     handleOpenPianoRollDialog
                                 )}
                                 tooltipText="Piano Roll"
-                                trackSectionId={trackSection.id}
                             />
                         )}
-                        <TrackSectionCardButton
+                        <ContextualIconButton
                             dragHandleProps={provided.dragHandleProps}
                             icon={DragHandleHorizontalIcon}
+                            id={trackSection.id}
                             isCornerButton={true}
-                            isHovering={isHovering}
                             isLastCard={isLast}
                             tooltipText="Move section"
-                            trackSectionId={trackSection.id}
                         />
                     </Pane>
                     <Pane display="flex" flexDirection="row">
