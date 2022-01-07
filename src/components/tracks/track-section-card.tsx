@@ -121,17 +121,15 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     {...borderProps}
                     {...provided.draggableProps}
                     backgroundColor={theme.colors.gray200}
-                    borderRight={!isLast}
-                    borderRightColor={theme.colors.gray300}
-                    borderRightWidth={1}
                     display="flex"
                     flexDirection="row"
                     height={majorScale(10)}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    padding={majorScale(1)}
-                    ref={provided.innerRef}
-                    width={width}>
+                    paddingLeft={isFirst ? majorScale(1) : undefined}
+                    paddingRight={isLast ? majorScale(1) : undefined}
+                    paddingY={majorScale(1)}
+                    ref={provided.innerRef}>
                     <Pane
                         display="flex"
                         flexDirection="row"
@@ -176,7 +174,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             id={trackSection.id}
                             isCornerButton={true}
                             isLastCard={isLast}
-                            marginRight={majorScale(1)}
+                            marginRight={isLast ? -majorScale(1) : undefined}
                             tooltipText="Move section"
                         />
                     </Pane>
