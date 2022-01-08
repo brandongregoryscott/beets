@@ -1,5 +1,6 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import {
+    AddIcon,
     Card,
     DeleteIcon,
     DragHandleHorizontalIcon,
@@ -7,7 +8,6 @@ import {
     majorScale,
     minorScale,
     Pane,
-    PlusIcon,
     PropertiesIcon,
     PropertyIcon,
     Tooltip,
@@ -252,7 +252,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                         </DragDropContext>
                         <Tooltip content="Add Section">
                             <IconButton
-                                icon={PlusIcon}
+                                icon={AddIcon}
                                 marginLeft={
                                     trackSections.isEmpty()
                                         ? undefined

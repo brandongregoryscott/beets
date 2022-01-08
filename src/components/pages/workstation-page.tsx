@@ -1,11 +1,11 @@
 import { SongControls } from "components/workstation/song-controls";
 import { TrackList } from "components/tracks/track-list";
 import {
+    AddIcon,
     IconButton,
     majorScale,
     minorScale,
     Pane,
-    PlusIcon,
     Spinner,
     Tooltip,
 } from "evergreen-ui";
@@ -180,22 +180,22 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                         </DragDropContext>
                     </SongControls>
                     <Pane display="flex" flexDirection="row" marginRight="auto">
-                        <Tooltip content="Add Track">
-                            <SelectMenu
-                                calculateHeight={true}
-                                closeOnSelect={true}
-                                hasFilter={false}
-                                isMultiSelect={false}
-                                onSelect={handleSelect}
-                                options={options}
-                                title="Track Type"
-                                width={majorScale(16)}>
+                        <SelectMenu
+                            calculateHeight={true}
+                            closeOnSelect={true}
+                            hasFilter={false}
+                            isMultiSelect={false}
+                            onSelect={handleSelect}
+                            options={options}
+                            title="Track Type"
+                            width={majorScale(16)}>
+                            <Tooltip content="Add Track">
                                 <IconButton
-                                    icon={PlusIcon}
+                                    icon={AddIcon}
                                     marginTop={majorScale(2)}
                                 />
-                            </SelectMenu>
-                        </Tooltip>
+                            </Tooltip>
+                        </SelectMenu>
                     </Pane>
                     {instrumentDialogOpen && (
                         <InstrumentSettingsDialog
