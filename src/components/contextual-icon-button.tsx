@@ -7,15 +7,14 @@ import {
 } from "evergreen-ui";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useDraggable } from "utils/hooks/use-draggable";
-import { useHoverable } from "utils/hooks/use-hoverable";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface ContextualIconButtonProps
     extends Omit<IconButtonProps, "icon">,
         Required<Pick<IconButtonProps, "icon">> {
     dragHandleProps?: DraggableProvidedDragHandleProps;
-    /** Id of the related element that is hoverable/draggable */
-    id: string;
+    /** Id of the related element that is draggable */
+    id?: string;
     /** Is this the corner button for the card? */
     isCornerButton?: boolean;
     /** Is this button for the last card in the row? */
@@ -27,6 +26,7 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     props: ContextualIconButtonProps
 ) => {
     const {
+        className,
         dragHandleProps,
         icon,
         intent,
@@ -39,23 +39,18 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     } = props;
     const theme = useTheme();
     const { draggableId } = useDraggable();
-    const { isHovering, hoverableId } = useHoverable({ hoverableId: id });
-    let visibility: VisibilityState = "hidden";
-    if (
-        (isHovering && hoverableId === id) ||
-        (draggableId != null && draggableId === id)
-    ) {
-        visibility = "visible";
-    }
-
-    if (draggableId != null && draggableId !== id) {
-        visibility = "hidden";
-    }
+    const isCurrentElementDragging = draggableId != null && draggableId === id;
+    const isOtherElementDragging = draggableId != null && draggableId !== id;
+    const visibility: VisibilityState = isCurrentElementDragging
+        ? "visible"
+        : "hidden";
 
     return (
         <Tooltip content={tooltipText}>
             <IconButton
                 {...dragHandleProps}
+                // Don't apply className with hover style if another element is being dragged
+                className={isOtherElementDragging ? undefined : props.className}
                 appearance="default"
                 backgroundColor={theme.colors.gray200}
                 borderRadius={false}
@@ -67,8 +62,8 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
                 intent={intent}
                 onClick={onClick}
                 size="small"
-                visibility={visibility}
                 {...rest}
+                visibility={visibility}
             />
         </Tooltip>
     );

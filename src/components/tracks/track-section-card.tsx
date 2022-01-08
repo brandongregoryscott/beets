@@ -23,12 +23,12 @@ import { sortBy } from "utils/collection-utils";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
-import { useHoverable } from "utils/hooks/use-hoverable";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
+import { css, select } from "glamor";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -67,9 +67,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         track,
         trackSection,
     } = props;
-    const { onMouseEnter, onMouseLeave } = useHoverable({
-        hoverableId: trackSection.id,
-    });
 
     const borderProps = getBorderXProps({
         isFirst,
@@ -104,15 +101,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         [onChange, trackSection.id]
     );
 
-    const handleButtonClick = useCallback(
-        (callback: () => void) => () => {
-            callback();
-            onMouseLeave();
-        },
-        [onMouseLeave]
-    );
-
     const width = trackSection.step_count * stepWidth;
+
+    const contextualButtonClass = css({ visibility: "hidden" }).toString();
+    const cardClass = css(
+        select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
+    ).toString();
 
     return (
         <Draggable draggableId={trackSection.id} index={trackSection.index}>
@@ -121,11 +115,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     {...borderProps}
                     {...provided.draggableProps}
                     backgroundColor={theme.colors.gray200}
+                    className={cardClass}
                     display="flex"
                     flexDirection="row"
                     height={majorScale(10)}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
                     paddingLeft={isFirst ? majorScale(1) : undefined}
                     paddingRight={isLast ? majorScale(1) : undefined}
                     paddingY={majorScale(1)}
@@ -139,36 +132,36 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         position="absolute"
                         width={width}>
                         <ContextualIconButton
+                            className={contextualButtonClass}
                             icon={DeleteIcon}
                             id={trackSection.id}
                             intent="danger"
                             isLastCard={isLast}
-                            onClick={handleButtonClick(handleRemove)}
+                            onClick={handleRemove}
                             tooltipText="Remove section"
                         />
                         {track.isSequencer() && (
                             <ContextualIconButton
+                                className={contextualButtonClass}
                                 icon={HeatGridIcon}
                                 id={trackSection.id}
                                 isLastCard={isLast}
-                                onClick={handleButtonClick(
-                                    handleOpenSequencerDialog
-                                )}
+                                onClick={handleOpenSequencerDialog}
                                 tooltipText="Sequencer"
                             />
                         )}
                         {!track.isSequencer() && (
                             <ContextualIconButton
+                                className={contextualButtonClass}
                                 icon={StepChartIcon}
                                 id={trackSection.id}
                                 isLastCard={isLast}
-                                onClick={handleButtonClick(
-                                    handleOpenPianoRollDialog
-                                )}
+                                onClick={handleOpenPianoRollDialog}
                                 tooltipText="Piano Roll"
                             />
                         )}
                         <ContextualIconButton
+                            className={contextualButtonClass}
                             dragHandleProps={provided.dragHandleProps}
                             icon={DragHandleHorizontalIcon}
                             id={trackSection.id}

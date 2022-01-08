@@ -38,7 +38,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { TrackSectionList } from "components/tracks/track-section-list";
 import { useDraggable } from "utils/hooks/use-draggable";
 import { ContextualIconButton } from "components/contextual-icon-button";
-import { useHoverable } from "utils/hooks/use-hoverable";
+import { css, select } from "glamor";
 
 interface TrackCardProps {
     onStepPlay: (steps: StepNoteType[], index: number) => void;
@@ -59,9 +59,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         state: trackSections,
         update: updateTrackSection,
     } = useTrackSectionsState({ trackId: id });
-    const { onMouseEnter, onMouseLeave, resetHoveringState } = useHoverable({
-        hoverableId: id,
-    });
     const { onDragEnd, onDragStart } = useDraggable({
         setState: setTrackSections,
     });
@@ -119,6 +116,11 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         [files, state.trackSectionSteps, track, trackSections]
     );
 
+    const contextualButtonClass = css({ visibility: "hidden" }).toString();
+    const cardClass = css(
+        select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
+    ).toString();
+
     return (
         <Pane
             marginBottom={
@@ -136,11 +138,10 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                         <Card
                             alignItems="flex-start"
                             background={theme.colors.gray200}
+                            className={cardClass}
                             display="flex"
                             flexDirection="column"
                             marginRight={majorScale(2)}
-                            onMouseEnter={onMouseEnter}
-                            onMouseLeave={onMouseLeave}
                             padding={majorScale(1)}
                             width={width}>
                             <Pane
@@ -152,14 +153,16 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 position="absolute"
                                 width={width}>
                                 <ContextualIconButton
+                                    className={contextualButtonClass}
                                     icon={DeleteIcon}
                                     id={track.id}
                                     intent="danger"
                                     isLastCard={true}
-                                    onClick={resetHoveringState(handleRemove)}
+                                    onClick={handleRemove}
                                     tooltipText="Remove section"
                                 />
                                 <ContextualIconButton
+                                    className={contextualButtonClass}
                                     dragHandleProps={provided.dragHandleProps}
                                     icon={DragHandleHorizontalIcon}
                                     id={track.id}
