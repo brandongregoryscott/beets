@@ -12,6 +12,7 @@
         ]
     },
     "dependencies": {
+        "@octokit/rest": "18.12.0",
         "@supabase/supabase-js": "1.24.0",
         "evergreen-ui": "6.6.3",
         "glamor": "2.20.40",
