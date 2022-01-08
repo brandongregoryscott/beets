@@ -3,6 +3,7 @@ import { SetStateAction, useCallback, useMemo } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import _ from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
+import { rebaseIndexes } from "utils/collection-utils";
 
 interface UseTrackSectionsStateOptions {
     trackId: string;
@@ -13,6 +14,7 @@ interface UseTrackSectionsStateResult {
     get: (id: string) => TrackSectionRecord | undefined;
     initialState: List<TrackSectionRecord>;
     remove: (trackSection: TrackSectionRecord) => void;
+    setState: (update: SetStateAction<List<TrackSectionRecord>>) => void;
     state: List<TrackSectionRecord>;
     update: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
 }
@@ -29,31 +31,36 @@ const useTrackSectionsState = (
 
     const add = useCallback(
         (trackSection?: TrackSectionRecord) =>
-            setCurrentState((prev) =>
-                prev.merge({
-                    trackSections: prev.trackSections.push(
-                        trackSection?.merge({ track_id: trackId }) ??
-                            new TrackSectionRecord({ track_id: trackId })
+            setCurrentState((prev) => {
+                const updatedTrackSections = prev.trackSections.push(
+                    trackSection?.merge({ track_id: trackId }) ??
+                        new TrackSectionRecord({ track_id: trackId })
+                );
+
+                return prev.merge({
+                    trackSections: rebaseIndexes(
+                        updatedTrackSections,
+                        filterByTrackId(trackId)
                     ),
-                })
-            ),
+                });
+            }),
         [setCurrentState, trackId]
     );
 
     const get = useCallback(
-        (id: string) =>
-            workstationState.trackSections.find(
-                (trackSection) => trackSection.id === id
-            ),
+        (id: string) => workstationState.trackSections.find(filterById(id)),
         [workstationState.trackSections]
     );
 
     const remove = useCallback(
         (trackSection: TrackSectionRecord) =>
             setCurrentState((prev) => {
-                const updatedTrackSections = prev.trackSections.filter(
-                    (existingTrackSection) =>
-                        existingTrackSection.id !== trackSection.id
+                const updatedTrackSections = rebaseIndexes(
+                    prev.trackSections.filter(
+                        (existingTrackSection) =>
+                            existingTrackSection.id !== trackSection.id
+                    ),
+                    filterByTrackId(trackId)
                 );
 
                 // Additionally remove any TrackSectionSteps
@@ -67,15 +74,13 @@ const useTrackSectionsState = (
                     trackSectionSteps: updatedTrackSectionSteps,
                 });
             }),
-        [setCurrentState]
+        [setCurrentState, trackId]
     );
 
     const update = useCallback(
         (id: string, update: SetStateAction<TrackSectionRecord>) =>
             setCurrentState((prev) => {
-                const index = prev.trackSections.findIndex(
-                    (trackSection) => trackSection.id === id
-                );
+                const index = prev.trackSections.findIndex(filterById(id));
 
                 if (index < 0) {
                     return prev;
@@ -92,19 +97,37 @@ const useTrackSectionsState = (
         [setCurrentState]
     );
 
+    const setState = useCallback(
+        (update: SetStateAction<List<TrackSectionRecord>>) => {
+            setCurrentState((prev) => {
+                const trackSectionsByTrack = prev.trackSections.filter(
+                    filterByTrackId(trackId)
+                );
+
+                const value = _.isFunction(update)
+                    ? update(trackSectionsByTrack)
+                    : update;
+
+                const mergedTrackSections = prev.trackSections
+                    .filterNot(filterByTrackId(trackId))
+                    .concat(value);
+
+                return prev.merge({ trackSections: mergedTrackSections });
+            });
+        },
+        [setCurrentState, trackId]
+    );
+
     const initialState = useMemo(
         () =>
             initialWorkstationState.trackSections.filter(
-                (trackSection) => trackSection.track_id === trackId
+                filterByTrackId(trackId)
             ),
         [initialWorkstationState.trackSections, trackId]
     );
 
     const state = useMemo(
-        () =>
-            workstationState.trackSections.filter(
-                (trackSection) => trackSection.track_id === trackId
-            ),
+        () => workstationState.trackSections.filter(filterByTrackId(trackId)),
         [trackId, workstationState.trackSections]
     );
 
@@ -113,9 +136,16 @@ const useTrackSectionsState = (
         get,
         initialState,
         remove,
+        setState,
         state,
         update,
     };
 };
+
+const filterById = (id: string) => (value: TrackSectionRecord) =>
+    value.id === id;
+
+const filterByTrackId = (trackId: string) => (value: TrackSectionRecord) =>
+    value.track_id === trackId;
 
 export { useTrackSectionsState };

@@ -1,5 +1,6 @@
 import { List, Record } from "immutable";
 import { Auditable } from "interfaces/auditable";
+import { OrderableEntity } from "interfaces/orderable-entity";
 import _ from "lodash";
 import { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
@@ -113,8 +114,56 @@ const mapToList = <TSource, TDestination>(
     constructor: new (...args: any[]) => TDestination
 ): List<TDestination> => List(mapTo(collection, constructor));
 
-const sortByIndex = <T extends { index: number }>(values: List<T>): List<T> =>
-    values.sortBy((value) => value.index);
+const rebaseIndexes = <T extends OrderableEntity>(
+    values: List<T>,
+    filter?: (value: T) => boolean
+): List<T> => {
+    if (filter == null) {
+        return values.map((value, index) =>
+            Record.isRecord(value)
+                ? value.merge({ index })
+                : _.merge(value, { index })
+        );
+    }
+
+    const filteredValues = values.filter(filter);
+    return values.filterNot(filter).concat(rebaseIndexes(filteredValues));
+};
+
+const reorder = <T extends OrderableEntity>(
+    values: List<T>,
+    sourceIndex: number,
+    destinationIndex: number
+): List<T> => {
+    const sourceValue = values.get(sourceIndex);
+    const destinationValue = values.get(destinationIndex);
+    if (sourceValue == null || destinationValue == null) {
+        return values;
+    }
+
+    const sourceUpdate = { index: destinationIndex };
+    const destinationUpdate = { index: sourceIndex };
+    return values
+        .update(sourceIndex, (source) =>
+            Record.isRecord(source)
+                ? source.merge(sourceUpdate)
+                : _.merge(source, sourceUpdate)
+        )
+        .update(destinationIndex, (destination) =>
+            Record.isRecord(destination)
+                ? destination.merge(destinationUpdate)
+                : _.merge(destination, destinationUpdate)
+        )
+        .sortBy((value) => value.index);
+};
+
+const sortBy = <T>(
+    collection: Array<T> | List<T>,
+    fields: Array<keyof T> | ((value: T) => number | string | undefined)
+): List<T> => {
+    const array = List.isList(collection) ? collection.toArray() : collection;
+    return List<T>(_.sortBy(array, fields));
+};
 
 export {
     diffDeletedEntities,
@@ -126,5 +175,7 @@ export {
     isNilOrEmpty,
     mapTo,
     mapToList,
-    sortByIndex,
+    rebaseIndexes,
+    reorder,
+    sortBy,
 };

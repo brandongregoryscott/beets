@@ -10,6 +10,7 @@ interface UseTracksStateResult {
     get: (id: string) => TrackRecord | undefined;
     initialState: List<TrackRecord>;
     remove: (track: TrackRecord) => void;
+    setState: (update: SetStateAction<List<TrackRecord>>) => void;
     state: List<TrackRecord>;
     update: (id: string, update: SetStateAction<TrackRecord>) => void;
 }
@@ -80,12 +81,26 @@ const useTracksState = (): UseTracksStateResult => {
         [setCurrentState]
     );
 
+    const setState = useCallback(
+        (update: SetStateAction<List<TrackRecord>>) => {
+            setCurrentState((prev) => {
+                const value = _.isFunction(update)
+                    ? update(prev.tracks)
+                    : update;
+
+                return prev.merge({ tracks: value });
+            });
+        },
+        [setCurrentState]
+    );
+
     return {
         add,
         get,
         initialState: initialState.tracks,
         remove,
         state: state.tracks,
+        setState,
         update,
     };
 };
