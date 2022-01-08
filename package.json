@@ -12,6 +12,7 @@
         ]
     },
     "dependencies": {
+        "@octokit/rest": "18.12.0",
         "@supabase/supabase-js": "1.24.0",
         "evergreen-ui": "6.6.3",
         "glamor": "2.20.40",
@@ -94,5 +95,5 @@
         "start": "react-scripts start",
         "test": "react-scripts test"
     },
-    "version": "1.1.0"
+    "version": "1.2.0"
 }
