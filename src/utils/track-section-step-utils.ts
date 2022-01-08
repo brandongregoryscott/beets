@@ -4,11 +4,7 @@ import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { MidiNote, StepType } from "reactronica";
-import {
-    initializeList,
-    intersectionWith,
-    sortByIndex,
-} from "utils/collection-utils";
+import { initializeList, intersectionWith } from "utils/collection-utils";
 import { getTotalStepCount } from "utils/track-section-utils";
 
 const getByTrackSection = (
@@ -34,9 +30,6 @@ const toInstrumentStepTypes = (
     trackSections: List<TrackSectionRecord>,
     trackSectionSteps: List<TrackSectionStepRecord>
 ): Array<StepType> => {
-    trackSections = sortByIndex(trackSections);
-    trackSectionSteps = sortByIndex(trackSectionSteps);
-
     const total = getTotalStepCount(trackSections);
     let steps = initializeList<StepType>(total, []);
     let indexAccumulator = 0;
@@ -76,9 +69,6 @@ const toSequencerStepTypes = (
     trackSectionSteps: List<TrackSectionStepRecord>,
     files: List<FileRecord>
 ): Array<StepType> => {
-    trackSections = sortByIndex(trackSections);
-    trackSectionSteps = sortByIndex(trackSectionSteps);
-
     const total = getTotalStepCount(trackSections);
     let steps = initializeList<StepType>(total, []);
     let indexAccumulator = 0;
