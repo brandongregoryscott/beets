@@ -1,60 +1,87 @@
+import { ClipboardType } from "enums/clipboard-type";
+import { toaster } from "evergreen-ui";
 import { List } from "immutable";
 import { useAtom } from "jotai";
 import { SetStateAction, useCallback } from "react";
+import { useKey } from "rooks";
 import { ClipboardItem } from "types/clipboard-item";
-import { ClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
+import { ClipboardStateAtomFamily } from "utils/atoms/clipboard-state-atom-family";
 
 interface UseClipboardStateResult {
-    addItem: (item: ClipboardItem) => void;
+    deselectItem: (item: ClipboardItem) => void;
     isSelected: (value: ClipboardItem) => boolean;
-    onClick: (item: ClipboardItem) => () => void;
-    removeItem: (item: ClipboardItem) => void;
-    setState: (update: SetStateAction<List<ClipboardItem>>) => void;
-    state: List<ClipboardItem>;
+    onSelect: (item: ClipboardItem) => () => void;
+    selectItem: (item: ClipboardItem) => void;
+    selectedState: List<ClipboardItem>;
+    setSelectedState: (update: SetStateAction<List<ClipboardItem>>) => void;
 }
 
 const useClipboardState = (): UseClipboardStateResult => {
-    const [state, setState] = useAtom(ClipboardStateAtom);
+    const [selectedState, setSelectedState] = useAtom(
+        ClipboardStateAtomFamily({
+            initialValue: List<ClipboardItem>(),
+            type: ClipboardType.Selected,
+        })
+    );
+    const [copiedState, setCopiedState] = useAtom(
+        ClipboardStateAtomFamily({
+            initialValue: List<ClipboardItem>(),
+            type: ClipboardType.Copied,
+        })
+    );
 
-    const addItem = useCallback(
+    useKey(["cmd", "c"], (_event) => {
+        toaster.notify(`Clipboard copied ${_event.type}`, {
+            id: JSON.stringify(selectedState),
+        });
+    });
+
+    const selectItem = useCallback(
         (item: ClipboardItem) => {
-            setState((prev) => prev.push(item));
+            setSelectedState((prev) => prev.push(item));
         },
-        [setState]
+        [setSelectedState]
     );
 
     const isSelected = useCallback(
-        (value: ClipboardItem) => state.some((item) => item.equals(value)),
-        [state]
+        (value: ClipboardItem) =>
+            selectedState.some((item) => item.equals(value)),
+        [selectedState]
     );
 
-    const removeItem = useCallback(
-        (item: ClipboardItem) => {
-            setState((prev) => {
+    const deselectItem = useCallback(
+        (item: ClipboardItem) =>
+            setSelectedState((prev) => {
                 const index = prev.indexOf(item);
                 if (index < 0) {
                     return prev;
                 }
 
                 return prev.remove(index);
-            });
-        },
-        [setState]
+            }),
+        [setSelectedState]
     );
 
-    const onClick = useCallback(
+    const onSelect = useCallback(
         (item: ClipboardItem) => () => {
             if (isSelected(item)) {
-                removeItem(item);
+                deselectItem(item);
                 return;
             }
 
-            addItem(item);
+            selectItem(item);
         },
-        [addItem, isSelected, removeItem]
+        [deselectItem, isSelected, selectItem]
     );
 
-    return { addItem, isSelected, onClick, removeItem, state, setState };
+    return {
+        selectItem,
+        isSelected,
+        onSelect,
+        deselectItem,
+        selectedState,
+        setSelectedState,
+    };
 };
 
 export { useClipboardState };

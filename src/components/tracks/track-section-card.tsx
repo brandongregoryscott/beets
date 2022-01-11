@@ -79,7 +79,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         trackId: trackSection.track_id,
     });
 
-    const { isSelected, onClick } = useClipboardState();
+    const { isSelected, onSelect } = useClipboardState();
 
     const {
         setState: handleTrackSectionStepsChange,
@@ -125,7 +125,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     flexDirection="row"
                     height={majorScale(10)}
                     hoverElevation={1}
-                    onClick={onClick(trackSection)}
+                    onClick={onSelect(trackSection)}
                     paddingLeft={isFirst ? majorScale(1) : undefined}
                     paddingRight={isLast ? majorScale(1) : undefined}
                     paddingY={majorScale(1)}
