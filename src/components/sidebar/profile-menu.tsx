@@ -1,18 +1,25 @@
 import { Menu } from "components/menu/menu";
-import { LogInIcon, LogOutIcon, NewPersonIcon } from "evergreen-ui";
-import { Fragment, useCallback } from "react";
+import {
+    InfoSignIcon,
+    LogInIcon,
+    LogOutIcon,
+    NewPersonIcon,
+} from "evergreen-ui";
+import React, { Fragment, useCallback } from "react";
 import { useHistory } from "react-router";
 import { Sitemap } from "sitemap";
 import { useLogout } from "utils/hooks/supabase/use-logout";
 import { useGlobalState } from "utils/hooks/use-global-state";
 
 interface ProfileMenuProps {
+    onAboutDialogClick: () => void;
     onClose: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
-    const { onClose } = props;
+    const { onAboutDialogClick, onClose } = props;
     const { isAuthenticated, setGlobalState } = useGlobalState();
+
     const handleLogoutsettled = useCallback(
         () =>
             setGlobalState((prev) =>
@@ -43,6 +50,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
 
     return (
         <Menu>
+            <Menu.Item icon={InfoSignIcon} onSelect={onAboutDialogClick}>
+                About
+            </Menu.Item>
             {isAuthenticated && (
                 <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>
                     Logout

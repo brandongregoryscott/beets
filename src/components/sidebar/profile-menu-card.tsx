@@ -1,3 +1,4 @@
+import { AboutDialog } from "components/sidebar/about-dialog";
 import { ProfileMenu } from "components/sidebar/profile-menu";
 import {
     Card,
@@ -7,9 +8,11 @@ import {
     Popover,
     Position,
 } from "evergreen-ui";
+import React from "react";
 import { useRouteMatch } from "react-router";
 import { Sitemap } from "sitemap";
 import { useBoolean } from "utils/hooks/use-boolean";
+import { useDialog } from "utils/hooks/use-dialog";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface ProfileMenuCardProps {}
@@ -23,6 +26,8 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
         setTrue: handleOpen,
         setFalse: handleClose,
     } = useBoolean(false);
+    const [isAboutDialogOpen, handleOpenAboutDialog, handleCloseAboutDialog] =
+        useDialog();
 
     const isLoginOrRegisterRoute =
         useRouteMatch([Sitemap.login, Sitemap.register])?.isExact ?? false;
@@ -33,21 +38,29 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
             : theme.colors.gray100;
 
     return (
-        <Popover
-            content={({ close: handleClosePopover }) => (
-                <ProfileMenu onClose={handleClosePopover} />
+        <React.Fragment>
+            <Popover
+                content={({ close: handleClosePopover }) => (
+                    <ProfileMenu
+                        onAboutDialogClick={handleOpenAboutDialog}
+                        onClose={handleClosePopover}
+                    />
+                )}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                position={Position.RIGHT}>
+                <Card
+                    background={background}
+                    borderRadius={minorScale(2)}
+                    cursor="pointer"
+                    padding={majorScale(2)}>
+                    <PersonIcon />
+                </Card>
+            </Popover>
+            {isAboutDialogOpen && (
+                <AboutDialog onCloseComplete={handleCloseAboutDialog} />
             )}
-            onClose={handleClose}
-            onOpen={handleOpen}
-            position={Position.RIGHT}>
-            <Card
-                background={background}
-                borderRadius={minorScale(2)}
-                cursor="pointer"
-                padding={majorScale(2)}>
-                <PersonIcon />
-            </Card>
-        </Popover>
+        </React.Fragment>
     );
 };
 
