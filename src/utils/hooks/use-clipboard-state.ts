@@ -1,11 +1,13 @@
-import { ClipboardType } from "enums/clipboard-type";
 import { toaster } from "evergreen-ui";
 import { List } from "immutable";
 import { useAtom } from "jotai";
 import { SetStateAction, useCallback } from "react";
 import { useKey } from "rooks";
 import { ClipboardItem } from "types/clipboard-item";
-import { ClipboardStateAtomFamily } from "utils/atoms/clipboard-state-atom-family";
+import {
+    CopiedClipboardStateAtom,
+    SelectedClipboardStateAtom,
+} from "utils/atoms/clipboard-state-atom";
 
 interface UseClipboardStateResult {
     deselectItem: (item: ClipboardItem) => void;
@@ -18,17 +20,9 @@ interface UseClipboardStateResult {
 
 const useClipboardState = (): UseClipboardStateResult => {
     const [selectedState, setSelectedState] = useAtom(
-        ClipboardStateAtomFamily({
-            initialValue: List<ClipboardItem>(),
-            type: ClipboardType.Selected,
-        })
+        SelectedClipboardStateAtom
     );
-    const [copiedState, setCopiedState] = useAtom(
-        ClipboardStateAtomFamily({
-            initialValue: List<ClipboardItem>(),
-            type: ClipboardType.Copied,
-        })
-    );
+    const [copiedState, setCopiedState] = useAtom(CopiedClipboardStateAtom);
 
     useKey(["cmd", "c"], (_event) => {
         toaster.notify(`Clipboard copied ${_event.type}`, {
