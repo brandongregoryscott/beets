@@ -1,7 +1,15 @@
 import { Menu } from "components/menu/menu";
-import { Button, EditIcon, Popover, Position } from "evergreen-ui";
+import {
+    Button,
+    ClipboardIcon,
+    DuplicateIcon,
+    Popover,
+    Position,
+    SquareIcon,
+} from "evergreen-ui";
 import React, { useCallback } from "react";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface EditTabProps {}
 
@@ -13,7 +21,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         clearSelected,
         copySelected,
     } = useClipboardState();
-
+    const { colors } = useTheme();
     const handleClick = useCallback(
         (closePopover: () => void, callback: () => void) => () => {
             callback();
@@ -22,6 +30,9 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         []
     );
 
+    const emptyClipboardColor = undefined;
+    const filledClipboardColor = colors.blue400;
+
     return (
         <React.Fragment>
             <Popover
@@ -29,16 +40,20 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                     <Menu>
                         <Menu.Item
                             disabled={selectedState.isEmpty()}
-                            onClick={handleClick(closePopover, copySelected)}>
+                            icon={DuplicateIcon}
+                            onClick={handleClick(closePopover, copySelected)}
+                            secondaryText={"⌘C" as any}>
                             Copy
                         </Menu.Item>
                         <Menu.Item
                             disabled={copiedState.isEmpty()}
+                            icon={<ClipboardIcon />}
                             onClick={handleClick(closePopover, clearCopied)}>
                             Clear Clipboard
                         </Menu.Item>
                         <Menu.Item
                             disabled={selectedState.isEmpty()}
+                            icon={<SquareIcon />}
                             onClick={handleClick(closePopover, clearSelected)}>
                             Clear Selection
                         </Menu.Item>
@@ -47,7 +62,15 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                 position={Position.TOP_RIGHT}>
                 <Button
                     appearance="tab"
-                    iconBefore={<EditIcon />}
+                    iconBefore={
+                        <ClipboardIcon
+                            color={
+                                copiedState.isEmpty()
+                                    ? emptyClipboardColor
+                                    : filledClipboardColor
+                            }
+                        />
+                    }
                     intent="none">
                     Edit
                 </Button>
