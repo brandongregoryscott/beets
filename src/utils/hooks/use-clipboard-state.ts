@@ -81,9 +81,18 @@ const useClipboardState = (): UseClipboardStateResult => {
                 return;
             }
 
+            if (
+                selectedState.some(
+                    (selectedItem) => selectedItem.track_id !== item.track_id
+                )
+            ) {
+                setSelectedState(List.of(item));
+                return;
+            }
+
             selectItem(item);
         },
-        [deselectItem, isSelected, selectItem]
+        [deselectItem, isSelected, selectItem, selectedState, setSelectedState]
     );
 
     const clearCopied = useCallback(() => {
