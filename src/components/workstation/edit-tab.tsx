@@ -1,8 +1,10 @@
 import { Menu } from "components/menu/menu";
 import {
+    AnnotationIcon,
     Button,
     ClipboardIcon,
     DuplicateIcon,
+    EraserIcon,
     Popover,
     Position,
     SquareIcon,
@@ -30,8 +32,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         []
     );
 
-    const emptyClipboardColor = undefined;
-    const filledClipboardColor = colors.blue400;
+    const editIconColor = copiedState.isEmpty() ? undefined : colors.blue400;
 
     return (
         <React.Fragment>
@@ -47,13 +48,20 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                         </Menu.Item>
                         <Menu.Item
                             disabled={copiedState.isEmpty()}
-                            icon={<ClipboardIcon />}
+                            icon={ClipboardIcon}
+                            onClick={closePopover}
+                            secondaryText={"⌘V" as any}>
+                            Paste
+                        </Menu.Item>
+                        <Menu.Item
+                            disabled={copiedState.isEmpty()}
+                            icon={EraserIcon}
                             onClick={handleClick(closePopover, clearCopied)}>
                             Clear Clipboard
                         </Menu.Item>
                         <Menu.Item
                             disabled={selectedState.isEmpty()}
-                            icon={<SquareIcon />}
+                            icon={SquareIcon}
                             onClick={handleClick(closePopover, clearSelected)}>
                             Clear Selection
                         </Menu.Item>
@@ -62,15 +70,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                 position={Position.TOP_RIGHT}>
                 <Button
                     appearance="tab"
-                    iconBefore={
-                        <ClipboardIcon
-                            color={
-                                copiedState.isEmpty()
-                                    ? emptyClipboardColor
-                                    : filledClipboardColor
-                            }
-                        />
-                    }
+                    iconBefore={<AnnotationIcon color={editIconColor} />}
                     intent="none">
                     Edit
                 </Button>
