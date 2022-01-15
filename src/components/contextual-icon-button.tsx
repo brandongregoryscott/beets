@@ -5,6 +5,7 @@ import {
     minorScale,
     Tooltip,
 } from "evergreen-ui";
+import React, { useCallback } from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useDraggable } from "utils/hooks/use-draggable";
 import { useTheme } from "utils/hooks/use-theme";
@@ -45,6 +46,14 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
         ? "visible"
         : "hidden";
 
+    const handleClick = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.stopPropagation();
+            onClick?.(event);
+        },
+        [onClick]
+    );
+
     return (
         <Tooltip content={tooltipText}>
             <IconButton
@@ -60,7 +69,7 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
                 icon={icon}
                 iconSize={majorScale(2)}
                 intent={intent}
-                onClick={onClick}
+                onClick={handleClick}
                 size="small"
                 {...rest}
                 visibility={visibility}

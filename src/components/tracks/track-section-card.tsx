@@ -28,7 +28,7 @@ import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
-import { css, select } from "glamor";
+import { css, hover, select } from "glamor";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
 
 interface TrackSectionCardProps {
@@ -106,13 +106,16 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
 
     const width = trackSection.step_count * stepWidth;
 
-    const contextualButtonClass = css({ visibility: "hidden" }).toString();
-    const cardClass = css(
-        select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
-    ).toString();
     const backgroundColor = isSelected(trackSection)
         ? theme.colors.gray400
         : theme.colors.gray200;
+
+    const contextualButtonClass = css({ visibility: "hidden" }).toString();
+    const cardClass = css(
+        hover({ cursor: "pointer" }),
+        select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
+    ).toString();
+
     return (
         <Draggable draggableId={trackSection.id} index={trackSection.index}>
             {(provided) => (
@@ -124,7 +127,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     display="flex"
                     flexDirection="row"
                     height={majorScale(10)}
-                    hoverElevation={1}
                     onClick={onSelect(trackSection)}
                     paddingLeft={isFirst ? majorScale(1) : undefined}
                     paddingRight={isLast ? majorScale(1) : undefined}
