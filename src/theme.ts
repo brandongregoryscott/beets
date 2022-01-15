@@ -1,13 +1,6 @@
-import {
-    defaultTheme as _defaultTheme,
-    majorScale,
-    minorScale,
-} from "evergreen-ui";
-import { DefaultEvergreenTheme } from "utils/hooks/use-theme";
-import _ from "lodash";
+import { defaultTheme, majorScale, mergeTheme, minorScale } from "evergreen-ui";
 
-const defaultTheme = _defaultTheme as DefaultEvergreenTheme;
-const theme = _.merge(defaultTheme, {
+const theme = mergeTheme(defaultTheme, {
     components: {
         Button: {
             baseStyle: {
