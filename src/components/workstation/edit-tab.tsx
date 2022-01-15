@@ -6,7 +6,13 @@ import { useClipboardState } from "utils/hooks/use-clipboard-state";
 interface EditTabProps {}
 
 const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
-    const { selectedState, clearSelected, copySelected } = useClipboardState();
+    const {
+        copiedState,
+        selectedState,
+        clearCopied,
+        clearSelected,
+        copySelected,
+    } = useClipboardState();
 
     const handleClick = useCallback(
         (closePopover: () => void, callback: () => void) => () => {
@@ -22,13 +28,19 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                 content={({ close: closePopover }) => (
                     <Menu>
                         <Menu.Item
+                            disabled={selectedState.isEmpty()}
                             onClick={handleClick(closePopover, copySelected)}>
                             Copy
                         </Menu.Item>
                         <Menu.Item
+                            disabled={copiedState.isEmpty()}
+                            onClick={handleClick(closePopover, clearCopied)}>
+                            Clear Clipboard
+                        </Menu.Item>
+                        <Menu.Item
                             disabled={selectedState.isEmpty()}
                             onClick={handleClick(closePopover, clearSelected)}>
-                            Deselect
+                            Clear Selection
                         </Menu.Item>
                     </Menu>
                 )}

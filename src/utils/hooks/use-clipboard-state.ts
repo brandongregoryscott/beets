@@ -23,6 +23,7 @@ interface UseClipboardStateResult {
     setSelectedState: (update: SetStateAction<List<ClipboardItem>>) => void;
 }
 
+const CLEARED_CLIPBOARD_ID = "cleared-clipboard";
 const EMPTY_CLIPBOARD_ID = "empty";
 
 const useClipboardState = (): UseClipboardStateResult => {
@@ -85,10 +86,11 @@ const useClipboardState = (): UseClipboardStateResult => {
         [deselectItem, isSelected, selectItem]
     );
 
-    const clearCopied = useCallback(
-        () => setCopiedState(List<ClipboardItem>()),
-        [setCopiedState]
-    );
+    const clearCopied = useCallback(() => {
+        toaster.notify("Clipboard cleared!", { id: CLEARED_CLIPBOARD_ID });
+        setCopiedState(List<ClipboardItem>());
+    }, [setCopiedState]);
+
     const clearSelected = useCallback(
         () => setSelectedState(List<ClipboardItem>()),
         [setSelectedState]
