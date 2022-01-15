@@ -11,10 +11,14 @@ const theme = mergeTheme(defaultTheme, {
             },
             appearances: {
                 tab: {
+                    _active: {
+                        backgroundColor: defaultTheme.colors.gray300,
+                    },
                     _hover: {
                         backgroundColor: defaultTheme.colors.gray300,
                     },
                     backgroundColor: defaultTheme.colors.gray100,
+                    borderRadius: 0,
                 },
             },
         },

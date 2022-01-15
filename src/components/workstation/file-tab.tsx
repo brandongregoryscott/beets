@@ -14,7 +14,7 @@ import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
 
-interface WorkstationTabProps {}
+interface FileTabProps {}
 
 enum ConfirmationAction {
     NewProject,
@@ -22,9 +22,7 @@ enum ConfirmationAction {
     RevertToSaved,
 }
 
-const WorkstationTab: React.FC<WorkstationTabProps> = (
-    props: WorkstationTabProps
-) => {
+const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
     const { initialState, isDirty, state, setCurrentState, setState } =
         useWorkstationState();
     const { isAuthenticated } = useGlobalState();
@@ -251,4 +249,4 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     );
 };
 
-export { WorkstationTab };
+export { FileTab };

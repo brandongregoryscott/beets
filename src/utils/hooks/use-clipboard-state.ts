@@ -11,6 +11,10 @@ import {
 } from "utils/atoms/clipboard-state-atom";
 
 interface UseClipboardStateResult {
+    clearCopied: () => void;
+    clearSelected: () => void;
+    copiedState: List<ClipboardItem>;
+    copySelected: () => void;
     deselectItem: (item: ClipboardItem) => void;
     isSelected: (value: ClipboardItem) => boolean;
     onSelect: (item: ClipboardItem) => () => void;
@@ -25,7 +29,7 @@ const useClipboardState = (): UseClipboardStateResult => {
     const [selectedState, setSelectedState] = useAtom(
         SelectedClipboardStateAtom
     );
-    const [, setCopiedState] = useAtom(CopiedClipboardStateAtom);
+    const [copiedState, setCopiedState] = useAtom(CopiedClipboardStateAtom);
 
     const handleCopy = useCallback(() => {
         if (selectedState.isEmpty()) {
@@ -81,7 +85,20 @@ const useClipboardState = (): UseClipboardStateResult => {
         [deselectItem, isSelected, selectItem]
     );
 
+    const clearCopied = useCallback(
+        () => setCopiedState(List<ClipboardItem>()),
+        [setCopiedState]
+    );
+    const clearSelected = useCallback(
+        () => setSelectedState(List<ClipboardItem>()),
+        [setSelectedState]
+    );
+
     return {
+        copySelected: handleCopy,
+        copiedState,
+        clearCopied,
+        clearSelected,
         selectItem,
         isSelected,
         onSelect,
