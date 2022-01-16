@@ -1,5 +1,5 @@
 import { toaster } from "evergreen-ui";
-import { List, Map } from "immutable";
+import { List } from "immutable";
 import { useAtom } from "jotai";
 import { SetStateAction, useCallback } from "react";
 import { useKey } from "rooks";
@@ -7,7 +7,7 @@ import { ClipboardItem } from "types/clipboard-item";
 import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
 import { intersectionWith, rebaseIndexes } from "utils/collection-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { generateId, generateIdMap, remapIds } from "utils/id-utils";
+import { generateIdMap, remapIds } from "utils/id-utils";
 
 interface UseClipboardStateResult {
     clearSelected: () => void;
@@ -48,7 +48,7 @@ const useClipboardState = (): UseClipboardStateResult => {
                 (left, right) => left.id === right.id
             );
 
-            const idMap = generateIdMap(trackSections);
+            const trackIdMap = generateIdMap(trackSections);
             const trackSectionSteps = intersectionWith(
                 state.trackSectionSteps,
                 trackSections,
@@ -56,15 +56,14 @@ const useClipboardState = (): UseClipboardStateResult => {
                     trackSection.id === trackSectionStep.track_section_id
             );
 
-            const clonedTrackSections = remapIds(trackSections, idMap);
-            const clonedTrackSectionSteps = trackSectionSteps.map(
-                (trackSectionStep) =>
-                    trackSectionStep.merge({
-                        id: generateId(),
-                        track_section_id: idMap.get(
-                            trackSectionStep.track_section_id
-                        ),
-                    })
+            const clonedTrackSections = remapIds(trackSections, trackIdMap);
+            const clonedTrackSectionSteps = remapIds(
+                trackSectionSteps,
+                trackIdMap,
+                {
+                    regenerateId: true,
+                    property: "track_section_id",
+                }
             );
 
             setCurrentWorkstationState((prev) =>
