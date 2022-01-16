@@ -2,28 +2,19 @@ import { Menu } from "components/menu/menu";
 import {
     AnnotationIcon,
     Button,
-    ClipboardIcon,
     DuplicateIcon,
-    EraserIcon,
     Popover,
     Position,
     SquareIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
-import { useTheme } from "utils/hooks/use-theme";
 
 interface EditTabProps {}
 
 const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
-    const {
-        copiedState,
-        selectedState,
-        clearCopied,
-        clearSelected,
-        copySelected,
-    } = useClipboardState();
-    const { colors } = useTheme();
+    const { selectedState, clearSelected, duplicateSelected } =
+        useClipboardState();
     const handleClick = useCallback(
         (closePopover: () => void, callback: () => void) => () => {
             callback();
@@ -31,8 +22,6 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         },
         []
     );
-
-    const editIconColor = copiedState.isEmpty() ? undefined : colors.blue400;
 
     return (
         <React.Fragment>
@@ -42,22 +31,12 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                         <Menu.Item
                             disabled={selectedState.isEmpty()}
                             icon={DuplicateIcon}
-                            onClick={handleClick(closePopover, copySelected)}
-                            secondaryText={"⌘C" as any}>
-                            Copy
-                        </Menu.Item>
-                        <Menu.Item
-                            disabled={copiedState.isEmpty()}
-                            icon={ClipboardIcon}
-                            onClick={closePopover}
-                            secondaryText={"⌘V" as any}>
-                            Paste
-                        </Menu.Item>
-                        <Menu.Item
-                            disabled={copiedState.isEmpty()}
-                            icon={EraserIcon}
-                            onClick={handleClick(closePopover, clearCopied)}>
-                            Clear Clipboard
+                            onClick={handleClick(
+                                closePopover,
+                                duplicateSelected
+                            )}
+                            secondaryText={"⌘D" as any}>
+                            Duplicate
                         </Menu.Item>
                         <Menu.Item
                             disabled={selectedState.isEmpty()}
@@ -70,7 +49,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                 position={Position.TOP_RIGHT}>
                 <Button
                     appearance="tab"
-                    iconBefore={<AnnotationIcon color={editIconColor} />}
+                    iconBefore={<AnnotationIcon />}
                     intent="none">
                     Edit
                 </Button>

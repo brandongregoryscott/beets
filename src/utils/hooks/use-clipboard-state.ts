@@ -1,21 +1,18 @@
 import { toaster } from "evergreen-ui";
-import { List } from "immutable";
+import { List, Map } from "immutable";
 import { useAtom } from "jotai";
-import pluralize from "pluralize";
 import { SetStateAction, useCallback } from "react";
 import { useKey } from "rooks";
 import { ClipboardItem } from "types/clipboard-item";
-import {
-    CopiedClipboardStateAtom,
-    SelectedClipboardStateAtom,
-} from "utils/atoms/clipboard-state-atom";
+import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
+import { intersectionWith, rebaseIndexes } from "utils/collection-utils";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { generateId, generateIdMap, remapIds } from "utils/id-utils";
 
 interface UseClipboardStateResult {
-    clearCopied: () => void;
     clearSelected: () => void;
-    copiedState: List<ClipboardItem>;
-    copySelected: () => void;
     deselectItem: (item: ClipboardItem) => void;
+    duplicateSelected: (event?: KeyboardEvent) => void;
     isSelected: (value: ClipboardItem) => boolean;
     onSelect: (item: ClipboardItem) => () => void;
     selectItem: (item: ClipboardItem) => void;
@@ -23,30 +20,78 @@ interface UseClipboardStateResult {
     setSelectedState: (update: SetStateAction<List<ClipboardItem>>) => void;
 }
 
-const CLEARED_CLIPBOARD_ID = "cleared-clipboard";
-const EMPTY_CLIPBOARD_ID = "empty";
-
 const useClipboardState = (): UseClipboardStateResult => {
+    const { state, setCurrentState: setCurrentWorkstationState } =
+        useWorkstationState();
     const [selectedState, setSelectedState] = useAtom(
         SelectedClipboardStateAtom
     );
-    const [copiedState, setCopiedState] = useAtom(CopiedClipboardStateAtom);
 
-    const handleCopy = useCallback(() => {
-        if (selectedState.isEmpty()) {
-            toaster.notify("There's nothing selected to copy!", {
-                duration: 1,
-                id: EMPTY_CLIPBOARD_ID,
-            });
-            return;
-        }
-        setCopiedState(selectedState);
-        setSelectedState(List<ClipboardItem>());
-        const count = selectedState.count();
-        toaster.notify(`${count} ${pluralize("item", count)} copied!`);
-    }, [selectedState, setCopiedState, setSelectedState]);
+    const duplicationMessage =
+        selectedState.count() === 1
+            ? "Track Section duplicated!"
+            : `${selectedState.count()} Track Sections duplicated!`;
 
-    useKey(["cmd", "c"], handleCopy);
+    const handleDuplicate = useCallback(
+        (event?: KeyboardEvent) => {
+            event?.preventDefault();
+            if (selectedState.isEmpty()) {
+                return;
+            }
+
+            const { track_id } = selectedState.first()!;
+
+            // Pull from current state's trackSections to ensure any changes after selection are propogated
+            const trackSections = intersectionWith(
+                selectedState,
+                state.trackSections,
+                (left, right) => left.id === right.id
+            );
+
+            const idMap = generateIdMap(trackSections);
+            const trackSectionSteps = intersectionWith(
+                state.trackSectionSteps,
+                trackSections,
+                (trackSectionStep, trackSection) =>
+                    trackSection.id === trackSectionStep.track_section_id
+            );
+
+            const clonedTrackSections = remapIds(trackSections, idMap);
+            const clonedTrackSectionSteps = trackSectionSteps.map(
+                (trackSectionStep) =>
+                    trackSectionStep.merge({
+                        id: generateId(),
+                        track_section_id: idMap.get(
+                            trackSectionStep.track_section_id
+                        ),
+                    })
+            );
+
+            setCurrentWorkstationState((prev) =>
+                prev.merge({
+                    trackSections: rebaseIndexes(
+                        prev.trackSections.concat(clonedTrackSections),
+                        (e) => e.track_id === track_id
+                    ),
+                    trackSectionSteps: prev.trackSectionSteps.concat(
+                        clonedTrackSectionSteps
+                    ),
+                })
+            );
+            setSelectedState(List<ClipboardItem>());
+            toaster.notify(duplicationMessage);
+        },
+        [
+            duplicationMessage,
+            selectedState,
+            setCurrentWorkstationState,
+            setSelectedState,
+            state.trackSectionSteps,
+            state.trackSections,
+        ]
+    );
+
+    useKey(["cmd", "d"], handleDuplicate);
 
     const selectItem = useCallback(
         (item: ClipboardItem) => {
@@ -95,20 +140,13 @@ const useClipboardState = (): UseClipboardStateResult => {
         [deselectItem, isSelected, selectItem, selectedState, setSelectedState]
     );
 
-    const clearCopied = useCallback(() => {
-        toaster.notify("Clipboard cleared!", { id: CLEARED_CLIPBOARD_ID });
-        setCopiedState(List<ClipboardItem>());
-    }, [setCopiedState]);
-
     const clearSelected = useCallback(
         () => setSelectedState(List<ClipboardItem>()),
         [setSelectedState]
     );
 
     return {
-        copySelected: handleCopy,
-        copiedState,
-        clearCopied,
+        duplicateSelected: handleDuplicate,
         clearSelected,
         selectItem,
         isSelected,
