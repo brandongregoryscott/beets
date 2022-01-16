@@ -1,8 +1,10 @@
-import { DiffableState } from "enums/diffable-state";
 import { SetStateAction, useAtom } from "jotai";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCallback } from "react";
-import { WorkstationStateAtomFamily } from "utils/atoms/workstation-state-atom-family";
+import {
+    CurrentWorkstationStateAtom,
+    InitialWorkstationStateAtom,
+} from "utils/atoms/workstation-atom";
 
 interface UseWorkstationStateResult {
     /**
@@ -37,17 +39,9 @@ interface UseWorkstationStateResult {
 
 const useWorkstationState = (): UseWorkstationStateResult => {
     const [initialState, setInitialState] = useAtom(
-        WorkstationStateAtomFamily({
-            initialValue: new WorkstationStateRecord(),
-            state: DiffableState.Initial,
-        })
+        InitialWorkstationStateAtom
     );
-    const [state, setCurrentState] = useAtom(
-        WorkstationStateAtomFamily({
-            initialValue: initialState,
-            state: DiffableState.Current,
-        })
-    );
+    const [state, setCurrentState] = useAtom(CurrentWorkstationStateAtom);
 
     const clearState = useCallback(() => {
         const state = new WorkstationStateRecord();

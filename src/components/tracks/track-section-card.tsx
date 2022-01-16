@@ -28,7 +28,8 @@ import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
-import { css, select } from "glamor";
+import { css, hover, select } from "glamor";
+import { useClipboardState } from "utils/hooks/use-clipboard-state";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -78,6 +79,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         trackId: trackSection.track_id,
     });
 
+    const { isSelected, onSelect } = useClipboardState();
+
     const {
         setState: handleTrackSectionStepsChange,
         state: trackSectionSteps,
@@ -103,8 +106,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
 
     const width = trackSection.step_count * stepWidth;
 
+    const backgroundColor = isSelected(trackSection)
+        ? theme.colors.gray400
+        : theme.colors.gray200;
+
     const contextualButtonClass = css({ visibility: "hidden" }).toString();
     const cardClass = css(
+        hover({ cursor: "pointer" }),
         select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
     ).toString();
 
@@ -114,11 +122,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                 <Pane
                     {...borderProps}
                     {...provided.draggableProps}
-                    backgroundColor={theme.colors.gray200}
+                    backgroundColor={backgroundColor}
                     className={cardClass}
                     display="flex"
                     flexDirection="row"
                     height={majorScale(10)}
+                    onClick={onSelect(trackSection)}
                     paddingLeft={isFirst ? majorScale(1) : undefined}
                     paddingRight={isLast ? majorScale(1) : undefined}
                     paddingY={majorScale(1)}
@@ -132,6 +141,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         position="absolute"
                         width={width}>
                         <ContextualIconButton
+                            backgroundColor={backgroundColor}
                             className={contextualButtonClass}
                             icon={DeleteIcon}
                             id={trackSection.id}
@@ -142,6 +152,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         />
                         {track.isSequencer() && (
                             <ContextualIconButton
+                                backgroundColor={backgroundColor}
                                 className={contextualButtonClass}
                                 icon={HeatGridIcon}
                                 id={trackSection.id}
@@ -152,6 +163,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         )}
                         {!track.isSequencer() && (
                             <ContextualIconButton
+                                backgroundColor={backgroundColor}
                                 className={contextualButtonClass}
                                 icon={StepChartIcon}
                                 id={trackSection.id}
@@ -161,6 +173,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             />
                         )}
                         <ContextualIconButton
+                            backgroundColor={backgroundColor}
                             className={contextualButtonClass}
                             dragHandleProps={provided.dragHandleProps}
                             icon={DragHandleHorizontalIcon}

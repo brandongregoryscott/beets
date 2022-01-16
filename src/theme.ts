@@ -1,13 +1,6 @@
-import {
-    defaultTheme as _defaultTheme,
-    majorScale,
-    minorScale,
-} from "evergreen-ui";
-import { DefaultEvergreenTheme } from "utils/hooks/use-theme";
-import _ from "lodash";
+import { defaultTheme, majorScale, mergeTheme, minorScale } from "evergreen-ui";
 
-const defaultTheme = _defaultTheme as DefaultEvergreenTheme;
-const theme = _.merge(defaultTheme, {
+const theme = mergeTheme(defaultTheme, {
     components: {
         Button: {
             baseStyle: {
@@ -18,10 +11,14 @@ const theme = _.merge(defaultTheme, {
             },
             appearances: {
                 tab: {
+                    _active: {
+                        backgroundColor: defaultTheme.colors.gray300,
+                    },
                     _hover: {
                         backgroundColor: defaultTheme.colors.gray300,
                     },
                     backgroundColor: defaultTheme.colors.gray100,
+                    borderRadius: 0,
                 },
             },
         },

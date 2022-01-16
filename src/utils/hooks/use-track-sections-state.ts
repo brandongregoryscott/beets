@@ -1,9 +1,15 @@
 import { List } from "immutable";
 import { SetStateAction, useCallback, useMemo } from "react";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import _ from "lodash";
+import { isFunction } from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
 import { rebaseIndexes } from "utils/collection-utils";
+import { useAtom } from "jotai";
+import {
+    CurrentTrackSectionsAtom,
+    InitialTrackSectionsAtom,
+} from "utils/atoms/track-sections-atom";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
+import { CurrentTrackSectionStepsAtom } from "utils/atoms/track-section-steps-atom";
 
 interface UseTrackSectionsStateOptions {
     trackId: string;
@@ -23,112 +29,101 @@ const useTrackSectionsState = (
     options: UseTrackSectionsStateOptions
 ): UseTrackSectionsStateResult => {
     const { trackId } = options;
-    const {
-        state: workstationState,
-        initialState: initialWorkstationState,
-        setCurrentState,
-    } = useWorkstationState();
+    const setTrackSectionSteps = useUpdateAtom(CurrentTrackSectionStepsAtom);
+    const _initialState = useAtomValue(InitialTrackSectionsAtom);
+    const [_state, _setState] = useAtom(CurrentTrackSectionsAtom);
 
     const add = useCallback(
         (trackSection?: TrackSectionRecord) =>
-            setCurrentState((prev) => {
-                const updatedTrackSections = prev.trackSections.push(
+            _setState((prev) => {
+                const updatedTrackSections = prev.push(
                     trackSection?.merge({ track_id: trackId }) ??
                         new TrackSectionRecord({ track_id: trackId })
                 );
 
-                return prev.merge({
-                    trackSections: rebaseIndexes(
-                        updatedTrackSections,
-                        filterByTrackId(trackId)
-                    ),
-                });
+                return rebaseIndexes(
+                    updatedTrackSections,
+                    filterByTrackId(trackId)
+                );
             }),
-        [setCurrentState, trackId]
+        [_setState, trackId]
     );
 
     const get = useCallback(
-        (id: string) => workstationState.trackSections.find(filterById(id)),
-        [workstationState.trackSections]
+        (id: string) => _state.find(filterById(id)),
+        [_state]
     );
 
     const remove = useCallback(
-        (trackSection: TrackSectionRecord) =>
-            setCurrentState((prev) => {
-                const updatedTrackSections = rebaseIndexes(
-                    prev.trackSections.filter(
+        (trackSection: TrackSectionRecord) => {
+            _setState((prev) =>
+                rebaseIndexes(
+                    prev.filter(
                         (existingTrackSection) =>
                             existingTrackSection.id !== trackSection.id
                     ),
                     filterByTrackId(trackId)
-                );
+                )
+            );
 
-                // Additionally remove any TrackSectionSteps
-                const updatedTrackSectionSteps = prev.trackSectionSteps.filter(
+            // Additionally remove any TrackSectionSteps
+            setTrackSectionSteps((prevTrackSectionSteps) =>
+                prevTrackSectionSteps.filter(
                     (trackSectionStep) =>
                         trackSectionStep.track_section_id !== trackSection.id
-                );
-
-                return prev.merge({
-                    trackSections: updatedTrackSections,
-                    trackSectionSteps: updatedTrackSectionSteps,
-                });
-            }),
-        [setCurrentState, trackId]
+                )
+            );
+        },
+        [_setState, setTrackSectionSteps, trackId]
     );
 
     const update = useCallback(
         (id: string, update: SetStateAction<TrackSectionRecord>) =>
-            setCurrentState((prev) => {
-                const index = prev.trackSections.findIndex(filterById(id));
+            _setState((prev) => {
+                const index = prev.findIndex(filterById(id));
 
                 if (index < 0) {
                     return prev;
                 }
 
-                const value = _.isFunction(update)
-                    ? update(prev.trackSections.get(index)!)
+                const value = isFunction(update)
+                    ? update(prev.get(index)!)
                     : update;
 
-                return prev.merge({
-                    trackSections: prev.trackSections.set(index, value),
-                });
+                return prev.set(index, value);
             }),
-        [setCurrentState]
+        [_setState]
     );
 
     const setState = useCallback(
         (update: SetStateAction<List<TrackSectionRecord>>) => {
-            setCurrentState((prev) => {
-                const trackSectionsByTrack = prev.trackSections.filter(
+            _setState((prev) => {
+                const trackSectionsByTrack = prev.filter(
                     filterByTrackId(trackId)
                 );
 
-                const value = _.isFunction(update)
+                const value = isFunction(update)
                     ? update(trackSectionsByTrack)
                     : update;
 
-                const mergedTrackSections = prev.trackSections
+                const mergedTrackSections = prev
                     .filterNot(filterByTrackId(trackId))
                     .concat(value);
 
-                return prev.merge({ trackSections: mergedTrackSections });
+                return mergedTrackSections;
             });
         },
-        [setCurrentState, trackId]
+        [_setState, trackId]
     );
 
     const initialState = useMemo(
-        () =>
-            initialWorkstationState.trackSections.filter(
-                filterByTrackId(trackId)
-            ),
-        [initialWorkstationState.trackSections, trackId]
+        () => _initialState.filter(filterByTrackId(trackId)),
+        [_initialState, trackId]
     );
 
     const state = useMemo(
-        () => workstationState.trackSections.filter(filterByTrackId(trackId)),
-        [trackId, workstationState.trackSections]
+        () => _state.filter(filterByTrackId(trackId)),
+        [trackId, _state]
     );
 
     return {

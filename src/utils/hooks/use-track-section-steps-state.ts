@@ -1,8 +1,13 @@
 import { List } from "immutable";
-import { SetStateAction, useCallback } from "react";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import _ from "lodash";
+import { SetStateAction, useCallback, useMemo } from "react";
+import { isFunction } from "lodash";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { useAtom } from "jotai";
+import {
+    CurrentTrackSectionStepsAtom,
+    InitialTrackSectionStepsAtom,
+} from "utils/atoms/track-section-steps-atom";
+import { useAtomValue } from "jotai/utils";
 
 interface UseTrackSectionStepsStateOptions {
     trackSectionId: string;
@@ -18,37 +23,41 @@ const useTrackSectionStepsState = (
     options: UseTrackSectionStepsStateOptions
 ): UseTrackSectionStepsStateResult => {
     const { trackSectionId } = options;
-    const { state, initialState, setCurrentState } = useWorkstationState();
+    const _initialState = useAtomValue(InitialTrackSectionStepsAtom);
+    const [_state, _setState] = useAtom(CurrentTrackSectionStepsAtom);
 
     const setState = useCallback(
         (update: SetStateAction<List<TrackSectionStepRecord>>) => {
-            setCurrentState((prev) => {
-                const value = _.isFunction(update)
-                    ? update(prev.trackSectionSteps)
-                    : update;
+            _setState((prev) => {
+                const value = isFunction(update) ? update(prev) : update;
 
-                const merged = prev.trackSectionSteps
+                const merged = prev
                     .filter(
                         (trackSectionStep) =>
                             trackSectionStep.track_section_id !== trackSectionId
                     )
                     .concat(value);
 
-                return prev.merge({
-                    trackSectionSteps: merged,
-                });
+                return merged;
             });
         },
-        [setCurrentState, trackSectionId]
+        [_setState, trackSectionId]
+    );
+
+    const initialState = useMemo(
+        () => filterByTrackSectionId(trackSectionId, _initialState),
+        [trackSectionId, _initialState]
+    );
+
+    const state = useMemo(
+        () => filterByTrackSectionId(trackSectionId, _state),
+        [trackSectionId, _state]
     );
 
     return {
-        initialState: filterByTrackSectionId(
-            trackSectionId,
-            initialState.trackSectionSteps
-        ),
+        initialState,
         setState,
-        state: filterByTrackSectionId(trackSectionId, state.trackSectionSteps),
+        state,
     };
 };
 
