@@ -4,7 +4,11 @@ import { useAtom } from "jotai";
 import { SetStateAction, useCallback } from "react";
 import { ClipboardItem } from "types/clipboard-item";
 import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
-import { intersectionWith, rebaseIndexes } from "utils/collection-utils";
+import {
+    intersectionWith,
+    rebaseIndexes,
+    sortBy,
+} from "utils/collection-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { generateIdMap, remapIds } from "utils/id-utils";
 
@@ -55,7 +59,10 @@ const useClipboardState = (): UseClipboardStateResult => {
                     trackSection.id === trackSectionStep.track_section_id
             );
 
-            const clonedTrackSections = remapIds(trackSections, trackIdMap);
+            const clonedTrackSections = sortBy(
+                remapIds(trackSections, trackIdMap),
+                (trackSection) => trackSection.index
+            );
             const clonedTrackSectionSteps = remapIds(
                 trackSectionSteps,
                 trackIdMap,
