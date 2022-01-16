@@ -8,6 +8,7 @@ import {
     SquareIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
+import { useKey } from "rooks";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
 
 interface EditTabProps {}
@@ -22,6 +23,8 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         },
         []
     );
+
+    useKey(["cmd", "d"], duplicateSelected);
 
     return (
         <React.Fragment>

@@ -13,6 +13,7 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
+import { useKey } from "rooks";
 
 interface FileTabProps {}
 
@@ -77,6 +78,11 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         onSuccess: handleSyncSuccess,
     });
 
+    useKey(["cmd", "s"], (event: KeyboardEvent) => {
+        event.preventDefault();
+        handleSave()();
+    });
+
     const handleNewClick = useCallback(
         (closePopover: () => void) => () => {
             if (isDirty) {
@@ -99,18 +105,18 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         [handleOpenOpenProjectDialog]
     );
 
-    const handleSaveClick = useCallback(
-        (closePopover: () => void) => () => {
+    const handleSave = useCallback(
+        (closePopover?: () => void) => () => {
             const newProjectHasName =
                 !state.isDemo() && isNotNilOrEmpty(project.name);
             if (projectIsPersisted || newProjectHasName) {
                 sync(state);
-                closePopover();
+                closePopover?.();
                 return;
             }
 
             handleOpenSaveProjectDialog();
-            closePopover();
+            closePopover?.();
         },
         [
             handleOpenSaveProjectDialog,
@@ -179,7 +185,9 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
                             Open
                         </Menu.Item>
-                        <Menu.Item onClick={handleSaveClick(closePopover)}>
+                        <Menu.Item
+                            onClick={handleSave(closePopover)}
+                            secondaryText={"⌘S" as any}>
                             Save
                         </Menu.Item>
                         <Menu.Item onClick={handleSettingsClick(closePopover)}>

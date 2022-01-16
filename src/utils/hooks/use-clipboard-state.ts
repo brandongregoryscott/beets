@@ -2,7 +2,6 @@ import { toaster } from "evergreen-ui";
 import { List } from "immutable";
 import { useAtom } from "jotai";
 import { SetStateAction, useCallback } from "react";
-import { useKey } from "rooks";
 import { ClipboardItem } from "types/clipboard-item";
 import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
 import { intersectionWith, rebaseIndexes } from "utils/collection-utils";
@@ -32,7 +31,7 @@ const useClipboardState = (): UseClipboardStateResult => {
             ? "Track Section duplicated!"
             : `${selectedState.count()} Track Sections duplicated!`;
 
-    const handleDuplicate = useCallback(
+    const duplicateSelected = useCallback(
         (event?: KeyboardEvent) => {
             event?.preventDefault();
             if (selectedState.isEmpty()) {
@@ -90,8 +89,6 @@ const useClipboardState = (): UseClipboardStateResult => {
         ]
     );
 
-    useKey(["cmd", "d"], handleDuplicate);
-
     const selectItem = useCallback(
         (item: ClipboardItem) => {
             setSelectedState((prev) => prev.push(item));
@@ -145,7 +142,7 @@ const useClipboardState = (): UseClipboardStateResult => {
     );
 
     return {
-        duplicateSelected: handleDuplicate,
+        duplicateSelected,
         clearSelected,
         selectItem,
         isSelected,
