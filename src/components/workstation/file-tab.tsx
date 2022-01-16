@@ -13,8 +13,9 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
+import { useKey } from "rooks";
 
-interface WorkstationTabProps {}
+interface FileTabProps {}
 
 enum ConfirmationAction {
     NewProject,
@@ -22,9 +23,7 @@ enum ConfirmationAction {
     RevertToSaved,
 }
 
-const WorkstationTab: React.FC<WorkstationTabProps> = (
-    props: WorkstationTabProps
-) => {
+const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
     const { initialState, isDirty, state, setCurrentState, setState } =
         useWorkstationState();
     const { isAuthenticated } = useGlobalState();
@@ -79,6 +78,11 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         onSuccess: handleSyncSuccess,
     });
 
+    useKey(["cmd", "s"], (event: KeyboardEvent) => {
+        event.preventDefault();
+        handleSave()();
+    });
+
     const handleNewClick = useCallback(
         (closePopover: () => void) => () => {
             if (isDirty) {
@@ -101,18 +105,18 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
         [handleOpenOpenProjectDialog]
     );
 
-    const handleSaveClick = useCallback(
-        (closePopover: () => void) => () => {
+    const handleSave = useCallback(
+        (closePopover?: () => void) => () => {
             const newProjectHasName =
                 !state.isDemo() && isNotNilOrEmpty(project.name);
             if (projectIsPersisted || newProjectHasName) {
                 sync(state);
-                closePopover();
+                closePopover?.();
                 return;
             }
 
             handleOpenSaveProjectDialog();
-            closePopover();
+            closePopover?.();
         },
         [
             handleOpenSaveProjectDialog,
@@ -181,7 +185,9 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
                         <Menu.Item onClick={handleOpenClick(closePopover)}>
                             Open
                         </Menu.Item>
-                        <Menu.Item onClick={handleSaveClick(closePopover)}>
+                        <Menu.Item
+                            onClick={handleSave(closePopover)}
+                            secondaryText={"⌘S" as any}>
                             Save
                         </Menu.Item>
                         <Menu.Item onClick={handleSettingsClick(closePopover)}>
@@ -251,4 +257,4 @@ const WorkstationTab: React.FC<WorkstationTabProps> = (
     );
 };
 
-export { WorkstationTab };
+export { FileTab };

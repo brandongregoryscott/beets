@@ -1,9 +1,9 @@
+import { DefaultThemeColors } from "evergreen-ui";
 import { theme } from "theme";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { valueByHash } from "utils/hash-utils";
-import { DefaultEvergreenTheme } from "utils/hooks/use-theme";
 
-const stepColors: Array<keyof DefaultEvergreenTheme["colors"]> = [
+const stepColors: Array<DefaultThemeColors> = [
     "blue200",
     "blue300",
     "green300",
@@ -19,7 +19,7 @@ const getStepColor = (fileId: string | undefined): string => {
 
     const key = valueByHash(fileId, stepColors);
 
-    return theme.colors[key] as string;
+    return theme.colors[key];
 };
 
 export { getStepColor };
