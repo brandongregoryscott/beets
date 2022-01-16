@@ -1,42 +1,20 @@
 import { List } from "immutable";
-import { atom, SetStateAction, WritableAtom } from "jotai";
-import { isFunction } from "lodash";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { WorkstationStateRecord } from "models/workstation-state-record";
+import { derivedAtomFactory } from "utils/atoms/derived-atom-factory";
 import {
     CurrentWorkstationStateAtom,
     InitialWorkstationStateAtom,
 } from "utils/atoms/workstation-state-atom";
 
-const getTrackSectionStepsAtom = (
-    workstationStateAtom: WritableAtom<
-        WorkstationStateRecord,
-        SetStateAction<WorkstationStateRecord>
-    >
-) =>
-    atom<
-        List<TrackSectionStepRecord>,
-        SetStateAction<List<TrackSectionStepRecord>>
-    >(
-        (get) => get(workstationStateAtom).trackSectionSteps,
-        (get, set, updated) => {
-            const prev = get(workstationStateAtom).trackSectionSteps;
-            const trackSectionSteps = isFunction(updated)
-                ? updated(prev)
-                : updated;
+const CurrentTrackSectionStepsAtom = derivedAtomFactory<
+    WorkstationStateRecord,
+    List<TrackSectionStepRecord>
+>(CurrentWorkstationStateAtom, "trackSectionSteps");
 
-            set(workstationStateAtom, (workstationState) =>
-                workstationState.merge({ trackSectionSteps })
-            );
-        }
-    );
-
-const CurrentTrackSectionStepsAtom = getTrackSectionStepsAtom(
-    CurrentWorkstationStateAtom
-);
-
-const InitialTrackSectionStepsAtom = getTrackSectionStepsAtom(
-    InitialWorkstationStateAtom
-);
+const InitialTrackSectionStepsAtom = derivedAtomFactory<
+    WorkstationStateRecord,
+    List<TrackSectionStepRecord>
+>(InitialWorkstationStateAtom, "trackSectionSteps");
 
 export { CurrentTrackSectionStepsAtom, InitialTrackSectionStepsAtom };
