@@ -6,7 +6,7 @@ import { intersectionWith } from "utils/collection-utils";
 import { useAtom } from "jotai";
 import { CurrentTracksAtom, InitialTracksAtom } from "utils/atoms/tracks-atom";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
-import { CurrentWorkstationStateAtom } from "utils/atoms/workstation-state-atom";
+import { CurrentWorkstationStateAtom } from "utils/atoms/workstation-atom";
 import { CurrentTrackSectionsAtom } from "utils/atoms/track-sections-atom";
 import { CurrentTrackSectionStepsAtom } from "utils/atoms/track-section-steps-atom";
 
@@ -73,7 +73,7 @@ const useTracksState = (): UseTracksStateResult => {
 
                 return updatedTracks;
             }),
-        [setState, setTrackSections, setTrackSectionSteps]
+        [setState, setTrackSectionSteps, setTrackSections]
     );
 
     const update = useCallback(

@@ -5,7 +5,7 @@ import { derivedAtomFactory } from "utils/atoms/derived-atom-factory";
 import {
     CurrentWorkstationStateAtom,
     InitialWorkstationStateAtom,
-} from "utils/atoms/workstation-state-atom";
+} from "utils/atoms/workstation-atom";
 
 const CurrentTracksAtom = derivedAtomFactory<
     WorkstationStateRecord,

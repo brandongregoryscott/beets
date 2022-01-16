@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import {
     CurrentWorkstationStateAtom,
     InitialWorkstationStateAtom,
-} from "utils/atoms/workstation-state-atom";
+} from "utils/atoms/workstation-atom";
 
 interface UseWorkstationStateResult {
     /**
