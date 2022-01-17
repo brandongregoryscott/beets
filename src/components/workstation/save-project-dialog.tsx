@@ -2,8 +2,6 @@ import { ErrorMessages } from "constants/error-messages";
 import {
     Alert,
     BanCircleIcon,
-    Dialog,
-    DialogProps,
     EmptyState,
     Icon,
     Pane,
@@ -19,6 +17,7 @@ import { useGlobalState } from "utils/hooks/use-global-state";
 import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { Dialog, DialogProps } from "components/dialog";
 
 interface SaveProjectDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
