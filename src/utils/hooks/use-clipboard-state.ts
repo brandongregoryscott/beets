@@ -1,7 +1,7 @@
 import { toaster } from "evergreen-ui";
 import { List } from "immutable";
 import { useAtom } from "jotai";
-import { SetStateAction, useCallback } from "react";
+import React, { SetStateAction, useCallback } from "react";
 import { ClipboardItem } from "types/clipboard-item";
 import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
 import {
