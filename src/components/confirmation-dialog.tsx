@@ -1,4 +1,5 @@
-import { Alert, Dialog, DialogProps, IntentTypes } from "evergreen-ui";
+import { Alert, IntentTypes } from "evergreen-ui";
+import { Dialog, DialogProps } from "components/dialog";
 import React from "react";
 
 interface ConfirmationDialogProps extends DialogProps {

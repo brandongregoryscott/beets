@@ -1,5 +1,5 @@
 import { Sequencer } from "components/sequencer/sequencer";
-import { Dialog, DialogProps } from "evergreen-ui";
+import { Dialog, DialogProps } from "components/dialog";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";

@@ -1,8 +1,9 @@
-import { Dialog, DialogProps, Link, TextInputField } from "evergreen-ui";
+import { Link, TextInputField } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useState, ChangeEvent } from "react";
 import { useUpdateFile } from "utils/hooks/domain/files/use-update-file";
+import { Dialog, DialogProps } from "components/dialog";
 
 interface FileDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {

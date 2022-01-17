@@ -1,12 +1,5 @@
 import { ConfirmationDialog } from "components/confirmation-dialog";
-import {
-    Dialog,
-    DialogProps,
-    EmptyState,
-    ProjectsIcon,
-    Spinner,
-    Table,
-} from "evergreen-ui";
+import { EmptyState, ProjectsIcon, Spinner, Table } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/collection-utils";
@@ -15,6 +8,7 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
 import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { Dialog, DialogProps } from "components/dialog";
 
 interface OpenProjectDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}

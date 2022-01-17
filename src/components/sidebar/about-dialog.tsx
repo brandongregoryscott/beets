@@ -1,8 +1,6 @@
 import {
     Alert,
     Code,
-    Dialog,
-    DialogProps,
     Link,
     majorScale,
     Pane,
@@ -12,6 +10,7 @@ import {
 import React from "react";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useLatestRelease } from "utils/hooks/use-latest-release";
+import { Dialog, DialogProps } from "components/dialog";
 
 enum Environment {
     Development = "Development",

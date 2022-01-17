@@ -1,6 +1,7 @@
 import { Form, FormProps } from "components/forms/form";
-import { Button, Dialog, DialogProps, majorScale, Pane } from "evergreen-ui";
+import { Button, majorScale, Pane } from "evergreen-ui";
 import React, { useCallback } from "react";
+import { Dialog, DialogProps } from "components/dialog";
 
 interface FormDialogProps
     extends Omit<DialogProps, "onConfirm">,

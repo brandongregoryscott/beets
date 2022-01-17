@@ -13,7 +13,8 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
-import { useKey } from "rooks";
+import { useKeys } from "rooks";
+import { KeyCode } from "enums/key-code";
 
 interface FileTabProps {}
 
@@ -78,8 +79,9 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         onSuccess: handleSyncSuccess,
     });
 
-    useKey(["cmd", "s"], (event: KeyboardEvent) => {
+    useKeys([KeyCode.Alt, "s"], (event: KeyboardEvent) => {
         event.preventDefault();
+        event.stopPropagation();
         handleSave()();
     });
 

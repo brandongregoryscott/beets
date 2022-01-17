@@ -1,12 +1,6 @@
 import { ConfirmButton } from "components/confirm-button";
 import { ErrorMessages } from "constants/error-messages";
-import {
-    Dialog,
-    DialogProps,
-    TextInputField,
-    toaster,
-    TrashIcon,
-} from "evergreen-ui";
+import { TextInputField, toaster, TrashIcon } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
 import { useInput } from "rooks";
@@ -14,6 +8,7 @@ import { isNilOrEmpty } from "utils/core-utils";
 import { useDeleteWorkstationState } from "utils/hooks/use-delete-workstation-state";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { Dialog, DialogProps } from "components/dialog";
 
 interface ProjectSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
