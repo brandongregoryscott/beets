@@ -1,7 +1,7 @@
 import { toaster } from "evergreen-ui";
 import { List } from "immutable";
 import { useAtom } from "jotai";
-import { SetStateAction, useCallback } from "react";
+import React, { SetStateAction, useCallback } from "react";
 import { ClipboardItem } from "types/clipboard-item";
 import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
 import {
@@ -9,6 +9,7 @@ import {
     rebaseIndexes,
     sortBy,
 } from "utils/collection-utils";
+import { isEventFromDialog } from "utils/event-utils";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { generateIdMap, remapIds } from "utils/id-utils";
 
@@ -17,7 +18,9 @@ interface UseClipboardStateResult {
     deselectItem: (item: ClipboardItem) => void;
     duplicateSelected: (event?: KeyboardEvent) => void;
     isSelected: (value: ClipboardItem) => boolean;
-    onSelect: (item: ClipboardItem) => () => void;
+    onSelect: (
+        item: ClipboardItem
+    ) => (event: React.MouseEvent<HTMLDivElement>) => void;
     selectItem: (item: ClipboardItem) => void;
     selectedState: List<ClipboardItem>;
     setSelectedState: (update: SetStateAction<List<ClipboardItem>>) => void;
@@ -125,7 +128,13 @@ const useClipboardState = (): UseClipboardStateResult => {
     );
 
     const onSelect = useCallback(
-        (item: ClipboardItem) => () => {
+        (item: ClipboardItem) => (event: React.MouseEvent<HTMLDivElement>) => {
+            // A bit of a hack to tell where the event is coming from - but it prevents Dialog clicks
+            // from leaking through and selecting or deselecting the card
+            if (isEventFromDialog(event)) {
+                return;
+            }
+
             if (isSelected(item)) {
                 deselectItem(item);
                 return;
