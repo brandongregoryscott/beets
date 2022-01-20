@@ -14,7 +14,7 @@ import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useMemo, useState } from "react";
-import { MidiNote } from "reactronica";
+import { MidiNote } from "@brandongregoryscott/reactronica";
 import { useTheme } from "utils/hooks/use-theme";
 import { isSelected } from "utils/track-section-step-utils";
 

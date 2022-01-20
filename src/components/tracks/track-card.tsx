@@ -19,7 +19,7 @@ import {
     Track as ReactronicaTrack,
     Instrument,
     StepNoteType,
-} from "reactronica";
+} from "@brandongregoryscott/reactronica";
 import { TrackRecord } from "models/track-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";

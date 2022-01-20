@@ -1,6 +1,6 @@
 import { majorScale, Text, Pane } from "evergreen-ui";
 import { memo } from "react";
-import { MidiNote } from "reactronica";
+import { MidiNote } from "@brandongregoryscott/reactronica";
 import { MidiNoteUtils } from "utils/midi-note-utils";
 
 interface PianoKeyProps {

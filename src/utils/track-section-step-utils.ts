@@ -3,7 +3,7 @@ import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { MidiNote, StepType } from "reactronica";
+import { MidiNote, StepType } from "@brandongregoryscott/reactronica";
 import { initializeList, intersectionWith } from "utils/collection-utils";
 import { getTotalStepCount } from "utils/track-section-utils";
 
