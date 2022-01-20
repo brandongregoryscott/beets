@@ -1,6 +1,6 @@
 import { majorScale, Pane } from "evergreen-ui";
 import { useCallback } from "react";
-import { MidiNote } from "reactronica";
+import { MidiNote } from "@brandongregoryscott/reactronica";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface PianoStepProps {

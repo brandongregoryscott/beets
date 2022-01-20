@@ -1,4 +1,4 @@
-import { MidiNote } from "reactronica";
+import { MidiNote } from "@brandongregoryscott/reactronica";
 
 const MidiNotes: MidiNote[] = [
     "C-2",

@@ -2,7 +2,7 @@ import { Record as ImmutableRecord } from "immutable";
 import { File } from "generated/interfaces/file";
 import { isNilOrEmpty, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
-import { MidiNote } from "reactronica";
+import { MidiNote } from "@brandongregoryscott/reactronica";
 import { MidiNotes } from "constants/midi-notes";
 import { valueByHash } from "utils/hash-utils";
 import { AuditableRecord } from "models/auditable-record";

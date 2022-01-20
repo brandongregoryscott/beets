@@ -15,7 +15,7 @@ import {
 } from "evergreen-ui";
 import { ChangeEvent, PropsWithChildren, useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { Song as ReactronicaSong } from "reactronica";
+import { Song as ReactronicaSong } from "@brandongregoryscott/reactronica";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
