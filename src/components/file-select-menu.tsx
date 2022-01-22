@@ -1,3 +1,4 @@
+import { FileSelectMenuItem } from "components/file-select-menu-item";
 import {
     SelectMenu,
     SelectMenuItem,
@@ -5,6 +6,7 @@ import {
 } from "components/select-menu";
 import { Spinner, majorScale, Pane } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
+import React from "react";
 import { PropsWithChildren, useCallback, useMemo } from "react";
 import { toSelectMenuItems } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
@@ -57,6 +59,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
             onSelect={handleSelect}
             options={options}
             selected={selected}
+            itemRenderer={(props) => <FileSelectMenuItem {...props} />}
             title={title}>
             {isLoading ? (
                 <Pane

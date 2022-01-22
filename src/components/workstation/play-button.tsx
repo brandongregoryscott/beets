@@ -5,7 +5,7 @@ import {
     PlayIcon,
     Spinner,
 } from "evergreen-ui";
-import { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 
 interface PlayButtonProps extends Omit<IconButtonProps, "icon" | "onClick"> {
     isPlaying: boolean;
@@ -21,10 +21,14 @@ const PlayButton: React.FC<PlayButtonProps> = (props: PlayButtonProps) => {
         onClick,
         ...iconButtonProps
     } = props;
-    const handleClick = useCallback(() => {
-        onClick?.(isPlaying);
-        toggleIsPlaying();
-    }, [isPlaying, onClick, toggleIsPlaying]);
+    const handleClick = useCallback(
+        (event: React.MouseEvent) => {
+            event.stopPropagation();
+            onClick?.(isPlaying);
+            toggleIsPlaying();
+        },
+        [isPlaying, onClick, toggleIsPlaying]
+    );
 
     const icon = useMemo(() => {
         if (isLoading) {
