@@ -12,8 +12,8 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
     const isBlackKey = MidiNoteUtils.isSharp(note);
     const background = isBlackKey ? "black" : "white";
     const textColor = isBlackKey ? "white" : "black";
-    const height = majorScale(3);
-    const width = majorScale(6);
+    const height = majorScale(4);
+    const width = majorScale(4);
     return (
         <Pane
             alignItems="center"
@@ -27,7 +27,7 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
             minHeight={height}
             minWidth={width}
             width={width}>
-            <Text color={textColor} size={300}>
+            <Text color={textColor} cursor="default" size={300}>
                 {note}
             </Text>
         </Pane>
