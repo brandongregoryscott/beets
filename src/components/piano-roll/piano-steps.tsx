@@ -20,7 +20,9 @@ import { isSelected } from "utils/track-section-step-utils";
 
 interface PianoStepsProps {
     file?: FileRecord;
+    isPlaying: boolean;
     onChange: (value: List<TrackSectionStepRecord>) => void;
+    playingIndex?: number;
     stepCount: number;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
@@ -30,8 +32,15 @@ const defaultNoteIndex = MidiNotes.indexOf("C5");
 const indexRange = 12; // Chromatic scale
 
 const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
-    const { file, onChange, stepCount, trackSection, trackSectionSteps } =
-        props;
+    const {
+        file,
+        isPlaying,
+        playingIndex,
+        onChange,
+        stepCount,
+        trackSection,
+        trackSectionSteps,
+    } = props;
     const [viewableIndex, setViewableIndex] =
         useState<number>(defaultNoteIndex);
     const handleScaleDown = useCallback(
@@ -76,7 +85,7 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
             MidiNotes.slice(
                 Math.max(viewableIndex, 0),
                 viewableIndex + indexRange
-            ).map((note) => (
+            ).map((note, rowIndex) => (
                 <Pane
                     backgroundColor={theme.colors.gray300}
                     display="flex"
@@ -88,6 +97,9 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
                     {_.range(0, stepCount).map((index: number) => (
                         <PianoStep
                             index={index}
+                            isFirst={rowIndex === 0}
+                            isLast={rowIndex === indexRange - 1}
+                            isPlaying={isPlaying && index === playingIndex}
                             isSelected={isSelected(
                                 trackSectionSteps,
                                 index,
@@ -102,6 +114,8 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
             )),
         [
             handleClick,
+            isPlaying,
+            playingIndex,
             stepCount,
             theme.colors.gray300,
             trackSectionSteps,

@@ -1,12 +1,5 @@
 import { SequencerStep } from "components/sequencer/sequencer-step";
-import {
-    Button,
-    IconButton,
-    majorScale,
-    Pane,
-    PauseIcon,
-    PlayIcon,
-} from "evergreen-ui";
+import { Button, majorScale, Pane } from "evergreen-ui";
 import _ from "lodash";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
@@ -16,17 +9,13 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
 import { FileSelectMenu } from "components/file-select-menu";
-import {
-    Instrument,
-    Track,
-    Song,
-    StepNoteType,
-} from "@brandongregoryscott/reactronica";
+import { Instrument, Track, Song } from "@brandongregoryscott/reactronica";
 import { toSequencerMap } from "utils/file-utils";
 import { toSequencerStepTypes } from "utils/track-section-step-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { ReactronicaState } from "interfaces/reactronica-state";
+import { PlayButton } from "components/workstation/play-button";
+import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -48,16 +37,16 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         trackSectionSteps,
         trackSection,
     } = props;
-    const [reactronicaState, setReactronicaState] = useState<ReactronicaState>({
-        notes: [],
-        index: 0,
+
+    const {
+        state: reactronicaState,
+        onStepPlay,
+        onPlayToggle,
+    } = useReactronicaState({
+        useAtomState: false,
     });
-    const handleStepPlay = useCallback(
-        (notes: StepNoteType[], index: number) =>
-            setReactronicaState({ notes, index }),
-        []
-    );
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
+    const { value: isLoading, setFalse: handleLoaded } = useBoolean(true);
     const { state: workstationState } = useWorkstationState();
     const { bpm, swing, volume } = workstationState.project;
     const [selected, setSelected] = useState<List<FileRecord>>(List());
@@ -92,10 +81,12 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
     return (
         <Pane>
             <Pane marginBottom={majorScale(1)}>
-                <IconButton
-                    icon={isPlaying ? PauseIcon : PlayIcon}
+                <PlayButton
+                    isLoading={isLoading}
+                    isPlaying={isPlaying}
                     marginRight={buttonMarginRight}
-                    onClick={toggleIsPlaying}
+                    onClick={onPlayToggle}
+                    toggleIsPlaying={toggleIsPlaying}
                 />
                 <FileSelectMenu
                     isMultiSelect={true}
@@ -124,7 +115,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                         files={files}
                         index={index}
                         isPlaying={
-                            isPlaying && reactronicaState.index === index
+                            isPlaying && reactronicaState?.index === index
                         }
                         key={index}
                         onChange={onStepChange}
@@ -142,11 +133,12 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 isPlaying={isPlaying}
                 swing={swing / 100}
                 volume={volume}>
-                <Track
-                    onStepPlay={handleStepPlay}
-                    steps={steps}
-                    subdivision="8n">
-                    <Instrument samples={samples} type="sampler" />
+                <Track onStepPlay={onStepPlay} steps={steps} subdivision="8n">
+                    <Instrument
+                        onLoad={handleLoaded}
+                        samples={samples}
+                        type="sampler"
+                    />
                 </Track>
             </Song>
         </Pane>

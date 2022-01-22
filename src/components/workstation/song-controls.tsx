@@ -2,8 +2,6 @@ import {
     IconButton,
     minorScale,
     Pane,
-    PauseIcon,
-    PlayIcon,
     VolumeOffIcon,
     VolumeUpIcon,
     Label,
@@ -18,7 +16,7 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { Song as ReactronicaSong } from "@brandongregoryscott/reactronica";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
+import { PlayButton } from "components/workstation/play-button";
 
 interface SongControlsProps {}
 
@@ -29,7 +27,6 @@ const SongControls: React.FC<SongControlsProps> = (
 ) => {
     const { children } = props;
     const { state: project, setCurrentState } = useProjectState();
-    const { onPause } = useReactronicaState();
     const { bpm, swing, volume } = project;
     const { value: isMuted, toggle: toggleIsMuted } = useBoolean(false);
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean(false);
@@ -80,14 +77,6 @@ const SongControls: React.FC<SongControlsProps> = (
         [setCurrentState]
     );
 
-    const handlePlayingClick = useCallback(() => {
-        if (isPlaying) {
-            onPause();
-        }
-
-        toggleIsPlaying();
-    }, [isPlaying, onPause, toggleIsPlaying]);
-
     return (
         <Pane>
             <Heading marginBottom={majorScale(1)} size={500}>
@@ -98,10 +87,10 @@ const SongControls: React.FC<SongControlsProps> = (
                 display="flex"
                 flexDirection="row"
                 marginBottom={majorScale(2)}>
-                <IconButton
-                    icon={isPlaying ? PauseIcon : PlayIcon}
+                <PlayButton
+                    isPlaying={isPlaying}
                     marginRight={marginRight}
-                    onClick={handlePlayingClick}
+                    toggleIsPlaying={toggleIsPlaying}
                 />
                 <IconButton
                     icon={isMuted ? VolumeOffIcon : VolumeUpIcon}
