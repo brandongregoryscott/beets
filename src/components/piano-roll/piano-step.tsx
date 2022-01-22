@@ -17,8 +17,8 @@ const PianoStep: React.FC<PianoStepProps> = (props: PianoStepProps) => {
     const { colors } = useTheme();
     const { index, isPlaying, isSelected, note, onClick, isFirst, isLast } =
         props;
-    const height = majorScale(3);
-    const width = majorScale(6);
+    const height = majorScale(4);
+    const width = majorScale(4);
     const handleClick = useCallback(
         () => onClick(index, note),
         [index, note, onClick]
