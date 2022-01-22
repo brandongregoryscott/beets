@@ -1,14 +1,16 @@
 import { SequencerStepRow } from "components/sequencer/sequencer-step-row";
 import { ConditionalTooltip } from "components/conditional-tooltip";
-import { Card, majorScale } from "evergreen-ui";
+import { Card, Elevation, majorScale } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface SequencerStepProps {
     files: List<FileRecord>;
     index: number;
+    isPlaying: boolean;
     onChange: (index: number, steps: List<TrackSectionStepRecord>) => void;
     selected: List<FileRecord>;
     trackSection: TrackSectionRecord;
@@ -20,7 +22,9 @@ const maxCount = 4;
 const SequencerStep: React.FC<SequencerStepProps> = (
     props: SequencerStepProps
 ) => {
-    const { index, files, onChange, selected, trackSection, value } = props;
+    const { index, isPlaying, files, onChange, selected, trackSection, value } =
+        props;
+    const { colors } = useTheme();
     const hasSamples = !selected.isEmpty();
     const handleAdd = () => {
         if (
@@ -57,12 +61,21 @@ const SequencerStep: React.FC<SequencerStepProps> = (
         onChange(index, value.remove(value.indexOf(step)));
     };
 
+    const activeProps = isPlaying
+        ? {
+              elevation: 1 as Elevation,
+              transform: "translateY(-4px)",
+          }
+        : {};
+
     return (
         <ConditionalTooltip
             content="Select one or more samples to drop in"
             shouldRender={!hasSamples && value.isEmpty()}>
             <Card
+                {...activeProps}
                 border={true}
+                borderColor={isPlaying ? colors.blue200 : undefined}
                 cursor={hasSamples ? "pointer" : "not-allowed"}
                 height={majorScale(12)}
                 hoverElevation={1}
