@@ -5,9 +5,11 @@ import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
+import { InstrumentRecord } from "models/instrument-record";
 
 interface PianoRollDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     file?: FileRecord;
+    instrument?: InstrumentRecord;
     onChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
     trackSection: TrackSectionRecord;
@@ -18,6 +20,7 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
     props: PianoRollDialogProps
 ) => {
     const {
+        instrument,
         file,
         onChange,
         onStepCountChange,
@@ -53,6 +56,7 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
             title="Piano Roll">
             <PianoRoll
                 file={file}
+                instrument={instrument}
                 onChange={setTrackSectionSteps}
                 onStepCountChange={setStepCount}
                 stepCount={stepCount}

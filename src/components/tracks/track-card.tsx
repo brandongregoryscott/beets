@@ -240,6 +240,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}>
                                         <TrackSectionList
+                                            instrument={instrument}
                                             instrumentFile={instrumentFile}
                                             onChange={updateTrackSection}
                                             track={track}

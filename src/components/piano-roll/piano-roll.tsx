@@ -14,15 +14,22 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useMemo, useState } from "react";
 import { toInstrumentMap } from "utils/file-utils";
 import { toInstrumentStepTypes } from "utils/track-section-step-utils";
-import { Instrument, Track, Song } from "@brandongregoryscott/reactronica";
+import {
+    Instrument,
+    Track,
+    Song,
+    MidiNote,
+} from "@brandongregoryscott/reactronica";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { PlayButton } from "components/workstation/play-button";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { MidiNotes } from "constants/midi-notes";
+import { InstrumentRecord } from "models/instrument-record";
 
 interface PianoRollProps {
     file?: FileRecord;
+    instrument?: InstrumentRecord;
     onChange: (value: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
     stepCount: number;
@@ -36,6 +43,7 @@ const indexRange = 12; // Chromatic scale
 
 const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
     const {
+        instrument,
         file,
         onChange,
         onStepCountChange,
@@ -43,8 +51,11 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
         trackSection,
         trackSectionSteps,
     } = props;
-    const [viewableIndex, setViewableIndex] =
-        useState<number>(defaultNoteIndex);
+    const [viewableIndex, setViewableIndex] = useState<number>(
+        instrument?.root_note != null
+            ? MidiNotes.indexOf(instrument.root_note as MidiNote)
+            : defaultNoteIndex
+    );
     const {
         state: reactronicaState,
         onStepPlay,

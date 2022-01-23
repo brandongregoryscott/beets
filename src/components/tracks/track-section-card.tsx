@@ -30,9 +30,11 @@ import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { getStepColor } from "utils/theme-utils";
 import { css, hover, select } from "glamor";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
+import { InstrumentRecord } from "models/instrument-record";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
+    instrument?: InstrumentRecord;
     isFirst?: boolean;
     isLast?: boolean;
     onChange: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
@@ -60,6 +62,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     ] = useDialog();
 
     const {
+        instrument,
         file,
         isFirst = false,
         isLast = false,
@@ -254,6 +257,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     {pianoRollDialogOpen && (
                         <PianoRollDialog
                             file={file}
+                            instrument={instrument}
                             onChange={handleTrackSectionStepsChange}
                             onCloseComplete={handleClosePianoRollDialog}
                             onStepCountChange={handleStepCountChange}
