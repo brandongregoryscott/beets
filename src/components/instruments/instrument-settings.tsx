@@ -13,6 +13,7 @@ import {
     Track,
     Instrument as ReactronicaInstrument,
     MidiNote,
+    StepType,
 } from "@brandongregoryscott/reactronica";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
@@ -31,6 +32,7 @@ import { MidiNoteUtils } from "utils/midi-note-utils";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
 import { DialogFooter } from "components/dialog-footer";
+import { initializeList } from "utils/collection-utils";
 
 interface InstrumentSettingsProps {
     instrument?: InstrumentRecord;
@@ -190,11 +192,24 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     const error = createError ?? deleteError;
     const isLoading = isCreating || isDeleting;
 
-    const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
+    const {
+        value: isPlaying,
+        toggle: toggleIsPlaying,
+        setFalse: stopPlaying,
+    } = useBoolean();
     const { value: isLoadingSamples, setFalse: handleSamplesLoaded } =
         useBoolean(true);
 
     const samples = useMemo(() => toInstrumentMap(file), [file]);
+    const steps = useMemo(
+        () =>
+            initializeList<StepType | null>(3, null)
+                .insert(0, rootNote)
+                .toArray(),
+        [rootNote]
+    );
+
+    useEffect(() => stopPlaying(), [steps, stopPlaying]);
 
     return (
         <React.Fragment>
@@ -260,7 +275,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     width="100%"
                 />
                 <Song bpm={80} isPlaying={isPlaying}>
-                    <Track subdivision="8n">
+                    <Track steps={steps} subdivision="8n">
                         <ReactronicaInstrument
                             onLoad={handleSamplesLoaded}
                             samples={samples}
