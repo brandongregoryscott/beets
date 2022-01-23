@@ -1,47 +1,24 @@
-import {
-    Song,
-    Track,
-    Instrument as ReactronicaInstrument,
-    MidiNote,
-} from "@brandongregoryscott/reactronica";
-import { ConfirmButton } from "components/confirm-button";
-import { ErrorAlert } from "components/error-alert";
-import { FileSelectMenu } from "components/file-select-menu";
+import { MidiNote } from "@brandongregoryscott/reactronica";
 import { FormDialog } from "components/forms/form-dialog";
-import { FormField } from "components/forms/form-field";
 import { InstrumentsTable } from "components/instruments/instruments-table";
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
-import { PlayButton } from "components/workstation/play-button";
 import { ValueRequiredState } from "constants/validation-states";
-import {
-    Button,
-    DialogProps,
-    majorScale,
-    Tab,
-    Tablist,
-    TextInputField,
-    toaster,
-    TrashIcon,
-} from "evergreen-ui";
+import { DialogProps, majorScale, Tab, Tablist, toaster } from "evergreen-ui";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
 import { useDeleteInstrument } from "generated/hooks/domain/instruments/use-delete-instrument";
 import { Instrument } from "generated/interfaces/instrument";
 import { ValidationState } from "interfaces/validation-state";
-import { capitalize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
-import { getFileById, toInstrumentMap } from "utils/file-utils";
+import { getFileById } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useBoolean } from "utils/hooks/use-boolean";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
-import { enumToSelectMenuItems } from "utils/select-menu-utils";
 import { MidiNoteUtils } from "utils/midi-note-utils";
-import { NoteSelectMenu } from "components/note-select-menu";
+import { InstrumentSettings } from "components/instruments/instrument-settings";
 
 interface InstrumentSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
@@ -55,10 +32,7 @@ enum DialogTab {
     CreateInstrument = "Create Instrument",
 }
 
-const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
-    enumToSelectMenuItems(InstrumentCurve);
-
-const tabs = Object.values(DialogTab);
+const tabs = [DialogTab.CreateInstrument, DialogTab.ChooseInstrument];
 
 const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
     props: InstrumentSettingsDialogProps
@@ -121,16 +95,12 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         min: 0,
         max: 1,
     });
-    const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
-    const { value: isLoadingSamples, setFalse: handleSamplesLoaded } =
-        useBoolean(true);
     const [fileValidation, setFileValidation] = useState<
         ValidationState | undefined
     >();
     const [file, setFile] = useState<FileRecord | undefined>(
         getFileById(initialInstrument?.file_id, files)
     );
-    const samples = useMemo(() => toInstrumentMap(file), [file]);
     const [curve, setCurve] = useState<InstrumentCurve>(
         InstrumentCurve.Exponential
     );
@@ -282,95 +252,26 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                 />
             )}
             {selectedTab === DialogTab.CreateInstrument && (
-                <React.Fragment>
-                    <TextInputField
-                        {...nameValidation}
-                        label="Name"
-                        onChange={onNameChange}
-                        value={name}
-                    />
-                    <TextInputField
-                        {...releaseValidation}
-                        label="Release"
-                        onChange={onReleaseChange}
-                        value={releaseDisplayValue}
-                    />
-                    <FormField label="Root Note">
-                        <NoteSelectMenu
-                            onDeselect={setRootNote}
-                            onSelect={setRootNote}
-                            selected={rootNote}>
-                            <Button type="button" width="100%">
-                                {rootNote}
-                            </Button>
-                        </NoteSelectMenu>
-                    </FormField>
-                    <FormField label="Curve">
-                        <SelectMenu
-                            calculateHeight={true}
-                            hasFilter={false}
-                            hasTitle={false}
-                            onValueDeselect={setCurve}
-                            onValueSelect={setCurve}
-                            options={curveOptions}
-                            selected={curve}>
-                            <Button type="button" width="100%">
-                                {capitalize(curve)}
-                            </Button>
-                        </SelectMenu>
-                    </FormField>
-                    <FormField label="Sample" {...fileValidation}>
-                        <FileSelectMenu
-                            hasTitle={false}
-                            onDeselect={handleFileSelected}
-                            onSelect={handleFileSelected}
-                            selected={file}>
-                            <Button
-                                intent={
-                                    fileValidation?.isInvalid
-                                        ? "danger"
-                                        : undefined
-                                }
-                                type="button"
-                                width="100%">
-                                {file?.name ?? "No sample selected"}
-                            </Button>
-                        </FileSelectMenu>
-                    </FormField>
-                    <FormField label="Preview">
-                        <PlayButton
-                            disabled={file == null}
-                            isLoading={file != null && isLoadingSamples}
-                            isPlaying={isPlaying}
-                            toggleIsPlaying={toggleIsPlaying}
-                            type="button"
-                            width="100%"
-                        />
-                        <Song bpm={80} isPlaying={isPlaying}>
-                            <Track subdivision="8n">
-                                <ReactronicaInstrument
-                                    onLoad={handleSamplesLoaded}
-                                    samples={samples}
-                                    type="sampler"
-                                />
-                            </Track>
-                        </Song>
-                    </FormField>
-                    {initialInstrument?.isPersisted() && (
-                        <ConfirmButton
-                            alertDescription="Click Delete Instrument again to confirm this action."
-                            alertTitle="This will permanently delete your instrument and all of its tracks."
-                            iconBefore={TrashIcon}
-                            intent="danger"
-                            isLoading={isDeleting}
-                            onClick={handleDeleteClick}
-                            onConfirm={handleDeleteConfirm}
-                            width="100%">
-                            Delete Instrument
-                        </ConfirmButton>
-                    )}
-                    <ErrorAlert error={error} />
-                </React.Fragment>
+                <InstrumentSettings
+                    curve={curve}
+                    error={error}
+                    file={file}
+                    fileValidation={fileValidation}
+                    instrument={initialInstrument}
+                    isDeleting={isDeleting}
+                    name={name}
+                    nameValidation={nameValidation}
+                    onCurveChange={setCurve}
+                    onDeleteClick={handleDeleteClick}
+                    onDeleteConfirm={handleDeleteConfirm}
+                    onFileChange={handleFileSelected}
+                    onNameChange={onNameChange}
+                    onReleaseChange={onReleaseChange}
+                    onRootNoteChange={setRootNote}
+                    releaseDisplayValue={releaseDisplayValue}
+                    releaseValidation={releaseValidation}
+                    rootNote={rootNote}
+                />
             )}
         </FormDialog>
     );
