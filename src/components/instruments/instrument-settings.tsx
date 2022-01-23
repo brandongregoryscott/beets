@@ -141,6 +141,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             name,
             release,
             file_id: file?.id,
+            root_note: rootNote,
         };
 
         const instrument =
@@ -157,6 +158,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         nameValidation,
         release,
         releaseValidation,
+        rootNote,
         setFileValidation,
         setNameValidation,
     ]);
@@ -268,6 +270,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     iconBefore={TrashIcon}
                     intent="danger"
                     isLoading={isDeleting}
+                    onClick={handleDeleteClick}
                     onConfirm={handleDeleteConfirm}
                     width="100%">
                     Delete Instrument
