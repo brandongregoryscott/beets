@@ -1,7 +1,7 @@
 import { Form, FormProps } from "components/forms/form";
-import { Button, majorScale, Pane } from "evergreen-ui";
 import React, { useCallback } from "react";
 import { Dialog, DialogProps } from "components/dialog";
+import { DialogFooter } from "components/dialog-footer";
 
 interface FormDialogProps
     extends Omit<DialogProps, "onConfirm">,
@@ -48,34 +48,18 @@ const FormDialog: React.FC<FormDialogProps> = (props: FormDialogProps) => {
             {({ close }) => (
                 <Form onSubmit={handleFormSubmit(close)}>
                     {children}
-                    <Pane
-                        display="flex"
-                        justifyContent="flex-end"
-                        paddingBottom={majorScale(4)}
-                        paddingTop={majorScale(3)}>
-                        {hasFooter && (
-                            <React.Fragment>
-                                {hasCancel && (
-                                    <Button
-                                        onClick={handleCancel(close)}
-                                        tabIndex={0}
-                                        type="button">
-                                        {cancelLabel}
-                                    </Button>
-                                )}
-                                <Button
-                                    appearance="primary"
-                                    disabled={isConfirmDisabled}
-                                    intent={intent}
-                                    isLoading={isConfirmLoading}
-                                    marginLeft={majorScale(1)}
-                                    onClick={handleSubmit(close)}
-                                    tabIndex={0}>
-                                    {confirmLabel}
-                                </Button>
-                            </React.Fragment>
-                        )}
-                    </Pane>
+                    {hasFooter && (
+                        <DialogFooter
+                            cancelLabel={cancelLabel}
+                            confirmLabel={confirmLabel}
+                            hasCancel={hasCancel}
+                            intent={intent}
+                            isConfirmDisabled={isConfirmDisabled}
+                            isConfirmLoading={isConfirmLoading}
+                            onCancel={handleCancel(close)}
+                            onConfirm={handleSubmit(close)}
+                        />
+                    )}
                 </Form>
             )}
         </Dialog>

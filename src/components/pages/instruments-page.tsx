@@ -1,4 +1,4 @@
-import { InstrumentSettingsDialog } from "components/instruments/instrument-settings-dialog";
+import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import { InstrumentsTable } from "components/instruments/instruments-table";
 import {
     Pane,
@@ -38,7 +38,7 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                         selected={instrument}
                     />
                     {instrument != null && (
-                        <InstrumentSettingsDialog
+                        <ChooseOrCreateInstrumentDialog
                             instrument={instrument}
                             isShown={true}
                             onCloseComplete={handleCloseDialog}

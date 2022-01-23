@@ -17,7 +17,7 @@ import { useListWorkstations } from "utils/hooks/use-list-workstations";
 import { RouteProps } from "interfaces/route-props";
 import { useCurrentUser } from "utils/hooks/use-current-user";
 import { useTimeoutWhen } from "rooks";
-import { InstrumentSettingsDialog } from "components/instruments/instrument-settings-dialog";
+import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import React from "react";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { TrackRecord } from "models/track-record";
@@ -198,7 +198,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                         </SelectMenu>
                     </Pane>
                     {instrumentDialogOpen && (
-                        <InstrumentSettingsDialog
+                        <ChooseOrCreateInstrumentDialog
                             isShown={true}
                             onCloseComplete={handleCloseInstrumentDialog}
                             onSubmit={handleInstrumentSubmit}

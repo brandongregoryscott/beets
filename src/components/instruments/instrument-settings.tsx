@@ -5,9 +5,9 @@ import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
-import { Button, TextInputField, TrashIcon } from "evergreen-ui";
+import { Button, TextInputField, toaster, TrashIcon } from "evergreen-ui";
 import { capitalize } from "lodash";
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Song,
     Track,
@@ -16,32 +16,26 @@ import {
 } from "@brandongregoryscott/reactronica";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
-import { SetStateAction } from "jotai";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
 import { FileRecord } from "models/file-record";
-import { toInstrumentMap } from "utils/file-utils";
+import { getFileById, toInstrumentMap } from "utils/file-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
+import { ValueRequiredState } from "constants/validation-states";
+import { useListFiles } from "generated/hooks/domain/files/use-list-files";
+import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
+import { useDeleteInstrument } from "generated/hooks/domain/instruments/use-delete-instrument";
+import { isNilOrEmpty } from "utils/core-utils";
+import { useNumberInput } from "utils/hooks/use-number-input";
+import { MidiNoteUtils } from "utils/midi-note-utils";
+import { useInput } from "utils/hooks/use-input";
+import { Instrument } from "generated/interfaces/instrument";
+import { DialogFooter } from "components/dialog-footer";
 
 interface InstrumentSettingsProps {
-    curve: InstrumentCurve;
-    error?: Error | null;
-    file?: FileRecord;
-    fileValidation?: ValidationState;
     instrument?: InstrumentRecord;
-    isDeleting?: boolean;
-    name?: string;
-    nameValidation?: ValidationState;
-    onCurveChange: (update: SetStateAction<InstrumentCurve>) => void;
-    onDeleteClick: () => void;
-    onDeleteConfirm: () => void;
-    onFileChange?: (file: FileRecord) => void;
-    onNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onReleaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onRootNoteChange: (update: SetStateAction<MidiNote>) => void;
-    releaseDisplayValue?: string;
-    releaseValidation?: ValidationState;
-    rootNote: MidiNote;
+    onCreateOrUpdate?: (instrument: InstrumentRecord) => void;
+    onDelete?: () => void;
 }
 
 const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
@@ -50,26 +44,144 @@ const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
 const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     props: InstrumentSettingsProps
 ) => {
+    const { instrument: initialInstrument, onCreateOrUpdate, onDelete } = props;
+
     const {
-        instrument: initialInstrument,
-        nameValidation,
-        name,
-        onNameChange,
-        releaseDisplayValue,
-        onReleaseChange,
-        releaseValidation,
-        rootNote,
-        onRootNoteChange,
+        error: createError,
+        mutate: createOrUpdateInstrument,
+        isLoading: isCreating,
+    } = useCreateOrUpdateInstrument({
+        onSuccess: (instrument: InstrumentRecord) => {
+            const isUpdate = initialInstrument?.isPersisted() ?? false;
+            toaster.success(
+                `Instrument '${instrument.name}' successfully ${
+                    isUpdate ? "updated" : "created"
+                }!`
+            );
+            onCreateOrUpdate?.(instrument);
+        },
+    });
+    const {
+        error: deleteError,
+        mutate: deleteInstrument,
+        isLoading: isDeleting,
+    } = useDeleteInstrument({
+        onSuccess: () => {
+            toaster.success("Instrument successfully deleted.");
+            onDelete?.();
+        },
+    });
+
+    const { resultObject: files } = useListFiles();
+
+    const {
+        value: name,
+        onChange: onNameChange,
+        setValidation: setNameValidation,
+        ...nameValidation
+    } = useInput({
+        initialValue: initialInstrument?.name,
+    });
+    const {
+        displayValue: releaseDisplayValue,
+        value: release,
+        onChange: onReleaseChange,
+        ...releaseValidation
+    } = useNumberInput({
+        initialValue:
+            initialInstrument?.release ??
+            InstrumentRecord.defaultValues.release,
+        allowFloating: true,
+        min: 0,
+        max: 1,
+    });
+    const [fileValidation, setFileValidation] = useState<
+        ValidationState | undefined
+    >();
+    const [file, setFile] = useState<FileRecord | undefined>(
+        getFileById(initialInstrument?.file_id, files)
+    );
+    const [curve, setCurve] = useState<InstrumentCurve>(
+        InstrumentCurve.Exponential
+    );
+    const [rootNote, setRootNote] = useState<MidiNote>(
+        (initialInstrument?.root_note as MidiNote) ?? MidiNoteUtils.defaultNote
+    );
+    const { value: isAttemptingDelete, setTrue: handleDeleteClick } =
+        useBoolean();
+
+    const handleFileSelected = useCallback(
+        (file: FileRecord) => {
+            setFileValidation(undefined);
+            setFile(file);
+        },
+        [setFile, setFileValidation]
+    );
+
+    const handleSubmit = useCallback(() => {
+        if (nameValidation?.isInvalid || releaseValidation.isInvalid) {
+            return;
+        }
+
+        const hasSubmissionErrors = isNilOrEmpty(name) || file == null;
+        if (isNilOrEmpty(name)) {
+            setNameValidation(ValueRequiredState);
+        }
+
+        if (file == null) {
+            setFileValidation(ValueRequiredState);
+        }
+
+        if (hasSubmissionErrors) {
+            return;
+        }
+
+        const updatedValues: Partial<Instrument> = {
+            curve,
+            name,
+            release,
+            file_id: file?.id,
+        };
+
+        const instrument =
+            initialInstrument?.merge(updatedValues) ??
+            new InstrumentRecord(updatedValues);
+
+        createOrUpdateInstrument(instrument);
+    }, [
+        createOrUpdateInstrument,
         curve,
-        onCurveChange,
         file,
-        fileValidation,
-        onFileChange,
-        isDeleting,
-        onDeleteClick,
-        onDeleteConfirm,
-        error,
-    } = props;
+        initialInstrument,
+        name,
+        nameValidation,
+        release,
+        releaseValidation,
+        setFileValidation,
+        setNameValidation,
+    ]);
+
+    const handleDeleteConfirm = useCallback(
+        () => deleteInstrument(initialInstrument?.id ?? ""),
+        [deleteInstrument, initialInstrument]
+    );
+
+    useEffect(() => {
+        if (file != null) {
+            return;
+        }
+
+        const foundFile = getFileById(initialInstrument?.file_id, files);
+        if (foundFile == null) {
+            return;
+        }
+
+        setFile(foundFile);
+    }, [file, files, initialInstrument?.file_id]);
+
+    const error = createError ?? deleteError;
+    const isLoading = isCreating || isDeleting;
+
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
     const { value: isLoadingSamples, setFalse: handleSamplesLoaded } =
         useBoolean(true);
@@ -92,8 +204,8 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             />
             <FormField label="Root Note">
                 <NoteSelectMenu
-                    onDeselect={onRootNoteChange}
-                    onSelect={onRootNoteChange}
+                    onDeselect={setRootNote}
+                    onSelect={setRootNote}
                     selected={rootNote}>
                     <Button type="button" width="100%">
                         {rootNote}
@@ -105,8 +217,8 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     calculateHeight={true}
                     hasFilter={false}
                     hasTitle={false}
-                    onValueDeselect={onCurveChange}
-                    onValueSelect={onCurveChange}
+                    onValueDeselect={setCurve}
+                    onValueSelect={setCurve}
                     options={curveOptions}
                     selected={curve}>
                     <Button type="button" width="100%">
@@ -117,8 +229,8 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             <FormField label="Sample" {...fileValidation}>
                 <FileSelectMenu
                     hasTitle={false}
-                    onDeselect={onFileChange}
-                    onSelect={onFileChange}
+                    onDeselect={handleFileSelected}
+                    onSelect={handleFileSelected}
                     selected={file}>
                     <Button
                         intent={
@@ -156,13 +268,17 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     iconBefore={TrashIcon}
                     intent="danger"
                     isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    onConfirm={onDeleteConfirm}
+                    onConfirm={handleDeleteConfirm}
                     width="100%">
                     Delete Instrument
                 </ConfirmButton>
             )}
             <ErrorAlert error={error} />
+            <DialogFooter
+                isConfirmDisabled={isAttemptingDelete}
+                isConfirmLoading={isLoading}
+                onConfirm={handleSubmit}
+            />
         </React.Fragment>
     );
 };
