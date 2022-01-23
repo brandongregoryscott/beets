@@ -10,21 +10,19 @@ import _ from "lodash";
 import { useCallback, useMemo } from "react";
 import { isNotNilOrEmpty } from "utils/core-utils";
 
-interface SelectMenuItem<T> extends Omit<EvergreenSelectMenuItem, "value"> {
-    id: string;
-    value: T;
-}
+type FirstParameter<TFunction extends undefined | ((...args: any[]) => any)> =
+    Parameters<NonNullable<TFunction>>[0];
 
-const defaultHeight = majorScale(31); // Value from base component
-const footerHeight = 6;
+type EvergreenSelectMenuItemRenderer = EvergreenSelectMenuProps["itemRenderer"];
 
 interface SelectMenuProps<T>
     extends Omit<
         EvergreenSelectMenuProps,
-        "onDeselect" | "onSelect" | "options" | "selected"
+        "onDeselect" | "onSelect" | "options" | "selected" | "itemRenderer"
     > {
     /** Calculate height of menu based on # of items */
     calculateHeight?: boolean;
+    itemRenderer?: (props: SelectMenuItemRendererProps<T>) => React.ReactNode;
     onDeselect?: (item: SelectMenuItem<T>) => void;
     onSelect?: (item: SelectMenuItem<T>) => void;
     onValueDeselect?: (value: T) => void;
@@ -32,6 +30,19 @@ interface SelectMenuProps<T>
     options?: Array<SelectMenuItem<T>>;
     selected?: T | T[] | List<T>;
 }
+
+interface SelectMenuItem<T> extends Omit<EvergreenSelectMenuItem, "value"> {
+    id: string;
+    value: T;
+}
+
+interface SelectMenuItemRendererProps<T>
+    extends Omit<EvergreenSelectMenuItemRenderer, "item"> {
+    item: SelectMenuItem<T>;
+}
+
+const defaultHeight = majorScale(31); // Value from base component
+const footerHeight = 6;
 
 const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     const {
@@ -41,6 +52,7 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
         isMultiSelect = false,
         options: optionValues,
         selected: selectedValues,
+        itemRenderer: typedItemRenderer,
         ...restProps
     } = props;
 
@@ -97,6 +109,27 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
         [optionValues]
     );
 
+    const wrappedItemRenderer = useCallback(
+        (props: FirstParameter<EvergreenSelectMenuItemRenderer>) => {
+            const { item, ...rest } = props;
+            const value = optionValues?.find(
+                (option) => option.id === item.value
+            );
+
+            if (value == null) {
+                return undefined;
+            }
+
+            return typedItemRenderer?.({ item: value, ...rest });
+        },
+        [optionValues, typedItemRenderer]
+    );
+
+    const itemRenderer = useMemo(
+        () => (typedItemRenderer != null ? wrappedItemRenderer : undefined),
+        [typedItemRenderer, wrappedItemRenderer]
+    );
+
     const onDeselect = handleSelect(props?.onDeselect, props?.onValueDeselect);
     const onSelect = handleSelect(props?.onSelect, props?.onValueSelect);
 
@@ -110,6 +143,7 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
                 options: optionValues ?? [],
                 hasTitle: isNotNilOrEmpty(props.title),
             })}
+            itemRenderer={itemRenderer as EvergreenSelectMenuItemRenderer}
             isMultiSelect={isMultiSelect}
             onDeselect={onDeselect}
             onSelect={onSelect}
@@ -144,5 +178,5 @@ const calculateHeightFromProps = <T,>(
     return height - footerHeight;
 };
 
-export type { SelectMenuItem, SelectMenuProps };
+export type { SelectMenuItem, SelectMenuItemRendererProps, SelectMenuProps };
 export { SelectMenu };
