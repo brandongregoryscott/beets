@@ -95,6 +95,7 @@ const ChooseOrCreateInstrumentDialog: React.FC<
             {selectedTab === DialogTab.CreateInstrument && (
                 <InstrumentSettings
                     instrument={initialInstrument}
+                    onCancel={onCloseComplete}
                     onCreateOrUpdate={handleCreateSubmit}
                     onDelete={onCloseComplete}
                 />

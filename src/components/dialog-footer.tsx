@@ -48,7 +48,10 @@ const DialogFooter: React.FC<DialogFooterProps> = (
             paddingBottom={majorScale(4)}
             paddingTop={majorScale(3)}>
             {hasCancel && (
-                <Button marginRight={majorScale(1)} onClick={handleCancel}>
+                <Button
+                    marginRight={majorScale(1)}
+                    onClick={handleCancel}
+                    type="button">
                     {cancelLabel}
                 </Button>
             )}
@@ -57,7 +60,8 @@ const DialogFooter: React.FC<DialogFooterProps> = (
                 disabled={isConfirmDisabled}
                 intent={intent}
                 isLoading={isConfirmLoading}
-                onClick={handleConfirm}>
+                onClick={handleConfirm}
+                type="button">
                 {confirmLabel}
             </Button>
         </Pane>

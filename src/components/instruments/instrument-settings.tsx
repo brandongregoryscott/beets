@@ -34,6 +34,7 @@ import { DialogFooter } from "components/dialog-footer";
 
 interface InstrumentSettingsProps {
     instrument?: InstrumentRecord;
+    onCancel?: () => void;
     onCreateOrUpdate?: (instrument: InstrumentRecord) => void;
     onDelete?: () => void;
 }
@@ -44,7 +45,12 @@ const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
 const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     props: InstrumentSettingsProps
 ) => {
-    const { instrument: initialInstrument, onCreateOrUpdate, onDelete } = props;
+    const {
+        instrument: initialInstrument,
+        onCreateOrUpdate,
+        onCancel,
+        onDelete,
+    } = props;
 
     const {
         error: createError,
@@ -280,6 +286,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             <DialogFooter
                 isConfirmDisabled={isAttemptingDelete}
                 isConfirmLoading={isLoading}
+                onCancel={onCancel}
                 onConfirm={handleSubmit}
             />
         </React.Fragment>
