@@ -1,3 +1,9 @@
+import {
+    Song,
+    Track,
+    Instrument as ReactronicaInstrument,
+    MidiNote,
+} from "@brandongregoryscott/reactronica";
 import { ConfirmButton } from "components/confirm-button";
 import { ErrorAlert } from "components/error-alert";
 import { FileSelectMenu } from "components/file-select-menu";
@@ -5,6 +11,7 @@ import { FormDialog } from "components/forms/form-dialog";
 import { FormField } from "components/forms/form-field";
 import { InstrumentsTable } from "components/instruments/instruments-table";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { PlayButton } from "components/workstation/play-button";
 import { ValueRequiredState } from "constants/validation-states";
 import {
     Button,
@@ -24,14 +31,17 @@ import { ValidationState } from "interfaces/validation-state";
 import { capitalize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
-import { getFileById } from "utils/file-utils";
+import { getFileById, toInstrumentMap } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useBoolean } from "utils/hooks/use-boolean";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useInput } from "utils/hooks/use-input";
 import { useNumberInput } from "utils/hooks/use-number-input";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
+import { MidiNoteUtils } from "utils/midi-note-utils";
+import { NoteSelectMenu } from "components/note-select-menu";
 
 interface InstrumentSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
@@ -41,8 +51,8 @@ interface InstrumentSettingsDialogProps
 }
 
 enum DialogTab {
-    CreateInstrument = "Create Instrument",
     ChooseInstrument = "Choose Instrument",
+    CreateInstrument = "Create Instrument",
 }
 
 const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
@@ -104,19 +114,28 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
         onChange: onReleaseChange,
         ...releaseValidation
     } = useNumberInput({
-        initialValue: initialInstrument?.release,
+        initialValue:
+            initialInstrument?.release ??
+            InstrumentRecord.defaultValues.release,
         allowFloating: true,
         min: 0,
         max: 1,
     });
+    const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
+    const { value: isLoadingSamples, setFalse: handleSamplesLoaded } =
+        useBoolean(true);
     const [fileValidation, setFileValidation] = useState<
         ValidationState | undefined
     >();
     const [file, setFile] = useState<FileRecord | undefined>(
         getFileById(initialInstrument?.file_id, files)
     );
+    const samples = useMemo(() => toInstrumentMap(file), [file]);
     const [curve, setCurve] = useState<InstrumentCurve>(
         InstrumentCurve.Exponential
+    );
+    const [rootNote, setRootNote] = useState<MidiNote>(
+        (initialInstrument?.root_note as MidiNote) ?? MidiNoteUtils.defaultNote
     );
     const [selectedTab, setSelectedTab] = useState<DialogTab>(
         globalState.isAuthenticated()
@@ -276,6 +295,16 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                         onChange={onReleaseChange}
                         value={releaseDisplayValue}
                     />
+                    <FormField label="Root Note">
+                        <NoteSelectMenu
+                            onDeselect={setRootNote}
+                            onSelect={setRootNote}
+                            selected={rootNote}>
+                            <Button type="button" width="100%">
+                                {rootNote}
+                            </Button>
+                        </NoteSelectMenu>
+                    </FormField>
                     <FormField label="Curve">
                         <SelectMenu
                             calculateHeight={true}
@@ -307,6 +336,25 @@ const InstrumentSettingsDialog: React.FC<InstrumentSettingsDialogProps> = (
                                 {file?.name ?? "No sample selected"}
                             </Button>
                         </FileSelectMenu>
+                    </FormField>
+                    <FormField label="Preview">
+                        <PlayButton
+                            disabled={file == null}
+                            isLoading={file != null && isLoadingSamples}
+                            isPlaying={isPlaying}
+                            toggleIsPlaying={toggleIsPlaying}
+                            type="button"
+                            width="100%"
+                        />
+                        <Song bpm={80} isPlaying={isPlaying}>
+                            <Track subdivision="8n">
+                                <ReactronicaInstrument
+                                    onLoad={handleSamplesLoaded}
+                                    samples={samples}
+                                    type="sampler"
+                                />
+                            </Track>
+                        </Song>
                     </FormField>
                     {initialInstrument?.isPersisted() && (
                         <ConfirmButton
