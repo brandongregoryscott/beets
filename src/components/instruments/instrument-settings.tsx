@@ -5,7 +5,16 @@ import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
-import { Button, TextInputField, toaster, TrashIcon } from "evergreen-ui";
+import {
+    Alert,
+    Button,
+    InlineAlert,
+    majorScale,
+    minorScale,
+    TextInputField,
+    toaster,
+    TrashIcon,
+} from "evergreen-ui";
 import { capitalize } from "lodash";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -265,7 +274,14 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     </Button>
                 </FileSelectMenu>
             </FormField>
-            <FormField label="Preview">
+            <FormField
+                label="Preview"
+                hint={
+                    <InlineAlert marginTop={majorScale(2)}>
+                        Curve and Release changes will not be reflected until
+                        saving and reopening.
+                    </InlineAlert>
+                }>
                 <PlayButton
                     disabled={file == null}
                     isLoading={file != null && isLoadingSamples}
@@ -277,6 +293,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                 <Song bpm={80} isPlaying={isPlaying}>
                     <Track steps={steps} subdivision="8n">
                         <ReactronicaInstrument
+                            options={{ curve, release }}
                             onLoad={handleSamplesLoaded}
                             samples={samples}
                             type="sampler"
