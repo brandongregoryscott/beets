@@ -15,8 +15,9 @@ interface PlayButtonProps extends Omit<IconButtonProps, "icon" | "onClick"> {
 
 const PlayButton: React.FC<PlayButtonProps> = (props: PlayButtonProps) => {
     const {
-        isLoading,
-        isPlaying,
+        disabled = false,
+        isLoading = false,
+        isPlaying = false,
         toggleIsPlaying,
         onClick,
         ...iconButtonProps
@@ -40,7 +41,7 @@ const PlayButton: React.FC<PlayButtonProps> = (props: PlayButtonProps) => {
     return (
         <IconButton
             {...iconButtonProps}
-            disabled={isLoading}
+            disabled={isLoading || disabled}
             icon={icon}
             onClick={handleClick}
         />
