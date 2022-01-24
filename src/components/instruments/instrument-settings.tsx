@@ -6,11 +6,9 @@ import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
 import {
-    Alert,
     Button,
     InlineAlert,
     majorScale,
-    minorScale,
     TextInputField,
     toaster,
     TrashIcon,
