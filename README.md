@@ -1,3 +1,4 @@
+<h1 align="center">beets</h1>
 <p align="center">
     <img src="https://raw.githubusercontent.com/brandongregoryscott/beets/main/assets/beets-hero.png" width="50%" height="50%"/>
     <br/>
