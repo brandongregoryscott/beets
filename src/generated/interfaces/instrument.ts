@@ -11,6 +11,7 @@ interface Instrument extends Auditable {
     name: string;
     release?: number;
     root_note?: string;
+    duration?: number;
 }
 
 export type { Instrument };
