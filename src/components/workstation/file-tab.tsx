@@ -13,8 +13,7 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
-import { useKeys } from "rooks";
-import { KeyCode } from "enums/key-code";
+import { useHotkeys } from "react-hotkeys-hook";
 
 interface FileTabProps {}
 
@@ -79,12 +78,6 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         onSuccess: handleSyncSuccess,
     });
 
-    useKeys([KeyCode.Alt, "s"], (event: KeyboardEvent) => {
-        event.preventDefault();
-        event.stopPropagation();
-        handleSave()();
-    });
-
     const handleNewClick = useCallback(
         (closePopover: () => void) => () => {
             if (isDirty) {
@@ -127,6 +120,15 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
             state,
             sync,
         ]
+    );
+
+    useHotkeys(
+        "cmd+s",
+        (event) => {
+            event.preventDefault();
+            handleSave()();
+        },
+        [handleSave]
     );
 
     const handleRevertToSavedClick = useCallback(

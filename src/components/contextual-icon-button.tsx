@@ -58,14 +58,14 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
         <Tooltip content={tooltipText}>
             <IconButton
                 {...dragHandleProps}
-                // Don't apply className with hover style if another element is being dragged
-                className={isOtherElementDragging ? undefined : props.className}
                 appearance="default"
                 backgroundColor={theme.colors.gray200}
-                borderRadius={false}
+                borderRadius={null}
                 borderTopRightRadius={
-                    isLastCard && isCornerButton ? minorScale(1) : false
+                    isLastCard && isCornerButton ? minorScale(1) : null
                 }
+                // Don't apply className with hover style if another element is being dragged
+                className={isOtherElementDragging ? undefined : props.className}
                 icon={icon}
                 iconSize={majorScale(2)}
                 intent={intent}

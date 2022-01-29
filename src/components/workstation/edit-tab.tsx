@@ -1,5 +1,4 @@
 import { Menu } from "components/menu/menu";
-import { KeyCode } from "enums/key-code";
 import {
     AnnotationIcon,
     Button,
@@ -9,7 +8,7 @@ import {
     SquareIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
-import { useKeys } from "rooks";
+import { useHotkeys } from "react-hotkeys-hook";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
 
 interface EditTabProps {}
@@ -25,7 +24,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         []
     );
 
-    useKeys([KeyCode.Alt, "d"], duplicateSelected);
+    useHotkeys("cmd+d", duplicateSelected, [selectedState]);
 
     return (
         <React.Fragment>
@@ -39,7 +38,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                                 closePopover,
                                 duplicateSelected
                             )}
-                            secondaryText={"⌥D" as any}>
+                            secondaryText={"⌘D" as any}>
                             Duplicate
                         </Menu.Item>
                         <Menu.Item

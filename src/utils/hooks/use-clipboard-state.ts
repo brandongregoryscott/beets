@@ -41,7 +41,6 @@ const useClipboardState = (): UseClipboardStateResult => {
     const duplicateSelected = useCallback(
         (event?: KeyboardEvent) => {
             event?.preventDefault();
-            event?.stopPropagation();
 
             if (selectedState.isEmpty()) {
                 return;
