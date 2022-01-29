@@ -17,6 +17,7 @@ import { Song as ReactronicaSong } from "@brandongregoryscott/reactronica";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
+import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 
 interface SongControlsProps {}
 
@@ -27,6 +28,7 @@ const SongControls: React.FC<SongControlsProps> = (
 ) => {
     const { children } = props;
     const { state: project, setCurrentState } = useProjectState();
+    const { onPlayToggle } = useReactronicaState();
     const { bpm, swing, volume } = project;
     const { value: isMuted, toggle: toggleIsMuted } = useBoolean(false);
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean(false);
@@ -90,6 +92,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 <PlayButton
                     isPlaying={isPlaying}
                     marginRight={marginRight}
+                    onClick={onPlayToggle}
                     toggleIsPlaying={toggleIsPlaying}
                 />
                 <IconButton
