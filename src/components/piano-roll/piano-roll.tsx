@@ -69,8 +69,13 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
     const { bpm, swing, volume } = workstationState.project;
     const samples = useMemo(() => toInstrumentMap(file), [file]);
     const steps = useMemo(
-        () => toInstrumentStepTypes(List.of(trackSection), trackSectionSteps),
-        [trackSection, trackSectionSteps]
+        () =>
+            toInstrumentStepTypes(
+                List.of(trackSection),
+                trackSectionSteps,
+                instrument
+            ),
+        [instrument, trackSection, trackSectionSteps]
     );
 
     const handleScaleDown = useCallback(

@@ -9,6 +9,7 @@ import { AuditableRecord } from "models/auditable-record";
 const defaultValues = makeDefaultValues<Instrument>({
     ...AuditableDefaultValues,
     curve: InstrumentCurve.Exponential,
+    duration: undefined,
     file_id: undefined,
     name: undefined,
     release: 0.1,

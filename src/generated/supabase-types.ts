@@ -151,6 +151,7 @@ export interface paths {
                     name?: parameters["rowFilter.instruments.name"];
                     release?: parameters["rowFilter.instruments.release"];
                     root_note?: parameters["rowFilter.instruments.root_note"];
+                    duration?: parameters["rowFilter.instruments.duration"];
                     /** Filtering Columns */
                     select?: parameters["select"];
                     /** Ordering */
@@ -213,6 +214,7 @@ export interface paths {
                     name?: parameters["rowFilter.instruments.name"];
                     release?: parameters["rowFilter.instruments.release"];
                     root_note?: parameters["rowFilter.instruments.root_note"];
+                    duration?: parameters["rowFilter.instruments.duration"];
                 };
                 header: {
                     /** Preference */
@@ -239,6 +241,7 @@ export interface paths {
                     name?: parameters["rowFilter.instruments.name"];
                     release?: parameters["rowFilter.instruments.release"];
                     root_note?: parameters["rowFilter.instruments.root_note"];
+                    duration?: parameters["rowFilter.instruments.duration"];
                 };
                 body: {
                     /** instruments */
@@ -462,125 +465,6 @@ export interface paths {
             responses: {
                 /** No Content */
                 204: never;
-            };
-        };
-    };
-    "/rpc/update_files_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_instruments_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_projects_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_track_section_steps_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_track_sections_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_tracks_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_users_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
             };
         };
     };
@@ -1052,6 +936,125 @@ export interface paths {
             };
         };
     };
+    "/rpc/update_track_sections_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_files_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_tracks_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_instruments_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_projects_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_track_section_steps_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
+    "/rpc/update_users_auditable_fields": {
+        post: {
+            parameters: {
+                body: {
+                    args: { [key: string]: unknown };
+                };
+                header: {
+                    /** Preference */
+                    Prefer?: parameters["preferParams"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: unknown;
+            };
+        };
+    };
 }
 
 export interface definitions {
@@ -1099,6 +1102,7 @@ export interface definitions {
         name: string;
         release?: number;
         root_note?: string;
+        duration?: number;
     };
     pgmigrations: {
         /**
@@ -1217,125 +1221,126 @@ export interface definitions {
 }
 
 export interface parameters {
-    /** files */
-    "body.files": definitions["files"];
-    /** instruments */
-    "body.instruments": definitions["instruments"];
-    /** pgmigrations */
-    "body.pgmigrations": definitions["pgmigrations"];
-    /** projects */
-    "body.projects": definitions["projects"];
-    /** track_section_steps */
-    "body.track_section_steps": definitions["track_section_steps"];
-    /** track_sections */
-    "body.track_sections": definitions["track_sections"];
-    /** tracks */
-    "body.tracks": definitions["tracks"];
-    /** users */
-    "body.users": definitions["users"];
-    "rowFilter.files.bucket_id": string;
-    "rowFilter.files.created_by_id": string;
-    "rowFilter.files.created_on": string;
-    "rowFilter.files.deleted_by_id": string;
-    "rowFilter.files.deleted_on": string;
-    "rowFilter.files.description": string;
-    "rowFilter.files.id": string;
-    "rowFilter.files.name": string;
-    "rowFilter.files.path": string;
-    "rowFilter.files.size": string;
-    "rowFilter.files.type": string;
-    "rowFilter.files.updated_by_id": string;
-    "rowFilter.files.updated_on": string;
-    "rowFilter.instruments.created_by_id": string;
-    "rowFilter.instruments.created_on": string;
-    "rowFilter.instruments.curve": string;
-    "rowFilter.instruments.deleted_by_id": string;
-    "rowFilter.instruments.deleted_on": string;
-    "rowFilter.instruments.file_id": string;
-    "rowFilter.instruments.id": string;
-    "rowFilter.instruments.name": string;
-    "rowFilter.instruments.release": string;
-    "rowFilter.instruments.root_note": string;
-    "rowFilter.instruments.updated_by_id": string;
-    "rowFilter.instruments.updated_on": string;
-    "rowFilter.pgmigrations.id": string;
-    "rowFilter.pgmigrations.name": string;
-    "rowFilter.pgmigrations.run_on": string;
-    "rowFilter.projects.bpm": string;
-    "rowFilter.projects.created_by_id": string;
-    "rowFilter.projects.created_on": string;
-    "rowFilter.projects.deleted_by_id": string;
-    "rowFilter.projects.deleted_on": string;
-    "rowFilter.projects.id": string;
-    "rowFilter.projects.name": string;
-    "rowFilter.projects.swing": string;
-    "rowFilter.projects.updated_by_id": string;
-    "rowFilter.projects.updated_on": string;
-    "rowFilter.projects.volume": string;
-    "rowFilter.track_section_steps.created_by_id": string;
-    "rowFilter.track_section_steps.created_on": string;
-    "rowFilter.track_section_steps.deleted_by_id": string;
-    "rowFilter.track_section_steps.deleted_on": string;
-    "rowFilter.track_section_steps.file_id": string;
-    "rowFilter.track_section_steps.id": string;
-    "rowFilter.track_section_steps.index": string;
-    "rowFilter.track_section_steps.note": string;
-    "rowFilter.track_section_steps.track_section_id": string;
-    "rowFilter.track_section_steps.updated_by_id": string;
-    "rowFilter.track_section_steps.updated_on": string;
-    "rowFilter.track_sections.created_by_id": string;
-    "rowFilter.track_sections.created_on": string;
-    "rowFilter.track_sections.deleted_by_id": string;
-    "rowFilter.track_sections.deleted_on": string;
-    "rowFilter.track_sections.id": string;
-    "rowFilter.track_sections.index": string;
-    "rowFilter.track_sections.step_count": string;
-    "rowFilter.track_sections.track_id": string;
-    "rowFilter.track_sections.updated_by_id": string;
-    "rowFilter.track_sections.updated_on": string;
-    "rowFilter.tracks.created_by_id": string;
-    "rowFilter.tracks.created_on": string;
-    "rowFilter.tracks.deleted_by_id": string;
-    "rowFilter.tracks.deleted_on": string;
-    "rowFilter.tracks.id": string;
-    "rowFilter.tracks.index": string;
-    "rowFilter.tracks.instrument_id": string;
-    "rowFilter.tracks.mute": string;
-    "rowFilter.tracks.name": string;
-    "rowFilter.tracks.pan": string;
-    "rowFilter.tracks.project_id": string;
-    "rowFilter.tracks.solo": string;
-    "rowFilter.tracks.updated_by_id": string;
-    "rowFilter.tracks.updated_on": string;
-    "rowFilter.tracks.volume": string;
-    "rowFilter.users.created_by_id": string;
-    "rowFilter.users.created_on": string;
-    "rowFilter.users.deleted_by_id": string;
-    "rowFilter.users.deleted_on": string;
-    "rowFilter.users.email": string;
-    "rowFilter.users.id": string;
-    "rowFilter.users.updated_by_id": string;
-    "rowFilter.users.updated_on": string;
-    /** Limiting and Pagination */
-    limit: string;
-    /** Limiting and Pagination */
-    offset: string;
-    /** On Conflict */
-    on_conflict: string;
-    /** Ordering */
-    order: string;
-    /** Preference */
-    preferCount: "count=none";
     /** Preference */
     preferParams: "params=single-object";
     /** Preference */
     preferReturn: "return=representation" | "return=minimal" | "return=none";
+    /** Preference */
+    preferCount: "count=none";
+    /** Filtering Columns */
+    select: string;
+    /** On Conflict */
+    on_conflict: string;
+    /** Ordering */
+    order: string;
     /** Limiting and Pagination */
     range: string;
     /** Limiting and Pagination */
     rangeUnit: string;
-    /** Filtering Columns */
-    select: string;
+    /** Limiting and Pagination */
+    offset: string;
+    /** Limiting and Pagination */
+    limit: string;
+    /** files */
+    "body.files": definitions["files"];
+    "rowFilter.files.created_on": string;
+    "rowFilter.files.created_by_id": string;
+    "rowFilter.files.deleted_on": string;
+    "rowFilter.files.deleted_by_id": string;
+    "rowFilter.files.updated_on": string;
+    "rowFilter.files.updated_by_id": string;
+    "rowFilter.files.id": string;
+    "rowFilter.files.bucket_id": string;
+    "rowFilter.files.description": string;
+    "rowFilter.files.name": string;
+    "rowFilter.files.path": string;
+    "rowFilter.files.size": string;
+    "rowFilter.files.type": string;
+    /** instruments */
+    "body.instruments": definitions["instruments"];
+    "rowFilter.instruments.created_on": string;
+    "rowFilter.instruments.created_by_id": string;
+    "rowFilter.instruments.deleted_on": string;
+    "rowFilter.instruments.deleted_by_id": string;
+    "rowFilter.instruments.updated_on": string;
+    "rowFilter.instruments.updated_by_id": string;
+    "rowFilter.instruments.id": string;
+    "rowFilter.instruments.curve": string;
+    "rowFilter.instruments.file_id": string;
+    "rowFilter.instruments.name": string;
+    "rowFilter.instruments.release": string;
+    "rowFilter.instruments.root_note": string;
+    "rowFilter.instruments.duration": string;
+    /** pgmigrations */
+    "body.pgmigrations": definitions["pgmigrations"];
+    "rowFilter.pgmigrations.id": string;
+    "rowFilter.pgmigrations.name": string;
+    "rowFilter.pgmigrations.run_on": string;
+    /** projects */
+    "body.projects": definitions["projects"];
+    "rowFilter.projects.created_on": string;
+    "rowFilter.projects.created_by_id": string;
+    "rowFilter.projects.deleted_on": string;
+    "rowFilter.projects.deleted_by_id": string;
+    "rowFilter.projects.updated_on": string;
+    "rowFilter.projects.updated_by_id": string;
+    "rowFilter.projects.id": string;
+    "rowFilter.projects.bpm": string;
+    "rowFilter.projects.name": string;
+    "rowFilter.projects.swing": string;
+    "rowFilter.projects.volume": string;
+    /** track_section_steps */
+    "body.track_section_steps": definitions["track_section_steps"];
+    "rowFilter.track_section_steps.created_on": string;
+    "rowFilter.track_section_steps.created_by_id": string;
+    "rowFilter.track_section_steps.deleted_on": string;
+    "rowFilter.track_section_steps.deleted_by_id": string;
+    "rowFilter.track_section_steps.updated_on": string;
+    "rowFilter.track_section_steps.updated_by_id": string;
+    "rowFilter.track_section_steps.id": string;
+    "rowFilter.track_section_steps.file_id": string;
+    "rowFilter.track_section_steps.index": string;
+    "rowFilter.track_section_steps.track_section_id": string;
+    "rowFilter.track_section_steps.note": string;
+    /** track_sections */
+    "body.track_sections": definitions["track_sections"];
+    "rowFilter.track_sections.created_on": string;
+    "rowFilter.track_sections.created_by_id": string;
+    "rowFilter.track_sections.deleted_on": string;
+    "rowFilter.track_sections.deleted_by_id": string;
+    "rowFilter.track_sections.updated_on": string;
+    "rowFilter.track_sections.updated_by_id": string;
+    "rowFilter.track_sections.id": string;
+    "rowFilter.track_sections.index": string;
+    "rowFilter.track_sections.step_count": string;
+    "rowFilter.track_sections.track_id": string;
+    /** tracks */
+    "body.tracks": definitions["tracks"];
+    "rowFilter.tracks.created_on": string;
+    "rowFilter.tracks.created_by_id": string;
+    "rowFilter.tracks.deleted_on": string;
+    "rowFilter.tracks.deleted_by_id": string;
+    "rowFilter.tracks.updated_on": string;
+    "rowFilter.tracks.updated_by_id": string;
+    "rowFilter.tracks.id": string;
+    "rowFilter.tracks.index": string;
+    "rowFilter.tracks.name": string;
+    "rowFilter.tracks.mute": string;
+    "rowFilter.tracks.solo": string;
+    "rowFilter.tracks.pan": string;
+    "rowFilter.tracks.project_id": string;
+    "rowFilter.tracks.volume": string;
+    "rowFilter.tracks.instrument_id": string;
+    /** users */
+    "body.users": definitions["users"];
+    "rowFilter.users.created_on": string;
+    "rowFilter.users.created_by_id": string;
+    "rowFilter.users.deleted_on": string;
+    "rowFilter.users.deleted_by_id": string;
+    "rowFilter.users.updated_on": string;
+    "rowFilter.users.updated_by_id": string;
+    "rowFilter.users.id": string;
+    "rowFilter.users.email": string;
 }
 
 export interface operations {}
