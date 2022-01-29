@@ -20,7 +20,7 @@ import {
     Track,
     Instrument as ReactronicaInstrument,
     MidiNote,
-    StepType,
+    StepNoteType,
 } from "@brandongregoryscott/reactronica";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
@@ -39,7 +39,6 @@ import { MidiNoteUtils } from "utils/midi-note-utils";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
 import { DialogFooter } from "components/dialog-footer";
-import { initializeList } from "utils/collection-utils";
 
 interface InstrumentSettingsProps {
     instrument?: InstrumentRecord;
@@ -110,6 +109,17 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         min: 0,
         max: 1,
     });
+    const {
+        displayValue: durationDisplayValue,
+        value: duration,
+        onChange: onDurationChange,
+        ...durationValidation
+    } = useNumberInput({
+        initialValue: initialInstrument?.duration,
+        allowFloating: true,
+        min: 0,
+        max: 30,
+    });
     const [fileValidation, setFileValidation] = useState<
         ValidationState | undefined
     >();
@@ -153,6 +163,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
 
         const updatedValues: Partial<Instrument> = {
             curve,
+            duration,
             name,
             release,
             file_id: file?.id,
@@ -167,6 +178,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     }, [
         createOrUpdateInstrument,
         curve,
+        duration,
         file,
         initialInstrument,
         name,
@@ -208,13 +220,16 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         useBoolean(true);
 
     const samples = useMemo(() => toInstrumentMap(file), [file]);
-    const steps = useMemo(
-        () =>
-            initializeList<StepType | null>(3, null)
-                .insert(0, rootNote)
-                .toArray(),
-        [rootNote]
+    const steps: Array<StepNoteType | null> = useMemo(
+        () => [{ name: rootNote, duration }],
+        [duration, rootNote]
     );
+
+    const handlePlay = useCallback(() => {
+        // Toggle the 'isPlaying' boolean after the duration of the sample which should reset to
+        // a 'Play' state instead of 'Pause'
+        setTimeout(stopPlaying, (duration ?? 0.5) * 1000);
+    }, [duration, stopPlaying]);
 
     useEffect(() => stopPlaying(), [steps, stopPlaying]);
 
@@ -231,6 +246,13 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                 label="Release"
                 onChange={onReleaseChange}
                 value={releaseDisplayValue}
+            />
+            <TextInputField
+                {...durationValidation}
+                hint="Value in seconds"
+                label="Duration"
+                onChange={onDurationChange}
+                value={durationDisplayValue}
             />
             <FormField label="Root Note">
                 <NoteSelectMenu
@@ -273,26 +295,27 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                 </FileSelectMenu>
             </FormField>
             <FormField
-                label="Preview"
                 hint={
                     <InlineAlert marginTop={majorScale(2)}>
                         Curve and Release changes will not be reflected until
                         saving and reopening.
                     </InlineAlert>
-                }>
+                }
+                label="Preview">
                 <PlayButton
                     disabled={file == null}
                     isLoading={file != null && isLoadingSamples}
                     isPlaying={isPlaying}
+                    onClick={handlePlay}
                     toggleIsPlaying={toggleIsPlaying}
                     type="button"
                     width="100%"
                 />
-                <Song bpm={80} isPlaying={isPlaying}>
+                <Song bpm={1} isPlaying={isPlaying}>
                     <Track steps={steps} subdivision="8n">
                         <ReactronicaInstrument
-                            options={{ curve, release }}
                             onLoad={handleSamplesLoaded}
+                            options={{ curve, release }}
                             samples={samples}
                             type="sampler"
                         />

@@ -3,9 +3,14 @@ import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { MidiNote, StepType } from "@brandongregoryscott/reactronica";
+import {
+    MidiNote,
+    StepNoteType,
+    StepType,
+} from "@brandongregoryscott/reactronica";
 import { initializeList, intersectionWith } from "utils/collection-utils";
 import { getTotalStepCount } from "utils/track-section-utils";
+import { InstrumentRecord } from "models/instrument-record";
 
 const getByTrackSection = (
     trackSection: TrackSectionRecord,
@@ -28,7 +33,8 @@ const isSelected = (
 
 const toInstrumentStepTypes = (
     trackSections: List<TrackSectionRecord>,
-    trackSectionSteps: List<TrackSectionStepRecord>
+    trackSectionSteps: List<TrackSectionStepRecord>,
+    instrument?: InstrumentRecord
 ): Array<StepType> => {
     const total = getTotalStepCount(trackSections);
     let steps = initializeList<StepType>(total, []);
@@ -49,9 +55,10 @@ const toInstrumentStepTypes = (
                 return;
             }
 
-            const midiNotes = stepsByIndex
+            const midiNotes: StepNoteType[] = stepsByIndex
                 .map((trackSectionStep) => ({
-                    name: trackSectionStep.note,
+                    name: trackSectionStep.note as MidiNote,
+                    duration: instrument?.duration,
                 }))
                 .toArray();
 

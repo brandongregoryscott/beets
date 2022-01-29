@@ -112,8 +112,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                       state.trackSectionSteps,
                       files ?? List()
                   )
-                : toInstrumentStepTypes(trackSections, state.trackSectionSteps),
-        [files, state.trackSectionSteps, track, trackSections]
+                : toInstrumentStepTypes(
+                      trackSections,
+                      state.trackSectionSteps,
+                      instrument
+                  ),
+        [files, instrument, state.trackSectionSteps, track, trackSections]
     );
 
     const contextualButtonClass = css({ visibility: "hidden" }).toString();
