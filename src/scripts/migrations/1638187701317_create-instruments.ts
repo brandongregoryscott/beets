@@ -49,7 +49,7 @@ const up = (pgm: MigrationBuilder) => {
     config.uniqueNonDeletedIndex("id").up();
 
     config.rowLevelSecurity().up();
-    config.softDeleteRule().up();
+    config.softDeleteTrigger().up();
     config.updateTrigger().up();
 
     config.authenticatedCreatePolicy().up();

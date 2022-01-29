@@ -1,6 +1,5 @@
 import { MigrationBuilder, Name } from "node-pg-migrate";
 import { AuditableColumns } from "../enums/auditable-columns";
-import { q } from "./quote";
 
 interface MigrationBuilderUtilsOptions {
     pgm: MigrationBuilder;
@@ -14,6 +13,16 @@ interface Migration {
 }
 
 const notDeleted = `${AuditableColumns.DeletedOn} is null`;
+
+const deleteTriggerSql = `
+    DECLARE
+        command text := ' SET ${AuditableColumns.DeletedOn} = current_timestamp, ${AuditableColumns.DeletedById} = auth.uid() WHERE id = $1';
+    BEGIN
+        EXECUTE 'UPDATE ' || TG_TABLE_NAME || command USING OLD.id;
+        RETURN NULL;
+    END;
+`;
+
 const updateTriggerSql = `
 
     BEGIN
@@ -32,7 +41,8 @@ const authenticatedCreatePolicy =
         const policyName = "Authenticated users can create records.";
 
         return {
-            down: () => pgm.dropPolicy(tableName, policyName),
+            down: () =>
+                pgm.dropPolicy(tableName, policyName, { ifExists: true }),
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
@@ -47,7 +57,8 @@ const deleteOwnRecordPolicy =
         const policyName = "Users can delete their own records.";
 
         return {
-            down: () => pgm.dropPolicy(tableName, policyName),
+            down: () =>
+                pgm.dropPolicy(tableName, policyName, { ifExists: true }),
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
@@ -65,7 +76,8 @@ const readAnyRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
         const policyName = "Users can read any record.";
         return {
-            down: () => pgm.dropPolicy(tableName, policyName),
+            down: () =>
+                pgm.dropPolicy(tableName, policyName, { ifExists: true }),
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
@@ -79,11 +91,12 @@ const readOwnRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
         const policyName = "Users can read their own records.";
         return {
-            down: () => pgm.dropPolicy(tableName, policyName),
+            down: () =>
+                pgm.dropPolicy(tableName, policyName, { ifExists: true }),
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
-                    using: `auth.uid() = ${AuditableColumns.CreatedById} AND ${notDeleted}`,
+                    using: `auth.uid() = ${AuditableColumns.CreatedById} AND (${notDeleted} OR ${AuditableColumns.DeletedOn} = transaction_timestamp())`,
                     command: "SELECT",
                 }),
         };
@@ -100,16 +113,27 @@ const rowLevelSecurity =
         };
     };
 
-const softDeleteRule =
+const softDeleteTrigger =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
-        const ruleName = q("SOFT DELETE");
+        const triggerName = `soft_delete_${tableName}`;
         return {
-            down: () =>
-                pgm.sql(`DROP RULE IF EXISTS ${ruleName} ON ${tableName}`),
-            policyOrRuleName: ruleName,
+            down: () => {
+                pgm.dropTrigger(tableName, triggerName);
+                pgm.dropFunction(triggerName, []);
+            },
+            policyOrRuleName: triggerName,
             up: () =>
-                pgm.sql(
-                    `CREATE OR REPLACE RULE ${ruleName} AS ON DELETE TO ${tableName} DO INSTEAD UPDATE ${tableName} SET ${AuditableColumns.DeletedOn} = current_timestamp, ${AuditableColumns.DeletedById} = auth.uid() WHERE ${tableName}.id = old.id RETURNING *`
+                pgm.createTrigger(
+                    tableName,
+                    triggerName,
+                    {
+                        when: "BEFORE",
+                        operation: "DELETE",
+                        level: "ROW",
+                        language: "plpgsql",
+                        replace: true,
+                    },
+                    deleteTriggerSql
                 ),
         };
     };
@@ -143,7 +167,8 @@ const updateOwnRecordPolicy =
     (pgm: MigrationBuilder, tableName: Name) => (): Migration => {
         const policyName = "Users can update their own records.";
         return {
-            down: () => pgm.dropPolicy(tableName, policyName),
+            down: () =>
+                pgm.dropPolicy(tableName, policyName, { ifExists: true }),
             policyOrRuleName: policyName,
             up: () =>
                 pgm.createPolicy(tableName, policyName, {
@@ -187,24 +212,14 @@ const uniqueNonDeletedIndex =
 
 const configure = (options: MigrationBuilderUtilsOptions) => {
     const { pgm, tableName } = options;
-    const _softDeleteRule = softDeleteRule(pgm, tableName);
     return {
         authenticatedCreatePolicy: authenticatedCreatePolicy(pgm, tableName),
         deleteOwnRecordPolicy: deleteOwnRecordPolicy(pgm, tableName),
         dropColumnIfExists: dropColumnIfExists(pgm, tableName),
         readAnyRecordPolicy: readAnyRecordPolicy(pgm, tableName),
         readOwnRecordPolicy: readOwnRecordPolicy(pgm, tableName),
-        /**
-         * Used to drop and recreate rules when columns are added or changed
-         * https://www.postgresql.org/message-id/16661-01a98a6c58c8054a%40postgresql.org
-         */
-        recreateRules: (callback: () => void) => {
-            _softDeleteRule().down();
-            callback();
-            _softDeleteRule().up();
-        },
         rowLevelSecurity: rowLevelSecurity(pgm, tableName),
-        softDeleteRule: _softDeleteRule,
+        softDeleteTrigger: softDeleteTrigger(pgm, tableName),
         updateOwnRecordPolicy: updateOwnRecordPolicy(pgm, tableName),
         updateTrigger: updateTrigger(pgm, tableName),
         uniqueNonDeletedIndex: uniqueNonDeletedIndex(pgm, tableName),
