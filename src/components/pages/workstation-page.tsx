@@ -85,8 +85,8 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         if (
             isLoadingFiles ||
             isLoadingWorkstations ||
-            project.isPersisted() ||
-            project.isDemo()
+            (project.isPersisted() && user != null) ||
+            (project.isDemo() && user == null)
         ) {
             return;
         }
