@@ -31,7 +31,7 @@ import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { TrackSectionList } from "components/tracks/track-section-list";
+import { TrackSectionList } from "components/tracks/track-section-list/track-section-list";
 import { useDraggable } from "utils/hooks/use-draggable";
 import { ContextualIconButton } from "components/contextual-icon-button";
 import { css, select } from "glamor";

@@ -1,6 +1,6 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import { TrackCardProps } from "components/tracks/track-card/track-card";
-import { TrackSectionList } from "components/tracks/track-section-list";
+import { TrackSectionList } from "components/tracks/track-section-list/track-section-list";
 import {
     Card,
     IconButton,
