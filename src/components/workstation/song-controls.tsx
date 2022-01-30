@@ -12,7 +12,6 @@ import {
     Heading,
 } from "evergreen-ui";
 import { ChangeEvent, PropsWithChildren, useCallback } from "react";
-import { useBoolean } from "utils/hooks/use-boolean";
 import { Reactronica } from "lib/reactronica";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
@@ -28,10 +27,10 @@ const SongControls: React.FC<SongControlsProps> = (
 ) => {
     const { children } = props;
     const { state: project, setCurrentState } = useProjectState();
-    const { onPlayToggle } = useReactronicaState();
+    const { onPlayToggle, setIsPlaying, setIsMuted, state } =
+        useReactronicaState();
+    const { isMuted, isPlaying } = state;
     const { bpm, swing, volume } = project;
-    const { value: isMuted, toggle: toggleIsMuted } = useBoolean(false);
-    const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean(false);
 
     const handleNumberChange = useCallback(
         (min: number, max: number, setState: (value: number) => void) =>
@@ -55,6 +54,16 @@ const SongControls: React.FC<SongControlsProps> = (
                 setState(value);
             },
         []
+    );
+
+    const toggleIsPlaying = useCallback(
+        () => setIsPlaying((prev) => !prev),
+        [setIsPlaying]
+    );
+
+    const toggleIsMuted = useCallback(
+        () => setIsMuted((prev) => !prev),
+        [setIsMuted]
     );
 
     const setBpm = useCallback(
