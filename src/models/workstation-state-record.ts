@@ -45,6 +45,8 @@ class WorkstationStateRecord
     extends BaseRecord(Record(defaultValues))
     implements WorkstationState
 {
+    public static demoId: string = demoId;
+
     public static demo(files?: List<FileRecord>): WorkstationStateRecord {
         const instruments = buildDemoInstruments(files);
         const wavyPad = instruments.find(
@@ -248,7 +250,7 @@ class WorkstationStateRecord
     }
 
     public isDemo(): boolean {
-        return this.project.id.includes(demoId);
+        return this.project.isDemo();
     }
 }
 

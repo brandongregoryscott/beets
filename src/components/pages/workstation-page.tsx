@@ -82,7 +82,12 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     );
 
     useEffect(() => {
-        if (isLoadingFiles || isLoadingWorkstations) {
+        if (
+            isLoadingFiles ||
+            isLoadingWorkstations ||
+            project.isPersisted() ||
+            project.isDemo()
+        ) {
             return;
         }
 
@@ -105,6 +110,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         files,
         isLoadingFiles,
         isLoadingWorkstations,
+        project,
         setState,
         user,
         workstations,

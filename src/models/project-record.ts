@@ -5,6 +5,7 @@ import { AuditableRecord } from "models/auditable-record";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { RecordParams } from "types/record-params";
 import { generateId } from "utils/id-utils";
+import { WorkstationStateRecord } from "models/workstation-state-record";
 
 const defaultValues = makeDefaultValues<Project>({
     ...AuditableDefaultValues,
@@ -30,6 +31,10 @@ class ProjectRecord
         }
 
         super(values);
+    }
+
+    public isDemo(): boolean {
+        return this.id.includes(WorkstationStateRecord.demoId);
     }
 }
 
