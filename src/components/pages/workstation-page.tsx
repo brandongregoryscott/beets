@@ -157,10 +157,14 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderSpinner && <Spinner />}
             {renderControls && (
                 <React.Fragment>
-                    <SongControls />
-                    {isPlaying && <PlayingTrackList tracks={tracks} />}
+                    {isPlaying && (
+                        <SongControls>
+                            <PlayingTrackList tracks={tracks} />
+                        </SongControls>
+                    )}
                     {!isPlaying && (
                         <React.Fragment>
+                            <SongControls />
                             <DraggableTrackList tracks={tracks} />
                             <Pane
                                 display="flex"

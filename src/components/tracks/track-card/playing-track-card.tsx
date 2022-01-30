@@ -1,6 +1,6 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import { TrackCardProps } from "components/tracks/track-card/track-card";
-import { TrackSectionList } from "components/tracks/track-section-list/track-section-list";
+import { PlayingTrackSectionList } from "components/tracks/track-section-list/playing-track-section-list";
 import {
     Card,
     IconButton,
@@ -155,7 +155,7 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
                     display="flex"
                     flexDirection="row"
                     margin={-2}>
-                    <TrackSectionList
+                    <PlayingTrackSectionList
                         instrument={instrument}
                         instrumentFile={instrumentFile}
                         onChange={updateTrackSection}
