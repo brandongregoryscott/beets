@@ -9,7 +9,7 @@ import {
     Tooltip,
 } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
@@ -27,6 +27,9 @@ import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
+import { SongComposition } from "components/song-composition/song-composition";
+import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { List } from "immutable";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -59,10 +62,16 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         handleCloseInstrumentDialog,
     ] = useDialog();
     const { globalState } = useGlobalState();
-    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { resultObject: files = List(), isLoading: isLoadingFiles } =
+        useListFiles();
+    const { resultObject: instrumentsArray, isLoading: isLoadingInstruments } =
+        useListInstruments();
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
-
+    const instruments = useMemo(
+        () => List(instrumentsArray ?? []),
+        [instrumentsArray]
+    );
     // Unfortunate hack to prevent infinite loading issue for initial render when a staleTime
     // is set: https://github.com/tannerlinsley/react-query/issues/1657
     const [hookTimedOut, setHookTimedOut] = useState(false);
@@ -147,7 +156,8 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         [add, project, tracks]
     );
 
-    const renderSpinner = isLoadingFiles || isLoadingWorkstations;
+    const renderSpinner =
+        isLoadingFiles || isLoadingWorkstations || isLoadingInstruments;
     const renderControls = !renderSpinner;
     return (
         <Pane
@@ -157,14 +167,10 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderSpinner && <Spinner />}
             {renderControls && (
                 <React.Fragment>
-                    {isPlaying && (
-                        <SongControls>
-                            <PlayingTrackList tracks={tracks} />
-                        </SongControls>
-                    )}
+                    <SongControls />
+                    {isPlaying && <PlayingTrackList tracks={tracks} />}
                     {!isPlaying && (
                         <React.Fragment>
-                            <SongControls />
                             <DraggableTrackList tracks={tracks} />
                             <Pane
                                 display="flex"
@@ -201,6 +207,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                     )}
                 </React.Fragment>
             )}
+            <SongComposition files={files} instruments={instruments} />
         </Pane>
     );
 };

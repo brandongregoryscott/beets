@@ -11,8 +11,7 @@ import {
     CaretUpIcon,
     Heading,
 } from "evergreen-ui";
-import { ChangeEvent, PropsWithChildren, useCallback } from "react";
-import { Reactronica } from "lib/reactronica";
+import { ChangeEvent, useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
@@ -23,9 +22,8 @@ interface SongControlsProps {}
 const marginRight = minorScale(2);
 
 const SongControls: React.FC<SongControlsProps> = (
-    props: PropsWithChildren<SongControlsProps>
+    props: SongControlsProps
 ) => {
-    const { children } = props;
     const { state: project, setCurrentState } = useProjectState();
     const { onPlayToggle, setIsPlaying, setIsMuted, state } =
         useReactronicaState();
@@ -156,14 +154,6 @@ const SongControls: React.FC<SongControlsProps> = (
                     onClick={handleIncrementVolume}
                 />
             </Pane>
-            <Reactronica.Song
-                bpm={bpm}
-                isMuted={isMuted}
-                isPlaying={isPlaying}
-                swing={swing / 100}
-                volume={volume}>
-                {children}
-            </Reactronica.Song>
         </Pane>
     );
 };

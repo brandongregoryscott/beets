@@ -1,4 +1,3 @@
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { TrackRecord } from "models/track-record";
 import { List } from "immutable";
 import React from "react";
@@ -12,16 +11,11 @@ const PlayingTrackList: React.FC<PlayingTrackListProps> = (
     props: PlayingTrackListProps
 ) => {
     const { tracks } = props;
-    const { onStepPlay } = useReactronicaState();
 
     return (
         <React.Fragment>
             {tracks?.map((track) => (
-                <PlayingTrackCard
-                    key={track.id}
-                    onStepPlay={onStepPlay}
-                    track={track}
-                />
+                <PlayingTrackCard key={track.id} track={track} />
             ))}
         </React.Fragment>
     );
