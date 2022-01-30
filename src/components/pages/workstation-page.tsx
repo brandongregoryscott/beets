@@ -178,7 +178,10 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                                         margin={-2}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}>
-                                        <TrackList tracks={tracks} />
+                                        <TrackList
+                                            isPlaying={true}
+                                            tracks={tracks}
+                                        />
                                         {provided.placeholder}
                                     </Pane>
                                 )}

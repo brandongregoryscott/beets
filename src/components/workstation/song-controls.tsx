@@ -13,7 +13,7 @@ import {
 } from "evergreen-ui";
 import { ChangeEvent, PropsWithChildren, useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { Song as ReactronicaSong } from "@brandongregoryscott/reactronica";
+import { Reactronica } from "lib/reactronica";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
@@ -147,14 +147,14 @@ const SongControls: React.FC<SongControlsProps> = (
                     onClick={handleIncrementVolume}
                 />
             </Pane>
-            <ReactronicaSong
+            <Reactronica.Song
                 bpm={bpm}
                 isMuted={isMuted}
                 isPlaying={isPlaying}
                 swing={swing / 100}
                 volume={volume}>
                 {children}
-            </ReactronicaSong>
+            </Reactronica.Song>
         </Pane>
     );
 };

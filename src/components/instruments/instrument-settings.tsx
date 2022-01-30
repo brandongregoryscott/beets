@@ -15,13 +15,7 @@ import {
 } from "evergreen-ui";
 import { capitalize } from "lodash";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-    Song,
-    Track,
-    Instrument as ReactronicaInstrument,
-    MidiNote,
-    StepNoteType,
-} from "@brandongregoryscott/reactronica";
+import { Reactronica, MidiNote, StepNoteType } from "lib/reactronica";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
@@ -311,16 +305,16 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     type="button"
                     width="100%"
                 />
-                <Song bpm={1} isPlaying={isPlaying}>
-                    <Track steps={steps} subdivision="8n">
-                        <ReactronicaInstrument
+                <Reactronica.Song bpm={1} isPlaying={isPlaying}>
+                    <Reactronica.Track steps={steps} subdivision="8n">
+                        <Reactronica.Instrument
                             onLoad={handleSamplesLoaded}
                             options={{ curve, release }}
                             samples={samples}
                             type="sampler"
                         />
-                    </Track>
-                </Song>
+                    </Reactronica.Track>
+                </Reactronica.Song>
             </FormField>
             {initialInstrument?.isPersisted() && (
                 <ConfirmButton

@@ -2,7 +2,7 @@ import { SelectMenuItem } from "components/select-menu";
 import { List, Map } from "immutable";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
-import { MidiNote } from "@brandongregoryscott/reactronica";
+import { MidiNote } from "lib/reactronica";
 import { isNilOrEmpty } from "utils/core-utils";
 
 type AnyFile = FileRecord | StorageProviderFileRecord;

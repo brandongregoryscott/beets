@@ -15,11 +15,7 @@ import {
     VolumeUpIcon,
 } from "evergreen-ui";
 import React, { useCallback, useMemo } from "react";
-import {
-    Track as ReactronicaTrack,
-    Instrument,
-    StepNoteType,
-} from "@brandongregoryscott/reactronica";
+import { Reactronica, StepNoteType } from "lib/reactronica";
 import { TrackRecord } from "models/track-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
@@ -200,14 +196,14 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                     />
                                 </Tooltip>
                             </Pane>
-                            <ReactronicaTrack
+                            <Reactronica.Track
                                 mute={mute}
                                 onStepPlay={onStepPlay}
                                 solo={solo}
                                 steps={steps}
                                 subdivision="8n">
                                 {instrument != null && (
-                                    <Instrument
+                                    <Reactronica.Instrument
                                         options={{
                                             curve: instrument.curve,
                                             release: instrument.release,
@@ -217,12 +213,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                     />
                                 )}
                                 {instrument == null && (
-                                    <Instrument
+                                    <Reactronica.Instrument
                                         samples={samples}
                                         type="sampler"
                                     />
                                 )}
-                            </ReactronicaTrack>
+                            </Reactronica.Track>
                         </Card>
                         <DragDropContext
                             onDragEnd={onDragEnd}

@@ -1,7 +1,7 @@
 import { ReactronicaState } from "interfaces/reactronica-state";
 import { SetStateAction, useAtom } from "jotai";
 import { useCallback, useMemo, useState } from "react";
-import { StepNoteType } from "@brandongregoryscott/reactronica";
+import { StepNoteType } from "lib/reactronica";
 import { ReactronicaStateAtom } from "utils/atoms/reactronica-atom";
 
 interface UseReactronicaStateOptions {

@@ -1,4 +1,4 @@
-import { StepNoteType } from "@brandongregoryscott/reactronica";
+import { StepNoteType } from "lib/reactronica";
 
 interface ReactronicaState {
     index: number;
