@@ -1,4 +1,4 @@
-import { MidiNote } from "@brandongregoryscott/reactronica";
+import { MidiNote } from "lib/reactronica";
 
 const defaultNote: MidiNote = "C4";
 

@@ -1,4 +1,4 @@
-import { TrackSectionCard } from "components/tracks/track-section-card";
+import { TrackSectionCard } from "components/tracks/track-section-card/track-section-card";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
