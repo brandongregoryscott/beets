@@ -31,12 +31,12 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
     props: PlayingTrackCardProps
 ) => {
     const { track } = props;
-    const { id, name, mute, solo, instrument_id, index } = track;
+    const { id, name, mute, solo, instrument_id } = track;
     const { colors } = useTheme();
     const { state: trackSections, update: updateTrackSection } =
         useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
-    const { update, state: tracks } = useTracksState();
+    const { update } = useTracksState();
     const { resultObject: instrument } = useGetInstrument({
         id: instrument_id!,
         enabled: isNotNilOrEmpty(instrument_id),
@@ -63,11 +63,7 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
     );
 
     return (
-        <Pane
-            marginBottom={
-                index === tracks.count() - 1 ? undefined : majorScale(1)
-            }
-            marginTop={index === 0 ? undefined : majorScale(1)}>
+        <Pane marginBottom={majorScale(2)} marginTop={majorScale(2)}>
             <Pane alignItems="center" display="flex" flexDirection="row">
                 <Card
                     alignItems="flex-start"
@@ -96,11 +92,9 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
                     </Pane>
                 </Card>
                 <Pane
-                    border={"2px dashed transparent"}
                     borderRadius={minorScale(1)}
                     display="flex"
-                    flexDirection="row"
-                    margin={-2}>
+                    flexDirection="row">
                     <PlayingTrackSectionList
                         instrument={instrument}
                         instrumentFile={instrumentFile}
