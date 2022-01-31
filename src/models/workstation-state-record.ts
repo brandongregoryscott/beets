@@ -18,6 +18,7 @@ import {
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
+import { MidiNoteUtils } from "utils/midi-note-utils";
 import { getByTrackSection } from "utils/track-section-step-utils";
 import { getByTrack } from "utils/track-section-utils";
 
@@ -44,6 +45,8 @@ class WorkstationStateRecord
     extends BaseRecord(Record(defaultValues))
     implements WorkstationState
 {
+    public static demoId: string = demoId;
+
     public static demo(files?: List<FileRecord>): WorkstationStateRecord {
         const instruments = buildDemoInstruments(files);
         const wavyPad = instruments.find(
@@ -88,7 +91,7 @@ class WorkstationStateRecord
             index: 0,
             file_id: wavyPad?.id,
             track_section_id: padTrackSection.id,
-            note: "C5",
+            note: MidiNoteUtils.defaultNote,
         });
 
         const kickSteps = [
@@ -247,7 +250,7 @@ class WorkstationStateRecord
     }
 
     public isDemo(): boolean {
-        return this.project.id.includes(demoId);
+        return this.project.isDemo();
     }
 }
 

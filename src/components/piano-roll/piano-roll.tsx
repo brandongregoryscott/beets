@@ -26,6 +26,7 @@ import { PlayButton } from "components/workstation/play-button";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { MidiNotes } from "constants/midi-notes";
 import { InstrumentRecord } from "models/instrument-record";
+import { MidiNoteUtils } from "utils/midi-note-utils";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -38,7 +39,7 @@ interface PianoRollProps {
 }
 
 const buttonMarginRight = majorScale(1);
-const defaultNoteIndex = MidiNotes.indexOf("C5");
+const defaultNoteIndex = MidiNotes.indexOf(MidiNoteUtils.defaultNote);
 const indexRange = 12; // Chromatic scale
 
 const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
