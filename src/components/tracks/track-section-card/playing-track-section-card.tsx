@@ -45,7 +45,7 @@ const PlayingTrackSectionCard: React.FC<PlayingTrackSectionCardProps> = (
     });
     const { state: reactronicaState } = useReactronicaState();
 
-    const { isSelected, onSelect } = useClipboardState();
+    const { isSelected } = useClipboardState();
 
     const { state: trackSectionSteps } = useTrackSectionStepsState({
         trackSectionId: trackSection.id,
@@ -65,7 +65,6 @@ const PlayingTrackSectionCard: React.FC<PlayingTrackSectionCardProps> = (
             display="flex"
             flexDirection="row"
             height={majorScale(10)}
-            onClick={onSelect(trackSection)}
             paddingLeft={isFirst ? majorScale(1) : undefined}
             paddingRight={isLast ? majorScale(1) : undefined}
             paddingY={majorScale(1)}>

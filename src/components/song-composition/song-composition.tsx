@@ -30,7 +30,12 @@ const SongComposition: React.FC<SongCompositionProps> = (
             swing={swing / 100}
             volume={volume}>
             {tracks.map((track) => (
-                <Track files={files} instruments={instruments} track={track} />
+                <Track
+                    files={files}
+                    instruments={instruments}
+                    key={track.id}
+                    track={track}
+                />
             ))}
         </Reactronica.Song>
     );
