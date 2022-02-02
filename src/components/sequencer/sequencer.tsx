@@ -9,7 +9,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
 import { FileSelectMenu } from "components/file-select-menu";
-import { Instrument, Track, Song } from "@brandongregoryscott/reactronica";
+import { Reactronica } from "lib/reactronica";
 import { toSequencerMap } from "utils/file-utils";
 import { toSequencerStepTypes } from "utils/track-section-step-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
@@ -128,19 +128,22 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     />
                 ))}
             </Pane>
-            <Song
+            <Reactronica.Song
                 bpm={bpm}
                 isPlaying={isPlaying}
                 swing={swing / 100}
                 volume={volume}>
-                <Track onStepPlay={onStepPlay} steps={steps} subdivision="8n">
-                    <Instrument
+                <Reactronica.Track
+                    onStepPlay={onStepPlay}
+                    steps={steps}
+                    subdivision="8n">
+                    <Reactronica.Instrument
                         onLoad={handleLoaded}
                         samples={samples}
                         type="sampler"
                     />
-                </Track>
-            </Song>
+                </Reactronica.Track>
+            </Reactronica.Song>
         </Pane>
     );
 };

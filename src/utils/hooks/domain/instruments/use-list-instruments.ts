@@ -8,6 +8,7 @@ import { useListInstruments as useGeneratedListInstruments } from "generated/hoo
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { buildDemoInstruments } from "utils/build-demo-instruments";
 import { stubUseQueryResult } from "utils/use-query-utils";
+import { useMemo } from "react";
 
 interface UseListInstrumentsOptions {
     enabled?: boolean;
@@ -21,15 +22,37 @@ interface UseListInstrumentsOptions {
 
 const useListInstruments = (
     options?: UseListInstrumentsOptions
-): UseQueryResult<InstrumentRecord[], Error> => {
+): UseQueryResult<List<InstrumentRecord>, Error> => {
     const { files } = options ?? {};
     const { globalState } = useGlobalState();
-    const result = useGeneratedListInstruments(options);
-    const demoInstruments = buildDemoInstruments(files).toArray();
+    const queryResult = useGeneratedListInstruments({
+        ...(options ?? {}),
+        enabled: globalState.isAuthenticated(),
+    });
+    const demoInstruments = useMemo(() => buildDemoInstruments(files), [files]);
 
-    return globalState.isAuthenticated()
-        ? result
-        : stubUseQueryResult(demoInstruments);
+    const authenticatedResult = useMemo(
+        () => ({
+            ...queryResult,
+            resultObject: List(queryResult.resultObject),
+        }),
+        [queryResult]
+    );
+
+    const unauthenticatedResult = useMemo(
+        () => stubUseQueryResult(demoInstruments),
+        [demoInstruments]
+    );
+
+    const result = useMemo(
+        () =>
+            globalState.isAuthenticated()
+                ? authenticatedResult
+                : unauthenticatedResult,
+        [authenticatedResult, globalState, unauthenticatedResult]
+    );
+
+    return result;
 };
 
 export { useListInstruments };

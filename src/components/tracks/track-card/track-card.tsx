@@ -15,33 +15,21 @@ import {
     VolumeUpIcon,
 } from "evergreen-ui";
 import React, { useCallback, useMemo } from "react";
-import {
-    Track as ReactronicaTrack,
-    Instrument,
-    StepNoteType,
-} from "@brandongregoryscott/reactronica";
 import { TrackRecord } from "models/track-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import {
-    toInstrumentStepTypes,
-    toSequencerStepTypes,
-} from "utils/track-section-step-utils";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { List } from "immutable";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
+import { getFileById } from "utils/file-utils";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { TrackSectionList } from "components/tracks/track-section-list";
+import { TrackSectionList } from "components/tracks/track-section-list/track-section-list";
 import { useDraggable } from "utils/hooks/use-draggable";
 import { ContextualIconButton } from "components/contextual-icon-button";
 import { css, select } from "glamor";
 
 interface TrackCardProps {
-    onStepPlay: (steps: StepNoteType[], index: number) => void;
     track: TrackRecord;
 }
 
@@ -49,9 +37,8 @@ const iconMarginRight = minorScale(2);
 const width = majorScale(21);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
-    const { onStepPlay, track } = props;
+    const { track } = props;
     const { id, name, mute, solo, instrument_id, index } = track;
-    const { state } = useWorkstationState();
     const { update, remove, state: tracks } = useTracksState();
     const {
         add: addTrackSection,
@@ -97,29 +84,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
-    const samples = useMemo(
-        () =>
-            track.isSequencer()
-                ? toSequencerMap(files)
-                : toInstrumentMap(instrumentFile),
-        [files, instrumentFile, track]
-    );
-    const steps = useMemo(
-        () =>
-            track.isSequencer()
-                ? toSequencerStepTypes(
-                      trackSections,
-                      state.trackSectionSteps,
-                      files ?? List()
-                  )
-                : toInstrumentStepTypes(
-                      trackSections,
-                      state.trackSectionSteps,
-                      instrument
-                  ),
-        [files, instrument, state.trackSectionSteps, track, trackSections]
-    );
-
     const contextualButtonClass = css({ visibility: "hidden" }).toString();
     const cardClass = css(
         select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
@@ -128,15 +92,16 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     return (
         <Pane
             marginBottom={
-                index === tracks.count() - 1 ? undefined : majorScale(1)
+                index === tracks.count() - 1 ? -majorScale(1) : undefined
             }
-            marginTop={index === 0 ? undefined : majorScale(1)}>
+            marginTop={index === 0 ? -majorScale(1) : undefined}>
             <Draggable draggableId={track.id} index={track.index}>
                 {(provided) => (
                     <Pane
                         alignItems="center"
                         display="flex"
                         flexDirection="row"
+                        marginY={majorScale(1)}
                         ref={provided.innerRef}
                         {...provided.draggableProps}>
                         <Card
@@ -200,29 +165,6 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                     />
                                 </Tooltip>
                             </Pane>
-                            <ReactronicaTrack
-                                mute={mute}
-                                onStepPlay={onStepPlay}
-                                solo={solo}
-                                steps={steps}
-                                subdivision="8n">
-                                {instrument != null && (
-                                    <Instrument
-                                        options={{
-                                            curve: instrument.curve,
-                                            release: instrument.release,
-                                        }}
-                                        samples={samples}
-                                        type="sampler"
-                                    />
-                                )}
-                                {instrument == null && (
-                                    <Instrument
-                                        samples={samples}
-                                        type="sampler"
-                                    />
-                                )}
-                            </ReactronicaTrack>
                         </Card>
                         <DragDropContext
                             onDragEnd={onDragEnd}

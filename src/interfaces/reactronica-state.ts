@@ -1,7 +1,9 @@
-import { StepNoteType } from "@brandongregoryscott/reactronica";
+import { StepNoteType } from "lib/reactronica";
 
 interface ReactronicaState {
-    index: number;
+    index?: number;
+    isMuted: boolean;
+    isPlaying: boolean;
     notes: StepNoteType[];
 }
 

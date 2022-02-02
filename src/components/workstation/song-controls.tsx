@@ -11,9 +11,7 @@ import {
     CaretUpIcon,
     Heading,
 } from "evergreen-ui";
-import { ChangeEvent, PropsWithChildren, useCallback } from "react";
-import { useBoolean } from "utils/hooks/use-boolean";
-import { Song as ReactronicaSong } from "@brandongregoryscott/reactronica";
+import { ChangeEvent, useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
@@ -24,14 +22,13 @@ interface SongControlsProps {}
 const marginRight = minorScale(2);
 
 const SongControls: React.FC<SongControlsProps> = (
-    props: PropsWithChildren<SongControlsProps>
+    props: SongControlsProps
 ) => {
-    const { children } = props;
     const { state: project, setCurrentState } = useProjectState();
-    const { onPlayToggle } = useReactronicaState();
+    const { onPlayToggle, setIsPlaying, setIsMuted, state } =
+        useReactronicaState();
+    const { isMuted, isPlaying } = state;
     const { bpm, swing, volume } = project;
-    const { value: isMuted, toggle: toggleIsMuted } = useBoolean(false);
-    const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean(false);
 
     const handleNumberChange = useCallback(
         (min: number, max: number, setState: (value: number) => void) =>
@@ -55,6 +52,16 @@ const SongControls: React.FC<SongControlsProps> = (
                 setState(value);
             },
         []
+    );
+
+    const toggleIsPlaying = useCallback(
+        () => setIsPlaying((prev) => !prev),
+        [setIsPlaying]
+    );
+
+    const toggleIsMuted = useCallback(
+        () => setIsMuted((prev) => !prev),
+        [setIsMuted]
     );
 
     const setBpm = useCallback(
@@ -147,14 +154,6 @@ const SongControls: React.FC<SongControlsProps> = (
                     onClick={handleIncrementVolume}
                 />
             </Pane>
-            <ReactronicaSong
-                bpm={bpm}
-                isMuted={isMuted}
-                isPlaying={isPlaying}
-                swing={swing / 100}
-                volume={volume}>
-                {children}
-            </ReactronicaSong>
         </Pane>
     );
 };

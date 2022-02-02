@@ -1,10 +1,9 @@
 import { SongControls } from "components/workstation/song-controls";
-import { TrackList } from "components/tracks/track-list";
+import { PlayingTrackList } from "components/tracks/track-list/playing-track-list";
 import {
     AddIcon,
     IconButton,
     majorScale,
-    minorScale,
     Pane,
     Spinner,
     Tooltip,
@@ -21,14 +20,16 @@ import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or
 import React from "react";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { TrackRecord } from "models/track-record";
-import { useTheme } from "utils/hooks/use-theme";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useDraggable } from "utils/hooks/use-draggable";
+import { useReactronicaState } from "utils/hooks/use-reactronica-state";
+import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
+import { SongComposition } from "components/song-composition/song-composition";
+import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { List } from "immutable";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -50,17 +51,23 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 ) => {
     const { user } = useCurrentUser();
     const { setState } = useWorkstationState();
+    const {
+        state: { isPlaying },
+    } = useReactronicaState();
     const { state: project } = useProjectState();
-    const { state: tracks, add, setState: setTracks } = useTracksState();
+    const { state: tracks, add } = useTracksState();
     const [
         instrumentDialogOpen,
         handleOpenInstrumentDialog,
         handleCloseInstrumentDialog,
     ] = useDialog();
-    const { onDragEnd, onDragStart } = useDraggable({ setState: setTracks });
     const { globalState } = useGlobalState();
-    const theme = useTheme();
-    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { resultObject: files = List(), isLoading: isLoadingFiles } =
+        useListFiles();
+    const {
+        resultObject: instruments = List(),
+        isLoading: isLoadingInstruments,
+    } = useListInstruments({ files });
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
 
@@ -82,7 +89,12 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     );
 
     useEffect(() => {
-        if (isLoadingFiles || isLoadingWorkstations) {
+        if (
+            isLoadingFiles ||
+            isLoadingWorkstations ||
+            (project.isPersisted() && user != null) ||
+            (project.isDemo() && user == null)
+        ) {
             return;
         }
 
@@ -105,6 +117,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         files,
         isLoadingFiles,
         isLoadingWorkstations,
+        project,
         setState,
         user,
         workstations,
@@ -142,7 +155,8 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         [add, project, tracks]
     );
 
-    const renderSpinner = isLoadingFiles || isLoadingWorkstations;
+    const renderSpinner =
+        isLoadingFiles || isLoadingWorkstations || isLoadingInstruments;
     const renderControls = !renderSpinner;
     return (
         <Pane
@@ -152,61 +166,47 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderSpinner && <Spinner />}
             {renderControls && (
                 <React.Fragment>
-                    <SongControls>
-                        <DragDropContext
-                            onDragEnd={onDragEnd}
-                            onDragStart={onDragStart}>
-                            <Droppable
-                                direction="vertical"
-                                droppableId={project.id}>
-                                {(provided, snapshot) => (
-                                    <Pane
-                                        border={`2px dashed ${
-                                            snapshot.isDraggingOver
-                                                ? theme.colors.blue300
-                                                : "transparent"
-                                        }`}
-                                        borderRadius={minorScale(1)}
-                                        display="flex"
-                                        flexDirection="column"
-                                        margin={-2}
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}>
-                                        <TrackList tracks={tracks} />
-                                        {provided.placeholder}
-                                    </Pane>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
-                    </SongControls>
-                    <Pane display="flex" flexDirection="row" marginRight="auto">
-                        <SelectMenu
-                            calculateHeight={true}
-                            closeOnSelect={true}
-                            hasFilter={false}
-                            isMultiSelect={false}
-                            onSelect={handleSelect}
-                            options={options}
-                            title="Track Type"
-                            width={majorScale(16)}>
-                            <Tooltip content="Add Track">
-                                <IconButton
-                                    icon={AddIcon}
-                                    marginTop={majorScale(2)}
+                    <SongControls />
+                    {isPlaying && <PlayingTrackList tracks={tracks} />}
+                    {!isPlaying && (
+                        <React.Fragment>
+                            <DraggableTrackList tracks={tracks} />
+                            <Pane
+                                display="flex"
+                                flexDirection="row"
+                                marginRight="auto">
+                                <SelectMenu
+                                    calculateHeight={true}
+                                    closeOnSelect={true}
+                                    hasFilter={false}
+                                    isMultiSelect={false}
+                                    onSelect={handleSelect}
+                                    options={options}
+                                    title="Track Type"
+                                    width={majorScale(16)}>
+                                    <Tooltip content="Add Track">
+                                        <IconButton
+                                            icon={AddIcon}
+                                            marginTop={majorScale(2)}
+                                        />
+                                    </Tooltip>
+                                </SelectMenu>
+                            </Pane>
+                            {instrumentDialogOpen && (
+                                <ChooseOrCreateInstrumentDialog
+                                    isShown={true}
+                                    onCloseComplete={
+                                        handleCloseInstrumentDialog
+                                    }
+                                    onSubmit={handleInstrumentSubmit}
+                                    showTabs={globalState.isAuthenticated()}
                                 />
-                            </Tooltip>
-                        </SelectMenu>
-                    </Pane>
-                    {instrumentDialogOpen && (
-                        <ChooseOrCreateInstrumentDialog
-                            isShown={true}
-                            onCloseComplete={handleCloseInstrumentDialog}
-                            onSubmit={handleInstrumentSubmit}
-                            showTabs={globalState.isAuthenticated()}
-                        />
+                            )}
+                        </React.Fragment>
                     )}
                 </React.Fragment>
             )}
+            <SongComposition files={files} instruments={instruments} />
         </Pane>
     );
 };

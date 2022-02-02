@@ -14,18 +14,14 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useMemo, useState } from "react";
 import { toInstrumentMap } from "utils/file-utils";
 import { toInstrumentStepTypes } from "utils/track-section-step-utils";
-import {
-    Instrument,
-    Track,
-    Song,
-    MidiNote,
-} from "@brandongregoryscott/reactronica";
+import { Reactronica, MidiNote } from "lib/reactronica";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { PlayButton } from "components/workstation/play-button";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { MidiNotes } from "constants/midi-notes";
 import { InstrumentRecord } from "models/instrument-record";
+import { MidiNoteUtils } from "utils/midi-note-utils";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -38,7 +34,7 @@ interface PianoRollProps {
 }
 
 const buttonMarginRight = majorScale(1);
-const defaultNoteIndex = MidiNotes.indexOf("C5");
+const defaultNoteIndex = MidiNotes.indexOf(MidiNoteUtils.defaultNote);
 const indexRange = 12; // Chromatic scale
 
 const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
@@ -131,19 +127,22 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     viewableIndex={viewableIndex}
                 />
             </Pane>
-            <Song
+            <Reactronica.Song
                 bpm={bpm}
                 isPlaying={isPlaying}
                 swing={swing / 100}
                 volume={volume}>
-                <Track onStepPlay={onStepPlay} steps={steps} subdivision="8n">
-                    <Instrument
+                <Reactronica.Track
+                    onStepPlay={onStepPlay}
+                    steps={steps}
+                    subdivision="8n">
+                    <Reactronica.Instrument
                         onLoad={handleLoaded}
                         samples={samples}
                         type="sampler"
                     />
-                </Track>
-            </Song>
+                </Reactronica.Track>
+            </Reactronica.Song>
         </React.Fragment>
     );
 };
