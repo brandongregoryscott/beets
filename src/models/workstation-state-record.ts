@@ -14,6 +14,7 @@ import { buildDemoInstruments } from "utils/build-demo-instruments";
 import {
     diffDeletedEntities,
     diffUpdatedEntities,
+    rebaseIndexes,
     sortBy,
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
@@ -141,7 +142,7 @@ class WorkstationStateRecord
 
         return new WorkstationStateRecord({
             project,
-            tracks: List.of(drumTrack, padTrack),
+            tracks: rebaseIndexes(List.of(drumTrack, padTrack)),
             trackSections: List.of(drumTrackSection, padTrackSection),
             trackSectionSteps: List.of(
                 ...kickSteps,

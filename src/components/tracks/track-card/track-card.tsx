@@ -92,15 +92,16 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     return (
         <Pane
             marginBottom={
-                index === tracks.count() - 1 ? undefined : majorScale(1)
+                index === tracks.count() - 1 ? -majorScale(1) : undefined
             }
-            marginTop={index === 0 ? undefined : majorScale(1)}>
+            marginTop={index === 0 ? -majorScale(1) : undefined}>
             <Draggable draggableId={track.id} index={track.index}>
                 {(provided) => (
                     <Pane
                         alignItems="center"
                         display="flex"
                         flexDirection="row"
+                        marginY={majorScale(1)}
                         ref={provided.innerRef}
                         {...provided.draggableProps}>
                         <Card
