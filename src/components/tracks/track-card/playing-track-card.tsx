@@ -63,7 +63,7 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
     );
 
     return (
-        <Pane marginBottom={majorScale(2)} marginTop={majorScale(2)}>
+        <Pane marginY={majorScale(2)}>
             <Pane alignItems="center" display="flex" flexDirection="row">
                 <Card
                     alignItems="flex-start"

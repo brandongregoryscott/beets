@@ -9,7 +9,7 @@ import {
     Tooltip,
 } from "evergreen-ui";
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
@@ -64,14 +64,13 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const { globalState } = useGlobalState();
     const { resultObject: files = List(), isLoading: isLoadingFiles } =
         useListFiles();
-    const { resultObject: instrumentsArray, isLoading: isLoadingInstruments } =
-        useListInstruments();
+    const {
+        resultObject: instruments = List(),
+        isLoading: isLoadingInstruments,
+    } = useListInstruments({ files });
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
-    const instruments = useMemo(
-        () => List(instrumentsArray ?? []),
-        [instrumentsArray]
-    );
+
     // Unfortunate hack to prevent infinite loading issue for initial render when a staleTime
     // is set: https://github.com/tannerlinsley/react-query/issues/1657
     const [hookTimedOut, setHookTimedOut] = useState(false);

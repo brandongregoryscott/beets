@@ -10,6 +10,7 @@ import {
     sortBy,
 } from "utils/collection-utils";
 import { isEventFromDialog } from "utils/event-utils";
+import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { generateIdMap, remapIds } from "utils/id-utils";
 
@@ -26,7 +27,12 @@ interface UseClipboardStateResult {
     setSelectedState: (update: SetStateAction<List<ClipboardItem>>) => void;
 }
 
+const IS_PLAYING_ERROR_TOAST_ID = "IS_PLAYING";
+
 const useClipboardState = (): UseClipboardStateResult => {
+    const {
+        state: { isPlaying },
+    } = useReactronicaState();
     const { state, setCurrentState: setCurrentWorkstationState } =
         useWorkstationState();
     const [selectedState, setSelectedState] = useAtom(
@@ -43,6 +49,14 @@ const useClipboardState = (): UseClipboardStateResult => {
             event?.preventDefault();
 
             if (selectedState.isEmpty()) {
+                return;
+            }
+
+            if (isPlaying) {
+                toaster.danger(
+                    "You can't duplicate Track Sections while the project is playing!",
+                    { id: IS_PLAYING_ERROR_TOAST_ID }
+                );
                 return;
             }
 
@@ -92,6 +106,7 @@ const useClipboardState = (): UseClipboardStateResult => {
         },
         [
             duplicationMessage,
+            isPlaying,
             selectedState,
             setCurrentWorkstationState,
             setSelectedState,
