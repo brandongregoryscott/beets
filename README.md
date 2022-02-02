@@ -1,6 +1,6 @@
 <h1 align="center">beets</h1>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/brandongregoryscott/beets/main/assets/beets-hero.png" width="50%" height="50%"/>
+    <img src="https://raw.githubusercontent.com/brandongregoryscott/beets/main/assets/beets-hero.png" width="70%" height="70%"/>
     <br/>
     <a href="https://app.netlify.com/sites/beets/deploys">
         <img src="https://api.netlify.com/api/v1/badges/577171ad-5dab-42f6-9f2e-8a4088452771/deploy-status">
@@ -16,8 +16,7 @@
     </a>
 </p>
 
-Web-based DAW (Digital Audio Workstation) written in React for making music. Currently in early
-states of development. This document will be updated with any noteworthy milestones.
+Web-based DAW (Digital Audio Workstation) written in React for making music.
 
 ## Quick Start
 
@@ -36,14 +35,18 @@ The app can be accessed now at [beets.studio](https://beets.studio). While no ac
 
 -   Authentication
 -   File uploads for samples
--   Workstation with tracks and step sequencer
+-   Workstation with tracks, a piano roll and step sequencer
+    -   Drag & Drop to reorder tracks or sections
+    -   Sampler instrument creation
+    -   Keyboard shortcut `⌘S` to save the project
+    -   Keyboard shortcut `⌘D` to duplicate track section(s) while selected
 -   Project management (saving, opening, deleting)
 
 ## Issues
 
 If you find a bug, feel free to [open up an issue](https://github.com/brandongregoryscott/beets/issues/new) and try to describe it in detail with reproduction steps if possible.
 
-If you would like to see a feature, and it isn't [already documented](https://github.com/brandongregoryscott/beets/issues), feel free to open up a new issue and describe the desired behavior.
+If you would like to see a feature, and it isn't [already documented](https://github.com/brandongregoryscott/beets/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement), feel free to open up a new issue and describe the desired behavior.
 
 ### Special thanks
 
