@@ -15,14 +15,18 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
         <Pane
             alignItems="center"
             borderLeft={index !== 0}
-            borderLeftColor={colors.gray900}
+            borderLeftColor={colors.gray700}
             borderLeftWidth={2}
             display="flex"
             flexDirection="row"
             height={majorScale(2)}
             justifyContent="center"
             width={majorScale(2)}>
-            {is4thBeat && <Text fontSize="x-small">{index + 1}</Text>}
+            {is4thBeat && (
+                <Text cursor="default" fontSize="x-small">
+                    {index + 1}
+                </Text>
+            )}
         </Pane>
     );
 };

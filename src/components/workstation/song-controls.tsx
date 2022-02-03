@@ -95,7 +95,7 @@ const SongControls: React.FC<SongControlsProps> = (
                 alignItems="center"
                 display="flex"
                 flexDirection="row"
-                marginBottom={majorScale(2)}>
+                marginBottom={majorScale(1)}>
                 <PlayButton
                     isPlaying={isPlaying}
                     marginRight={marginRight}

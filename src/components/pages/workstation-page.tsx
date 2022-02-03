@@ -51,7 +51,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
 ) => {
     const { user } = useCurrentUser();
-    const { setState } = useWorkstationState();
+    const { state, setState } = useWorkstationState();
     const {
         state: { isPlaying },
     } = useReactronicaState();
@@ -168,7 +168,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderControls && (
                 <React.Fragment>
                     <SongControls />
-                    <TrackTime stepCount={64} />
+                    <TrackTime stepCount={state.getStepCount()} />
                     {isPlaying && <PlayingTrackList tracks={tracks} />}
                     {!isPlaying && (
                         <React.Fragment>
