@@ -29,7 +29,7 @@
         "react-router-config": "5.1.1",
         "react-router-dom": "5.3.0",
         "react-scripts": "4.0.3",
-        "@brandongregoryscott/reactronica": "0.7.1",
+        "@brandongregoryscott/reactronica": "0.8.0",
         "rooks": "5.7.2",
         "slugify": "1.6.0",
         "tone": "14.7.77",
