@@ -168,11 +168,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             {renderControls && (
                 <React.Fragment>
                     <SongControls />
-                    <TrackTime
-                        bpm={project.bpm}
-                        isPlaying={isPlaying}
-                        stepCount={state.getStepCount()}
-                    />
+                    <TrackTime stepCount={state.getStepCount()} />
                     {isPlaying && <PlayingTrackList tracks={tracks} />}
                     {!isPlaying && (
                         <React.Fragment>

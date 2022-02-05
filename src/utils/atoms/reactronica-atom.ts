@@ -6,6 +6,7 @@ const initialReactronicaState: ReactronicaState = {
     isPlaying: false,
     isMuted: false,
     notes: [],
+    startIndex: undefined,
 };
 const ReactronicaStateAtom = atom<ReactronicaState>(initialReactronicaState);
 
