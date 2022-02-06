@@ -135,6 +135,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 volume={volume}>
                 <Reactronica.Track
                     onStepPlay={onStepPlay}
+                    solo={true}
                     steps={steps}
                     subdivision="8n">
                     <Reactronica.Instrument
