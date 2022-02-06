@@ -1,6 +1,8 @@
 import { StepNoteType } from "lib/reactronica";
 
 interface ReactronicaState {
+    /** Step index to stop playing the track at */
+    endIndex?: number;
     /** Current index being played */
     index?: number;
     isMuted: boolean;

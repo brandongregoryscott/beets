@@ -17,7 +17,7 @@ const SongComposition: React.FC<SongCompositionProps> = (
 ) => {
     const { files, instruments } = props;
     const { state: reactronicaState } = useReactronicaState();
-    const { isMuted, isPlaying } = reactronicaState;
+    const { isMuted, isPlaying, startIndex, endIndex } = reactronicaState;
     const { state: project } = useProjectState();
     const { state: tracks } = useTracksState();
     const { bpm, swing, volume } = project;
@@ -25,8 +25,10 @@ const SongComposition: React.FC<SongCompositionProps> = (
     return (
         <Reactronica.Song
             bpm={bpm}
+            endIndex={endIndex != null ? endIndex + 1 : undefined}
             isMuted={isMuted}
             isPlaying={isPlaying}
+            startIndex={startIndex}
             swing={swing / 100}
             volume={volume}>
             {tracks.map((track) => (

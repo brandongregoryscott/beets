@@ -10,8 +10,7 @@ interface TrackTimeProps {
 const TrackTime: React.FC<TrackTimeProps> = (props: TrackTimeProps) => {
     const { stepCount } = props;
     const { state } = useReactronicaState();
-    const { index: playingIndex, startIndex, isPlaying } = state;
-    console.log("stepCount", stepCount);
+    const { index: playingIndex, isPlaying } = state;
     return (
         <Pane
             display="flex"
@@ -23,8 +22,8 @@ const TrackTime: React.FC<TrackTimeProps> = (props: TrackTimeProps) => {
                 <TrackTimeCard
                     index={index}
                     isPlaying={isPlaying && index === playingIndex}
-                    isStartIndex={startIndex === index}
                     key={index}
+                    stepCount={stepCount}
                 />
             ))}
         </Pane>

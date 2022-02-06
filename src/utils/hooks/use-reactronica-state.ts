@@ -7,6 +7,9 @@ import {
     ReactronicaStateAtom,
 } from "utils/atoms/reactronica-atom";
 import { isFunction } from "lodash";
+import { isHotkeyPressed } from "react-hotkeys-hook";
+import _ from "lodash";
+import { List } from "immutable";
 
 interface UseReactronicaStateOptions {
     /** When true, uses shared `ReactronicaStateAtom`. Otherwise, creates a local state value */
@@ -14,6 +17,8 @@ interface UseReactronicaStateOptions {
 }
 
 interface UseReactronicaStateResult {
+    isSelected: (index: number) => boolean;
+    onIndexClick: (index: number) => () => void;
     onPlayToggle: (isPlaying: boolean) => void;
     onStepPlay: (notes: StepNoteType[], index: number) => void;
     setIsMuted: (update: SetStateAction<boolean>) => void;
@@ -34,6 +39,9 @@ const useReactronicaState = (
         () => (useAtomState ? atomState : localState),
         [atomState, localState, useAtomState]
     );
+
+    const { startIndex, endIndex } = state;
+
     const setState = useMemo(
         () => (useAtomState ? setAtomState : setLocalState),
         [setAtomState, setLocalState, useAtomState]
@@ -88,13 +96,55 @@ const useReactronicaState = (
         [onPause]
     );
 
+    const onIndexClick = useCallback(
+        (index: number) => () => {
+            if (!isHotkeyPressed("shift")) {
+                setState((prev) => ({
+                    ...prev,
+                    startIndex: startIndex === index ? undefined : index,
+                    endIndex: undefined,
+                }));
+
+                return;
+            }
+
+            const indexes = List([startIndex, endIndex, index])
+                .filterNot(_.isNil)
+                .sort();
+
+            setState((prev) => ({
+                ...prev,
+                startIndex: indexes.first(),
+                endIndex: indexes.last(),
+            }));
+        },
+        [endIndex, setState, startIndex]
+    );
+
+    const isSelected = useCallback(
+        (index: number) => {
+            if (startIndex == null) {
+                return false;
+            }
+
+            if (endIndex == null) {
+                return index === startIndex;
+            }
+
+            return index >= startIndex && index <= endIndex;
+        },
+        [endIndex, startIndex]
+    );
+
     return {
+        isSelected,
         state,
         setIsPlaying,
         setIsMuted,
         setState,
         onStepPlay,
         onPlayToggle,
+        onIndexClick,
     };
 };
 
