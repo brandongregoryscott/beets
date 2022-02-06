@@ -18,7 +18,7 @@ interface UseReactronicaStateOptions {
 
 interface UseReactronicaStateResult {
     isSelected: (index: number) => boolean;
-    onIndexClick: (index: number) => () => void;
+    onIndexClick: (index: number) => void;
     onPlayToggle: (isPlaying: boolean) => void;
     onStepPlay: (notes: StepNoteType[], index: number) => void;
     setIsMuted: (update: SetStateAction<boolean>) => void;
@@ -97,7 +97,7 @@ const useReactronicaState = (
     );
 
     const onIndexClick = useCallback(
-        (index: number) => () => {
+        (index: number) => {
             if (!isHotkeyPressed("shift")) {
                 setState((prev) => ({
                     ...prev,
