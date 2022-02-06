@@ -130,14 +130,9 @@ const useClipboardState = (): UseClipboardStateResult => {
 
     const deselectItem = useCallback(
         (item: ClipboardItem) =>
-            setSelectedState((prev) => {
-                const index = prev.indexOf(item);
-                if (index < 0) {
-                    return prev;
-                }
-
-                return prev.remove(index);
-            }),
+            setSelectedState((prev) =>
+                prev.filter((selectedItem) => selectedItem.id !== item.id)
+            ),
         [setSelectedState]
     );
 
