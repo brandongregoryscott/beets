@@ -80,9 +80,9 @@ const useReactronicaState = (
             setState((prev) => ({
                 ...prev,
                 notes,
-                index,
+                index: startIndex != null ? index + startIndex : index,
             })),
-        [setState]
+        [setState, startIndex]
     );
 
     const onPlayToggle = useCallback(
