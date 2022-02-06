@@ -121,7 +121,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         getFileById(initialInstrument?.file_id, files)
     );
     const [curve, setCurve] = useState<InstrumentCurve>(
-        InstrumentCurve.Exponential
+        initialInstrument?.curve ?? InstrumentCurve.Exponential
     );
     const [rootNote, setRootNote] = useState<MidiNote>(
         (initialInstrument?.root_note as MidiNote) ?? MidiNoteUtils.defaultNote
