@@ -1,7 +1,7 @@
 import { DemoInstrument } from "enums/demo-instrument";
 import { List, Record } from "immutable";
 import { WorkstationState } from "interfaces/workstation-state";
-import _ from "lodash";
+import _, { sumBy } from "lodash";
 import { BaseRecord } from "models/base-record";
 import { FileRecord } from "models/file-record";
 import { ProjectRecord } from "models/project-record";
@@ -20,7 +20,6 @@ import {
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
 import { MidiNoteUtils } from "utils/midi-note-utils";
-import { getByTrackSection } from "utils/track-section-step-utils";
 import { getByTrack } from "utils/track-section-utils";
 
 interface WorkstationStateDiff {
@@ -231,23 +230,17 @@ class WorkstationStateRecord
         return diff;
     }
 
-    public getTrackSectionsByTrack(
-        track: TrackRecord
-    ): List<TrackSectionRecord> {
-        return getByTrack(track, this.trackSections);
-    }
+    public getStepCount(): number {
+        // Calculate sum of steps by track
+        const stepSums = this.tracks.map((track) => {
+            const trackSections = getByTrack(track, this.trackSections);
+            return sumBy(
+                trackSections.toArray(),
+                (trackSection) => trackSection.step_count
+            );
+        });
 
-    public getTrackSectionStepsByTrack(
-        track: TrackRecord
-    ): List<TrackSectionStepRecord> {
-        const trackSections = this.getTrackSectionsByTrack(track);
-        const trackSectionSteps = trackSections
-            .map((trackSection) =>
-                getByTrackSection(trackSection, this.trackSectionSteps)
-            )
-            .flatten()
-            .toList() as List<TrackSectionStepRecord>;
-        return trackSectionSteps;
+        return stepSums.max()!;
     }
 
     public isDemo(): boolean {
