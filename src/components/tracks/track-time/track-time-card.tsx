@@ -25,6 +25,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
 
     return (
         <Pane
+            {...activeProps}
             alignItems="center"
             backgroundColor={isSelected(index) ? colors.blue200 : undefined}
             className={className}
@@ -35,12 +36,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             justifyContent="center"
             onClick={onIndexClick(index)}
             width={majorScale(2)}>
-            <Text
-                {...activeProps}
-                color={isPlaying ? colors.blue500 : undefined}
-                cursor="pointer"
-                fontSize="x-small"
-                userSelect="none">
+            <Text cursor="pointer" fontSize="x-small" userSelect="none">
                 {index + 1}
             </Text>
         </Pane>
