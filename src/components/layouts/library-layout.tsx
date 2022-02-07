@@ -34,19 +34,21 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
     );
 
     return (
-        <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
-            <TabNavigation>
-                {tabs.map((tab) => (
-                    <Tab
-                        isSelected={isTabSelected(tab)}
-                        key={tab}
-                        onSelect={handleClick(tab)}>
-                        {tab}
-                    </Tab>
-                ))}
-            </TabNavigation>
-            <Pane marginTop={majorScale(2)}>
-                <NestedRoutes route={route} />
+        <Pane height="100vh" overflow="auto">
+            <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
+                <TabNavigation>
+                    {tabs.map((tab) => (
+                        <Tab
+                            isSelected={isTabSelected(tab)}
+                            key={tab}
+                            onSelect={handleClick(tab)}>
+                            {tab}
+                        </Tab>
+                    ))}
+                </TabNavigation>
+                <Pane marginBottom={majorScale(2)} marginTop={majorScale(2)}>
+                    <NestedRoutes route={route} />
+                </Pane>
             </Pane>
         </Pane>
     );

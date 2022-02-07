@@ -20,11 +20,15 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
     const theme = useTheme();
     return (
         <React.Fragment>
-            <FileList bucketName={BucketName.Samples} />
+            {globalState.isAuthenticated() && (
+                <React.Fragment>
+                    <Pane marginBottom={majorScale(2)}>
+                        <FileUpload bucketName={BucketName.Samples} />
+                    </Pane>
+                    <FileList bucketName={BucketName.Samples} />
+                </React.Fragment>
+            )}
             <Pane marginTop={majorScale(1)}>
-                {globalState.isAuthenticated() && (
-                    <FileUpload bucketName={BucketName.Samples} />
-                )}
                 {!globalState.isAuthenticated() && (
                     <Pane maxWidth={majorScale(60)}>
                         <EmptyState
