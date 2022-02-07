@@ -71,6 +71,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     } = useListInstruments({ files });
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
+    const [hasInitialized, setHasInitialized] = useState<boolean>(false);
 
     // Unfortunate hack to prevent infinite loading issue for initial render when a staleTime
     // is set: https://github.com/tannerlinsley/react-query/issues/1657
@@ -91,6 +92,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 
     useEffect(() => {
         if (
+            hasInitialized ||
             isLoadingFiles ||
             isLoadingWorkstations ||
             (project.isPersisted() && user != null) ||
@@ -98,6 +100,8 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         ) {
             return;
         }
+
+        setHasInitialized(true);
 
         if (user == null) {
             setState(
@@ -116,6 +120,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         setState(workstations?.first()!);
     }, [
         files,
+        hasInitialized,
         isLoadingFiles,
         isLoadingWorkstations,
         project,
