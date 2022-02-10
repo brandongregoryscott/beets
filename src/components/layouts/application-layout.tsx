@@ -13,11 +13,9 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = (
     useSubscribeToAuthStatus();
 
     return (
-        <Pane display="flex" flexDirection="row">
-            <Pane>
-                <SidebarNavigation />
-            </Pane>
-            <Pane width="100%">
+        <Pane display="flex" flexDirection="row" height="100%">
+            <SidebarNavigation />
+            <Pane overflowX="auto">
                 <NestedRoutes route={route} />
             </Pane>
         </Pane>

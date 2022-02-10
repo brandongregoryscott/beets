@@ -17,14 +17,16 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
             background={theme.colors.gray100}
             display="flex"
             flexDirection="column"
-            height="100vh">
-            <SidebarLink route={Routes.root.routes.workstation} />
-            <SidebarLink
-                matchingRoutes={flattenRoutes(
-                    Routes.root.routes.library.routes
-                )}
-                route={Routes.root.routes.library}
-            />
+            height="100%">
+            <Pane display="flex" flexDirection="column">
+                <SidebarLink route={Routes.root.routes.workstation} />
+                <SidebarLink
+                    matchingRoutes={flattenRoutes(
+                        Routes.root.routes.library.routes
+                    )}
+                    route={Routes.root.routes.library}
+                />
+            </Pane>
             <Pane
                 display="flex"
                 flexDirection="column"
