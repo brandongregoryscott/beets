@@ -166,51 +166,59 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const renderControls = !renderSpinner;
     return (
         <Pane
-            marginLeft={majorScale(2)}
-            marginTop={majorScale(2)}
-            maxWidth={`calc(100% - ${majorScale(4)}px)`}>
+            // marginLeft={majorScale(2)}
+            // marginTop={majorScale(2)}
+            height="100%"
+            width="100%">
             {renderSpinner && <Spinner />}
             {renderControls && (
                 <React.Fragment>
                     <SongControls />
-                    <TrackTime stepCount={state.getStepCount()} />
-                    {isPlaying && <PlayingTrackList tracks={tracks} />}
-                    {!isPlaying && (
-                        <React.Fragment>
-                            <DraggableTrackList tracks={tracks} />
-                            <Pane
-                                display="flex"
-                                flexDirection="row"
-                                marginRight="auto">
-                                <SelectMenu
-                                    calculateHeight={true}
-                                    closeOnSelect={true}
-                                    hasFilter={false}
-                                    isMultiSelect={false}
-                                    onSelect={handleSelect}
-                                    options={options}
-                                    title="Track Type"
-                                    width={majorScale(16)}>
-                                    <Tooltip content="Add Track">
-                                        <IconButton
-                                            icon={AddIcon}
-                                            marginTop={majorScale(2)}
-                                        />
-                                    </Tooltip>
-                                </SelectMenu>
-                            </Pane>
-                            {instrumentDialogOpen && (
-                                <ChooseOrCreateInstrumentDialog
-                                    isShown={true}
-                                    onCloseComplete={
-                                        handleCloseInstrumentDialog
-                                    }
-                                    onSubmit={handleInstrumentSubmit}
-                                    showTabs={globalState.isAuthenticated()}
-                                />
-                            )}
-                        </React.Fragment>
-                    )}
+                    <Pane
+                        // height="100%"
+                        // width="100%"
+                        height={`calc(100% - 96px)`}
+                        width={`calc(100% - 32px)`}
+                        overflow="auto">
+                        <TrackTime stepCount={state.getStepCount()} />
+                        {isPlaying && <PlayingTrackList tracks={tracks} />}
+                        {!isPlaying && (
+                            <React.Fragment>
+                                <DraggableTrackList tracks={tracks} />
+                                <Pane
+                                    display="flex"
+                                    flexDirection="row"
+                                    marginRight="auto">
+                                    <SelectMenu
+                                        calculateHeight={true}
+                                        closeOnSelect={true}
+                                        hasFilter={false}
+                                        isMultiSelect={false}
+                                        onSelect={handleSelect}
+                                        options={options}
+                                        title="Track Type"
+                                        width={majorScale(16)}>
+                                        <Tooltip content="Add Track">
+                                            <IconButton
+                                                icon={AddIcon}
+                                                marginTop={majorScale(2)}
+                                            />
+                                        </Tooltip>
+                                    </SelectMenu>
+                                </Pane>
+                                {instrumentDialogOpen && (
+                                    <ChooseOrCreateInstrumentDialog
+                                        isShown={true}
+                                        onCloseComplete={
+                                            handleCloseInstrumentDialog
+                                        }
+                                        onSubmit={handleInstrumentSubmit}
+                                        showTabs={globalState.isAuthenticated()}
+                                    />
+                                )}
+                            </React.Fragment>
+                        )}
+                    </Pane>
                 </React.Fragment>
             )}
             <SongComposition files={files} instruments={instruments} />

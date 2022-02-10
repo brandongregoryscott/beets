@@ -15,9 +15,7 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = (
     return (
         <Pane display="flex" flexDirection="row" height="100%">
             <SidebarNavigation />
-            <Pane overflowX="auto">
-                <NestedRoutes route={route} />
-            </Pane>
+            <NestedRoutes route={route} />
         </Pane>
     );
 };

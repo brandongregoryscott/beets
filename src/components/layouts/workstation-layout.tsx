@@ -10,7 +10,7 @@ const WorkstationLayout: React.FC<WorkstationLayoutProps> = (
 ) => {
     const { route } = props;
     return (
-        <Pane width="100%">
+        <Pane width="100%" height="100%">
             <WorkstationTabs />
             <NestedRoutes route={route} />
         </Pane>
