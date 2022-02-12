@@ -6,11 +6,16 @@ import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { RecordParams } from "types/record-params";
 import { generateId } from "utils/id-utils";
 import { WorkstationStateRecord } from "models/workstation-state-record";
+import { formatUpdatedOn } from "utils/date-utils";
 
 const defaultValues = makeDefaultValues<Project>({
     ...AuditableDefaultValues,
     bpm: 80,
-    name: "",
+    get name() {
+        return `Untitled Project (${formatUpdatedOn(
+            new Date().toISOString()
+        )})`;
+    },
     swing: 0,
     volume: 0,
 });

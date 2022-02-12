@@ -196,7 +196,10 @@ class WorkstationStateRecord
     public diff(right: WorkstationStateRecord): WorkstationStateDiff {
         let diff: WorkstationStateDiff = {};
 
-        if (!this.project.equals(right.project)) {
+        if (
+            !this.project.equals(right.project) ||
+            !right.project.isPersisted()
+        ) {
             diff.createdOrUpdatedProject = right.project;
         }
 
