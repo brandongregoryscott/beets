@@ -195,7 +195,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                         )}
                         overflow="auto"
                         width={calcFrom100(SidebarNavigationWidth + margin)}>
-                        <TrackTime stepCount={state.getStepCount()} />
                         {isPlaying && <PlayingTrackList tracks={tracks} />}
                         {!isPlaying && (
                             <React.Fragment>

@@ -22,6 +22,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
 
     const className = css(hover({ transform: "translateY(-2px)" })).toString();
 
+    const step = index + 1 >= 100 ? getLastTwoDigits(index) : index + 1;
     return (
         <Pane
             alignItems="center"
@@ -32,14 +33,22 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             flexDirection="row"
             height={majorScale(2)}
             justifyContent="center"
+            maxWidth={majorScale(2)}
+            minWidth={majorScale(2)}
             onClick={handleClick}
             transform={state.index === index ? "translateY(-2px)" : undefined}
             width={majorScale(2)}>
             <Text cursor="pointer" fontSize="x-small" userSelect="none">
-                {index + 1}
+                {step}
             </Text>
         </Pane>
     );
+};
+
+const getLastTwoDigits = (index: number): string => {
+    const string = (index + 1).toString();
+    const values = string.split("");
+    return [values.pop()!, values.pop()!].reverse().join("");
 };
 
 export { TrackTimeCard };

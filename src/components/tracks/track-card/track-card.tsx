@@ -28,6 +28,8 @@ import { TrackSectionList } from "components/tracks/track-section-list/track-sec
 import { useDraggable } from "utils/hooks/use-draggable";
 import { ContextualIconButton } from "components/contextual-icon-button";
 import { css, select } from "glamor";
+import { TrackTime } from "components/tracks/track-time/track-time";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface TrackCardProps {
     track: TrackRecord;
@@ -39,6 +41,7 @@ const width = majorScale(21);
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { track } = props;
     const { id, name, mute, solo, instrument_id, index } = track;
+    const { state: workstationState } = useWorkstationState();
     const { update, remove, state: tracks } = useTracksState();
     const {
         add: addTrackSection,
@@ -95,6 +98,13 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 index === tracks.count() - 1 ? -majorScale(1) : undefined
             }
             marginTop={index === 0 ? -majorScale(1) : undefined}>
+            {index === 0 && (
+                <Pane
+                    marginLeft={width + majorScale(3)}
+                    marginTop={majorScale(2)}>
+                    <TrackTime stepCount={workstationState.getStepCount()} />
+                </Pane>
+            )}
             <Draggable draggableId={track.id} index={track.index}>
                 {(provided) => (
                     <Pane
@@ -111,6 +121,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             display="flex"
                             flexDirection="column"
                             marginRight={majorScale(2)}
+                            minWidth={width}
                             padding={majorScale(1)}
                             width={width}>
                             <Pane
