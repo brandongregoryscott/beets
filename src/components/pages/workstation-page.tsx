@@ -33,7 +33,6 @@ import { DraggableTrackList } from "components/tracks/track-list/draggable-track
 import { SongComposition } from "components/song-composition/song-composition";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { List } from "immutable";
-import { TrackTime } from "components/tracks/track-time/track-time";
 import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
 import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
@@ -59,7 +58,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
 ) => {
     const { user } = useCurrentUser();
-    const { state, setState } = useWorkstationState();
+    const { setState } = useWorkstationState();
     const {
         state: { isPlaying },
     } = useReactronicaState();
