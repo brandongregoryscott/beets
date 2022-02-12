@@ -1,6 +1,7 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import { TrackCardProps } from "components/tracks/track-card/track-card";
 import { PlayingTrackSectionList } from "components/tracks/track-section-list/playing-track-section-list";
+import { TrackTime } from "components/tracks/track-time/track-time";
 import {
     Card,
     IconButton,
@@ -21,6 +22,7 @@ import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrum
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { useTracksState } from "utils/hooks/use-tracks-state";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface PlayingTrackCardProps extends TrackCardProps {}
 
@@ -31,8 +33,9 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
     props: PlayingTrackCardProps
 ) => {
     const { track } = props;
-    const { id, name, mute, solo, instrument_id } = track;
+    const { id, name, mute, solo, instrument_id, index } = track;
     const { colors } = useTheme();
+    const { state: workstationState } = useWorkstationState();
     const { state: trackSections, update: updateTrackSection } =
         useTrackSectionsState({ trackId: id });
     const { resultObject: files } = useListFiles();
@@ -64,6 +67,14 @@ const PlayingTrackCard: React.FC<PlayingTrackCardProps> = (
 
     return (
         <Pane marginY={majorScale(2)}>
+            {index === 0 && (
+                <Pane
+                    marginBottom={majorScale(1)}
+                    marginLeft={width + majorScale(3)}
+                    marginTop={-majorScale(1)}>
+                    <TrackTime stepCount={workstationState.getStepCount()} />
+                </Pane>
+            )}
             <Pane alignItems="center" display="flex" flexDirection="row">
                 <Card
                     alignItems="flex-start"
