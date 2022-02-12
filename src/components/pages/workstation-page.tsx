@@ -175,7 +175,17 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 
     return (
         <Pane height="100%" marginTop={margin} width="100%">
-            {renderSpinner && <Spinner />}
+            {renderSpinner && (
+                <Pane
+                    alignItems="center"
+                    display="flex"
+                    flexDirection="column"
+                    height="100%"
+                    justifyContent="center"
+                    width="100%">
+                    <Spinner />
+                </Pane>
+            )}
             {renderControls && (
                 <Pane height="100%" marginLeft={margin} width="100%">
                     <SongControls />
