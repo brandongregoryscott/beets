@@ -1,4 +1,7 @@
-import { SongControls } from "components/workstation/song-controls";
+import {
+    SongControls,
+    SongControlsHeight,
+} from "components/workstation/song-controls";
 import { PlayingTrackList } from "components/tracks/track-list/playing-track-list";
 import {
     AddIcon,
@@ -31,6 +34,9 @@ import { SongComposition } from "components/song-composition/song-composition";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { List } from "immutable";
 import { TrackTime } from "components/tracks/track-time/track-time";
+import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
+import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
+import { calcFrom100 } from "utils/theme-utils";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -46,6 +52,8 @@ const options: Array<SelectMenuItem<boolean>> = [
         value: true,
     },
 ];
+
+const margin = majorScale(2);
 
 const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
@@ -164,22 +172,19 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const renderSpinner =
         isLoadingFiles || isLoadingWorkstations || isLoadingInstruments;
     const renderControls = !renderSpinner;
+
     return (
-        <Pane
-            // marginLeft={majorScale(2)}
-            // marginTop={majorScale(2)}
-            height="100%"
-            width="100%">
+        <Pane height="100%" marginTop={margin} width="100%">
             {renderSpinner && <Spinner />}
             {renderControls && (
-                <React.Fragment>
+                <Pane height="100%" marginLeft={margin} width="100%">
                     <SongControls />
                     <Pane
-                        // height="100%"
-                        // width="100%"
-                        height={`calc(100% - 96px)`}
-                        width={`calc(100% - 32px)`}
-                        overflow="auto">
+                        height={calcFrom100(
+                            WorkstationTabsHeight + SongControlsHeight + margin
+                        )}
+                        overflow="auto"
+                        width={calcFrom100(SidebarNavigationWidth + margin)}>
                         <TrackTime stepCount={state.getStepCount()} />
                         {isPlaying && <PlayingTrackList tracks={tracks} />}
                         {!isPlaying && (
@@ -219,7 +224,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                             </React.Fragment>
                         )}
                     </Pane>
-                </React.Fragment>
+                </Pane>
             )}
             <SongComposition files={files} instruments={instruments} />
         </Pane>

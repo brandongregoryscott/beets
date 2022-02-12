@@ -1,4 +1,4 @@
-import { Pane } from "evergreen-ui";
+import { majorScale, Pane } from "evergreen-ui";
 import { useTheme } from "utils/hooks/use-theme";
 import { SidebarLink } from "components/sidebar/sidebar-link";
 import { ProfileMenuCard } from "components/sidebar/profile-menu-card";
@@ -6,6 +6,8 @@ import { Routes } from "routes";
 import { flattenRoutes } from "utils/route-utils";
 
 interface SidebarNavigationProps {}
+
+const SidebarNavigationWidth = majorScale(6);
 
 const SidebarNavigation: React.FC<SidebarNavigationProps> = (
     props: SidebarNavigationProps
@@ -17,7 +19,8 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
             background={theme.colors.gray100}
             display="flex"
             flexDirection="column"
-            height="100%">
+            height="100%"
+            width={SidebarNavigationWidth}>
             <Pane display="flex" flexDirection="column">
                 <SidebarLink route={Routes.root.routes.workstation} />
                 <SidebarLink
@@ -38,4 +41,4 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
     );
 };
 
-export { SidebarNavigation };
+export { SidebarNavigation, SidebarNavigationWidth };

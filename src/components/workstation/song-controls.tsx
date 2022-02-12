@@ -11,7 +11,7 @@ import {
     CaretUpIcon,
     Heading,
 } from "evergreen-ui";
-import { ChangeEvent, useCallback } from "react";
+import React, { ChangeEvent, useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
@@ -20,6 +20,7 @@ import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 interface SongControlsProps {}
 
 const marginRight = minorScale(2);
+const SongControlsHeight = majorScale(9);
 
 const SongControls: React.FC<SongControlsProps> = (
     props: SongControlsProps
@@ -87,7 +88,7 @@ const SongControls: React.FC<SongControlsProps> = (
     );
 
     return (
-        <Pane>
+        <Pane height={SongControlsHeight}>
             <Heading marginBottom={majorScale(1)} size={500}>
                 {project.name}
             </Heading>
@@ -158,4 +159,4 @@ const SongControls: React.FC<SongControlsProps> = (
     );
 };
 
-export { SongControls };
+export { SongControls, SongControlsHeight };

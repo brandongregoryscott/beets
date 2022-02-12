@@ -12,6 +12,8 @@ const stepColors: Array<DefaultThemeColors> = [
     "red300",
 ];
 
+const calcFrom100 = (value: number) => `calc(100% - ${value}px)`;
+
 const getStepColor = (fileId: string | undefined): string => {
     if (isNilOrEmpty(fileId)) {
         return "transparent";
@@ -22,4 +24,4 @@ const getStepColor = (fileId: string | undefined): string => {
     return theme.colors[key];
 };
 
-export { getStepColor };
+export { calcFrom100, getStepColor };
