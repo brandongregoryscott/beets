@@ -1,5 +1,4 @@
 import { NestedRoutes } from "components/nested-routes";
-import { Pane } from "evergreen-ui";
 import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -12,12 +11,10 @@ const App: React.FC = () => {
     useEffect(() => queryClient.clear(), [queryClient, user]);
 
     return (
-        <Pane height="100vh" overflowY="hidden">
-            <BrowserRouter>
-                <NestedRoutes routes={Routes} />
-            </BrowserRouter>
-        </Pane>
+        <BrowserRouter>
+            <NestedRoutes routes={Routes} />
+        </BrowserRouter>
     );
 };
 
-export default App;
+export { App };
