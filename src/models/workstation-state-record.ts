@@ -154,10 +154,18 @@ class WorkstationStateRecord
     }
 
     constructor(values?: RecordParams<WorkstationStateRecord>) {
+        const defaultProject = new ProjectRecord();
+        const defaultTrack = new TrackRecord().merge({
+            project_id: defaultProject.id,
+        });
+        const defaultTrackSection = new TrackSectionRecord().merge({
+            track_id: defaultTrack.id,
+        });
         values = values ?? {
             ...defaultValues,
-            project: new ProjectRecord(),
-            tracks: List.of(new TrackRecord()),
+            project: defaultProject,
+            tracks: List.of(defaultTrack),
+            trackSections: List.of(defaultTrackSection),
         };
 
         if (values.project != null) {

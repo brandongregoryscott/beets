@@ -36,6 +36,8 @@ import { List } from "immutable";
 import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
 import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
+import { TrackSectionRecord } from "models/track-section-record";
+import { Track } from "generated/interfaces/track";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -63,7 +65,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         state: { isPlaying },
     } = useReactronicaState();
     const { state: project } = useProjectState();
-    const { state: tracks, add } = useTracksState();
+    const { state: tracks, add: addTrack } = useTracksState();
     const [
         instrumentDialogOpen,
         handleOpenInstrumentDialog,
@@ -136,6 +138,29 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         workstations,
     ]);
 
+    const addTrackWithTrackSection = useCallback(
+        (overrides?: Partial<Track>) => {
+            const newTrack = new TrackRecord().merge({
+                index: tracks.count(),
+                project_id: project.id,
+                ...(overrides ?? {}),
+            });
+
+            const newTrackSection = new TrackSectionRecord().merge({
+                track_id: newTrack.id,
+            });
+
+            addTrack(newTrack);
+
+            setState((prev) =>
+                prev.merge({
+                    trackSections: prev.trackSections.push(newTrackSection),
+                })
+            );
+        },
+        [addTrack, project.id, setState, tracks]
+    );
+
     const handleSelect = useCallback(
         (item: SelectMenuItem<boolean>) => {
             const { value: isInstrument } = item;
@@ -144,28 +169,19 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                 return;
             }
 
-            add(
-                new TrackRecord().merge({
-                    index: tracks.count(),
-                    project_id: project.id,
-                })
-            );
+            addTrackWithTrackSection();
         },
-        [add, handleOpenInstrumentDialog, project, tracks]
+        [addTrackWithTrackSection, handleOpenInstrumentDialog]
     );
 
     const handleInstrumentSubmit = useCallback(
         (instrument: InstrumentRecord) => {
-            add(
-                new TrackRecord().merge({
-                    index: tracks.count(),
-                    instrument_id: instrument.id,
-                    project_id: project.id,
-                    name: instrument?.name,
-                })
-            );
+            addTrackWithTrackSection({
+                instrument_id: instrument.id,
+                name: instrument?.name,
+            });
         },
-        [add, project, tracks]
+        [addTrackWithTrackSection]
     );
 
     const renderSpinner =
