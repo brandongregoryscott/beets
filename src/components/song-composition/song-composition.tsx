@@ -6,6 +6,7 @@ import { InstrumentRecord } from "models/instrument-record";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTracksState } from "utils/hooks/use-tracks-state";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface SongCompositionProps {
     files: List<FileRecord>;
@@ -18,6 +19,7 @@ const SongComposition: React.FC<SongCompositionProps> = (
     const { files, instruments } = props;
     const { state: reactronicaState } = useReactronicaState();
     const { isMuted, isPlaying } = reactronicaState;
+    const { state: workstationState } = useWorkstationState();
     const { state: project } = useProjectState();
     const { state: tracks } = useTracksState();
     const { bpm, swing, volume } = project;
@@ -27,6 +29,7 @@ const SongComposition: React.FC<SongCompositionProps> = (
             bpm={bpm}
             isMuted={isMuted}
             isPlaying={isPlaying}
+            key={workstationState.getKey()}
             swing={swing / 100}
             volume={volume}>
             {tracks.map((track) => (

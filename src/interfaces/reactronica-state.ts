@@ -1,4 +1,4 @@
-import { StepNoteType } from "lib/reactronica";
+import { StepType } from "lib/reactronica";
 
 interface ReactronicaState {
     /** Step index to stop playing the track at */
@@ -8,7 +8,7 @@ interface ReactronicaState {
     isMuted: boolean;
     isPlaying: boolean;
     /** Current notes being played */
-    notes: StepNoteType[];
+    notes: StepType;
     /** Step index to start playing the track at */
     startIndex?: number;
 }

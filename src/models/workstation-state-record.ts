@@ -254,6 +254,10 @@ class WorkstationStateRecord
         return stepSums.max()!;
     }
 
+    public getKey(): string {
+        return JSON.stringify(this.toJS());
+    }
+
     public isDemo(): boolean {
         return this.project.isDemo();
     }

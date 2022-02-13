@@ -1,7 +1,7 @@
 import { ReactronicaState } from "interfaces/reactronica-state";
 import { SetStateAction, useAtom } from "jotai";
 import { useCallback, useMemo, useState } from "react";
-import { StepNoteType } from "lib/reactronica";
+import { StepType } from "lib/reactronica";
 import {
     initialReactronicaState,
     ReactronicaStateAtom,
@@ -20,7 +20,7 @@ interface UseReactronicaStateResult {
     isSelected: (index: number) => boolean;
     onIndexClick: (index: number) => void;
     onPlayToggle: (isPlaying: boolean) => void;
-    onStepPlay: (notes: StepNoteType[], index: number) => void;
+    onStepPlay: (notes: StepType, index: number) => void;
     setIsMuted: (update: SetStateAction<boolean>) => void;
     setIsPlaying: (update: SetStateAction<boolean>) => void;
     setState: (update: SetStateAction<ReactronicaState>) => void;
@@ -76,7 +76,7 @@ const useReactronicaState = (
     );
 
     const onStepPlay = useCallback(
-        (notes: StepNoteType[], index: number) =>
+        (notes: StepType, index: number) =>
             setState((prev) => ({
                 ...prev,
                 notes,
