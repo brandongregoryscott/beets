@@ -12,7 +12,7 @@
         ]
     },
     "dependencies": {
-        "@brandongregoryscott/reactronica": "0.9.0",
+        "@brandongregoryscott/reactronica": "0.9.1",
         "@octokit/rest": "18.12.0",
         "@supabase/supabase-js": "1.24.0",
         "evergreen-ui": "6.7.1",
