@@ -28,7 +28,6 @@ import { useTracksState } from "utils/hooks/use-tracks-state";
 import { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
 import { SongComposition } from "components/song-composition/song-composition";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
@@ -38,6 +37,7 @@ import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import { Track } from "generated/interfaces/track";
+import { useTone } from "utils/hooks/use-tone";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -61,9 +61,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 ) => {
     const { user } = useCurrentUser();
     const { setState } = useWorkstationState();
-    const {
-        state: { isPlaying },
-    } = useReactronicaState();
+    const { isPlaying } = useTone();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
     const [

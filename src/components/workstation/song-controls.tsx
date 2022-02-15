@@ -15,7 +15,7 @@ import React, { ChangeEvent, useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
+import { useTone } from "utils/hooks/use-tone";
 
 interface SongControlsProps {}
 
@@ -26,9 +26,7 @@ const SongControls: React.FC<SongControlsProps> = (
     props: SongControlsProps
 ) => {
     const { state: project, setCurrentState } = useProjectState();
-    const { onPlayToggle, setIsPlaying, setIsMuted, state } =
-        useReactronicaState();
-    const { isMuted, isPlaying } = state;
+    const { toggleMute, toggleIsPlaying, mute, isPlaying } = useTone();
     const { bpm, swing, volume } = project;
 
     const handleNumberChange = useCallback(
@@ -53,16 +51,6 @@ const SongControls: React.FC<SongControlsProps> = (
                 setState(value);
             },
         []
-    );
-
-    const toggleIsPlaying = useCallback(
-        () => setIsPlaying((prev) => !prev),
-        [setIsPlaying]
-    );
-
-    const toggleIsMuted = useCallback(
-        () => setIsMuted((prev) => !prev),
-        [setIsMuted]
     );
 
     const setBpm = useCallback(
@@ -98,15 +86,14 @@ const SongControls: React.FC<SongControlsProps> = (
                 flexDirection="row"
                 marginBottom={majorScale(2)}>
                 <PlayButton
-                    isPlaying={isPlaying}
+                    isPlaying={isPlaying ?? false}
                     marginRight={marginRight}
-                    onClick={onPlayToggle}
                     toggleIsPlaying={toggleIsPlaying}
                 />
                 <IconButton
-                    icon={isMuted ? VolumeOffIcon : VolumeUpIcon}
+                    icon={mute ? VolumeOffIcon : VolumeUpIcon}
                     marginRight={marginRight}
-                    onClick={toggleIsMuted}
+                    onClick={toggleMute}
                 />
                 <Label
                     fontSize="x-small"

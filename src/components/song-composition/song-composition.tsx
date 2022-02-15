@@ -4,7 +4,7 @@ import { Reactronica } from "lib/reactronica";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import { useProjectState } from "utils/hooks/use-project-state";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
+import { useTone } from "utils/hooks/use-tone";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 
 interface SongCompositionProps {
@@ -16,16 +16,15 @@ const SongComposition: React.FC<SongCompositionProps> = (
     props: SongCompositionProps
 ) => {
     const { files, instruments } = props;
-    const { state: reactronicaState } = useReactronicaState();
-    const { isMuted, isPlaying } = reactronicaState;
     const { state: project } = useProjectState();
     const { state: tracks } = useTracksState();
     const { bpm, swing, volume } = project;
+    const { mute, isPlaying } = useTone({ bpm, swing, volume });
 
     return (
         <Reactronica.Song
             bpm={bpm}
-            isMuted={isMuted}
+            isMuted={mute}
             isPlaying={isPlaying}
             swing={swing / 100}
             volume={volume}>
