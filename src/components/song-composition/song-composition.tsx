@@ -5,7 +5,9 @@ import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useTone } from "utils/hooks/use-tone";
+import { useToneTracks } from "utils/hooks/use-tone-tracks";
 import { useTracksState } from "utils/hooks/use-tracks-state";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface SongCompositionProps {
     files: List<FileRecord>;
@@ -17,27 +19,34 @@ const SongComposition: React.FC<SongCompositionProps> = (
 ) => {
     const { files, instruments } = props;
     const { state: project } = useProjectState();
-    const { state: tracks } = useTracksState();
     const { bpm, swing, volume } = project;
-    const { mute, isPlaying } = useTone({ bpm, swing, volume });
+    console.log("files in SongComposition", files);
+    const { mute, isPlaying } = useTone({
+        bpm,
+        swing,
+        volume,
+        files,
+        instruments,
+    });
 
-    return (
-        <Reactronica.Song
-            bpm={bpm}
-            isMuted={mute}
-            isPlaying={isPlaying}
-            swing={swing / 100}
-            volume={volume}>
-            {tracks.map((track) => (
-                <Track
-                    files={files}
-                    instruments={instruments}
-                    key={track.id}
-                    track={track}
-                />
-            ))}
-        </Reactronica.Song>
-    );
+    return null;
+    // return (
+    //     <Reactronica.Song
+    //         bpm={bpm}
+    //         isMuted={mute}
+    //         isPlaying={isPlaying}
+    //         swing={swing / 100}
+    //         volume={volume}>
+    //         {tracks.map((track) => (
+    //             <Track
+    //                 files={files}
+    //                 instruments={instruments}
+    //                 key={track.id}
+    //                 track={track}
+    //             />
+    //         ))}
+    //     </Reactronica.Song>
+    // );
 };
 
 export { SongComposition };

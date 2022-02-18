@@ -72,6 +72,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const { globalState } = useGlobalState();
     const { resultObject: files = List(), isLoading: isLoadingFiles } =
         useListFiles();
+    console.log("files in WorkstationPage", files);
     const {
         resultObject: instruments = List(),
         isLoading: isLoadingInstruments,
