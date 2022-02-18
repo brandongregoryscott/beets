@@ -31,7 +31,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         instruments = List<InstrumentRecord>(),
     } = options;
     const toneTracksRef = useRef<Map<string, ToneTrack>>(Map());
-    const { isPlaying } = useAtomValue(ToneStateAtom);
+    const { isPlaying, subdivision } = useAtomValue(ToneStateAtom);
     const { state: workstationState } = useWorkstationState();
     const { tracks, trackSections, trackSectionSteps } = workstationState;
 
@@ -81,26 +81,14 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
             const sequence =
                 toneTrack?.sequence ??
                 new Tone.Sequence(
-                    (time: number, step: ToneStep) => {
-                        console.log("attempting to trigger", step);
-                        try {
-                            sampler.triggerAttackRelease(
-                                step.note,
-                                step.duration ?? 0.5
-                            );
-                        } catch (error) {
-                            console.log("error triggering", step, error);
-                            console.log("sampleMap", sampleMap);
-                            console.log("--- track", track);
-                            console.log(
-                                "files",
-                                files,
-                                getFileById(instrument?.file_id, files)
-                            );
-                        }
+                    (_time: number, step: ToneStep) => {
+                        sampler.triggerAttackRelease(
+                            step.note,
+                            step.duration ?? 0.5
+                        );
                     },
                     steps,
-                    "8n"
+                    subdivision
                 );
 
             sequence.events = steps;
@@ -119,7 +107,14 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         });
 
         toneTracksRef.current = updatedToneTracks;
-    }, [files, instruments, trackSectionSteps, trackSections, tracks]);
+    }, [
+        files,
+        instruments,
+        subdivision,
+        trackSectionSteps,
+        trackSections,
+        tracks,
+    ]);
 
     useEffect(() => {
         toneTracksRef.current.forEach((toneTrack) => {
