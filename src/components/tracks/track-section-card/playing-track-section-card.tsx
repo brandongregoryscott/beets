@@ -7,7 +7,6 @@ import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { sortBy } from "utils/collection-utils";
 import { getBorderXProps } from "utils/core-utils";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { getStepColor } from "utils/theme-utils";
@@ -43,7 +42,6 @@ const PlayingTrackSectionCard: React.FC<PlayingTrackSectionCardProps> = (
         isLast,
         borderRadius: minorScale(1),
     });
-    const { state: reactronicaState } = useReactronicaState();
 
     const { isSelected } = useClipboardState();
 
@@ -77,8 +75,9 @@ const PlayingTrackSectionCard: React.FC<PlayingTrackSectionCardProps> = (
                         (trackSectionStep) => trackSectionStep.file_id
                     );
 
-                    const isPlaying =
-                        index + stepCountOffset === reactronicaState?.index;
+                    const isPlaying = false;
+                    // const isPlaying =
+                    //     index + stepCountOffset === reactronicaState?.index;
 
                     const activeProps = isPlaying
                         ? {

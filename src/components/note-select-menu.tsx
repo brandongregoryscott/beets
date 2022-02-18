@@ -1,4 +1,3 @@
-import { MidiNote } from "lib/reactronica";
 import {
     SelectMenu,
     SelectMenuItem,
@@ -7,6 +6,7 @@ import {
 import { MidiNotes } from "constants/midi-notes";
 import React from "react";
 import { PropsWithChildren, useCallback } from "react";
+import { MidiNote } from "types/midi-note";
 
 interface NoteSelectMenuProps
     extends Pick<

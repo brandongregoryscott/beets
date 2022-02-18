@@ -10,16 +10,14 @@ import {
 import React, { useCallback } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
+import { useToneControls } from "utils/hooks/use-tone-controls";
 
 interface EditTabProps {}
 
 const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
     const { selectedState, clearSelected, duplicateSelected } =
         useClipboardState();
-    const {
-        state: { isPlaying },
-    } = useReactronicaState();
+    const { isPlaying } = useToneControls();
     const handleClick = useCallback(
         (closePopover: () => void, callback: () => void) => () => {
             callback();

@@ -10,7 +10,7 @@ import {
     sortBy,
 } from "utils/collection-utils";
 import { isEventFromDialog } from "utils/event-utils";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
+import { useToneControls } from "utils/hooks/use-tone-controls";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { generateIdMap, remapIds } from "utils/id-utils";
 
@@ -30,9 +30,7 @@ interface UseClipboardStateResult {
 const IS_PLAYING_ERROR_TOAST_ID = "IS_PLAYING";
 
 const useClipboardState = (): UseClipboardStateResult => {
-    const {
-        state: { isPlaying },
-    } = useReactronicaState();
+    const { isPlaying } = useToneControls();
     const { state, setCurrentState: setCurrentWorkstationState } =
         useWorkstationState();
     const [selectedState, setSelectedState] = useAtom(

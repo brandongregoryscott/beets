@@ -23,7 +23,6 @@ import { sortBy } from "utils/collection-utils";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
@@ -77,7 +76,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         isLast,
         borderRadius: minorScale(1),
     });
-    const { state: reactronicaState } = useReactronicaState();
     const { remove } = useTrackSectionsState({
         trackId: trackSection.track_id,
     });
@@ -200,9 +198,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                                         trackSectionStep.file_id
                                 );
 
-                                const isPlaying =
-                                    index + stepCountOffset ===
-                                    reactronicaState?.index;
+                                const isPlaying = false;
+                                // const isPlaying =
+                                //     index + stepCountOffset ===
+                                //     reactronicaState?.index;
 
                                 const activeProps = isPlaying
                                     ? {

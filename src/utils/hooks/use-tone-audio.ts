@@ -1,4 +1,5 @@
 import { List, Map } from "immutable";
+import { ToneStep } from "interfaces/tone-step";
 import { ToneTrack } from "interfaces/tone-track";
 import { useAtomValue } from "jotai/utils";
 import { pick } from "lodash";
@@ -80,14 +81,12 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
             const sequence =
                 toneTrack?.sequence ??
                 new Tone.Sequence(
-                    (time: number, step: any) => {
+                    (time: number, step: ToneStep) => {
                         console.log("attempting to trigger", step);
                         try {
                             sampler.triggerAttackRelease(
-                                step.name,
-                                step.duration ?? 0.5,
-                                undefined,
-                                step.velocity
+                                step.note,
+                                step.duration ?? 0.5
                             );
                         } catch (error) {
                             console.log("error triggering", step, error);

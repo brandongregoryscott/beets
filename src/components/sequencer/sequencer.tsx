@@ -9,13 +9,11 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
 import { FileSelectMenu } from "components/file-select-menu";
-import { Reactronica } from "lib/reactronica";
 import { toSequencerMap } from "utils/file-utils";
 import { toSequencerStepTypes } from "utils/track-section-step-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { PlayButton } from "components/workstation/play-button";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -38,13 +36,13 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         trackSection,
     } = props;
 
-    const {
-        state: reactronicaState,
-        onStepPlay,
-        onPlayToggle,
-    } = useReactronicaState({
-        useAtomState: false,
-    });
+    // const {
+    //     state: reactronicaState,
+    //     onStepPlay,
+    //     onPlayToggle,
+    // } = useReactronicaState({
+    //     useAtomState: false,
+    // });
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
     const { value: isLoading, setFalse: handleLoaded } = useBoolean(true);
     const { state: workstationState } = useWorkstationState();
@@ -85,7 +83,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     isLoading={isLoading}
                     isPlaying={isPlaying}
                     marginRight={buttonMarginRight}
-                    onClick={onPlayToggle}
+                    // onClick={onPlayToggle}
                     toggleIsPlaying={toggleIsPlaying}
                 />
                 <FileSelectMenu
@@ -114,9 +112,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     <SequencerStep
                         files={files}
                         index={index}
-                        isPlaying={
-                            isPlaying && reactronicaState?.index === index
-                        }
+                        isPlaying={false}
                         key={index}
                         onChange={onStepChange}
                         selected={selected}
@@ -128,7 +124,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     />
                 ))}
             </Pane>
-            <Reactronica.Song
+            {/* <Reactronica.Song
                 bpm={bpm}
                 isPlaying={isPlaying}
                 swing={swing / 100}
@@ -144,7 +140,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                         type="sampler"
                     />
                 </Reactronica.Track>
-            </Reactronica.Song>
+            </Reactronica.Song> */}
         </Pane>
     );
 };

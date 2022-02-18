@@ -1,8 +1,8 @@
 import { majorScale, Pane, Text } from "evergreen-ui";
 import { useTheme } from "utils/hooks/use-theme";
 import { css, hover } from "glamor";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useCallback } from "react";
+import { useToneControls } from "utils/hooks/use-tone-controls";
 
 interface TrackTimeCardProps {
     index: number;
@@ -13,7 +13,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
 ) => {
     const { index } = props;
     const { colors } = useTheme();
-    const { onIndexClick, isSelected, state } = useReactronicaState();
+    const { onIndexClick, isSelected } = useToneControls();
 
     const handleClick = useCallback(
         () => onIndexClick(index),
@@ -36,7 +36,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             maxWidth={majorScale(2)}
             minWidth={majorScale(2)}
             onClick={handleClick}
-            transform={state.index === index ? "translateY(-2px)" : undefined}
+            // transform={state.index === index ? "translateY(-2px)" : undefined}
             width={majorScale(2)}>
             <Text cursor="pointer" fontSize="x-small" userSelect="none">
                 {step}

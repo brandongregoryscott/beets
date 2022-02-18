@@ -15,7 +15,6 @@ import {
 } from "evergreen-ui";
 import { capitalize } from "lodash";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Reactronica, MidiNote, StepNoteType } from "lib/reactronica";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
@@ -33,6 +32,8 @@ import { MidiNoteUtils } from "utils/midi-note-utils";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
 import { DialogFooter } from "components/dialog-footer";
+import { MidiNote } from "types/midi-note";
+import { ToneStep } from "interfaces/tone-step";
 
 interface InstrumentSettingsProps {
     instrument?: InstrumentRecord;
@@ -214,8 +215,8 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         useBoolean(true);
 
     const samples = useMemo(() => toInstrumentMap(file), [file]);
-    const steps: Array<StepNoteType | null> = useMemo(
-        () => [{ name: rootNote, duration }],
+    const steps: Array<ToneStep | null> = useMemo(
+        () => [{ note: rootNote, duration }],
         [duration, rootNote]
     );
 
@@ -305,7 +306,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     type="button"
                     width="100%"
                 />
-                <Reactronica.Song bpm={1} isPlaying={isPlaying}>
+                {/* <Reactronica.Song bpm={1} isPlaying={isPlaying}>
                     <Reactronica.Track steps={steps} subdivision="8n">
                         <Reactronica.Instrument
                             onLoad={handleSamplesLoaded}
@@ -314,7 +315,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                             type="sampler"
                         />
                     </Reactronica.Track>
-                </Reactronica.Song>
+                </Reactronica.Song> */}
             </FormField>
             {initialInstrument?.isPersisted() && (
                 <ConfirmButton

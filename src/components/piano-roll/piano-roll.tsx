@@ -14,14 +14,13 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useMemo, useState } from "react";
 import { toInstrumentMap } from "utils/file-utils";
 import { toInstrumentStepTypes } from "utils/track-section-step-utils";
-import { Reactronica, MidiNote } from "lib/reactronica";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { PlayButton } from "components/workstation/play-button";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { MidiNotes } from "constants/midi-notes";
 import { InstrumentRecord } from "models/instrument-record";
 import { MidiNoteUtils } from "utils/midi-note-utils";
+import { MidiNote } from "types/midi-note";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -52,13 +51,13 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
             ? MidiNotes.indexOf(instrument.root_note as MidiNote)
             : defaultNoteIndex
     );
-    const {
-        state: reactronicaState,
-        onStepPlay,
-        onPlayToggle,
-    } = useReactronicaState({
-        useAtomState: false,
-    });
+    // const {
+    //     state: reactronicaState,
+    //     onStepPlay,
+    //     onPlayToggle,
+    // } = useReactronicaState({
+    //     useAtomState: false,
+    // });
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
     const { value: isLoading, setFalse: handleLoaded } = useBoolean(true);
     const { state: workstationState } = useWorkstationState();
@@ -90,7 +89,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     isLoading={isLoading}
                     isPlaying={isPlaying}
                     marginRight={buttonMarginRight}
-                    onClick={onPlayToggle}
+                    // onClick={onPlayToggle}
                     toggleIsPlaying={toggleIsPlaying}
                 />
                 <IconButton
@@ -120,14 +119,14 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     indexRange={indexRange}
                     isPlaying={isPlaying}
                     onChange={onChange}
-                    playingIndex={reactronicaState?.index}
+                    // playingIndex={reactronicaState?.index}
                     stepCount={stepCount}
                     trackSection={trackSection}
                     trackSectionSteps={trackSectionSteps}
                     viewableIndex={viewableIndex}
                 />
             </Pane>
-            <Reactronica.Song
+            {/* <Reactronica.Song
                 bpm={bpm}
                 isPlaying={isPlaying}
                 swing={swing / 100}
@@ -143,7 +142,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                         type="sampler"
                     />
                 </Reactronica.Track>
-            </Reactronica.Song>
+            </Reactronica.Song> */}
         </React.Fragment>
     );
 };
