@@ -1,85 +1,38 @@
-import { Project } from "generated/interfaces/project";
 import { List, Map } from "immutable";
-import { ToneState } from "interfaces/tone-state";
-import { useAtom } from "jotai";
-import { merge, pick } from "lodash";
+import { ToneTrack } from "interfaces/tone-track";
+import { useAtomValue } from "jotai/utils";
+import { pick } from "lodash";
 import { FileRecord } from "models/file-record";
+import { InstrumentRecord } from "models/instrument-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import * as Tone from "tone";
 import { ToneStateAtom } from "utils/atoms/tone-state-atom";
-import { useToneBpmEffect } from "utils/hooks/use-tone-bpm-effect";
-import { useToneMuteEffect } from "utils/hooks/use-tone-mute-effect";
-import { useTonePlayingEffect } from "utils/hooks/use-tone-playing-effect";
-import { useToneSwingEffect } from "utils/hooks/use-tone-swing-effect";
-import { useToneVolumeEffect } from "utils/hooks/use-tone-volume-effect";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { intersectionWith } from "utils/collection-utils";
+import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import {
     toInstrumentStepTypes,
     toSequencerStepTypes,
 } from "utils/track-section-step-utils";
-import { InstrumentRecord } from "models/instrument-record";
-import * as Tone from "tone";
-import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
-import { ToneTrack } from "interfaces/tone-track";
 
-interface UseToneOptions extends Pick<Project, "bpm" | "swing" | "volume"> {
+interface UseToneAudioOptions {
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
 }
 
-interface UseToneResult extends ToneState {
-    setIsPlaying: (isPlaying: boolean) => void;
-    setMute: (isMuted: boolean) => void;
-    toggleIsPlaying: () => void;
-    toggleMute: () => void;
-}
+interface UseToneAudioResult {}
 
-const useTone = (options: UseToneOptions): UseToneResult => {
+const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
-        bpm,
-        swing,
-        volume,
-        instruments = List<InstrumentRecord>(),
         files = List<FileRecord>(),
+        instruments = List<InstrumentRecord>(),
     } = options;
-    console.log("files in useTone", files);
-    const [state, setState] = useAtom(ToneStateAtom);
     const toneTracksRef = useRef<Map<string, ToneTrack>>(Map());
-    const { mute, isPlaying } = state;
+    const { isPlaying } = useAtomValue(ToneStateAtom);
     const { state: workstationState } = useWorkstationState();
     const { tracks, trackSections, trackSectionSteps } = workstationState;
-
-    useToneSwingEffect(swing);
-    useToneBpmEffect(bpm);
-    useToneVolumeEffect(volume);
-    useTonePlayingEffect(isPlaying);
-    useToneMuteEffect(mute);
-
-    const setIsPlaying = useCallback(
-        (isPlaying: boolean) =>
-            setState((prev) => mergeState(prev, { isPlaying })),
-        [setState]
-    );
-
-    const setMute = useCallback(
-        (mute: boolean) => setState((prev) => mergeState(prev, { mute })),
-        [setState]
-    );
-
-    const toggleIsPlaying = useCallback(
-        () =>
-            setState((prev) =>
-                mergeState(prev, { isPlaying: !prev.isPlaying })
-            ),
-        [setState]
-    );
-
-    const toggleMute = useCallback(
-        () => setState((prev) => mergeState(prev, { mute: !prev.mute })),
-        [setState]
-    );
 
     useEffect(() => {
         let updatedToneTracks: Map<string, ToneTrack> = Map();
@@ -180,10 +133,7 @@ const useTone = (options: UseToneOptions): UseToneResult => {
         });
     }, [isPlaying]);
 
-    return { ...state, setIsPlaying, setMute, toggleIsPlaying, toggleMute };
+    return {};
 };
 
-const mergeState = (previousState: ToneState, update: Partial<ToneState>) =>
-    merge({}, previousState, update);
-
-export { useTone };
+export { useToneAudio };

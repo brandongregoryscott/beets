@@ -29,7 +29,6 @@ import { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
-import { SongComposition } from "components/song-composition/song-composition";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { List } from "immutable";
 import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
@@ -37,7 +36,8 @@ import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import { Track } from "generated/interfaces/track";
-import { useTone } from "utils/hooks/use-tone";
+import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useToneAudio } from "utils/hooks/use-tone-audio";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -61,7 +61,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 ) => {
     const { user } = useCurrentUser();
     const { setState } = useWorkstationState();
-    const { isPlaying } = useTone();
+    const { isPlaying } = useToneControls();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
     const [
@@ -72,11 +72,13 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     const { globalState } = useGlobalState();
     const { resultObject: files = List(), isLoading: isLoadingFiles } =
         useListFiles();
-    console.log("files in WorkstationPage", files);
     const {
         resultObject: instruments = List(),
         isLoading: isLoadingInstruments,
     } = useListInstruments({ files });
+
+    useToneAudio({ files, instruments });
+
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
     const [hasInitialized, setHasInitialized] = useState<boolean>(false);
@@ -249,7 +251,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                     </Pane>
                 </Pane>
             )}
-            <SongComposition files={files} instruments={instruments} />
         </Pane>
     );
 };

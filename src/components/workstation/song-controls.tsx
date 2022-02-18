@@ -15,7 +15,7 @@ import React, { ChangeEvent, useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
-import { useTone } from "utils/hooks/use-tone";
+import { useToneControls } from "utils/hooks/use-tone-controls";
 
 interface SongControlsProps {}
 
@@ -26,8 +26,8 @@ const SongControls: React.FC<SongControlsProps> = (
     props: SongControlsProps
 ) => {
     const { state: project, setCurrentState } = useProjectState();
-    const { toggleMute, toggleIsPlaying, mute, isPlaying } = useTone();
     const { bpm, swing, volume } = project;
+    const { toggleMute, toggleIsPlaying, mute, isPlaying } = useToneControls();
 
     const handleNumberChange = useCallback(
         (min: number, max: number, setState: (value: number) => void) =>
