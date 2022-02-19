@@ -200,6 +200,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             onChange={handleTrackSectionStepsChange}
                             onCloseComplete={handleClosePianoRollDialog}
                             onStepCountChange={handleStepCountChange}
+                            track={track}
                             trackSection={trackSection}
                             trackSectionSteps={trackSectionSteps}
                         />

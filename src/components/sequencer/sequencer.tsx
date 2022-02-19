@@ -10,7 +10,6 @@ import { TrackSectionRecord } from "models/track-section-record";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
 import { FileSelectMenu } from "components/file-select-menu";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { PlayButton } from "components/workstation/play-button";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";

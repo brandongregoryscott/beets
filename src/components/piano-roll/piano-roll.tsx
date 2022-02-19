@@ -11,16 +11,17 @@ import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import React, { useCallback, useMemo, useState } from "react";
-import { toInstrumentMap } from "utils/file-utils";
-import { toInstrumentStepTypes } from "utils/track-section-step-utils";
+import React, { useCallback, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { PlayButton } from "components/workstation/play-button";
 import { MidiNotes } from "constants/midi-notes";
 import { InstrumentRecord } from "models/instrument-record";
 import { MidiNoteUtils } from "utils/midi-note-utils";
 import { MidiNote } from "types/midi-note";
+import { useAtomValue } from "jotai/utils";
+import { useToneAudio } from "utils/hooks/use-tone-audio";
+import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
+import { TrackRecord } from "models/track-record";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -28,6 +29,7 @@ interface PianoRollProps {
     onChange: (value: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
     stepCount: number;
+    track: TrackRecord;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
 }
@@ -43,6 +45,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
         onChange,
         onStepCountChange,
         stepCount,
+        track,
         trackSection,
         trackSectionSteps,
     } = props;
@@ -51,27 +54,16 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
             ? MidiNotes.indexOf(instrument.root_note as MidiNote)
             : defaultNoteIndex
     );
-    // const {
-    //     state: reactronicaState,
-    //     onStepPlay,
-    //     onPlayToggle,
-    // } = useReactronicaState({
-    //     useAtomState: false,
-    // });
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
-    const { value: isLoading, setFalse: handleLoaded } = useBoolean(true);
-    const { state: workstationState } = useWorkstationState();
-    const { bpm, swing, volume } = workstationState.project;
-    const samples = useMemo(() => toInstrumentMap(file), [file]);
-    const steps = useMemo(
-        () =>
-            toInstrumentStepTypes(
-                List.of(trackSection),
-                trackSectionSteps,
-                instrument
-            ),
-        [instrument, trackSection, trackSectionSteps]
-    );
+    const currentIndex = useAtomValue(CurrentIndexAtom);
+    const { isLoading } = useToneAudio({
+        isPlaying,
+        instruments: instrument != null ? List.of(instrument) : undefined,
+        files: file != null ? List.of(file) : undefined,
+        tracks: List.of(track),
+        trackSections: List.of(trackSection),
+        trackSectionSteps,
+    });
 
     const handleScaleDown = useCallback(
         () => setViewableIndex((prev) => prev - indexRange),
@@ -89,7 +81,6 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     isLoading={isLoading}
                     isPlaying={isPlaying}
                     marginRight={buttonMarginRight}
-                    // onClick={onPlayToggle}
                     toggleIsPlaying={toggleIsPlaying}
                 />
                 <IconButton
@@ -119,30 +110,13 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     indexRange={indexRange}
                     isPlaying={isPlaying}
                     onChange={onChange}
-                    // playingIndex={reactronicaState?.index}
+                    playingIndex={currentIndex}
                     stepCount={stepCount}
                     trackSection={trackSection}
                     trackSectionSteps={trackSectionSteps}
                     viewableIndex={viewableIndex}
                 />
             </Pane>
-            {/* <Reactronica.Song
-                bpm={bpm}
-                isPlaying={isPlaying}
-                swing={swing / 100}
-                volume={volume}>
-                <Reactronica.Track
-                    onStepPlay={onStepPlay}
-                    solo={true}
-                    steps={steps}
-                    subdivision="8n">
-                    <Reactronica.Instrument
-                        onLoad={handleLoaded}
-                        samples={samples}
-                        type="sampler"
-                    />
-                </Reactronica.Track>
-            </Reactronica.Song> */}
         </React.Fragment>
     );
 };
