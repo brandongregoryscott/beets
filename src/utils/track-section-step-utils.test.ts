@@ -79,12 +79,12 @@ describe("TrackSectionStepUtils", () => {
             );
 
             // Assert
-            _.range(0, 8).map((index: number) => {
+            _.range(0, 8).forEach((index: number) => {
                 expect(result[index]).toStrictEqual([
-                    { name: notes.get(index) },
+                    { note: notes.get(index) },
                 ]);
             });
-            expect(result[8]).toStrictEqual([{ name: notes.get(0) }]);
+            expect(result[8]).toStrictEqual([{ note: notes.get(0) }]);
         });
     });
 });
