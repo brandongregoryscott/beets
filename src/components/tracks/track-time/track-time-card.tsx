@@ -3,6 +3,8 @@ import { useTheme } from "utils/hooks/use-theme";
 import { css, hover } from "glamor";
 import { useCallback } from "react";
 import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useAtomValue } from "jotai/utils";
+import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
 
 interface TrackTimeCardProps {
     index: number;
@@ -13,7 +15,8 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
 ) => {
     const { index } = props;
     const { colors } = useTheme();
-    const { onIndexClick, isSelected } = useToneControls();
+    const { onIndexClick, isSelected, isPlaying } = useToneControls();
+    const currentIndex = useAtomValue(CurrentIndexAtom);
 
     const handleClick = useCallback(
         () => onIndexClick(index),
@@ -36,7 +39,11 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             maxWidth={majorScale(2)}
             minWidth={majorScale(2)}
             onClick={handleClick}
-            // transform={state.index === index ? "translateY(-2px)" : undefined}
+            transform={
+                isPlaying && currentIndex === index
+                    ? "translateY(-2px)"
+                    : undefined
+            }
             width={majorScale(2)}>
             <Text cursor="pointer" fontSize="x-small" userSelect="none">
                 {step}
