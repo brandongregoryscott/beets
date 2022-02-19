@@ -95,6 +95,10 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 new Tone.Sampler(sampleMap, () =>
                     setLoadingState((prev) => prev.set(track.id, false))
                 ).chain(channel, Tone.Destination);
+            sampler.set({
+                curve: instrument?.curve,
+                release: instrument?.release,
+            });
 
             const isLoading = toneTrack?.sampler == null;
             if (isLoading) {
