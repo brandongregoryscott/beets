@@ -22,6 +22,7 @@ interface UseToneAudioOptions
     extends Pick<ToneState, "isPlaying" | "subdivision"> {
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
+    loop?: boolean;
     trackSectionSteps?: List<TrackSectionStepRecord>;
     trackSections?: List<TrackSectionRecord>;
     tracks?: List<TrackRecord>;
@@ -33,6 +34,7 @@ interface UseToneAudioResult {
 
 const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
+        loop = true,
         isPlaying = false,
         subdivision = "8n",
         tracks = List<TrackRecord>(),
@@ -119,7 +121,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 );
 
             sequence.events = steps;
-            sequence.loop = true;
+            sequence.loop = loop;
 
             const updatedToneTrack: ToneTrack = {
                 channel,
@@ -139,6 +141,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         files,
         instruments,
         loadingState,
+        loop,
         subdivision,
         trackSectionSteps,
         trackSections,

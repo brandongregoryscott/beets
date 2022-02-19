@@ -5,14 +5,7 @@ import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
-import {
-    Button,
-    InlineAlert,
-    majorScale,
-    TextInputField,
-    toaster,
-    TrashIcon,
-} from "evergreen-ui";
+import { Button, TextInputField, toaster, TrashIcon } from "evergreen-ui";
 import { capitalize } from "lodash";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { InstrumentRecord } from "models/instrument-record";
@@ -238,6 +231,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
 
     const { isLoading: isLoadingSamples } = useToneAudio({
         isPlaying,
+        loop: false,
         files: file != null ? List.of(file) : undefined,
         instruments: List.of(instrument),
         tracks: List.of(track),
