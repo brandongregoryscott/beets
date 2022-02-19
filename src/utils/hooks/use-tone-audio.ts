@@ -1,41 +1,53 @@
 import { List, Map } from "immutable";
+import { ToneState } from "interfaces/tone-state";
 import { ToneStep } from "interfaces/tone-step";
 import { ToneTrack } from "interfaces/tone-track";
-import { useAtomValue } from "jotai/utils";
 import { pick } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { useEffect, useRef } from "react";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
-import { ToneStateAtom } from "utils/atoms/tone-state-atom";
 import { intersectionWith } from "utils/collection-utils";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useTonePlayingEffect } from "utils/hooks/use-tone-playing-effect";
 import {
     toInstrumentStepTypes,
     toSequencerStepTypes,
 } from "utils/track-section-step-utils";
 
-interface UseToneAudioOptions {
+interface UseToneAudioOptions
+    extends Pick<ToneState, "isPlaying" | "subdivision"> {
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
+    trackSectionSteps?: List<TrackSectionStepRecord>;
+    trackSections?: List<TrackSectionRecord>;
+    tracks?: List<TrackRecord>;
 }
 
-interface UseToneAudioResult {}
+interface UseToneAudioResult {
+    isLoading: boolean;
+}
 
 const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
+        isPlaying = false,
+        subdivision = "8n",
+        tracks = List<TrackRecord>(),
+        trackSections = List<TrackSectionRecord>(),
+        trackSectionSteps = List<TrackSectionStepRecord>(),
         files = List<FileRecord>(),
         instruments = List<InstrumentRecord>(),
     } = options;
+    const [loadingState, setLoadingState] = useState<Map<string, boolean>>(
+        Map()
+    );
     const toneTracksRef = useRef<Map<string, ToneTrack>>(Map());
-    const { isPlaying, subdivision } = useAtomValue(ToneStateAtom);
-    const { state: workstationState } = useWorkstationState();
-    const { tracks, trackSections, trackSectionSteps } = workstationState;
 
     useEffect(() => {
+        let updatedLoadingState: Map<string, boolean> = Map(loadingState);
         let updatedToneTracks: Map<string, ToneTrack> = Map();
 
         tracks.forEach((track: TrackRecord) => {
@@ -50,7 +62,6 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 (trackSectionStep, trackSection) =>
                     trackSectionStep.track_section_id === trackSection.id
             );
-
             const instrument = instruments.find(
                 (instrument) => instrument.id === track.instrument_id
             );
@@ -71,12 +82,24 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 ? toSequencerMap(files)
                 : toInstrumentMap(getFileById(instrument?.file_id, files));
 
-            const toneTrack = toneTracksRef.current.get(track.id);
+            const toneTrack = toneTracksRef.current.get<ToneTrack | undefined>(
+                track.id,
+                undefined
+            );
+
             const channel = toneTrack?.channel ?? new Tone.Channel();
             channel.set(pick(track, "volume", "pan", "mute", "solo"));
+
             const sampler =
                 toneTrack?.sampler ??
-                new Tone.Sampler(sampleMap).chain(channel, Tone.Destination);
+                new Tone.Sampler(sampleMap, () =>
+                    setLoadingState((prev) => prev.set(track.id, false))
+                ).chain(channel, Tone.Destination);
+
+            const isLoading = toneTrack?.sampler == null;
+            if (isLoading) {
+                updatedLoadingState = updatedLoadingState.set(track.id, true);
+            }
 
             const sequence =
                 toneTrack?.sequence ??
@@ -107,14 +130,18 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         });
 
         toneTracksRef.current = updatedToneTracks;
+        setLoadingState(updatedLoadingState);
     }, [
         files,
         instruments,
+        loadingState,
         subdivision,
         trackSectionSteps,
         trackSections,
         tracks,
     ]);
+
+    useTonePlayingEffect(isPlaying);
 
     useEffect(() => {
         toneTracksRef.current.forEach((toneTrack) => {
@@ -127,7 +154,11 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         });
     }, [isPlaying]);
 
-    return {};
+    const isLoading = loadingState.some((loading) => loading);
+
+    return {
+        isLoading,
+    };
 };
 
 export { useToneAudio };

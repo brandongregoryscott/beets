@@ -60,7 +60,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
 ) => {
     const { user } = useCurrentUser();
-    const { setState } = useWorkstationState();
+    const { state, setState } = useWorkstationState();
     const { isPlaying } = useToneControls();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
@@ -77,7 +77,14 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         isLoading: isLoadingInstruments,
     } = useListInstruments({ files });
 
-    useToneAudio({ files, instruments });
+    useToneAudio({
+        isPlaying,
+        tracks,
+        trackSections: state.trackSections,
+        trackSectionSteps: state.trackSectionSteps,
+        files,
+        instruments,
+    });
 
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();

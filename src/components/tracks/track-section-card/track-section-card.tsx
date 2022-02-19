@@ -188,6 +188,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             onCloseComplete={handleCloseSequencerDialog}
                             onStepChange={handleTrackSectionStepsChange}
                             onStepCountChange={handleStepCountChange}
+                            track={track}
                             trackSection={trackSection}
                             trackSectionSteps={trackSectionSteps}
                         />
