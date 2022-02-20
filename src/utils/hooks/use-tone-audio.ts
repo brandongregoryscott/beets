@@ -1,6 +1,7 @@
 import { List, Map } from "immutable";
 import { ToneState } from "interfaces/tone-state";
 import { ToneStep } from "interfaces/tone-step";
+import { ToneStepGroup } from "interfaces/tone-step-group";
 import { ToneTrack } from "interfaces/tone-track";
 import { pick } from "lodash";
 import { FileRecord } from "models/file-record";
@@ -121,11 +122,14 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
             const sequence =
                 toneTrack?.sequence ??
                 new Tone.Sequence(
-                    (_time: number, step: ToneStep) => {
-                        sampler.triggerAttackRelease(
-                            step.note,
-                            step.duration ?? 0.5
-                        );
+                    (time: number, stepGroup: ToneStepGroup) => {
+                        stepGroup.steps.forEach((step) => {
+                            sampler.triggerAttackRelease(
+                                step.note,
+                                step.duration ?? 0.5,
+                                time
+                            );
+                        });
                     },
                     steps,
                     subdivision

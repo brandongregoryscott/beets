@@ -8,6 +8,7 @@ import { initializeList, intersectionWith } from "utils/collection-utils";
 import { getTotalStepCount } from "utils/track-section-utils";
 import { InstrumentRecord } from "models/instrument-record";
 import { ToneStep } from "interfaces/tone-step";
+import { ToneStepGroup } from "interfaces/tone-step-group";
 
 interface ClampIndexToRangeOptions {
     endIndex: number;
@@ -48,7 +49,7 @@ const toInstrumentStepTypes = (
     trackSections: List<TrackSectionRecord>,
     trackSectionSteps: List<TrackSectionStepRecord>,
     instrument?: InstrumentRecord
-): Array<Array<ToneStep>> => {
+): Array<ToneStepGroup> => {
     const total = getTotalStepCount(trackSections);
     let steps = initializeList<Array<ToneStep>>(total, []);
     let indexAccumulator = 0;
@@ -81,14 +82,14 @@ const toInstrumentStepTypes = (
         indexAccumulator += trackSection.step_count;
     });
 
-    return steps.toArray();
+    return steps.map((steps, index) => ({ index, steps })).toArray();
 };
 
 const toSequencerStepTypes = (
     trackSections: List<TrackSectionRecord>,
     trackSectionSteps: List<TrackSectionStepRecord>,
     files: List<FileRecord>
-): Array<Array<ToneStep>> => {
+): Array<ToneStepGroup> => {
     const total = getTotalStepCount(trackSections);
     let steps = initializeList<Array<ToneStep>>(total, []);
     let indexAccumulator = 0;
@@ -126,7 +127,7 @@ const toSequencerStepTypes = (
         indexAccumulator += trackSection.step_count;
     });
 
-    return steps.toArray();
+    return steps.map((steps, index) => ({ index, steps })).toArray();
 };
 
 export {
