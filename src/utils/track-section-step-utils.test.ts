@@ -85,7 +85,7 @@ describe("TrackSectionStepUtils", () => {
             expect(result).toHaveLength(sumStepCount(trackSections));
         });
 
-        it("given multiple TrackSections with varying TrackSectionSteps, it returns properly mapped StepNoteTypes", () => {
+        it("given multiple TrackSections with varying TrackSectionSteps, it returns properly mapped ToneStepGroups", () => {
             // Arrange
             const trackSection1 = new TrackSectionRecord({
                 index: 0,
@@ -118,11 +118,15 @@ describe("TrackSectionStepUtils", () => {
 
             // Assert
             _.range(0, 8).forEach((index: number) => {
-                expect(result[index]).toStrictEqual([
-                    { note: notes.get(index) },
-                ]);
+                expect(result[index]).toStrictEqual({
+                    index,
+                    steps: [{ note: notes.get(index) }],
+                });
             });
-            expect(result[8]).toStrictEqual([{ note: notes.get(0) }]);
+            expect(result[8]).toStrictEqual({
+                index: 8,
+                steps: [{ note: notes.get(0) }],
+            });
         });
     });
 });
