@@ -1,6 +1,5 @@
 import { List, Map } from "immutable";
 import { ToneState } from "interfaces/tone-state";
-import { ToneStep } from "interfaces/tone-step";
 import { ToneStepGroup } from "interfaces/tone-step-group";
 import { ToneTrack } from "interfaces/tone-track";
 import { pick } from "lodash";
