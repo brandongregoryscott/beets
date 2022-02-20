@@ -27,6 +27,7 @@ import { useClipboardState } from "utils/hooks/use-clipboard-state";
 import { InstrumentRecord } from "models/instrument-record";
 import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -74,6 +75,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         trackId: trackSection.track_id,
     });
 
+    const { state: workstationState } = useWorkstationState();
+    const stepCount = workstationState.getStepCount();
     const { isSelected, onSelect } = useClipboardState();
 
     const {
@@ -178,6 +181,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                         />
                     </Pane>
                     <TrackSectionStepGrid
+                        stepCount={stepCount}
                         stepCountOffset={stepCountOffset}
                         trackSection={trackSection}
                         trackSectionSteps={trackSectionSteps}

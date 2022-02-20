@@ -61,7 +61,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 ) => {
     const { user } = useCurrentUser();
     const { state, setState } = useWorkstationState();
-    const { isPlaying } = useToneControls();
+    const { isPlaying, startIndex, endIndex } = useToneControls();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
     const [
@@ -78,6 +78,8 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     } = useListInstruments({ files });
 
     useToneAudio({
+        startIndex,
+        endIndex,
         isPlaying,
         tracks,
         trackSections: state.trackSections,

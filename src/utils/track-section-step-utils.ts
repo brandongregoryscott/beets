@@ -9,6 +9,22 @@ import { getTotalStepCount } from "utils/track-section-utils";
 import { InstrumentRecord } from "models/instrument-record";
 import { ToneStep } from "interfaces/tone-step";
 
+interface ClampIndexToRangeOptions {
+    endIndex: number;
+    index: number;
+    startIndex?: number;
+}
+
+/**
+ * Remaps the current index between the given range of indexes
+ */
+
+const clampIndexToRange = (options: ClampIndexToRangeOptions): number => {
+    const { index, startIndex = 0, endIndex } = options;
+    const result = index % (endIndex - startIndex + 1);
+    return result + startIndex;
+};
+
 const getByTrackSection = (
     trackSection: TrackSectionRecord,
     trackSectionSteps: List<TrackSectionStepRecord>
@@ -114,6 +130,7 @@ const toSequencerStepTypes = (
 };
 
 export {
+    clampIndexToRange,
     getByTrackSection,
     isSelected,
     toInstrumentStepTypes,

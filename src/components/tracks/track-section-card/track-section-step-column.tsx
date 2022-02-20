@@ -6,9 +6,11 @@ import { range } from "lodash";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
 import { ToneStateAtom } from "utils/atoms/tone-state-atom";
+import { clampIndexToRange } from "utils/track-section-step-utils";
 
 interface TrackSectionStepColumnProps {
     index: number;
+    stepCount: number;
     stepCountOffset: number;
     trackSectionSteps: List<TrackSectionStepRecord>;
 }
@@ -18,11 +20,17 @@ const TrackSectionStepColumnWidth = majorScale(2);
 const TrackSectionStepColumn: React.FC<TrackSectionStepColumnProps> = (
     props: TrackSectionStepColumnProps
 ) => {
-    const { index, stepCountOffset, trackSectionSteps } = props;
+    const { index, stepCount, stepCountOffset, trackSectionSteps } = props;
+    const { isPlaying, startIndex, endIndex } = useAtomValue(ToneStateAtom);
     const currentIndex = useAtomValue(CurrentIndexAtom);
-    const { isPlaying } = useAtomValue(ToneStateAtom);
+
+    const playingIndex = clampIndexToRange({
+        index: currentIndex,
+        startIndex,
+        endIndex: endIndex ?? stepCount - 1,
+    });
     const activeProps =
-        isPlaying && index + stepCountOffset === currentIndex
+        isPlaying && index + stepCountOffset === playingIndex
             ? {
                   elevation: 4 as Elevation,
                   transform: "translateY(-2px)",

@@ -5,18 +5,27 @@ import { useCallback } from "react";
 import { useToneControls } from "utils/hooks/use-tone-controls";
 import { useAtomValue } from "jotai/utils";
 import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
+import { clampIndexToRange } from "utils/track-section-step-utils";
 
 interface TrackTimeCardProps {
     index: number;
+    stepCount: number;
 }
 
 const TrackTimeCard: React.FC<TrackTimeCardProps> = (
     props: TrackTimeCardProps
 ) => {
-    const { index } = props;
+    const { index, stepCount } = props;
     const { colors } = useTheme();
-    const { onIndexClick, isSelected, isPlaying } = useToneControls();
+    const { onIndexClick, isSelected, isPlaying, startIndex, endIndex } =
+        useToneControls();
     const currentIndex = useAtomValue(CurrentIndexAtom);
+
+    const playingIndex = clampIndexToRange({
+        index: currentIndex,
+        startIndex,
+        endIndex: endIndex ?? stepCount - 1,
+    });
 
     const handleClick = useCallback(
         () => onIndexClick(index),
@@ -40,7 +49,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             minWidth={majorScale(2)}
             onClick={handleClick}
             transform={
-                isPlaying && currentIndex === index
+                isPlaying && playingIndex === index
                     ? "translateY(-2px)"
                     : undefined
             }

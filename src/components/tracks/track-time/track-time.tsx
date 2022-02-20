@@ -11,7 +11,11 @@ const TrackTime: React.FC<TrackTimeProps> = (props: TrackTimeProps) => {
     return (
         <Pane display="flex" flexDirection="row">
             {range(0, stepCount).map((index: number) => (
-                <TrackTimeCard index={index} key={index} />
+                <TrackTimeCard
+                    index={index}
+                    key={index}
+                    stepCount={stepCount}
+                />
             ))}
         </Pane>
     );

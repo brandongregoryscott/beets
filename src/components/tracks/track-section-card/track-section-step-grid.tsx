@@ -7,6 +7,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useMemo } from "react";
 
 interface TrackSectionStepGridProps {
+    stepCount: number;
     stepCountOffset: number;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
@@ -15,7 +16,8 @@ interface TrackSectionStepGridProps {
 const TrackSectionStepGrid: React.FC<TrackSectionStepGridProps> = (
     props: TrackSectionStepGridProps
 ) => {
-    const { stepCountOffset, trackSection, trackSectionSteps } = props;
+    const { stepCount, stepCountOffset, trackSection, trackSectionSteps } =
+        props;
     const groupedTrackSectionSteps = useMemo(
         () => trackSectionSteps.groupBy((e) => e.index),
         [trackSectionSteps]
@@ -26,6 +28,7 @@ const TrackSectionStepGrid: React.FC<TrackSectionStepGridProps> = (
                 <TrackSectionStepColumn
                     index={index}
                     key={`${TrackSectionStepColumn.name}${index}`}
+                    stepCount={stepCount}
                     stepCountOffset={stepCountOffset}
                     trackSectionSteps={groupedTrackSectionSteps
                         .get(index, List<TrackSectionStepRecord>())

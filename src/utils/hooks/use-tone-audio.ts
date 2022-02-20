@@ -20,9 +20,11 @@ import {
 
 interface UseToneAudioOptions
     extends Pick<ToneState, "isPlaying" | "subdivision"> {
+    endIndex?: number;
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
     loop?: boolean;
+    startIndex?: number;
     trackSectionSteps?: List<TrackSectionStepRecord>;
     trackSections?: List<TrackSectionRecord>;
     tracks?: List<TrackRecord>;
@@ -35,6 +37,8 @@ interface UseToneAudioResult {
 const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
         loop = true,
+        startIndex,
+        endIndex,
         isPlaying = false,
         subdivision = "8n",
         tracks = List<TrackRecord>(),
@@ -68,7 +72,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 (instrument) => instrument.id === track.instrument_id
             );
 
-            const steps = track.isSequencer()
+            let steps = track.isSequencer()
                 ? toSequencerStepTypes(
                       trackSectionsForTrack,
                       trackSectionStepsForTrack,
@@ -79,6 +83,13 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                       trackSectionStepsForTrack,
                       instrument
                   );
+
+            if (startIndex != null) {
+                steps = steps.slice(
+                    startIndex,
+                    endIndex != null ? endIndex + 1 : undefined
+                );
+            }
 
             const sampleMap = track.isSequencer()
                 ? toSequencerMap(files)
@@ -138,10 +149,12 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         toneTracksRef.current = updatedToneTracks;
         setLoadingState(updatedLoadingState);
     }, [
+        endIndex,
         files,
         instruments,
         loadingState,
         loop,
+        startIndex,
         subdivision,
         trackSectionSteps,
         trackSections,

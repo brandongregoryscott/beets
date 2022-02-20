@@ -13,7 +13,7 @@ const useTonePlayingEffect = (isPlaying?: boolean): void => {
         }
 
         Tone.Transport.stop();
-        setCurrentIndex(-1);
+        setCurrentIndex(0);
     }, [isPlaying, setCurrentIndex]);
 };
 
