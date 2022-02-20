@@ -28,9 +28,7 @@ import { useTracksState } from "utils/hooks/use-tracks-state";
 import { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
-import { SongComposition } from "components/song-composition/song-composition";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { List } from "immutable";
 import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
@@ -38,6 +36,8 @@ import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import { Track } from "generated/interfaces/track";
+import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useToneAudio } from "utils/hooks/use-tone-audio";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -60,10 +60,8 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
 ) => {
     const { user } = useCurrentUser();
-    const { setState } = useWorkstationState();
-    const {
-        state: { isPlaying },
-    } = useReactronicaState();
+    const { state, setState } = useWorkstationState();
+    const { isPlaying, startIndex, endIndex } = useToneControls();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
     const [
@@ -78,6 +76,18 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         resultObject: instruments = List(),
         isLoading: isLoadingInstruments,
     } = useListInstruments({ files });
+
+    useToneAudio({
+        startIndex,
+        endIndex,
+        isPlaying,
+        tracks,
+        trackSections: state.trackSections,
+        trackSectionSteps: state.trackSectionSteps,
+        files,
+        instruments,
+    });
+
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
     const [hasInitialized, setHasInitialized] = useState<boolean>(false);
@@ -250,7 +260,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                     </Pane>
                 </Pane>
             )}
-            <SongComposition files={files} instruments={instruments} />
         </Pane>
     );
 };

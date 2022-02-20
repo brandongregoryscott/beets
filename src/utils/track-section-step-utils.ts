@@ -3,10 +3,28 @@ import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { MidiNote, StepNoteType, StepType } from "lib/reactronica";
+import { MidiNote } from "types/midi-note";
 import { initializeList, intersectionWith } from "utils/collection-utils";
 import { getTotalStepCount } from "utils/track-section-utils";
 import { InstrumentRecord } from "models/instrument-record";
+import { ToneStep } from "interfaces/tone-step";
+import { ToneStepGroup } from "interfaces/tone-step-group";
+
+interface ClampIndexToRangeOptions {
+    endIndex: number;
+    index: number;
+    startIndex?: number;
+}
+
+/**
+ * Remaps the current index between the given range of indexes
+ */
+
+const clampIndexToRange = (options: ClampIndexToRangeOptions): number => {
+    const { index, startIndex = 0, endIndex } = options;
+    const result = index % (endIndex - startIndex + 1);
+    return result + startIndex;
+};
 
 const getByTrackSection = (
     trackSection: TrackSectionRecord,
@@ -31,9 +49,9 @@ const toInstrumentStepTypes = (
     trackSections: List<TrackSectionRecord>,
     trackSectionSteps: List<TrackSectionStepRecord>,
     instrument?: InstrumentRecord
-): Array<StepType> => {
+): Array<ToneStepGroup> => {
     const total = getTotalStepCount(trackSections);
-    let steps = initializeList<StepType>(total, []);
+    let steps = initializeList<Array<ToneStep>>(total, []);
     let indexAccumulator = 0;
 
     trackSections.forEach((trackSection) => {
@@ -51,29 +69,29 @@ const toInstrumentStepTypes = (
                 return;
             }
 
-            const midiNotes: StepNoteType[] = stepsByIndex
+            const midiNotes: ToneStep[] = stepsByIndex
                 .map((trackSectionStep) => ({
-                    name: trackSectionStep.note as MidiNote,
+                    note: trackSectionStep.note as MidiNote,
                     duration: instrument?.duration,
                 }))
                 .toArray();
 
-            steps = steps.set(index + indexAccumulator, midiNotes as StepType);
+            steps = steps.set(index + indexAccumulator, midiNotes);
         });
 
         indexAccumulator += trackSection.step_count;
     });
 
-    return steps.toArray();
+    return steps.map((steps, index) => ({ index, steps })).toArray();
 };
 
 const toSequencerStepTypes = (
     trackSections: List<TrackSectionRecord>,
     trackSectionSteps: List<TrackSectionStepRecord>,
     files: List<FileRecord>
-): Array<StepType> => {
+): Array<ToneStepGroup> => {
     const total = getTotalStepCount(trackSections);
-    let steps = initializeList<StepType>(total, []);
+    let steps = initializeList<Array<ToneStep>>(total, []);
     let indexAccumulator = 0;
 
     trackSections.forEach((trackSection) => {
@@ -97,22 +115,23 @@ const toSequencerStepTypes = (
                 (file, trackSection) => trackSection.file_id === file.id
             );
 
-            const midiNotes = filesForTrackSectionSteps
+            const midiNotes: ToneStep[] = filesForTrackSectionSteps
                 .map((file) => ({
-                    name: file.getMidiNote(),
+                    note: file.getMidiNote(),
                 }))
                 .toArray();
 
-            steps = steps.set(index + indexAccumulator, midiNotes as StepType);
+            steps = steps.set(index + indexAccumulator, midiNotes);
         });
 
         indexAccumulator += trackSection.step_count;
     });
 
-    return steps.toArray();
+    return steps.map((steps, index) => ({ index, steps })).toArray();
 };
 
 export {
+    clampIndexToRange,
     getByTrackSection,
     isSelected,
     toInstrumentStepTypes,

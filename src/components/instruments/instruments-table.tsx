@@ -43,6 +43,7 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                         <Table.Row
                             isSelectable={isSelectable}
                             isSelected={instrument.equals(selected)}
+                            key={instrument.id}
                             onSelect={() => onSelect?.(instrument)}>
                             <Table.TextCell>{instrument.name}</Table.TextCell>
                             <Table.TextCell>

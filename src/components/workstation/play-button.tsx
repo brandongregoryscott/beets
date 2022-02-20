@@ -6,6 +6,7 @@ import {
     Spinner,
 } from "evergreen-ui";
 import React, { useCallback, useMemo } from "react";
+import * as Tone from "tone";
 
 interface PlayButtonProps extends Omit<IconButtonProps, "icon" | "onClick"> {
     isPlaying: boolean;
@@ -23,7 +24,9 @@ const PlayButton: React.FC<PlayButtonProps> = (props: PlayButtonProps) => {
         ...iconButtonProps
     } = props;
     const handleClick = useCallback(
-        (event: React.MouseEvent) => {
+        async (event: React.MouseEvent) => {
+            // Ensure AudioContext is started
+            await Tone.start();
             event.stopPropagation();
             onClick?.(isPlaying);
             toggleIsPlaying();

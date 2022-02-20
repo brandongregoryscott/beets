@@ -1,19 +1,31 @@
 import { majorScale, Pane, Text } from "evergreen-ui";
 import { useTheme } from "utils/hooks/use-theme";
 import { css, hover } from "glamor";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useCallback } from "react";
+import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useAtomValue } from "jotai/utils";
+import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
+import { clampIndexToRange } from "utils/track-section-step-utils";
 
 interface TrackTimeCardProps {
     index: number;
+    stepCount: number;
 }
 
 const TrackTimeCard: React.FC<TrackTimeCardProps> = (
     props: TrackTimeCardProps
 ) => {
-    const { index } = props;
+    const { index, stepCount } = props;
     const { colors } = useTheme();
-    const { onIndexClick, isSelected, state } = useReactronicaState();
+    const { onIndexClick, isSelected, isPlaying, startIndex, endIndex } =
+        useToneControls();
+    const currentIndex = useAtomValue(CurrentIndexAtom);
+
+    const playingIndex = clampIndexToRange({
+        index: currentIndex,
+        startIndex,
+        endIndex: endIndex ?? stepCount - 1,
+    });
 
     const handleClick = useCallback(
         () => onIndexClick(index),
@@ -36,7 +48,11 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             maxWidth={majorScale(2)}
             minWidth={majorScale(2)}
             onClick={handleClick}
-            transform={state.index === index ? "translateY(-2px)" : undefined}
+            transform={
+                isPlaying && playingIndex === index
+                    ? "translateY(-2px)"
+                    : undefined
+            }
             width={majorScale(2)}>
             <Text cursor="pointer" fontSize="x-small" userSelect="none">
                 {step}

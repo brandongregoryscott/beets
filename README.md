@@ -51,6 +51,5 @@ If you would like to see a feature, and it isn't [already documented](https://gi
 ### Special thanks
 
 -   [Tone.js](https://github.com/Tonejs/Tone.js)
--   [reactronica](https://github.com/unkleho/reactronica)
 -   [Evergreen](https://github.com/segmentio/evergreen)
 -   [Supabase](https://github.com/supabase/supabase)

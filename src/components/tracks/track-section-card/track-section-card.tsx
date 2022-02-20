@@ -4,33 +4,30 @@ import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
     DeleteIcon,
     DragHandleHorizontalIcon,
-    Elevation,
     HeatGridIcon,
     majorScale,
     minorScale,
     Pane,
     StepChartIcon,
 } from "evergreen-ui";
-import { List } from "immutable";
 import { SetStateAction } from "jotai";
-import _ from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { sortBy } from "utils/collection-utils";
 import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
-import { useReactronicaState } from "utils/hooks/use-reactronica-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import { getStepColor } from "utils/theme-utils";
 import { css, hover, select } from "glamor";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
 import { InstrumentRecord } from "models/instrument-record";
+import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
+import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
+import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -42,9 +39,6 @@ interface TrackSectionCardProps {
     track: TrackRecord;
     trackSection: TrackSectionRecord;
 }
-
-const stepHeight = majorScale(2);
-const stepWidth = majorScale(2);
 
 const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     props: TrackSectionCardProps
@@ -77,11 +71,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         isLast,
         borderRadius: minorScale(1),
     });
-    const { state: reactronicaState } = useReactronicaState();
     const { remove } = useTrackSectionsState({
         trackId: trackSection.track_id,
     });
 
+    const { state: workstationState } = useWorkstationState();
+    const stepCount = workstationState.getStepCount();
     const { isSelected, onSelect } = useClipboardState();
 
     const {
@@ -90,8 +85,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     } = useTrackSectionStepsState({ trackSectionId: trackSection.id });
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
-
-    const groupedTrackSectionSteps = trackSectionSteps.groupBy((e) => e.index);
 
     const handleRemove = useCallback(
         () => remove(trackSection),
@@ -107,7 +100,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         [onChange, trackSection.id]
     );
 
-    const width = trackSection.step_count * stepWidth;
+    const width = trackSection.step_count * TrackSectionStepColumnWidth;
 
     const backgroundColor = isSelected(trackSection)
         ? theme.colors.gray400
@@ -187,69 +180,19 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             tooltipText="Move section"
                         />
                     </Pane>
-                    <Pane display="flex" flexDirection="row">
-                        {_.range(0, trackSection.step_count).map(
-                            (index: number) => {
-                                const steps =
-                                    groupedTrackSectionSteps
-                                        .get(index)
-                                        ?.toList() ?? List();
-                                const stepsSortedByFileId = sortBy(
-                                    steps,
-                                    (trackSectionStep) =>
-                                        trackSectionStep.file_id
-                                );
-
-                                const isPlaying =
-                                    index + stepCountOffset ===
-                                    reactronicaState?.index;
-
-                                const activeProps = isPlaying
-                                    ? {
-                                          elevation: 4 as Elevation,
-                                          transform: "translateY(-2px)",
-                                      }
-                                    : {};
-
-                                return (
-                                    <Pane
-                                        {...activeProps}
-                                        display="flex"
-                                        flexDirection="column"
-                                        key={`track-section-${trackSection.id}-column-${index}`}
-                                        minHeight={stepHeight}
-                                        minWidth={stepWidth}
-                                        width={stepWidth}>
-                                        {_.range(0, 4).map((row: number) => {
-                                            const backgroundColor =
-                                                getStepColor(
-                                                    stepsSortedByFileId.get(row)
-                                                        ?.file_id
-                                                );
-                                            return (
-                                                <Pane
-                                                    backgroundColor={
-                                                        backgroundColor
-                                                    }
-                                                    height={stepHeight}
-                                                    key={`track-section-${trackSection.id}-row-${row}`}
-                                                    minHeight={stepHeight}
-                                                    minWidth={stepWidth}
-                                                    width={stepWidth}
-                                                />
-                                            );
-                                        })}
-                                    </Pane>
-                                );
-                            }
-                        )}
-                    </Pane>
+                    <TrackSectionStepGrid
+                        stepCount={stepCount}
+                        stepCountOffset={stepCountOffset}
+                        trackSection={trackSection}
+                        trackSectionSteps={trackSectionSteps}
+                    />
                     {sequencerDialogOpen && files != null && (
                         <SequencerDialog
                             files={files}
                             onCloseComplete={handleCloseSequencerDialog}
                             onStepChange={handleTrackSectionStepsChange}
                             onStepCountChange={handleStepCountChange}
+                            track={track}
                             trackSection={trackSection}
                             trackSectionSteps={trackSectionSteps}
                         />
@@ -261,6 +204,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                             onChange={handleTrackSectionStepsChange}
                             onCloseComplete={handleClosePianoRollDialog}
                             onStepCountChange={handleStepCountChange}
+                            track={track}
                             trackSection={trackSection}
                             trackSectionSteps={trackSectionSteps}
                         />

@@ -5,23 +5,15 @@ import { SelectMenu, SelectMenuItem } from "components/select-menu";
 import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
-import {
-    Button,
-    InlineAlert,
-    majorScale,
-    TextInputField,
-    toaster,
-    TrashIcon,
-} from "evergreen-ui";
+import { Button, TextInputField, toaster, TrashIcon } from "evergreen-ui";
 import { capitalize } from "lodash";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Reactronica, MidiNote, StepNoteType } from "lib/reactronica";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
 import { FileRecord } from "models/file-record";
-import { getFileById, toInstrumentMap } from "utils/file-utils";
+import { getFileById } from "utils/file-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { ValueRequiredState } from "constants/validation-states";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";
@@ -33,6 +25,12 @@ import { MidiNoteUtils } from "utils/midi-note-utils";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
 import { DialogFooter } from "components/dialog-footer";
+import { MidiNote } from "types/midi-note";
+import { TrackRecord } from "models/track-record";
+import { TrackSectionRecord } from "models/track-section-record";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { List } from "immutable";
+import { useToneAudio } from "utils/hooks/use-tone-audio";
 
 interface InstrumentSettingsProps {
     instrument?: InstrumentRecord;
@@ -129,6 +127,23 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     const { value: isAttemptingDelete, setTrue: handleDeleteClick } =
         useBoolean();
 
+    const instrument = useMemo(() => {
+        const updatedValues: Partial<Instrument> = {
+            curve,
+            duration,
+            name,
+            release,
+            file_id: file?.id,
+            root_note: rootNote,
+        };
+
+        const instrument =
+            initialInstrument?.merge(updatedValues) ??
+            new InstrumentRecord(updatedValues);
+
+        return instrument;
+    }, [curve, duration, file?.id, initialInstrument, name, release, rootNote]);
+
     const handleFileSelected = useCallback(
         (file: FileRecord) => {
             setFileValidation(undefined);
@@ -155,32 +170,14 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             return;
         }
 
-        const updatedValues: Partial<Instrument> = {
-            curve,
-            duration,
-            name,
-            release,
-            file_id: file?.id,
-            root_note: rootNote,
-        };
-
-        const instrument =
-            initialInstrument?.merge(updatedValues) ??
-            new InstrumentRecord(updatedValues);
-
         createOrUpdateInstrument(instrument);
     }, [
         createOrUpdateInstrument,
-        curve,
-        duration,
         file,
-        initialInstrument,
+        instrument,
         name,
-        nameValidation,
-        release,
-        releaseValidation,
-        rootNote,
-        setFileValidation,
+        nameValidation?.isInvalid,
+        releaseValidation.isInvalid,
         setNameValidation,
     ]);
 
@@ -210,14 +207,37 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         toggle: toggleIsPlaying,
         setFalse: stopPlaying,
     } = useBoolean();
-    const { value: isLoadingSamples, setFalse: handleSamplesLoaded } =
-        useBoolean(true);
 
-    const samples = useMemo(() => toInstrumentMap(file), [file]);
-    const steps: Array<StepNoteType | null> = useMemo(
-        () => [{ name: rootNote, duration }],
-        [duration, rootNote]
+    const track = useMemo(
+        () => new TrackRecord().merge({ instrument_id: initialInstrument?.id }),
+        [initialInstrument?.id]
     );
+
+    const trackSection = useMemo(
+        () => new TrackSectionRecord().merge({ track_id: track.id }),
+        [track.id]
+    );
+
+    const trackSectionSteps: List<TrackSectionStepRecord> = useMemo(
+        () =>
+            List.of(
+                new TrackSectionStepRecord({
+                    note: rootNote,
+                    track_section_id: trackSection.id,
+                })
+            ),
+        [rootNote, trackSection.id]
+    );
+
+    const { isLoading: isLoadingSamples } = useToneAudio({
+        isPlaying,
+        loop: false,
+        files: file != null ? List.of(file) : undefined,
+        instruments: List.of(instrument),
+        tracks: List.of(track),
+        trackSections: List.of(trackSection),
+        trackSectionSteps: trackSectionSteps,
+    });
 
     const handlePlay = useCallback(() => {
         // Toggle the 'isPlaying' boolean after the duration of the sample which should reset to
@@ -225,7 +245,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         setTimeout(stopPlaying, (duration ?? 0.5) * 1000);
     }, [duration, stopPlaying]);
 
-    useEffect(() => stopPlaying(), [steps, stopPlaying]);
+    useEffect(() => stopPlaying(), [stopPlaying]);
 
     return (
         <React.Fragment>
@@ -288,14 +308,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     </Button>
                 </FileSelectMenu>
             </FormField>
-            <FormField
-                hint={
-                    <InlineAlert marginTop={majorScale(2)}>
-                        Curve and Release changes will not be reflected until
-                        saving and reopening.
-                    </InlineAlert>
-                }
-                label="Preview">
+            <FormField label="Preview">
                 <PlayButton
                     disabled={file == null}
                     isLoading={file != null && isLoadingSamples}
@@ -305,16 +318,6 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     type="button"
                     width="100%"
                 />
-                <Reactronica.Song bpm={1} isPlaying={isPlaying}>
-                    <Reactronica.Track steps={steps} subdivision="8n">
-                        <Reactronica.Instrument
-                            onLoad={handleSamplesLoaded}
-                            options={{ curve, release }}
-                            samples={samples}
-                            type="sampler"
-                        />
-                    </Reactronica.Track>
-                </Reactronica.Song>
             </FormField>
             {initialInstrument?.isPersisted() && (
                 <ConfirmButton

@@ -5,11 +5,13 @@ import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
+import { TrackRecord } from "models/track-record";
 
 interface SequencerDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     files: List<FileRecord>;
     onStepChange: (trackSectionSteps: List<TrackSectionStepRecord>) => void;
     onStepCountChange: (stepCount: number) => void;
+    track: TrackRecord;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
 }
@@ -22,6 +24,7 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
         onStepCountChange,
         onCloseComplete,
         files,
+        track,
         trackSectionSteps: initialValue,
         trackSection,
     } = props;
@@ -69,6 +72,7 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
                 onStepChange={handleStepChange}
                 onStepCountChange={setStepCount}
                 stepCount={stepCount}
+                track={track}
                 trackSection={trackSection}
                 trackSectionSteps={trackSectionSteps}
             />
