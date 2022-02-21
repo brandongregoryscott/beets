@@ -14,6 +14,7 @@ import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { useHotkeys } from "react-hotkeys-hook";
+import { ExportDialog } from "components/workstation/export-dialog";
 
 interface FileTabProps {}
 
@@ -43,6 +44,11 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         isConfirmDialogOpen,
         handleOpenConfirmDialog,
         handleCloseConfirmDialog,
+    ] = useDialog();
+    const [
+        isExportDialogOpen,
+        handleOpenExportDialog,
+        handleCloseExportDialog,
     ] = useDialog();
     const [
         isSettingsDialogOpen,
@@ -178,6 +184,14 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         [handleOpenSettingsDialog]
     );
 
+    const handleExportClick = useCallback(
+        (closePopover: () => void) => () => {
+            handleOpenExportDialog();
+            closePopover();
+        },
+        [handleOpenExportDialog]
+    );
+
     return (
         <React.Fragment>
             <Popover
@@ -193,6 +207,9 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                             onClick={handleSave(closePopover)}
                             secondaryText={"⌘S" as any}>
                             Save
+                        </Menu.Item>
+                        <Menu.Item onClick={handleExportClick(closePopover)}>
+                            Export
                         </Menu.Item>
                         <Menu.Item onClick={handleSettingsClick(closePopover)}>
                             Settings
@@ -255,6 +272,12 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                 <ProjectSettingsDialog
                     isShown={isSettingsDialogOpen}
                     onCloseComplete={handleCloseSettingsDialog}
+                />
+            )}
+            {isExportDialogOpen && (
+                <ExportDialog
+                    isShown={isExportDialogOpen}
+                    onCloseComplete={handleCloseExportDialog}
                 />
             )}
         </React.Fragment>

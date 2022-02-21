@@ -19,11 +19,13 @@ import {
 } from "utils/track-section-step-utils";
 
 interface UseToneAudioOptions
-    extends Pick<ToneState, "isPlaying" | "subdivision"> {
+    extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision"> {
     endIndex?: number;
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
+    lengthInMs?: number;
     loop?: boolean;
+    onRecordingComplete?: (recording: Blob) => void;
     startIndex?: number;
     trackSectionSteps?: List<TrackSectionStepRecord>;
     trackSections?: List<TrackSectionRecord>;
@@ -36,10 +38,13 @@ interface UseToneAudioResult {
 
 const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
+        lengthInMs,
         loop = true,
         startIndex,
         endIndex,
         isPlaying = false,
+        isRecording = false,
+        onRecordingComplete,
         subdivision = "8n",
         tracks = List<TrackRecord>(),
         trackSections = List<TrackSectionRecord>(),
@@ -50,10 +55,11 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const [loadingState, setLoadingState] = useState<Map<string, boolean>>(
         Map()
     );
+    const recorderRef = useRef<Tone.Recorder>(new Tone.Recorder());
+    const recordingIdRef = useRef<NodeJS.Timeout>();
     const toneTracksRef = useRef<Map<string, ToneTrack>>(Map());
 
     useEffect(() => {
-        let updatedLoadingState: Map<string, boolean> = Map(loadingState);
         let updatedToneTracks: Map<string, ToneTrack> = Map();
 
         tracks.forEach((track: TrackRecord) => {
@@ -105,9 +111,12 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
 
             const sampler =
                 toneTrack?.sampler ??
-                new Tone.Sampler(sampleMap, () =>
-                    setLoadingState((prev) => prev.set(track.id, false))
-                ).chain(channel, Tone.Destination);
+                new Tone.Sampler(sampleMap, () => {
+                    setLoadingState((prev) => prev.set(track.id, false));
+                }).chain(channel, Tone.Destination);
+
+            Tone.Destination.connect(recorderRef.current);
+
             sampler.set({
                 curve: instrument?.curve,
                 release: instrument?.release,
@@ -115,7 +124,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
 
             const isLoading = toneTrack?.sampler == null;
             if (isLoading) {
-                updatedLoadingState = updatedLoadingState.set(track.id, true);
+                setLoadingState((prev) => prev.set(track.id, true));
             }
 
             const sequence =
@@ -150,12 +159,10 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         });
 
         toneTracksRef.current = updatedToneTracks;
-        setLoadingState(updatedLoadingState);
     }, [
         endIndex,
         files,
         instruments,
-        loadingState,
         loop,
         startIndex,
         subdivision,
@@ -167,21 +174,58 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     useTonePlayingEffect(isPlaying);
 
     useEffect(() => {
-        toneTracksRef.current.forEach((toneTrack) => {
-            if (isPlaying) {
-                toneTrack.sequence.start(0);
-                return;
-            }
-
-            toneTrack.sequence.stop();
-        });
+        updateTracks({ isPlaying }, toneTracksRef.current);
     }, [isPlaying]);
+
+    useEffect(() => {
+        if (isRecording) {
+            Tone.Transport.start();
+
+            recorderRef.current.start();
+            updateTracks(
+                { isPlaying: true, loop: false },
+                toneTracksRef.current
+            );
+
+            recordingIdRef.current = setTimeout(async () => {
+                const recording = await recorderRef.current.stop();
+                Tone.Transport.stop();
+                onRecordingComplete?.(recording);
+            }, lengthInMs ?? 0);
+
+            return;
+        }
+
+        if (recordingIdRef.current != null) {
+            clearTimeout(recordingIdRef.current);
+        }
+        recorderRef.current = new Tone.Recorder();
+        updateTracks({ isPlaying: false, loop: true }, toneTracksRef.current);
+    }, [isRecording, lengthInMs, onRecordingComplete]);
 
     const isLoading = loadingState.some((loading) => loading);
 
     return {
         isLoading,
     };
+};
+
+const updateTracks = (
+    options: Pick<UseToneAudioOptions, "loop" | "isPlaying">,
+    tracks: Map<string, ToneTrack>
+) => {
+    const { loop, isPlaying } = options;
+    tracks.forEach((toneTrack) => {
+        if (loop != null) {
+            toneTrack.sequence.loop = loop;
+        }
+
+        if (isPlaying) {
+            toneTrack.sequence.start(0);
+            return;
+        }
+        toneTrack.sequence.stop();
+    });
 };
 
 export { useToneAudio };

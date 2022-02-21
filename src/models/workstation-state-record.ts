@@ -241,6 +241,13 @@ class WorkstationStateRecord
         return diff;
     }
 
+    public getLengthInMs(): number {
+        const stepCount = this.getStepCount();
+        const { bpm } = this.project;
+        // Increment the step count to account for tail audio
+        return 1000 * ((60 / bpm) * ((stepCount + 1) / 2));
+    }
+
     public getStepCount(): number {
         // Calculate sum of steps by track
         const stepSums = this.tracks.map((track) => {
