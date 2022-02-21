@@ -137,3 +137,5 @@ export {
     toInstrumentStepTypes,
     toSequencerStepTypes,
 };
+
+export type { ClampIndexToRangeOptions };

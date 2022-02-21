@@ -18,10 +18,9 @@ import { MidiNotes } from "constants/midi-notes";
 import { InstrumentRecord } from "models/instrument-record";
 import { MidiNoteUtils } from "utils/midi-note-utils";
 import { MidiNote } from "types/midi-note";
-import { useAtomValue } from "jotai/utils";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
-import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
 import { TrackRecord } from "models/track-record";
+import { useCurrentIndex } from "utils/hooks/use-current-index";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -55,7 +54,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
             : defaultNoteIndex
     );
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
-    const currentIndex = useAtomValue(CurrentIndexAtom);
+    const currentIndex = useCurrentIndex({ endIndex: stepCount - 1 });
     const { isLoading } = useToneAudio({
         isPlaying,
         instruments: instrument != null ? List.of(instrument) : undefined,
