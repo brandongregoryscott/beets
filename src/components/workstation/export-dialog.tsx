@@ -1,7 +1,10 @@
 import { Dialog, DialogProps } from "components/dialog";
 import {
+    Alert,
     Button,
     ExportIcon,
+    Link,
+    Text,
     majorScale,
     Paragraph,
     RecordIcon,
@@ -90,6 +93,19 @@ const ExportDialog: React.FC<ExportDialogProps> = (
                         below. Recording happens in real-time, and you'll be
                         able to download the file once complete.
                     </Paragraph>
+                    <Alert
+                        marginBottom={majorScale(2)}
+                        title="The file will be exported as a .webm file">
+                        <Text>
+                            Use a site like{" "}
+                            <Link
+                                href="https://cloudconvert.com/webm-converter"
+                                target="_blank">
+                                CloudConvert
+                            </Link>{" "}
+                            to convert it to your desired format.
+                        </Text>
+                    </Alert>
                     <Button
                         allowUnsafeHref={true}
                         appearance={blob == null ? "default" : "primary"}
@@ -112,7 +128,11 @@ const ExportDialog: React.FC<ExportDialogProps> = (
                         isLoading={isRecording}
                         onClick={blob == null ? handleExportClick : undefined}
                         width="100%">
-                        {blob == null ? "Export" : "Download file"}
+                        {blob == null && !isRecording && "Export"}
+                        {isRecording && (
+                            <Text color={colors.red600}>Recording...</Text>
+                        )}
+                        {blob != null && !isRecording && "Download file"}
                     </Button>
                 </React.Fragment>
             )}
