@@ -4,6 +4,7 @@ import { atom } from "jotai";
 const ToneStateAtom = atom<ToneState>({
     endIndex: undefined,
     isPlaying: false,
+    isRecording: false,
     mute: false,
     startIndex: undefined,
     subdivision: "8n",
