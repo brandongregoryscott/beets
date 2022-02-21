@@ -4,9 +4,8 @@ import { List } from "immutable";
 import { useAtomValue } from "jotai/utils";
 import { range } from "lodash";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
 import { ToneStateAtom } from "utils/atoms/tone-state-atom";
-import { clampIndexToRange } from "utils/track-section-step-utils";
+import { useCurrentIndex } from "utils/hooks/use-current-index";
 
 interface TrackSectionStepColumnProps {
     index: number;
@@ -22,15 +21,12 @@ const TrackSectionStepColumn: React.FC<TrackSectionStepColumnProps> = (
 ) => {
     const { index, stepCount, stepCountOffset, trackSectionSteps } = props;
     const { isPlaying, startIndex, endIndex } = useAtomValue(ToneStateAtom);
-    const currentIndex = useAtomValue(CurrentIndexAtom);
-
-    const playingIndex = clampIndexToRange({
-        index: currentIndex,
+    const currentIndex = useCurrentIndex({
         startIndex,
         endIndex: endIndex ?? stepCount - 1,
     });
     const activeProps =
-        isPlaying && index + stepCountOffset === playingIndex
+        isPlaying && index + stepCountOffset === currentIndex
             ? {
                   elevation: 4 as Elevation,
                   transform: "translateY(-2px)",

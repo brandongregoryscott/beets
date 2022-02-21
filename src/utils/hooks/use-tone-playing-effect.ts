@@ -1,10 +1,10 @@
-import { useUpdateAtom } from "jotai/utils";
+import { useResetAtom } from "jotai/utils";
 import { useEffect } from "react";
 import * as Tone from "tone";
 import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
 
 const useTonePlayingEffect = (isPlaying?: boolean): void => {
-    const setCurrentIndex = useUpdateAtom(CurrentIndexAtom);
+    const resetCurrentIndex = useResetAtom(CurrentIndexAtom);
 
     useEffect(() => {
         if (isPlaying) {
@@ -13,8 +13,8 @@ const useTonePlayingEffect = (isPlaying?: boolean): void => {
         }
 
         Tone.Transport.stop();
-        setCurrentIndex(0);
-    }, [isPlaying, setCurrentIndex]);
+        resetCurrentIndex();
+    }, [isPlaying, resetCurrentIndex]);
 };
 
 export { useTonePlayingEffect };
