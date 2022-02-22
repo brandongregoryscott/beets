@@ -35,7 +35,6 @@ const DraggableTrackList: React.FC<DraggableTrackListProps> = (
                         borderRadius={minorScale(1)}
                         display="flex"
                         flexDirection="column"
-                        margin={-2}
                         ref={provided.innerRef}
                         {...provided.droppableProps}>
                         <TrackList tracks={tracks} />

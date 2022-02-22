@@ -4,7 +4,7 @@ import { SetStateAction, useAtom } from "jotai";
 import { useCallback } from "react";
 import { DragStart, DropResult, ResponderProvided } from "react-beautiful-dnd";
 import { DraggableAtom } from "utils/atoms/draggable-atom";
-import { reorder } from "utils/collection-utils";
+import { rebaseIndexes, reorder } from "utils/collection-utils";
 
 interface UseDraggableOptions<T extends OrderableEntity> {
     setState?: (update: SetStateAction<List<T>>) => void;
@@ -37,7 +37,7 @@ const useDraggable = <T extends OrderableEntity>(
             }
 
             setState?.((prev) =>
-                reorder(prev, source.index, destination.index)
+                rebaseIndexes(reorder(prev, source.index, destination.index))
             );
         },
         [setDraggableId, setState]

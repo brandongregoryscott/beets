@@ -34,7 +34,7 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
     );
 
     return (
-        <Pane height="100vh" overflow="auto">
+        <Pane height="100%" overflow="auto" width="100%">
             <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
                 <TabNavigation>
                     {tabs.map((tab) => (
