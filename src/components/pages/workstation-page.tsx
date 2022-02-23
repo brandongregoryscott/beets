@@ -220,42 +220,35 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                         )}
                         overflow="auto"
                         width={calcFrom100(SidebarNavigationWidth + margin)}>
-                        {isPlaying && <PlayingTrackList tracks={tracks} />}
-                        {!isPlaying && (
-                            <React.Fragment>
-                                <DraggableTrackList tracks={tracks} />
-                                <Pane
-                                    display="flex"
-                                    flexDirection="row"
-                                    marginRight="auto">
-                                    <SelectMenu
-                                        calculateHeight={true}
-                                        closeOnSelect={true}
-                                        hasFilter={false}
-                                        isMultiSelect={false}
-                                        onSelect={handleSelect}
-                                        options={options}
-                                        title="Track Type"
-                                        width={majorScale(16)}>
-                                        <Tooltip content="Add Track">
-                                            <IconButton
-                                                icon={AddIcon}
-                                                marginTop={majorScale(2)}
-                                            />
-                                        </Tooltip>
-                                    </SelectMenu>
-                                </Pane>
-                                {instrumentDialogOpen && (
-                                    <ChooseOrCreateInstrumentDialog
-                                        isShown={true}
-                                        onCloseComplete={
-                                            handleCloseInstrumentDialog
-                                        }
-                                        onSubmit={handleInstrumentSubmit}
-                                        showTabs={globalState.isAuthenticated()}
+                        <DraggableTrackList tracks={tracks} />
+                        <Pane
+                            display="flex"
+                            flexDirection="row"
+                            marginRight="auto">
+                            <SelectMenu
+                                calculateHeight={true}
+                                closeOnSelect={true}
+                                hasFilter={false}
+                                isMultiSelect={false}
+                                onSelect={handleSelect}
+                                options={options}
+                                title="Track Type"
+                                width={majorScale(16)}>
+                                <Tooltip content="Add Track">
+                                    <IconButton
+                                        icon={AddIcon}
+                                        marginTop={majorScale(2)}
                                     />
-                                )}
-                            </React.Fragment>
+                                </Tooltip>
+                            </SelectMenu>
+                        </Pane>
+                        {instrumentDialogOpen && (
+                            <ChooseOrCreateInstrumentDialog
+                                isShown={true}
+                                onCloseComplete={handleCloseInstrumentDialog}
+                                onSubmit={handleInstrumentSubmit}
+                                showTabs={globalState.isAuthenticated()}
+                            />
                         )}
                     </Pane>
                 </Pane>
