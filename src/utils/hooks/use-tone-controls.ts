@@ -5,12 +5,8 @@ import { merge, isNil } from "lodash";
 import { useCallback } from "react";
 import { isHotkeyPressed } from "react-hotkeys-hook";
 import { ToneStateAtom } from "utils/atoms/tone-state-atom";
-import { useToneBpmEffect } from "utils/hooks/use-tone-bpm-effect";
 import { useToneMuteEffect } from "utils/hooks/use-tone-mute-effect";
 import { useTonePlayingEffect } from "utils/hooks/use-tone-playing-effect";
-import { useToneSwingEffect } from "utils/hooks/use-tone-swing-effect";
-import { useToneVolumeEffect } from "utils/hooks/use-tone-volume-effect";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface UseToneControlsResult extends ToneState {
     isSelected: (index: number) => boolean;
@@ -22,15 +18,9 @@ interface UseToneControlsResult extends ToneState {
 }
 
 const useToneControls = (): UseToneControlsResult => {
-    const { state: workstationState } = useWorkstationState();
-    const { project } = workstationState;
-    const { swing, bpm, volume } = project;
     const [state, setState] = useAtom(ToneStateAtom);
     const { mute, isPlaying, endIndex, startIndex } = state;
 
-    useToneSwingEffect(swing);
-    useToneBpmEffect(bpm);
-    useToneVolumeEffect(volume);
     useTonePlayingEffect(isPlaying);
     useToneMuteEffect(mute);
 

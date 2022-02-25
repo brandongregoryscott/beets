@@ -2,7 +2,6 @@ import {
     SongControls,
     SongControlsHeight,
 } from "components/workstation/song-controls";
-import { PlayingTrackList } from "components/tracks/track-list/playing-track-list";
 import {
     AddIcon,
     IconButton,
@@ -36,8 +35,6 @@ import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import { Track } from "generated/interfaces/track";
-import { useToneControls } from "utils/hooks/use-tone-controls";
-import { useToneAudio } from "utils/hooks/use-tone-audio";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -60,8 +57,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     props: WorkstationPageProps
 ) => {
     const { user } = useCurrentUser();
-    const { state, setState } = useWorkstationState();
-    const { isPlaying, startIndex, endIndex } = useToneControls();
+    const { setState } = useWorkstationState();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
     const [
@@ -76,17 +72,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         resultObject: instruments = List(),
         isLoading: isLoadingInstruments,
     } = useListInstruments({ files });
-
-    useToneAudio({
-        startIndex,
-        endIndex,
-        isPlaying,
-        tracks,
-        trackSections: state.trackSections,
-        trackSectionSteps: state.trackSectionSteps,
-        files,
-        instruments,
-    });
 
     const { resultObject: workstations, isLoading: isLoadingWorkstations } =
         useListWorkstations();
@@ -213,7 +198,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             )}
             {renderControls && (
                 <Pane height="100%" marginLeft={margin} width="100%">
-                    <SongControls />
+                    <SongControls files={files} instruments={instruments} />
                     <Pane
                         height={calcFrom100(
                             WorkstationTabsHeight + SongControlsHeight + margin
