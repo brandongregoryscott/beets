@@ -13,7 +13,6 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
-import { useCurrentIndex } from "utils/hooks/use-current-index";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -57,9 +56,6 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         [setSelected]
     );
 
-    const currentIndex = useCurrentIndex({
-        endIndex: stepCount - 1,
-    });
     const { isLoading } = useToneAudio({
         isPlaying,
         files,
@@ -107,7 +103,6 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     <SequencerStep
                         files={files}
                         index={index}
-                        isPlaying={isPlaying && currentIndex === index}
                         key={index}
                         onChange={onStepChange}
                         selected={selected}

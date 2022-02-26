@@ -20,7 +20,6 @@ import { MidiNoteUtils } from "utils/midi-note-utils";
 import { MidiNote } from "types/midi-note";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
-import { useCurrentIndex } from "utils/hooks/use-current-index";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -54,7 +53,6 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
             : defaultNoteIndex
     );
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
-    const currentIndex = useCurrentIndex({ endIndex: stepCount - 1 });
     const { isLoading } = useToneAudio({
         isPlaying,
         instruments: instrument != null ? List.of(instrument) : undefined,
@@ -107,9 +105,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                 <PianoSteps
                     file={file}
                     indexRange={indexRange}
-                    isPlaying={isPlaying}
                     onChange={onChange}
-                    playingIndex={currentIndex}
                     stepCount={stepCount}
                     trackSection={trackSection}
                     trackSectionSteps={trackSectionSteps}

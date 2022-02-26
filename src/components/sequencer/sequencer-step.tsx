@@ -1,16 +1,15 @@
 import { SequencerStepRow } from "components/sequencer/sequencer-step-row";
 import { ConditionalTooltip } from "components/conditional-tooltip";
-import { Card, Elevation, majorScale } from "evergreen-ui";
+import { Card, majorScale } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { useTheme } from "utils/hooks/use-theme";
+import { useCallback } from "react";
 
 interface SequencerStepProps {
     files: List<FileRecord>;
     index: number;
-    isPlaying: boolean;
     onChange: (index: number, steps: List<TrackSectionStepRecord>) => void;
     selected: List<FileRecord>;
     trackSection: TrackSectionRecord;
@@ -22,11 +21,9 @@ const maxCount = 4;
 const SequencerStep: React.FC<SequencerStepProps> = (
     props: SequencerStepProps
 ) => {
-    const { index, isPlaying, files, onChange, selected, trackSection, value } =
-        props;
-    const { colors } = useTheme();
+    const { index, files, onChange, selected, trackSection, value } = props;
     const hasSamples = !selected.isEmpty();
-    const handleAdd = () => {
+    const handleAdd = useCallback(() => {
         if (
             value.count() >= maxCount ||
             value.count() + selected.count() > maxCount
@@ -51,32 +48,27 @@ const SequencerStep: React.FC<SequencerStepProps> = (
             );
 
         onChange(index, value.concat(newSteps));
-    };
+    }, [index, onChange, selected, trackSection.id, value]);
 
-    const handleRemove = (step: TrackSectionStepRecord) => {
-        if (!value.includes(step)) {
-            return;
-        }
+    const handleRemove = useCallback(
+        (step: TrackSectionStepRecord) => {
+            if (!value.includes(step)) {
+                return;
+            }
 
-        onChange(index, value.remove(value.indexOf(step)));
-    };
-
-    const activeProps = isPlaying
-        ? {
-              elevation: 1 as Elevation,
-              transform: "translateY(-4px)",
-          }
-        : {};
+            onChange(index, value.remove(value.indexOf(step)));
+        },
+        [index, onChange, value]
+    );
 
     return (
         <ConditionalTooltip
             content="Select one or more samples to drop in"
             shouldRender={!hasSamples && value.isEmpty()}>
             <Card
-                {...activeProps}
                 border={true}
-                borderColor={isPlaying ? colors.blue200 : undefined}
                 cursor={hasSamples ? "pointer" : "not-allowed"}
+                data-index={index}
                 height={majorScale(12)}
                 hoverElevation={1}
                 margin={majorScale(1)}

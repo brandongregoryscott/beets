@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { difference } from "lodash";
+import { difference, debounce } from "lodash";
 import { clampIndexToRange } from "utils/track-section-step-utils";
 
 let index: number = -1;
@@ -38,12 +38,13 @@ const getIndexElements = (index?: number): HTMLDivElement[] => {
     return document.querySelectorAll(selector) as any as HTMLDivElement[];
 };
 
+const handleStop = debounce(() => {
+    index = -1;
+    removeStyles(getIndexElements());
+}, 0);
+
 const registerIndexStyleMutation = () => {
-    Tone.Transport.on("stop", () => {
-        index = -1;
-        const allElements = getIndexElements();
-        removeStyles(allElements);
-    });
+    Tone.Transport.on("stop", handleStop);
 
     Tone.Transport.scheduleRepeat((time: number) => {
         Tone.Draw.schedule(() => {
