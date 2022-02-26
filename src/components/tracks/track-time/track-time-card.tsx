@@ -30,6 +30,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             backgroundColor={isSelected(index) ? colors.blue200 : undefined}
             className={className}
             cursor="pointer"
+            data-index={index}
             display="flex"
             flexDirection="row"
             height={majorScale(2)}
@@ -38,11 +39,9 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             minWidth={majorScale(2)}
             onClick={handleClick}
             width={majorScale(2)}>
-            <div data-index={index}>
-                <Text cursor="pointer" fontSize="x-small" userSelect="none">
-                    {step}
-                </Text>
-            </div>
+            <Text cursor="pointer" fontSize="x-small" userSelect="none">
+                {step}
+            </Text>
         </Pane>
     );
 };

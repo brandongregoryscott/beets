@@ -20,19 +20,18 @@ const TrackSectionStepColumn: React.FC<TrackSectionStepColumnProps> = (
 
     return (
         <Pane
+            data-index={index + stepCountOffset}
             display="flex"
             flexDirection="column"
             minWidth={TrackSectionStepColumnWidth}
             width={TrackSectionStepColumnWidth}>
-            <div data-index={index + stepCountOffset}>
-                {range(0, 4).map((row: number) => (
-                    <TrackSectionStepRow
-                        index={row}
-                        key={`${TrackSectionStepRow.name}${row}`}
-                        trackSectionStep={trackSectionSteps.get(row)}
-                    />
-                ))}
-            </div>
+            {range(0, 4).map((row: number) => (
+                <TrackSectionStepRow
+                    index={row}
+                    key={`${TrackSectionStepRow.name}${row}`}
+                    trackSectionStep={trackSectionSteps.get(row)}
+                />
+            ))}
         </Pane>
     );
 };
