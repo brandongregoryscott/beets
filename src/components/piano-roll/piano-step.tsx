@@ -1,13 +1,10 @@
-import { Elevation, majorScale, Pane } from "evergreen-ui";
+import { majorScale, Pane } from "evergreen-ui";
 import { useCallback } from "react";
 import { MidiNote } from "types/midi-note";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface PianoStepProps {
     index: number;
-    isFirst: boolean;
-    isLast: boolean;
-    isPlaying: boolean;
     isSelected: boolean;
     note: MidiNote;
     onClick: (index: number, note: MidiNote) => void;
@@ -15,8 +12,7 @@ interface PianoStepProps {
 
 const PianoStep: React.FC<PianoStepProps> = (props: PianoStepProps) => {
     const { colors } = useTheme();
-    const { index, isPlaying, isSelected, note, onClick, isFirst, isLast } =
-        props;
+    const { index, isSelected, note, onClick } = props;
     const height = majorScale(4);
     const width = majorScale(4);
     const handleClick = useCallback(
@@ -24,25 +20,13 @@ const PianoStep: React.FC<PianoStepProps> = (props: PianoStepProps) => {
         [index, note, onClick]
     );
 
-    const activeProps = isPlaying
-        ? {
-              elevation: 1 as Elevation,
-              transform: "translateY(-4px)",
-          }
-        : {};
-
     return (
         <Pane
-            {...activeProps}
             alignItems="center"
             background={isSelected ? colors.gray700 : colors.gray300}
-            borderBottom={isPlaying && isLast}
-            borderColor={isPlaying ? colors.blue300 : undefined}
-            borderLeft={isPlaying}
-            borderRight={isPlaying}
-            borderTop={isPlaying && isFirst}
             borderWidth={1}
             cursor="pointer"
+            data-index={index}
             display="flex"
             flexGrow={1}
             height={height}

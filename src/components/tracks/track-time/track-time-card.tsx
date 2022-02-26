@@ -3,9 +3,6 @@ import { useTheme } from "utils/hooks/use-theme";
 import { css, hover } from "glamor";
 import { useCallback } from "react";
 import { useToneControls } from "utils/hooks/use-tone-controls";
-import { useAtomValue } from "jotai/utils";
-import { CurrentIndexAtom } from "utils/atoms/current-index-atom";
-import { clampIndexToRange } from "utils/track-section-step-utils";
 
 interface TrackTimeCardProps {
     index: number;
@@ -15,17 +12,9 @@ interface TrackTimeCardProps {
 const TrackTimeCard: React.FC<TrackTimeCardProps> = (
     props: TrackTimeCardProps
 ) => {
-    const { index, stepCount } = props;
+    const { index } = props;
     const { colors } = useTheme();
-    const { onIndexClick, isSelected, isPlaying, startIndex, endIndex } =
-        useToneControls();
-    const currentIndex = useAtomValue(CurrentIndexAtom);
-
-    const playingIndex = clampIndexToRange({
-        index: currentIndex,
-        startIndex,
-        endIndex: endIndex ?? stepCount - 1,
-    });
+    const { onIndexClick, isSelected } = useToneControls();
 
     const handleClick = useCallback(
         () => onIndexClick(index),
@@ -41,6 +30,7 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             backgroundColor={isSelected(index) ? colors.blue200 : undefined}
             className={className}
             cursor="pointer"
+            data-index={index}
             display="flex"
             flexDirection="row"
             height={majorScale(2)}
@@ -48,11 +38,6 @@ const TrackTimeCard: React.FC<TrackTimeCardProps> = (
             maxWidth={majorScale(2)}
             minWidth={majorScale(2)}
             onClick={handleClick}
-            transform={
-                isPlaying && playingIndex === index
-                    ? "translateY(-2px)"
-                    : undefined
-            }
             width={majorScale(2)}>
             <Text cursor="pointer" fontSize="x-small" userSelect="none">
                 {step}

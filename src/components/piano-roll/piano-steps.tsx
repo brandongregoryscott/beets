@@ -15,9 +15,7 @@ import { isSelected } from "utils/track-section-step-utils";
 interface PianoStepsProps {
     file?: FileRecord;
     indexRange: number;
-    isPlaying: boolean;
     onChange: (value: List<TrackSectionStepRecord>) => void;
-    playingIndex?: number;
     stepCount: number;
     trackSection: TrackSectionRecord;
     trackSectionSteps: List<TrackSectionStepRecord>;
@@ -29,8 +27,6 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
         viewableIndex,
         indexRange,
         file,
-        isPlaying,
-        playingIndex,
         onChange,
         stepCount,
         trackSection,
@@ -77,7 +73,7 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
 
     const innerContent = useMemo(
         () =>
-            notes.map((note, rowIndex) => (
+            notes.map((note) => (
                 <Pane
                     backgroundColor={colors.gray300}
                     display="flex"
@@ -85,35 +81,23 @@ const PianoSteps: React.FC<PianoStepsProps> = (props: PianoStepsProps) => {
                     flexGrow={1}
                     key={`piano-steps-pane-${note}`}
                     width="min-content">
-                    <PianoKey key={`piano-steps-key-${note}`} note={note} />
+                    <PianoKey key={`${PianoKey.name}-${note}`} note={note} />
                     {_.range(0, stepCount).map((index: number) => (
                         <PianoStep
                             index={index}
-                            isFirst={rowIndex === 0}
-                            isLast={rowIndex === indexRange - 1}
-                            isPlaying={isPlaying && index === playingIndex}
                             isSelected={isSelected(
                                 trackSectionSteps,
                                 index,
                                 note
                             )}
-                            key={`piano-steps-step-${note}-${index}`}
+                            key={`${PianoStep.name}-${note}-${index}`}
                             note={note}
                             onClick={handleClick}
                         />
                     ))}
                 </Pane>
             )),
-        [
-            colors.gray300,
-            handleClick,
-            indexRange,
-            isPlaying,
-            notes,
-            playingIndex,
-            stepCount,
-            trackSectionSteps,
-        ]
+        [colors.gray300, handleClick, notes, stepCount, trackSectionSteps]
     );
     return (
         <Pane

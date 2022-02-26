@@ -6,6 +6,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";
 import "./index.css";
+import { registerIndexStyleMutation } from "utils/register-index-style-mutation";
+
+registerIndexStyleMutation();
 
 const queryClient = new QueryClient({
     defaultOptions: {

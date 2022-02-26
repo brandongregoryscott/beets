@@ -1,3 +1,4 @@
+import { Project } from "generated/interfaces/project";
 import { List, Map } from "immutable";
 import { ToneState } from "interfaces/tone-state";
 import { ToneStepGroup } from "interfaces/tone-step-group";
@@ -12,14 +13,18 @@ import { useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
 import { intersectionWith } from "utils/collection-utils";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
+import { useToneBpmEffect } from "utils/hooks/use-tone-bpm-effect";
 import { useTonePlayingEffect } from "utils/hooks/use-tone-playing-effect";
+import { useToneSwingEffect } from "utils/hooks/use-tone-swing-effect";
+import { useToneVolumeEffect } from "utils/hooks/use-tone-volume-effect";
 import {
     toInstrumentStepTypes,
     toSequencerStepTypes,
 } from "utils/track-section-step-utils";
 
 interface UseToneAudioOptions
-    extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision"> {
+    extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision">,
+        Partial<Pick<Project, "bpm" | "swing" | "volume">> {
     endIndex?: number;
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
@@ -38,6 +43,9 @@ interface UseToneAudioResult {
 
 const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
+        bpm,
+        swing,
+        volume,
         lengthInMs,
         loop = true,
         startIndex,
@@ -58,6 +66,10 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const recorderRef = useRef<Tone.Recorder>(new Tone.Recorder());
     const recordingIdRef = useRef<NodeJS.Timeout>();
     const toneTracksRef = useRef<Map<string, ToneTrack>>(Map());
+
+    useToneSwingEffect(swing);
+    useToneBpmEffect(bpm);
+    useToneVolumeEffect(volume);
 
     useEffect(() => {
         let updatedToneTracks: Map<string, ToneTrack> = Map();
