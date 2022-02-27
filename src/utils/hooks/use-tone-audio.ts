@@ -21,6 +21,12 @@ import {
     toInstrumentStepTypes,
     toSequencerStepTypes,
 } from "utils/track-section-step-utils";
+import MediaRecorder, {
+    OpusMediaRecorderWorkerOptions,
+} from "opus-media-recorder";
+import OpusMediaRecorder from "opus-media-recorder";
+import { toaster } from "evergreen-ui";
+import { env } from "utils/env";
 
 interface UseToneAudioOptions
     extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision">,
@@ -30,6 +36,7 @@ interface UseToneAudioOptions
     instruments?: List<InstrumentRecord>;
     lengthInMs?: number;
     loop?: boolean;
+    mimeType?: string;
     onRecordingComplete?: (recording: Blob) => void;
     startIndex?: number;
     trackSectionSteps?: List<TrackSectionStepRecord>;
@@ -40,6 +47,14 @@ interface UseToneAudioOptions
 interface UseToneAudioResult {
     isLoading: boolean;
 }
+
+const opusMediaRecorderPath = `${env.PUBLIC_URL}/opus-media-recorder`;
+const workerOptions: OpusMediaRecorderWorkerOptions = {
+    encoderWorkerFactory: () =>
+        new Worker(`${opusMediaRecorderPath}/encoderWorker.umd.js`),
+    OggOpusEncoderWasmPath: `${opusMediaRecorderPath}/OggOpusEncoder.wasm`,
+    WebMOpusEncoderWasmPath: `${opusMediaRecorderPath}/WebMOpusEncoder.wasm`,
+};
 
 const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const {
@@ -52,6 +67,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         endIndex,
         isPlaying = false,
         isRecording = false,
+        mimeType,
         onRecordingComplete,
         subdivision = "8n",
         tracks = List<TrackRecord>(),
@@ -63,7 +79,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     const [loadingState, setLoadingState] = useState<Map<string, boolean>>(
         Map()
     );
-    const recorderRef = useRef<Tone.Recorder>(new Tone.Recorder());
+    const recorderRef = useRef<OpusMediaRecorder>();
     const recordingIdRef = useRef<NodeJS.Timeout>();
     const toneTracksRef = useRef<Map<string, ToneTrack>>(Map());
 
@@ -126,8 +142,6 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 new Tone.Sampler(sampleMap, () => {
                     setLoadingState((prev) => prev.set(track.id, false));
                 }).chain(channel, Tone.Destination);
-
-            Tone.Destination.connect(recorderRef.current);
 
             sampler.set({
                 curve: instrument?.curve,
@@ -193,16 +207,35 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         if (isRecording) {
             Tone.Transport.start();
 
-            recorderRef.current.start();
+            const streamDestination =
+                Tone.getContext().createMediaStreamDestination();
+            Tone.getDestination().connect(streamDestination);
+            recorderRef.current = new MediaRecorder(
+                streamDestination.stream,
+                { mimeType },
+                workerOptions
+            );
+
+            recorderRef.current?.start();
+
+            recorderRef.current.addEventListener("error", (event) => {
+                toaster.danger("There was an error recording.");
+                // eslint-disable-next-line no-console
+                console.log("Recording error", event);
+            });
+
+            recorderRef.current?.addEventListener("dataavailable", (event) => {
+                onRecordingComplete?.(event.data);
+            });
+
             updateTracks(
                 { isPlaying: true, loop: false },
                 toneTracksRef.current
             );
 
             recordingIdRef.current = setTimeout(async () => {
-                const recording = await recorderRef.current.stop();
+                recorderRef.current?.stop();
                 Tone.Transport.stop();
-                onRecordingComplete?.(recording);
             }, lengthInMs ?? 0);
 
             return;
@@ -211,9 +244,8 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         if (recordingIdRef.current != null) {
             clearTimeout(recordingIdRef.current);
         }
-        recorderRef.current = new Tone.Recorder();
         updateTracks({ isPlaying: false, loop: true }, toneTracksRef.current);
-    }, [isRecording, lengthInMs, onRecordingComplete]);
+    }, [isRecording, lengthInMs, mimeType, onRecordingComplete]);
 
     const isLoading = loadingState.some((loading) => loading);
 
