@@ -13,7 +13,7 @@ import {
     minorScale,
 } from "evergreen-ui";
 import { List } from "immutable";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { useBoolean } from "utils/hooks/use-boolean";
@@ -29,6 +29,7 @@ import { getExtension } from "utils/mime-type-utils";
 import slugify from "slugify";
 import { unixTime } from "utils/core-utils";
 import { useInput } from "utils/hooks/use-input";
+import { isEmpty } from "lodash";
 
 interface ExportDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
@@ -105,6 +106,14 @@ const ExportDialog: React.FC<ExportDialogProps> = (
         []
     );
 
+    const fullFileName = useMemo(() => {
+        const extension = getExtension(mimeType)!;
+        if (isEmpty(fileName)) {
+            return `${getDefaultFileName(state.project)}${extension}`;
+        }
+
+        return `${fileName}${extension}`;
+    }, [fileName, mimeType, state.project]);
     const hasFile = blob != null;
 
     return (
@@ -150,15 +159,16 @@ const ExportDialog: React.FC<ExportDialogProps> = (
                                 options={options}
                                 title="Type"
                                 width={majorScale(16)}>
-                                <Button>{getExtension(mimeType)}</Button>
+                                <Button disabled={hasFile || isRecording}>
+                                    {getExtension(mimeType)}
+                                </Button>
                             </SelectMenu>
                         </Pane>
                     </Pane>
-
                     <Button
                         allowUnsafeHref={true}
                         appearance={hasFile ? "primary" : "default"}
-                        download={`${fileName}${getExtension(mimeType)}`}
+                        download={fullFileName}
                         href={hasFile ? URL.createObjectURL(blob) : undefined}
                         iconBefore={
                             hasFile ? (

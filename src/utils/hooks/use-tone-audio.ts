@@ -205,8 +205,6 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
 
     useEffect(() => {
         if (isRecording) {
-            Tone.Transport.start();
-
             const streamDestination =
                 Tone.getContext().createMediaStreamDestination();
             Tone.getDestination().connect(streamDestination);
@@ -227,6 +225,8 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
             recorderRef.current?.addEventListener("dataavailable", (event) => {
                 onRecordingComplete?.(event.data);
             });
+
+            Tone.Transport.start();
 
             updateTracks(
                 { isPlaying: true, loop: false },
