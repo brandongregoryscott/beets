@@ -20,6 +20,7 @@ import { MidiNoteUtils } from "utils/midi-note-utils";
 import { MidiNote } from "types/midi-note";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
+import { toDataAttributes } from "utils/data-attribute-utils";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -58,7 +59,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
         instruments: instrument != null ? List.of(instrument) : undefined,
         files: file != null ? List.of(file) : undefined,
         tracks: List.of(track),
-        trackSections: List.of(trackSection),
+        trackSections: List.of(trackSection.merge({ step_count: stepCount })),
         trackSectionSteps,
     });
 
@@ -72,7 +73,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
     );
 
     return (
-        <React.Fragment>
+        <Pane {...toDataAttributes({ stepCount })}>
             <Pane marginBottom={majorScale(1)}>
                 <PlayButton
                     isLoading={isLoading}
@@ -112,7 +113,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     viewableIndex={viewableIndex}
                 />
             </Pane>
-        </React.Fragment>
+        </Pane>
     );
 };
 

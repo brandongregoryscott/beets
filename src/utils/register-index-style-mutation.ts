@@ -1,10 +1,9 @@
 import * as Tone from "tone";
 import { difference, debounce } from "lodash";
 import { clampIndexToRange } from "utils/track-section-step-utils";
+import { DataAttributes } from "constants/data-attributes";
 
 let index: number = -1;
-
-const DATA_INDEX = "data-index";
 
 const applyStyles = (adjustedIndex: number): HTMLDivElement[] => {
     const playingElements = getIndexElements(adjustedIndex);
@@ -33,8 +32,8 @@ const getIndexElements = (index?: number): HTMLDivElement[] => {
     const selector =
         index == null
             ? // Since '0' is falsy, we need to explicitly include it in the "find all" query
-              `[${DATA_INDEX}],[${DATA_INDEX}='0']`
-            : `[${DATA_INDEX}='${index}']`;
+              `[${DataAttributes.index}],[${DataAttributes.index}='0']`
+            : `[${DataAttributes.index}='${index}']`;
     return document.querySelectorAll(selector) as any as HTMLDivElement[];
 };
 
@@ -50,9 +49,9 @@ const registerIndexStyleMutation = () => {
         Tone.Draw.schedule(() => {
             index++;
 
-            const endIndex = getAttributeValue("data-end-index");
-            const startIndex = getAttributeValue("data-start-index");
-            const stepCount = getAttributeValue("data-step-count")!;
+            const endIndex = getAttributeValue(DataAttributes.endIndex);
+            const startIndex = getAttributeValue(DataAttributes.startIndex);
+            const stepCount = getAttributeValue(DataAttributes.stepCount)!;
 
             const adjustedIndex = clampIndexToRange({
                 index,
