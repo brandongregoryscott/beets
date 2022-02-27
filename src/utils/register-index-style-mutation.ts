@@ -56,7 +56,7 @@ const registerIndexStyleMutation = () => {
 
             const adjustedIndex = clampIndexToRange({
                 index,
-                endIndex: endIndex ?? stepCount,
+                endIndex: endIndex ?? stepCount - 1,
                 startIndex,
             });
 
