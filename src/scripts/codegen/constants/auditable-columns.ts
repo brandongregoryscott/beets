@@ -1,4 +1,4 @@
-import { keyMirror } from "../utils";
+import keyMirror from "keymirror";
 
 const AuditableColumns = keyMirror({
     created_on: null,

@@ -13,6 +13,7 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
+import { toDataAttributes } from "utils/data-attribute-utils";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -60,17 +61,14 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         isPlaying,
         files,
         tracks: List.of(track),
-        trackSections: List.of(trackSection),
+        trackSections: List.of(trackSection.merge({ step_count: stepCount })),
         trackSectionSteps,
     });
 
-    const sampleButtonText = `${selected.count()} ${pluralize(
-        "Sample",
-        selected.count()
-    )}`;
+    const sampleButtonText = pluralize("Sample", selected.count(), true);
 
     return (
-        <Pane>
+        <Pane {...toDataAttributes({ stepCount })}>
             <Pane marginBottom={majorScale(1)}>
                 <PlayButton
                     isLoading={isLoading}
