@@ -1,4 +1,4 @@
-import { keyMirror } from "../utils";
+import keyMirror from "keymirror";
 
 const Variables = keyMirror({
     Auditable: null,

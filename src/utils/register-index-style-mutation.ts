@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { difference, debounce } from "lodash";
+import { difference, debounce, last } from "lodash";
 import { clampIndexToRange } from "utils/track-section-step-utils";
 import { DataAttributes } from "constants/data-attributes";
 
@@ -17,9 +17,10 @@ const applyStyles = (adjustedIndex: number): HTMLDivElement[] => {
 };
 
 const getAttributeValue = (attributeName: string): number | undefined => {
-    const value = document
-        .querySelector(`[${attributeName}]`)
-        ?.attributes.getNamedItem(attributeName)?.value;
+    // Prioritize the last matching element to handle Dialog components w/ attributes
+    const value = last(
+        document.querySelectorAll(`[${attributeName}]`)
+    )?.attributes.getNamedItem(attributeName)?.value;
 
     if (value == null || isNaN(parseInt(value))) {
         return undefined;
