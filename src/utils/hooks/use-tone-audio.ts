@@ -233,7 +233,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 toneTracksRef.current
             );
 
-            recordingIdRef.current = setTimeout(async () => {
+            recordingIdRef.current = setTimeout(() => {
                 recorderRef.current?.stop();
                 Tone.Transport.stop();
             }, lengthInMs ?? 0);
