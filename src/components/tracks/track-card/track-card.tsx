@@ -123,6 +123,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             marginRight={majorScale(2)}
                             minWidth={width}
                             padding={majorScale(1)}
+                            position="relative"
                             width={width}>
                             <Pane
                                 display="flex"

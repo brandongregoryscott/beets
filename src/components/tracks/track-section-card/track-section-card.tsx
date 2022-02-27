@@ -127,6 +127,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
                     paddingLeft={isFirst ? majorScale(1) : undefined}
                     paddingRight={isLast ? majorScale(1) : undefined}
                     paddingY={majorScale(1)}
+                    position="relative"
                     ref={provided.innerRef}>
                     <Pane
                         display="flex"
