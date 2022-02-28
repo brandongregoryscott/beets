@@ -37,7 +37,7 @@ interface SelectMenuItem<T> extends Omit<EvergreenSelectMenuItem, "value"> {
 }
 
 interface SelectMenuItemRendererProps<T>
-    extends Omit<EvergreenSelectMenuItemRenderer, "item"> {
+    extends Omit<FirstParameter<EvergreenSelectMenuItemRenderer>, "item"> {
     item: SelectMenuItem<T>;
 }
 
@@ -143,8 +143,8 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
                 options: optionValues ?? [],
                 hasTitle: isNotNilOrEmpty(props.title),
             })}
-            itemRenderer={itemRenderer as EvergreenSelectMenuItemRenderer}
             isMultiSelect={isMultiSelect}
+            itemRenderer={itemRenderer as EvergreenSelectMenuItemRenderer}
             onDeselect={onDeselect}
             onSelect={onSelect}
             options={options}
