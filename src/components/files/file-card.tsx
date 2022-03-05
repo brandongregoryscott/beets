@@ -39,12 +39,14 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
         <Card
             alignItems="center"
             border={true}
+            borderColor={colors.gray400}
             display="flex"
             flexDirection="row"
             height={majorScale(8)}
             justifyContent="space-between"
             marginBottom={majorScale(2)}
-            maxWidth={majorScale(60)}
+            marginRight={majorScale(2)}
+            maxWidth={majorScale(40)}
             width="100%">
             <Pane
                 display="flex"
@@ -61,7 +63,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                             height={majorScale(5)}
                             justifyContent="center"
                             width={majorScale(5)}>
-                            <MusicIcon />
+                            <MusicIcon color={colors.gray600} />
                         </Card>
                     </Pane>
                 </Pane>
@@ -83,6 +85,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
             <Pane display="flex" flexDirection="row" justifyContent="flex-end">
                 <IconButton
                     appearance="minimal"
+                    color={colors.gray600}
                     disabled={isLoading}
                     icon={CogIcon}
                     marginLeft="auto"
@@ -91,6 +94,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                 />
                 <IconButton
                     appearance="minimal"
+                    color={colors.gray600}
                     icon={TrashIcon}
                     isLoading={isLoading}
                     marginLeft="auto"

@@ -12,6 +12,7 @@ import {
 import { useTheme } from "utils/hooks/use-theme";
 import { RouteProps } from "interfaces/route-props";
 import { FileUploader } from "components/files/file-uploader";
+import { Flex } from "components/flex";
 
 interface FilesPageProps extends RouteProps {}
 
@@ -22,10 +23,14 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
         <React.Fragment>
             {globalState.isAuthenticated() && (
                 <React.Fragment>
-                    <Pane marginBottom={majorScale(2)}>
-                        <FileUploader />
-                    </Pane>
-                    <FileList bucketName={BucketName.Samples} />
+                    <Flex.Row marginBottom={majorScale(2)}>
+                        <Flex.Column marginRight={majorScale(4)}>
+                            <FileUploader />
+                        </Flex.Column>
+                        <Flex.Column width="100%">
+                            <FileList bucketName={BucketName.Samples} />
+                        </Flex.Column>
+                    </Flex.Row>
                 </React.Fragment>
             )}
             <Pane marginTop={majorScale(1)}>

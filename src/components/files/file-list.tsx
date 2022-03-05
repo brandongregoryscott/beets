@@ -6,6 +6,7 @@ import { useGlobalState } from "utils/hooks/use-global-state";
 import { groupBy } from "utils/collection-utils";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";
 import { FileCard } from "components/files/file-card";
+import { Flex } from "components/flex";
 
 interface FileListProps {
     bucketName: BucketName;
@@ -32,7 +33,7 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
     );
 
     return (
-        <Pane>
+        <Flex.Row flexWrap="wrap" width="100%">
             {groupedFiles.map(({ left: storageProviderFile, right: file }) => (
                 <FileCard
                     file={file}
@@ -40,7 +41,7 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
                     storageProviderFile={storageProviderFile}
                 />
             ))}
-        </Pane>
+        </Flex.Row>
     );
 };
 
