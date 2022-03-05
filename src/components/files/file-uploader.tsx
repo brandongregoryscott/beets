@@ -31,7 +31,9 @@ const FileUploader: React.FC<FileUploaderProps> = (
     props: FileUploaderProps
 ) => {
     const { bucketName } = props;
-    const { mutate: uploadFile, isLoading } = useCreateFile({ bucketName });
+    const { isLoading, mutateAsync: uploadFile } = useCreateFile({
+        bucketName,
+    });
     const [files, setFiles] = useState<File[]>([]);
     const [uploadingFiles, setUploadingFiles] = useState<File[]>([]);
     const [fileRejections, setFileRejections] = useState<FileRejection[]>([]);
@@ -69,18 +71,20 @@ const FileUploader: React.FC<FileUploaderProps> = (
             prev.filter((uploadingFile) => uploadingFile !== file)
         );
     }, []);
-    const handleUpload = useCallback(() => {
+
+    const handleUpload = useCallback(async () => {
         if (!isEmpty(fileRejections)) {
             return;
         }
 
         setUploadingFiles(files);
 
-        files.forEach((file: File) => {
-            uploadFile(file, {
-                onSuccess: () => handleUploaded(file),
-            });
-        });
+        await Promise.all(
+            files.map(async (file: File) => {
+                await uploadFile(file);
+                handleUploaded(file);
+            })
+        );
     }, [fileRejections, files, handleUploaded, uploadFile]);
 
     const fileCountOverLimit = files.length + fileRejections.length - maxFiles;
@@ -148,6 +152,7 @@ const FileUploader: React.FC<FileUploaderProps> = (
             <Button
                 appearance="primary"
                 disabled={isEmpty(files) || !isEmpty(fileRejections)}
+                isLoading={isLoading || !isEmpty(uploadingFiles)}
                 onClick={handleUpload}
                 width="100%">
                 Upload
