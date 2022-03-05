@@ -12,7 +12,6 @@ import {
 import { useTheme } from "utils/hooks/use-theme";
 import { RouteProps } from "interfaces/route-props";
 import { FileUploader } from "components/files/file-uploader";
-import { FileCard } from "components/files/file-card";
 
 interface FilesPageProps extends RouteProps {}
 
@@ -25,10 +24,6 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
                 <React.Fragment>
                     <Pane marginBottom={majorScale(2)}>
                         <FileUploader />
-                        <FileCard
-                            name="example.wav"
-                            sizeInBytes={10 * 1024 ** 2}
-                        />
                     </Pane>
                     <FileList bucketName={BucketName.Samples} />
                 </React.Fragment>
