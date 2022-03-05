@@ -1,3 +1,4 @@
+import { BucketName } from "enums/bucket-name";
 import {
     MimeType,
     FileUploader as EvergreenFileUploader,
@@ -16,8 +17,11 @@ import {
 import { isEmpty } from "lodash";
 import pluralize from "pluralize";
 import React, { useCallback, useMemo, useState } from "react";
+import { useCreateFile } from "utils/hooks/domain/files/use-create-file";
 
-interface FileUploaderProps {}
+interface FileUploaderProps {
+    bucketName: BucketName;
+}
 
 const acceptedMimeTypes = [MimeType.mp3, MimeType.wav];
 const maxFiles = 10;
@@ -26,14 +30,17 @@ const maxSizeInBytes = 10 * 1024 ** 2; // 10 MB
 const FileUploader: React.FC<FileUploaderProps> = (
     props: FileUploaderProps
 ) => {
+    const { bucketName } = props;
+    const { mutate: uploadFile, isLoading } = useCreateFile({ bucketName });
     const [files, setFiles] = useState<File[]>([]);
+    const [uploadingFiles, setUploadingFiles] = useState<File[]>([]);
     const [fileRejections, setFileRejections] = useState<FileRejection[]>([]);
     const values = useMemo(
         () => joinFiles(files, fileRejections),
         [fileRejections, files]
     );
     const handleRemove = useCallback(
-        (file) => {
+        (file: File) => {
             const updatedFiles = files.filter(
                 (existingFile) => existingFile !== file
             );
@@ -53,6 +60,28 @@ const FileUploader: React.FC<FileUploaderProps> = (
         },
         [fileRejections, files]
     );
+
+    const handleUploaded = useCallback((file: File) => {
+        setFiles((prev) =>
+            prev.filter((existingFile) => existingFile !== file)
+        );
+        setUploadingFiles((prev) =>
+            prev.filter((uploadingFile) => uploadingFile !== file)
+        );
+    }, []);
+    const handleUpload = useCallback(() => {
+        if (!isEmpty(fileRejections)) {
+            return;
+        }
+
+        setUploadingFiles(files);
+
+        files.forEach((file: File) => {
+            uploadFile(file, {
+                onSuccess: () => handleUploaded(file),
+            });
+        });
+    }, [fileRejections, files, handleUploaded, uploadFile]);
 
     const fileCountOverLimit = files.length + fileRejections.length - maxFiles;
     const fileCountError = `${getMaxFilesMessage(
@@ -91,7 +120,7 @@ const FileUploader: React.FC<FileUploaderProps> = (
                             fileRejection.reason !==
                                 FileRejectionReason.OverFileLimit
                     );
-                    const { message } = fileRejection || {};
+                    const { message } = fileRejection ?? {};
 
                     return (
                         <React.Fragment key={`${file.name}-${index}`}>
@@ -104,6 +133,7 @@ const FileUploader: React.FC<FileUploaderProps> = (
                             )}
                             <FileCard
                                 isInvalid={fileRejection != null}
+                                isLoading={uploadingFiles.includes(file)}
                                 name={name}
                                 onRemove={() => handleRemove(file)}
                                 sizeInBytes={size}
@@ -118,6 +148,7 @@ const FileUploader: React.FC<FileUploaderProps> = (
             <Button
                 appearance="primary"
                 disabled={isEmpty(files) || !isEmpty(fileRejections)}
+                onClick={handleUpload}
                 width="100%">
                 Upload
             </Button>

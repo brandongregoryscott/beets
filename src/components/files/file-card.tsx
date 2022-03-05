@@ -8,6 +8,7 @@ import {
     IconButton,
     TrashIcon,
     CogIcon,
+    minorScale,
 } from "evergreen-ui";
 import { useTheme } from "utils/hooks/use-theme";
 import humanize from "humanize-plus";
@@ -17,6 +18,7 @@ import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { FileDialog } from "components/files/file-dialog";
+import { Flex } from "components/flex";
 
 interface FileCardProps
     extends Omit<EvergreenFileCardProps, "name" | "type" | "sizeInBytes"> {
@@ -36,12 +38,11 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
     const { colors } = useTheme();
     const { name, size } = file;
     return (
-        <Card
+        <Flex.Row
             alignItems="center"
             border={true}
             borderColor={colors.gray400}
-            display="flex"
-            flexDirection="row"
+            borderRadius={minorScale(1)}
             height={majorScale(8)}
             justifyContent="space-between"
             marginBottom={majorScale(2)}
@@ -52,7 +53,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                 display="flex"
                 flexDirection="row"
                 justifyContent="flex-start">
-                <Pane alignItems="center" display="flex" flexDirection="row">
+                <Flex.Row alignItems="center">
                     <Pane
                         marginLeft={majorScale(2)}
                         marginRight={majorScale(1)}>
@@ -66,8 +67,8 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                             <MusicIcon color={colors.gray600} />
                         </Card>
                     </Pane>
-                </Pane>
-                <Pane display="flex" flexDirection="column" overflow="hidden">
+                </Flex.Row>
+                <Flex.Column overflow="hidden">
                     <Paragraph
                         color={colors.gray800}
                         overflow="hidden"
@@ -80,9 +81,9 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                             {humanize.fileSize(size, 0)}
                         </Paragraph>
                     )}
-                </Pane>
+                </Flex.Column>
             </Pane>
-            <Pane display="flex" flexDirection="row" justifyContent="flex-end">
+            <Flex.Row justifyContent="flex-end">
                 <IconButton
                     appearance="minimal"
                     color={colors.gray600}
@@ -102,7 +103,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                     onClick={handleDelete}
                     type="button"
                 />
-            </Pane>
+            </Flex.Row>
             {isOpen && (
                 <FileDialog
                     file={file}
@@ -111,7 +112,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                     storageProviderFile={storageProviderFile}
                 />
             )}
-        </Card>
+        </Flex.Row>
     );
 };
 

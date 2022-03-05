@@ -17,7 +17,6 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
 import { RouteProps } from "interfaces/route-props";
 import { useCurrentUser } from "utils/hooks/use-current-user";
-import { useTimeoutWhen } from "rooks";
 import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import React from "react";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
@@ -35,6 +34,7 @@ import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import { Track } from "generated/interfaces/track";
+import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 
 interface WorkstationPageProps extends RouteProps {}
 
@@ -79,20 +79,15 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
 
     // Unfortunate hack to prevent infinite loading issue for initial render when a staleTime
     // is set: https://github.com/tannerlinsley/react-query/issues/1657
-    const [hookTimedOut, setHookTimedOut] = useState(false);
-    useTimeoutWhen(
-        () => {
+    useTimeoutRender({
+        onTimeout: () => {
             // If we're still seeing a loading state for either of these after 1s, assume react-query
             // is stuck and set state manually
             if (isLoadingFiles || isLoadingWorkstations) {
                 setState(new WorkstationStateRecord());
             }
-
-            setHookTimedOut(true);
         },
-        1000,
-        !hookTimedOut
-    );
+    });
 
     useEffect(() => {
         if (

@@ -22,16 +22,14 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
     return (
         <React.Fragment>
             {globalState.isAuthenticated() && (
-                <React.Fragment>
-                    <Flex.Row marginBottom={majorScale(2)}>
-                        <Flex.Column marginRight={majorScale(4)}>
-                            <FileUploader />
-                        </Flex.Column>
-                        <Flex.Column width="100%">
-                            <FileList bucketName={BucketName.Samples} />
-                        </Flex.Column>
-                    </Flex.Row>
-                </React.Fragment>
+                <Flex.Row marginBottom={majorScale(2)}>
+                    <Flex.Column marginRight={majorScale(4)}>
+                        <FileUploader bucketName={BucketName.Samples} />
+                    </Flex.Column>
+                    <Flex.Column width="100%">
+                        <FileList bucketName={BucketName.Samples} />
+                    </Flex.Column>
+                </Flex.Row>
             )}
             <Pane marginTop={majorScale(1)}>
                 {!globalState.isAuthenticated() && (
