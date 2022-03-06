@@ -1,11 +1,9 @@
 import {
-    Card,
     majorScale,
     MusicIcon,
     Pane,
     FileCardProps as EvergreenFileCardProps,
     Paragraph,
-    IconButton,
     TrashIcon,
     CogIcon,
     minorScale,
@@ -19,6 +17,7 @@ import { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { FileDialog } from "components/files/file-dialog";
 import { Flex } from "components/flex";
+import { IconButton } from "components/icon-button";
 
 interface FileCardProps
     extends Omit<EvergreenFileCardProps, "name" | "type" | "sizeInBytes"> {
@@ -49,23 +48,20 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
             marginRight={majorScale(2)}
             maxWidth={majorScale(40)}
             width="100%">
-            <Pane
-                display="flex"
-                flexDirection="row"
-                justifyContent="flex-start">
+            <Flex.Row justifyContent="flex-start">
                 <Flex.Row alignItems="center">
                     <Pane
                         marginLeft={majorScale(2)}
                         marginRight={majorScale(1)}>
-                        <Card
+                        <Flex.Row
                             alignItems="center"
                             backgroundColor={colors.gray90}
-                            display="flex"
+                            borderRadius={minorScale(1)}
                             height={majorScale(5)}
                             justifyContent="center"
                             width={majorScale(5)}>
                             <MusicIcon color={colors.gray600} />
-                        </Card>
+                        </Flex.Row>
                     </Pane>
                 </Flex.Row>
                 <Flex.Column overflow="hidden">
@@ -82,7 +78,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                         </Paragraph>
                     )}
                 </Flex.Column>
-            </Pane>
+            </Flex.Row>
             <Flex.Row justifyContent="flex-end">
                 <IconButton
                     appearance="minimal"
