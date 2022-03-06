@@ -8,6 +8,7 @@ import { FileCard } from "components/files/file-card";
 import { Flex } from "components/flex";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 import { Spinner } from "evergreen-ui";
+import React from "react";
 
 interface FileListProps {
     bucketName: BucketName;
@@ -35,18 +36,23 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
         files,
         (a, b) => a.id === b.id
     );
+    const isLoading = isLoadingFiles || isLoadingStorageProviderFiles;
 
     return (
-        <Flex.Row flexWrap="wrap" width="100%">
-            {isLoadingFiles || (isLoadingStorageProviderFiles && <Spinner />)}
-            {groupedFiles.map(({ left: storageProviderFile, right: file }) => (
-                <FileCard
-                    file={file}
-                    key={file.id}
-                    storageProviderFile={storageProviderFile}
-                />
-            ))}
-        </Flex.Row>
+        <Flex.Column>
+            <Flex.Row flexWrap="wrap" width="100%">
+                {isLoading && <Spinner />}
+                {groupedFiles.map(
+                    ({ left: storageProviderFile, right: file }) => (
+                        <FileCard
+                            file={file}
+                            key={file.id}
+                            storageProviderFile={storageProviderFile}
+                        />
+                    )
+                )}
+            </Flex.Row>
+        </Flex.Column>
     );
 };
 
