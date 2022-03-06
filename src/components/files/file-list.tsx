@@ -1,11 +1,14 @@
 import { BucketName } from "enums/bucket-name";
 import { SortOrder } from "enums/sort-order";
-import { Pane } from "evergreen-ui";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
-import { FileListItem } from "components/files/file-list-item";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { groupBy } from "utils/collection-utils";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";
+import { FileCard } from "components/files/file-card";
+import { Flex } from "components/flex";
+import { useTimeoutRender } from "utils/hooks/use-timeout-render";
+import { Spinner } from "evergreen-ui";
+import React from "react";
 
 interface FileListProps {
     bucketName: BucketName;
@@ -14,7 +17,10 @@ interface FileListProps {
 const FileList: React.FC<FileListProps> = (props: FileListProps) => {
     const { bucketName } = props;
     const { globalState } = useGlobalState();
-    const { resultObject: storageProviderFiles } = useListStorageProviderFiles({
+    const {
+        resultObject: storageProviderFiles,
+        isLoading: isLoadingStorageProviderFiles,
+    } = useListStorageProviderFiles({
         bucketName,
         path: globalState.userId(),
         sortBy: {
@@ -22,25 +28,31 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
             order: SortOrder.DESC,
         },
     });
-
-    const { resultObject: files } = useListFiles();
+    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    useTimeoutRender();
 
     const groupedFiles = groupBy(
         storageProviderFiles,
         files,
         (a, b) => a.id === b.id
     );
+    const isLoading = isLoadingFiles || isLoadingStorageProviderFiles;
 
     return (
-        <Pane>
-            {groupedFiles.map(({ left: storageProviderFile, right: file }) => (
-                <FileListItem
-                    file={file}
-                    key={file.id}
-                    storageProviderFile={storageProviderFile}
-                />
-            ))}
-        </Pane>
+        <Flex.Column>
+            <Flex.Row flexWrap="wrap" width="100%">
+                {isLoading && <Spinner />}
+                {groupedFiles.map(
+                    ({ left: storageProviderFile, right: file }) => (
+                        <FileCard
+                            file={file}
+                            key={file.id}
+                            storageProviderFile={storageProviderFile}
+                        />
+                    )
+                )}
+            </Flex.Row>
+        </Flex.Column>
     );
 };
 

@@ -9,9 +9,10 @@ import {
     majorScale,
     Pane,
 } from "evergreen-ui";
-import { FileUpload } from "components/files/file-upload";
 import { useTheme } from "utils/hooks/use-theme";
 import { RouteProps } from "interfaces/route-props";
+import { FileUploader } from "components/files/file-uploader";
+import { Flex } from "components/flex";
 
 interface FilesPageProps extends RouteProps {}
 
@@ -21,12 +22,14 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
     return (
         <React.Fragment>
             {globalState.isAuthenticated() && (
-                <React.Fragment>
-                    <Pane marginBottom={majorScale(2)}>
-                        <FileUpload bucketName={BucketName.Samples} />
-                    </Pane>
-                    <FileList bucketName={BucketName.Samples} />
-                </React.Fragment>
+                <Flex.Row marginBottom={majorScale(2)}>
+                    <Flex.Column marginRight={majorScale(4)}>
+                        <FileUploader bucketName={BucketName.Samples} />
+                    </Flex.Column>
+                    <Flex.Column width="100%">
+                        <FileList bucketName={BucketName.Samples} />
+                    </Flex.Column>
+                </Flex.Row>
             )}
             <Pane marginTop={majorScale(1)}>
                 {!globalState.isAuthenticated() && (
