@@ -22,6 +22,8 @@ const defaultValues = makeDefaultValues<SupabaseUser>({
     last_sign_in_at: undefined,
     role: undefined,
     updated_at: undefined,
+    invited_at: undefined,
+    identities: [],
 });
 
 class SupabaseUserRecord
