@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetPgmigrationOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetPgmigration = (
     options: UseGetPgmigrationOptions
 ): UseQueryResult<Pgmigration | undefined, Error> => {
     const { fromPgmigrations } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromPgmigrations()
@@ -34,7 +35,7 @@ const useGetPgmigration = (
 
     const result = useQuery<Pgmigration | undefined, Error>({
         enabled,
-        key: [Tables.Pgmigrations, id],
+        key: [Tables.Pgmigrations, id, ...key],
         fn: get,
     });
 

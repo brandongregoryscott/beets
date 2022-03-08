@@ -9,6 +9,7 @@ interface UseListPgmigrationsOptions {
     filter?: (
         query: PostgrestFilterBuilder<Pgmigration>
     ) => PostgrestFilterBuilder<Pgmigration>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: Pgmigration[]) => void;
 }
@@ -22,6 +23,7 @@ const useListPgmigrations = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -38,7 +40,7 @@ const useListPgmigrations = (
 
     const result = useQuery<Pgmigration[], Error>({
         enabled,
-        key: Tables.Pgmigrations,
+        key: [Tables.Pgmigrations, ...key],
         fn: list,
         onError,
         onSuccess,

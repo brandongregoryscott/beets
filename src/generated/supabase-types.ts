@@ -936,128 +936,3005 @@ export interface paths {
             };
         };
     };
-    "/rpc/update_track_sections_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** Limiting and Pagination */
+    "Range-Unit"?: parameters["rangeUnit"];
+    /** OK */
+    200: unknown;
+    /** OK */
+    200: {
+        schema: definitions["files"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["instruments"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["pgmigrations"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["projects"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["track_section_steps"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["track_sections"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["tracks"][];
+    };
+    /** OK */
+    200: {
+        schema: definitions["users"][];
+    };
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** Created */
+    201: unknown;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** No Content */
+    204: never;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Partial Content */
+    206: unknown;
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferCount"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Preference */
+    Prefer?: parameters["preferReturn"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    /** Limiting and Pagination */
+    Range?: parameters["range"];
+    body: {
+        /** files */
+        files?: definitions["files"];
+    };
+    body: {
+        /** files */
+        files?: definitions["files"];
+    };
+    body: {
+        /** instruments */
+        instruments?: definitions["instruments"];
+    };
+    body: {
+        /** instruments */
+        instruments?: definitions["instruments"];
+    };
+    body: {
+        /** pgmigrations */
+        pgmigrations?: definitions["pgmigrations"];
+    };
+    body: {
+        /** pgmigrations */
+        pgmigrations?: definitions["pgmigrations"];
+    };
+    body: {
+        /** projects */
+        projects?: definitions["projects"];
+    };
+    body: {
+        /** projects */
+        projects?: definitions["projects"];
+    };
+    body: {
+        /** track_section_steps */
+        track_section_steps?: definitions["track_section_steps"];
+    };
+    body: {
+        /** track_section_steps */
+        track_section_steps?: definitions["track_section_steps"];
+    };
+    body: {
+        /** track_sections */
+        track_sections?: definitions["track_sections"];
+    };
+    body: {
+        /** track_sections */
+        track_sections?: definitions["track_sections"];
+    };
+    body: {
+        /** tracks */
+        tracks?: definitions["tracks"];
+    };
+    body: {
+        /** tracks */
+        tracks?: definitions["tracks"];
+    };
+    body: {
+        /** users */
+        users?: definitions["users"];
+    };
+    body: {
+        /** users */
+        users?: definitions["users"];
+    };
+    bpm?: parameters["rowFilter.projects.bpm"];
+    bpm?: parameters["rowFilter.projects.bpm"];
+    bpm?: parameters["rowFilter.projects.bpm"];
+    bucket_id?: parameters["rowFilter.files.bucket_id"];
+    bucket_id?: parameters["rowFilter.files.bucket_id"];
+    bucket_id?: parameters["rowFilter.files.bucket_id"];
+    created_by_id?: parameters["rowFilter.files.created_by_id"];
+    created_by_id?: parameters["rowFilter.files.created_by_id"];
+    created_by_id?: parameters["rowFilter.files.created_by_id"];
+    created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+    created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+    created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+    created_by_id?: parameters["rowFilter.projects.created_by_id"];
+    created_by_id?: parameters["rowFilter.projects.created_by_id"];
+    created_by_id?: parameters["rowFilter.projects.created_by_id"];
+    created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+    created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+    created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+    created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+    created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+    created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+    created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+    created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+    created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+    created_by_id?: parameters["rowFilter.users.created_by_id"];
+    created_by_id?: parameters["rowFilter.users.created_by_id"];
+    created_by_id?: parameters["rowFilter.users.created_by_id"];
+    created_on?: parameters["rowFilter.files.created_on"];
+    created_on?: parameters["rowFilter.files.created_on"];
+    created_on?: parameters["rowFilter.files.created_on"];
+    created_on?: parameters["rowFilter.instruments.created_on"];
+    created_on?: parameters["rowFilter.instruments.created_on"];
+    created_on?: parameters["rowFilter.instruments.created_on"];
+    created_on?: parameters["rowFilter.projects.created_on"];
+    created_on?: parameters["rowFilter.projects.created_on"];
+    created_on?: parameters["rowFilter.projects.created_on"];
+    created_on?: parameters["rowFilter.track_section_steps.created_on"];
+    created_on?: parameters["rowFilter.track_section_steps.created_on"];
+    created_on?: parameters["rowFilter.track_section_steps.created_on"];
+    created_on?: parameters["rowFilter.track_sections.created_on"];
+    created_on?: parameters["rowFilter.track_sections.created_on"];
+    created_on?: parameters["rowFilter.track_sections.created_on"];
+    created_on?: parameters["rowFilter.tracks.created_on"];
+    created_on?: parameters["rowFilter.tracks.created_on"];
+    created_on?: parameters["rowFilter.tracks.created_on"];
+    created_on?: parameters["rowFilter.users.created_on"];
+    created_on?: parameters["rowFilter.users.created_on"];
+    created_on?: parameters["rowFilter.users.created_on"];
+    curve?: parameters["rowFilter.instruments.curve"];
+    curve?: parameters["rowFilter.instruments.curve"];
+    curve?: parameters["rowFilter.instruments.curve"];
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.files.created_on"];
+                created_by_id?: parameters["rowFilter.files.created_by_id"];
+                deleted_on?: parameters["rowFilter.files.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+                updated_on?: parameters["rowFilter.files.updated_on"];
+                updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+                id?: parameters["rowFilter.files.id"];
+                bucket_id?: parameters["rowFilter.files.bucket_id"];
+                description?: parameters["rowFilter.files.description"];
+                name?: parameters["rowFilter.files.name"];
+                path?: parameters["rowFilter.files.path"];
+                size?: parameters["rowFilter.files.size"];
+                type?: parameters["rowFilter.files.type"];
             };
-            responses: {
-                /** OK */
-                200: unknown;
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
             };
         };
-    };
-    "/rpc/update_files_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
+        responses: {
+            /** No Content */
+            204: never;
         };
     };
-    "/rpc/update_tracks_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.instruments.created_on"];
+                created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+                deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+                updated_on?: parameters["rowFilter.instruments.updated_on"];
+                updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+                id?: parameters["rowFilter.instruments.id"];
+                curve?: parameters["rowFilter.instruments.curve"];
+                file_id?: parameters["rowFilter.instruments.file_id"];
+                name?: parameters["rowFilter.instruments.name"];
+                release?: parameters["rowFilter.instruments.release"];
+                root_note?: parameters["rowFilter.instruments.root_note"];
+                duration?: parameters["rowFilter.instruments.duration"];
             };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
-        };
-    };
-    "/rpc/update_instruments_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
             };
         };
-    };
-    "/rpc/update_projects_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
+        responses: {
+            /** No Content */
+            204: never;
         };
     };
-    "/rpc/update_track_section_steps_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
+    delete: {
+        parameters: {
+            query: {
+                id?: parameters["rowFilter.pgmigrations.id"];
+                name?: parameters["rowFilter.pgmigrations.name"];
+                run_on?: parameters["rowFilter.pgmigrations.run_on"];
             };
-            responses: {
-                /** OK */
-                200: unknown;
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
             };
         };
-    };
-    "/rpc/update_users_auditable_fields": {
-        post: {
-            parameters: {
-                body: {
-                    args: { [key: string]: unknown };
-                };
-                header: {
-                    /** Preference */
-                    Prefer?: parameters["preferParams"];
-                };
-            };
-            responses: {
-                /** OK */
-                200: unknown;
-            };
+        responses: {
+            /** No Content */
+            204: never;
         };
     };
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.projects.created_on"];
+                created_by_id?: parameters["rowFilter.projects.created_by_id"];
+                deleted_on?: parameters["rowFilter.projects.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+                updated_on?: parameters["rowFilter.projects.updated_on"];
+                updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+                id?: parameters["rowFilter.projects.id"];
+                bpm?: parameters["rowFilter.projects.bpm"];
+                name?: parameters["rowFilter.projects.name"];
+                swing?: parameters["rowFilter.projects.swing"];
+                volume?: parameters["rowFilter.projects.volume"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.track_section_steps.created_on"];
+                created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+                deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+                updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+                updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+                id?: parameters["rowFilter.track_section_steps.id"];
+                file_id?: parameters["rowFilter.track_section_steps.file_id"];
+                index?: parameters["rowFilter.track_section_steps.index"];
+                track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                note?: parameters["rowFilter.track_section_steps.note"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.track_sections.created_on"];
+                created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+                deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+                updated_on?: parameters["rowFilter.track_sections.updated_on"];
+                updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+                id?: parameters["rowFilter.track_sections.id"];
+                index?: parameters["rowFilter.track_sections.index"];
+                step_count?: parameters["rowFilter.track_sections.step_count"];
+                track_id?: parameters["rowFilter.track_sections.track_id"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.tracks.created_on"];
+                created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+                deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+                updated_on?: parameters["rowFilter.tracks.updated_on"];
+                updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+                id?: parameters["rowFilter.tracks.id"];
+                index?: parameters["rowFilter.tracks.index"];
+                name?: parameters["rowFilter.tracks.name"];
+                mute?: parameters["rowFilter.tracks.mute"];
+                solo?: parameters["rowFilter.tracks.solo"];
+                pan?: parameters["rowFilter.tracks.pan"];
+                project_id?: parameters["rowFilter.tracks.project_id"];
+                volume?: parameters["rowFilter.tracks.volume"];
+                instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    delete: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.users.created_on"];
+                created_by_id?: parameters["rowFilter.users.created_by_id"];
+                deleted_on?: parameters["rowFilter.users.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+                updated_on?: parameters["rowFilter.users.updated_on"];
+                updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+                id?: parameters["rowFilter.users.id"];
+                email?: parameters["rowFilter.users.email"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+    deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+    deleted_on?: parameters["rowFilter.files.deleted_on"];
+    deleted_on?: parameters["rowFilter.files.deleted_on"];
+    deleted_on?: parameters["rowFilter.files.deleted_on"];
+    deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+    deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+    deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+    deleted_on?: parameters["rowFilter.projects.deleted_on"];
+    deleted_on?: parameters["rowFilter.projects.deleted_on"];
+    deleted_on?: parameters["rowFilter.projects.deleted_on"];
+    deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+    deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+    deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+    deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+    deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+    deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+    deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+    deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+    deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+    deleted_on?: parameters["rowFilter.users.deleted_on"];
+    deleted_on?: parameters["rowFilter.users.deleted_on"];
+    deleted_on?: parameters["rowFilter.users.deleted_on"];
+    description?: parameters["rowFilter.files.description"];
+    description?: parameters["rowFilter.files.description"];
+    description?: parameters["rowFilter.files.description"];
+    duration?: parameters["rowFilter.instruments.duration"];
+    duration?: parameters["rowFilter.instruments.duration"];
+    duration?: parameters["rowFilter.instruments.duration"];
+    email?: parameters["rowFilter.users.email"];
+    email?: parameters["rowFilter.users.email"];
+    email?: parameters["rowFilter.users.email"];
+    file_id?: parameters["rowFilter.instruments.file_id"];
+    file_id?: parameters["rowFilter.instruments.file_id"];
+    file_id?: parameters["rowFilter.instruments.file_id"];
+    file_id?: parameters["rowFilter.track_section_steps.file_id"];
+    file_id?: parameters["rowFilter.track_section_steps.file_id"];
+    file_id?: parameters["rowFilter.track_section_steps.file_id"];
+    /** files */
+    files?: definitions["files"];
+    /** files */
+    files?: definitions["files"];
+    get: {
+        responses: {
+            /** OK */
+            200: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.files.created_on"];
+                created_by_id?: parameters["rowFilter.files.created_by_id"];
+                deleted_on?: parameters["rowFilter.files.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+                updated_on?: parameters["rowFilter.files.updated_on"];
+                updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+                id?: parameters["rowFilter.files.id"];
+                bucket_id?: parameters["rowFilter.files.bucket_id"];
+                description?: parameters["rowFilter.files.description"];
+                name?: parameters["rowFilter.files.name"];
+                path?: parameters["rowFilter.files.path"];
+                size?: parameters["rowFilter.files.size"];
+                type?: parameters["rowFilter.files.type"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["files"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.instruments.created_on"];
+                created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+                deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+                updated_on?: parameters["rowFilter.instruments.updated_on"];
+                updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+                id?: parameters["rowFilter.instruments.id"];
+                curve?: parameters["rowFilter.instruments.curve"];
+                file_id?: parameters["rowFilter.instruments.file_id"];
+                name?: parameters["rowFilter.instruments.name"];
+                release?: parameters["rowFilter.instruments.release"];
+                root_note?: parameters["rowFilter.instruments.root_note"];
+                duration?: parameters["rowFilter.instruments.duration"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["instruments"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                id?: parameters["rowFilter.pgmigrations.id"];
+                name?: parameters["rowFilter.pgmigrations.name"];
+                run_on?: parameters["rowFilter.pgmigrations.run_on"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["pgmigrations"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.projects.created_on"];
+                created_by_id?: parameters["rowFilter.projects.created_by_id"];
+                deleted_on?: parameters["rowFilter.projects.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+                updated_on?: parameters["rowFilter.projects.updated_on"];
+                updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+                id?: parameters["rowFilter.projects.id"];
+                bpm?: parameters["rowFilter.projects.bpm"];
+                name?: parameters["rowFilter.projects.name"];
+                swing?: parameters["rowFilter.projects.swing"];
+                volume?: parameters["rowFilter.projects.volume"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["projects"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.track_section_steps.created_on"];
+                created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+                deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+                updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+                updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+                id?: parameters["rowFilter.track_section_steps.id"];
+                file_id?: parameters["rowFilter.track_section_steps.file_id"];
+                index?: parameters["rowFilter.track_section_steps.index"];
+                track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                note?: parameters["rowFilter.track_section_steps.note"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["track_section_steps"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.track_sections.created_on"];
+                created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+                deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+                updated_on?: parameters["rowFilter.track_sections.updated_on"];
+                updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+                id?: parameters["rowFilter.track_sections.id"];
+                index?: parameters["rowFilter.track_sections.index"];
+                step_count?: parameters["rowFilter.track_sections.step_count"];
+                track_id?: parameters["rowFilter.track_sections.track_id"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["track_sections"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.tracks.created_on"];
+                created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+                deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+                updated_on?: parameters["rowFilter.tracks.updated_on"];
+                updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+                id?: parameters["rowFilter.tracks.id"];
+                index?: parameters["rowFilter.tracks.index"];
+                name?: parameters["rowFilter.tracks.name"];
+                mute?: parameters["rowFilter.tracks.mute"];
+                solo?: parameters["rowFilter.tracks.solo"];
+                pan?: parameters["rowFilter.tracks.pan"];
+                project_id?: parameters["rowFilter.tracks.project_id"];
+                volume?: parameters["rowFilter.tracks.volume"];
+                instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["tracks"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    get: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.users.created_on"];
+                created_by_id?: parameters["rowFilter.users.created_by_id"];
+                deleted_on?: parameters["rowFilter.users.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+                updated_on?: parameters["rowFilter.users.updated_on"];
+                updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+                id?: parameters["rowFilter.users.id"];
+                email?: parameters["rowFilter.users.email"];
+                /** Filtering Columns */
+                select?: parameters["select"];
+                /** Ordering */
+                order?: parameters["order"];
+                /** Limiting and Pagination */
+                offset?: parameters["offset"];
+                /** Limiting and Pagination */
+                limit?: parameters["limit"];
+            };
+            header: {
+                /** Limiting and Pagination */
+                Range?: parameters["range"];
+                /** Limiting and Pagination */
+                "Range-Unit"?: parameters["rangeUnit"];
+                /** Preference */
+                Prefer?: parameters["preferCount"];
+            };
+        };
+        responses: {
+            /** OK */
+            200: {
+                schema: definitions["users"][];
+            };
+            /** Partial Content */
+            206: unknown;
+        };
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Limiting and Pagination */
+        Range?: parameters["range"];
+        /** Limiting and Pagination */
+        "Range-Unit"?: parameters["rangeUnit"];
+        /** Preference */
+        Prefer?: parameters["preferCount"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    header: {
+        /** Preference */
+        Prefer?: parameters["preferReturn"];
+    };
+    id?: parameters["rowFilter.files.id"];
+    id?: parameters["rowFilter.files.id"];
+    id?: parameters["rowFilter.files.id"];
+    id?: parameters["rowFilter.instruments.id"];
+    id?: parameters["rowFilter.instruments.id"];
+    id?: parameters["rowFilter.instruments.id"];
+    id?: parameters["rowFilter.pgmigrations.id"];
+    id?: parameters["rowFilter.pgmigrations.id"];
+    id?: parameters["rowFilter.pgmigrations.id"];
+    id?: parameters["rowFilter.projects.id"];
+    id?: parameters["rowFilter.projects.id"];
+    id?: parameters["rowFilter.projects.id"];
+    id?: parameters["rowFilter.track_section_steps.id"];
+    id?: parameters["rowFilter.track_section_steps.id"];
+    id?: parameters["rowFilter.track_section_steps.id"];
+    id?: parameters["rowFilter.track_sections.id"];
+    id?: parameters["rowFilter.track_sections.id"];
+    id?: parameters["rowFilter.track_sections.id"];
+    id?: parameters["rowFilter.tracks.id"];
+    id?: parameters["rowFilter.tracks.id"];
+    id?: parameters["rowFilter.tracks.id"];
+    id?: parameters["rowFilter.users.id"];
+    id?: parameters["rowFilter.users.id"];
+    id?: parameters["rowFilter.users.id"];
+    index?: parameters["rowFilter.track_section_steps.index"];
+    index?: parameters["rowFilter.track_section_steps.index"];
+    index?: parameters["rowFilter.track_section_steps.index"];
+    index?: parameters["rowFilter.track_sections.index"];
+    index?: parameters["rowFilter.track_sections.index"];
+    index?: parameters["rowFilter.track_sections.index"];
+    index?: parameters["rowFilter.tracks.index"];
+    index?: parameters["rowFilter.tracks.index"];
+    index?: parameters["rowFilter.tracks.index"];
+    instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+    instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+    instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+    /** instruments */
+    instruments?: definitions["instruments"];
+    /** instruments */
+    instruments?: definitions["instruments"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    /** Limiting and Pagination */
+    limit?: parameters["limit"];
+    mute?: parameters["rowFilter.tracks.mute"];
+    mute?: parameters["rowFilter.tracks.mute"];
+    mute?: parameters["rowFilter.tracks.mute"];
+    name?: parameters["rowFilter.files.name"];
+    name?: parameters["rowFilter.files.name"];
+    name?: parameters["rowFilter.files.name"];
+    name?: parameters["rowFilter.instruments.name"];
+    name?: parameters["rowFilter.instruments.name"];
+    name?: parameters["rowFilter.instruments.name"];
+    name?: parameters["rowFilter.pgmigrations.name"];
+    name?: parameters["rowFilter.pgmigrations.name"];
+    name?: parameters["rowFilter.pgmigrations.name"];
+    name?: parameters["rowFilter.projects.name"];
+    name?: parameters["rowFilter.projects.name"];
+    name?: parameters["rowFilter.projects.name"];
+    name?: parameters["rowFilter.tracks.name"];
+    name?: parameters["rowFilter.tracks.name"];
+    name?: parameters["rowFilter.tracks.name"];
+    note?: parameters["rowFilter.track_section_steps.note"];
+    note?: parameters["rowFilter.track_section_steps.note"];
+    note?: parameters["rowFilter.track_section_steps.note"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Limiting and Pagination */
+    offset?: parameters["offset"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    /** Ordering */
+    order?: parameters["order"];
+    pan?: parameters["rowFilter.tracks.pan"];
+    pan?: parameters["rowFilter.tracks.pan"];
+    pan?: parameters["rowFilter.tracks.pan"];
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.files.created_on"];
+            created_by_id?: parameters["rowFilter.files.created_by_id"];
+            deleted_on?: parameters["rowFilter.files.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+            updated_on?: parameters["rowFilter.files.updated_on"];
+            updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+            id?: parameters["rowFilter.files.id"];
+            bucket_id?: parameters["rowFilter.files.bucket_id"];
+            description?: parameters["rowFilter.files.description"];
+            name?: parameters["rowFilter.files.name"];
+            path?: parameters["rowFilter.files.path"];
+            size?: parameters["rowFilter.files.size"];
+            type?: parameters["rowFilter.files.type"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** files */
+            files?: definitions["files"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.files.created_on"];
+            created_by_id?: parameters["rowFilter.files.created_by_id"];
+            deleted_on?: parameters["rowFilter.files.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+            updated_on?: parameters["rowFilter.files.updated_on"];
+            updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+            id?: parameters["rowFilter.files.id"];
+            bucket_id?: parameters["rowFilter.files.bucket_id"];
+            description?: parameters["rowFilter.files.description"];
+            name?: parameters["rowFilter.files.name"];
+            path?: parameters["rowFilter.files.path"];
+            size?: parameters["rowFilter.files.size"];
+            type?: parameters["rowFilter.files.type"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.files.created_on"];
+            created_by_id?: parameters["rowFilter.files.created_by_id"];
+            deleted_on?: parameters["rowFilter.files.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+            updated_on?: parameters["rowFilter.files.updated_on"];
+            updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+            id?: parameters["rowFilter.files.id"];
+            bucket_id?: parameters["rowFilter.files.bucket_id"];
+            description?: parameters["rowFilter.files.description"];
+            name?: parameters["rowFilter.files.name"];
+            path?: parameters["rowFilter.files.path"];
+            size?: parameters["rowFilter.files.size"];
+            type?: parameters["rowFilter.files.type"];
+        };
+        body: {
+            /** files */
+            files?: definitions["files"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.instruments.created_on"];
+            created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+            deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+            updated_on?: parameters["rowFilter.instruments.updated_on"];
+            updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+            id?: parameters["rowFilter.instruments.id"];
+            curve?: parameters["rowFilter.instruments.curve"];
+            file_id?: parameters["rowFilter.instruments.file_id"];
+            name?: parameters["rowFilter.instruments.name"];
+            release?: parameters["rowFilter.instruments.release"];
+            root_note?: parameters["rowFilter.instruments.root_note"];
+            duration?: parameters["rowFilter.instruments.duration"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** instruments */
+            instruments?: definitions["instruments"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.instruments.created_on"];
+            created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+            deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+            updated_on?: parameters["rowFilter.instruments.updated_on"];
+            updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+            id?: parameters["rowFilter.instruments.id"];
+            curve?: parameters["rowFilter.instruments.curve"];
+            file_id?: parameters["rowFilter.instruments.file_id"];
+            name?: parameters["rowFilter.instruments.name"];
+            release?: parameters["rowFilter.instruments.release"];
+            root_note?: parameters["rowFilter.instruments.root_note"];
+            duration?: parameters["rowFilter.instruments.duration"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.instruments.created_on"];
+            created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+            deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+            updated_on?: parameters["rowFilter.instruments.updated_on"];
+            updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+            id?: parameters["rowFilter.instruments.id"];
+            curve?: parameters["rowFilter.instruments.curve"];
+            file_id?: parameters["rowFilter.instruments.file_id"];
+            name?: parameters["rowFilter.instruments.name"];
+            release?: parameters["rowFilter.instruments.release"];
+            root_note?: parameters["rowFilter.instruments.root_note"];
+            duration?: parameters["rowFilter.instruments.duration"];
+        };
+        body: {
+            /** instruments */
+            instruments?: definitions["instruments"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            id?: parameters["rowFilter.pgmigrations.id"];
+            name?: parameters["rowFilter.pgmigrations.name"];
+            run_on?: parameters["rowFilter.pgmigrations.run_on"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** pgmigrations */
+            pgmigrations?: definitions["pgmigrations"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            id?: parameters["rowFilter.pgmigrations.id"];
+            name?: parameters["rowFilter.pgmigrations.name"];
+            run_on?: parameters["rowFilter.pgmigrations.run_on"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            id?: parameters["rowFilter.pgmigrations.id"];
+            name?: parameters["rowFilter.pgmigrations.name"];
+            run_on?: parameters["rowFilter.pgmigrations.run_on"];
+        };
+        body: {
+            /** pgmigrations */
+            pgmigrations?: definitions["pgmigrations"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.projects.created_on"];
+            created_by_id?: parameters["rowFilter.projects.created_by_id"];
+            deleted_on?: parameters["rowFilter.projects.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+            updated_on?: parameters["rowFilter.projects.updated_on"];
+            updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+            id?: parameters["rowFilter.projects.id"];
+            bpm?: parameters["rowFilter.projects.bpm"];
+            name?: parameters["rowFilter.projects.name"];
+            swing?: parameters["rowFilter.projects.swing"];
+            volume?: parameters["rowFilter.projects.volume"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** projects */
+            projects?: definitions["projects"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.projects.created_on"];
+            created_by_id?: parameters["rowFilter.projects.created_by_id"];
+            deleted_on?: parameters["rowFilter.projects.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+            updated_on?: parameters["rowFilter.projects.updated_on"];
+            updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+            id?: parameters["rowFilter.projects.id"];
+            bpm?: parameters["rowFilter.projects.bpm"];
+            name?: parameters["rowFilter.projects.name"];
+            swing?: parameters["rowFilter.projects.swing"];
+            volume?: parameters["rowFilter.projects.volume"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.projects.created_on"];
+            created_by_id?: parameters["rowFilter.projects.created_by_id"];
+            deleted_on?: parameters["rowFilter.projects.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+            updated_on?: parameters["rowFilter.projects.updated_on"];
+            updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+            id?: parameters["rowFilter.projects.id"];
+            bpm?: parameters["rowFilter.projects.bpm"];
+            name?: parameters["rowFilter.projects.name"];
+            swing?: parameters["rowFilter.projects.swing"];
+            volume?: parameters["rowFilter.projects.volume"];
+        };
+        body: {
+            /** projects */
+            projects?: definitions["projects"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.track_section_steps.created_on"];
+            created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+            deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+            updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+            updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+            id?: parameters["rowFilter.track_section_steps.id"];
+            file_id?: parameters["rowFilter.track_section_steps.file_id"];
+            index?: parameters["rowFilter.track_section_steps.index"];
+            track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+            note?: parameters["rowFilter.track_section_steps.note"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** track_section_steps */
+            track_section_steps?: definitions["track_section_steps"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.track_section_steps.created_on"];
+            created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+            deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+            updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+            updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+            id?: parameters["rowFilter.track_section_steps.id"];
+            file_id?: parameters["rowFilter.track_section_steps.file_id"];
+            index?: parameters["rowFilter.track_section_steps.index"];
+            track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+            note?: parameters["rowFilter.track_section_steps.note"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.track_section_steps.created_on"];
+            created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+            deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+            updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+            updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+            id?: parameters["rowFilter.track_section_steps.id"];
+            file_id?: parameters["rowFilter.track_section_steps.file_id"];
+            index?: parameters["rowFilter.track_section_steps.index"];
+            track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+            note?: parameters["rowFilter.track_section_steps.note"];
+        };
+        body: {
+            /** track_section_steps */
+            track_section_steps?: definitions["track_section_steps"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.track_sections.created_on"];
+            created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+            deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+            updated_on?: parameters["rowFilter.track_sections.updated_on"];
+            updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+            id?: parameters["rowFilter.track_sections.id"];
+            index?: parameters["rowFilter.track_sections.index"];
+            step_count?: parameters["rowFilter.track_sections.step_count"];
+            track_id?: parameters["rowFilter.track_sections.track_id"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** track_sections */
+            track_sections?: definitions["track_sections"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.track_sections.created_on"];
+            created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+            deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+            updated_on?: parameters["rowFilter.track_sections.updated_on"];
+            updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+            id?: parameters["rowFilter.track_sections.id"];
+            index?: parameters["rowFilter.track_sections.index"];
+            step_count?: parameters["rowFilter.track_sections.step_count"];
+            track_id?: parameters["rowFilter.track_sections.track_id"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.track_sections.created_on"];
+            created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+            deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+            updated_on?: parameters["rowFilter.track_sections.updated_on"];
+            updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+            id?: parameters["rowFilter.track_sections.id"];
+            index?: parameters["rowFilter.track_sections.index"];
+            step_count?: parameters["rowFilter.track_sections.step_count"];
+            track_id?: parameters["rowFilter.track_sections.track_id"];
+        };
+        body: {
+            /** track_sections */
+            track_sections?: definitions["track_sections"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.tracks.created_on"];
+            created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+            deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+            updated_on?: parameters["rowFilter.tracks.updated_on"];
+            updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+            id?: parameters["rowFilter.tracks.id"];
+            index?: parameters["rowFilter.tracks.index"];
+            name?: parameters["rowFilter.tracks.name"];
+            mute?: parameters["rowFilter.tracks.mute"];
+            solo?: parameters["rowFilter.tracks.solo"];
+            pan?: parameters["rowFilter.tracks.pan"];
+            project_id?: parameters["rowFilter.tracks.project_id"];
+            volume?: parameters["rowFilter.tracks.volume"];
+            instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** tracks */
+            tracks?: definitions["tracks"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.tracks.created_on"];
+            created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+            deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+            updated_on?: parameters["rowFilter.tracks.updated_on"];
+            updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+            id?: parameters["rowFilter.tracks.id"];
+            index?: parameters["rowFilter.tracks.index"];
+            name?: parameters["rowFilter.tracks.name"];
+            mute?: parameters["rowFilter.tracks.mute"];
+            solo?: parameters["rowFilter.tracks.solo"];
+            pan?: parameters["rowFilter.tracks.pan"];
+            project_id?: parameters["rowFilter.tracks.project_id"];
+            volume?: parameters["rowFilter.tracks.volume"];
+            instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.tracks.created_on"];
+            created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+            deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+            updated_on?: parameters["rowFilter.tracks.updated_on"];
+            updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+            id?: parameters["rowFilter.tracks.id"];
+            index?: parameters["rowFilter.tracks.index"];
+            name?: parameters["rowFilter.tracks.name"];
+            mute?: parameters["rowFilter.tracks.mute"];
+            solo?: parameters["rowFilter.tracks.solo"];
+            pan?: parameters["rowFilter.tracks.pan"];
+            project_id?: parameters["rowFilter.tracks.project_id"];
+            volume?: parameters["rowFilter.tracks.volume"];
+            instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+        };
+        body: {
+            /** tracks */
+            tracks?: definitions["tracks"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.users.created_on"];
+            created_by_id?: parameters["rowFilter.users.created_by_id"];
+            deleted_on?: parameters["rowFilter.users.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+            updated_on?: parameters["rowFilter.users.updated_on"];
+            updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+            id?: parameters["rowFilter.users.id"];
+            email?: parameters["rowFilter.users.email"];
+            /** Filtering Columns */
+            select?: parameters["select"];
+            /** Ordering */
+            order?: parameters["order"];
+            /** Limiting and Pagination */
+            offset?: parameters["offset"];
+            /** Limiting and Pagination */
+            limit?: parameters["limit"];
+        };
+        header: {
+            /** Limiting and Pagination */
+            Range?: parameters["range"];
+            /** Limiting and Pagination */
+            "Range-Unit"?: parameters["rangeUnit"];
+            /** Preference */
+            Prefer?: parameters["preferCount"];
+        };
+    };
+    parameters: {
+        body: {
+            /** users */
+            users?: definitions["users"];
+        };
+        query: {
+            /** Filtering Columns */
+            select?: parameters["select"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.users.created_on"];
+            created_by_id?: parameters["rowFilter.users.created_by_id"];
+            deleted_on?: parameters["rowFilter.users.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+            updated_on?: parameters["rowFilter.users.updated_on"];
+            updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+            id?: parameters["rowFilter.users.id"];
+            email?: parameters["rowFilter.users.email"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    parameters: {
+        query: {
+            created_on?: parameters["rowFilter.users.created_on"];
+            created_by_id?: parameters["rowFilter.users.created_by_id"];
+            deleted_on?: parameters["rowFilter.users.deleted_on"];
+            deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+            updated_on?: parameters["rowFilter.users.updated_on"];
+            updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+            id?: parameters["rowFilter.users.id"];
+            email?: parameters["rowFilter.users.email"];
+        };
+        body: {
+            /** users */
+            users?: definitions["users"];
+        };
+        header: {
+            /** Preference */
+            Prefer?: parameters["preferReturn"];
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.files.created_on"];
+                created_by_id?: parameters["rowFilter.files.created_by_id"];
+                deleted_on?: parameters["rowFilter.files.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+                updated_on?: parameters["rowFilter.files.updated_on"];
+                updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+                id?: parameters["rowFilter.files.id"];
+                bucket_id?: parameters["rowFilter.files.bucket_id"];
+                description?: parameters["rowFilter.files.description"];
+                name?: parameters["rowFilter.files.name"];
+                path?: parameters["rowFilter.files.path"];
+                size?: parameters["rowFilter.files.size"];
+                type?: parameters["rowFilter.files.type"];
+            };
+            body: {
+                /** files */
+                files?: definitions["files"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.instruments.created_on"];
+                created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+                deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+                updated_on?: parameters["rowFilter.instruments.updated_on"];
+                updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+                id?: parameters["rowFilter.instruments.id"];
+                curve?: parameters["rowFilter.instruments.curve"];
+                file_id?: parameters["rowFilter.instruments.file_id"];
+                name?: parameters["rowFilter.instruments.name"];
+                release?: parameters["rowFilter.instruments.release"];
+                root_note?: parameters["rowFilter.instruments.root_note"];
+                duration?: parameters["rowFilter.instruments.duration"];
+            };
+            body: {
+                /** instruments */
+                instruments?: definitions["instruments"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                id?: parameters["rowFilter.pgmigrations.id"];
+                name?: parameters["rowFilter.pgmigrations.name"];
+                run_on?: parameters["rowFilter.pgmigrations.run_on"];
+            };
+            body: {
+                /** pgmigrations */
+                pgmigrations?: definitions["pgmigrations"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.projects.created_on"];
+                created_by_id?: parameters["rowFilter.projects.created_by_id"];
+                deleted_on?: parameters["rowFilter.projects.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+                updated_on?: parameters["rowFilter.projects.updated_on"];
+                updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+                id?: parameters["rowFilter.projects.id"];
+                bpm?: parameters["rowFilter.projects.bpm"];
+                name?: parameters["rowFilter.projects.name"];
+                swing?: parameters["rowFilter.projects.swing"];
+                volume?: parameters["rowFilter.projects.volume"];
+            };
+            body: {
+                /** projects */
+                projects?: definitions["projects"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.track_section_steps.created_on"];
+                created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+                deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+                updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+                updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+                id?: parameters["rowFilter.track_section_steps.id"];
+                file_id?: parameters["rowFilter.track_section_steps.file_id"];
+                index?: parameters["rowFilter.track_section_steps.index"];
+                track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+                note?: parameters["rowFilter.track_section_steps.note"];
+            };
+            body: {
+                /** track_section_steps */
+                track_section_steps?: definitions["track_section_steps"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.track_sections.created_on"];
+                created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+                deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+                updated_on?: parameters["rowFilter.track_sections.updated_on"];
+                updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+                id?: parameters["rowFilter.track_sections.id"];
+                index?: parameters["rowFilter.track_sections.index"];
+                step_count?: parameters["rowFilter.track_sections.step_count"];
+                track_id?: parameters["rowFilter.track_sections.track_id"];
+            };
+            body: {
+                /** track_sections */
+                track_sections?: definitions["track_sections"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.tracks.created_on"];
+                created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+                deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+                updated_on?: parameters["rowFilter.tracks.updated_on"];
+                updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+                id?: parameters["rowFilter.tracks.id"];
+                index?: parameters["rowFilter.tracks.index"];
+                name?: parameters["rowFilter.tracks.name"];
+                mute?: parameters["rowFilter.tracks.mute"];
+                solo?: parameters["rowFilter.tracks.solo"];
+                pan?: parameters["rowFilter.tracks.pan"];
+                project_id?: parameters["rowFilter.tracks.project_id"];
+                volume?: parameters["rowFilter.tracks.volume"];
+                instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+            };
+            body: {
+                /** tracks */
+                tracks?: definitions["tracks"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    patch: {
+        parameters: {
+            query: {
+                created_on?: parameters["rowFilter.users.created_on"];
+                created_by_id?: parameters["rowFilter.users.created_by_id"];
+                deleted_on?: parameters["rowFilter.users.deleted_on"];
+                deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+                updated_on?: parameters["rowFilter.users.updated_on"];
+                updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+                id?: parameters["rowFilter.users.id"];
+                email?: parameters["rowFilter.users.email"];
+            };
+            body: {
+                /** users */
+                users?: definitions["users"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** No Content */
+            204: never;
+        };
+    };
+    path?: parameters["rowFilter.files.path"];
+    path?: parameters["rowFilter.files.path"];
+    path?: parameters["rowFilter.files.path"];
+    /** pgmigrations */
+    pgmigrations?: definitions["pgmigrations"];
+    /** pgmigrations */
+    pgmigrations?: definitions["pgmigrations"];
+    post: {
+        parameters: {
+            body: {
+                /** files */
+                files?: definitions["files"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** instruments */
+                instruments?: definitions["instruments"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** pgmigrations */
+                pgmigrations?: definitions["pgmigrations"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** projects */
+                projects?: definitions["projects"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** track_section_steps */
+                track_section_steps?: definitions["track_section_steps"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** track_sections */
+                track_sections?: definitions["track_sections"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** tracks */
+                tracks?: definitions["tracks"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    post: {
+        parameters: {
+            body: {
+                /** users */
+                users?: definitions["users"];
+            };
+            query: {
+                /** Filtering Columns */
+                select?: parameters["select"];
+            };
+            header: {
+                /** Preference */
+                Prefer?: parameters["preferReturn"];
+            };
+        };
+        responses: {
+            /** Created */
+            201: unknown;
+        };
+    };
+    project_id?: parameters["rowFilter.tracks.project_id"];
+    project_id?: parameters["rowFilter.tracks.project_id"];
+    project_id?: parameters["rowFilter.tracks.project_id"];
+    /** projects */
+    projects?: definitions["projects"];
+    /** projects */
+    projects?: definitions["projects"];
+    query: {
+        created_on?: parameters["rowFilter.files.created_on"];
+        created_by_id?: parameters["rowFilter.files.created_by_id"];
+        deleted_on?: parameters["rowFilter.files.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+        updated_on?: parameters["rowFilter.files.updated_on"];
+        updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+        id?: parameters["rowFilter.files.id"];
+        bucket_id?: parameters["rowFilter.files.bucket_id"];
+        description?: parameters["rowFilter.files.description"];
+        name?: parameters["rowFilter.files.name"];
+        path?: parameters["rowFilter.files.path"];
+        size?: parameters["rowFilter.files.size"];
+        type?: parameters["rowFilter.files.type"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.files.created_on"];
+        created_by_id?: parameters["rowFilter.files.created_by_id"];
+        deleted_on?: parameters["rowFilter.files.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+        updated_on?: parameters["rowFilter.files.updated_on"];
+        updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+        id?: parameters["rowFilter.files.id"];
+        bucket_id?: parameters["rowFilter.files.bucket_id"];
+        description?: parameters["rowFilter.files.description"];
+        name?: parameters["rowFilter.files.name"];
+        path?: parameters["rowFilter.files.path"];
+        size?: parameters["rowFilter.files.size"];
+        type?: parameters["rowFilter.files.type"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.files.created_on"];
+        created_by_id?: parameters["rowFilter.files.created_by_id"];
+        deleted_on?: parameters["rowFilter.files.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.files.deleted_by_id"];
+        updated_on?: parameters["rowFilter.files.updated_on"];
+        updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+        id?: parameters["rowFilter.files.id"];
+        bucket_id?: parameters["rowFilter.files.bucket_id"];
+        description?: parameters["rowFilter.files.description"];
+        name?: parameters["rowFilter.files.name"];
+        path?: parameters["rowFilter.files.path"];
+        size?: parameters["rowFilter.files.size"];
+        type?: parameters["rowFilter.files.type"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.instruments.created_on"];
+        created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+        deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+        updated_on?: parameters["rowFilter.instruments.updated_on"];
+        updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+        id?: parameters["rowFilter.instruments.id"];
+        curve?: parameters["rowFilter.instruments.curve"];
+        file_id?: parameters["rowFilter.instruments.file_id"];
+        name?: parameters["rowFilter.instruments.name"];
+        release?: parameters["rowFilter.instruments.release"];
+        root_note?: parameters["rowFilter.instruments.root_note"];
+        duration?: parameters["rowFilter.instruments.duration"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.instruments.created_on"];
+        created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+        deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+        updated_on?: parameters["rowFilter.instruments.updated_on"];
+        updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+        id?: parameters["rowFilter.instruments.id"];
+        curve?: parameters["rowFilter.instruments.curve"];
+        file_id?: parameters["rowFilter.instruments.file_id"];
+        name?: parameters["rowFilter.instruments.name"];
+        release?: parameters["rowFilter.instruments.release"];
+        root_note?: parameters["rowFilter.instruments.root_note"];
+        duration?: parameters["rowFilter.instruments.duration"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.instruments.created_on"];
+        created_by_id?: parameters["rowFilter.instruments.created_by_id"];
+        deleted_on?: parameters["rowFilter.instruments.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.instruments.deleted_by_id"];
+        updated_on?: parameters["rowFilter.instruments.updated_on"];
+        updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+        id?: parameters["rowFilter.instruments.id"];
+        curve?: parameters["rowFilter.instruments.curve"];
+        file_id?: parameters["rowFilter.instruments.file_id"];
+        name?: parameters["rowFilter.instruments.name"];
+        release?: parameters["rowFilter.instruments.release"];
+        root_note?: parameters["rowFilter.instruments.root_note"];
+        duration?: parameters["rowFilter.instruments.duration"];
+    };
+    query: {
+        id?: parameters["rowFilter.pgmigrations.id"];
+        name?: parameters["rowFilter.pgmigrations.name"];
+        run_on?: parameters["rowFilter.pgmigrations.run_on"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        id?: parameters["rowFilter.pgmigrations.id"];
+        name?: parameters["rowFilter.pgmigrations.name"];
+        run_on?: parameters["rowFilter.pgmigrations.run_on"];
+    };
+    query: {
+        id?: parameters["rowFilter.pgmigrations.id"];
+        name?: parameters["rowFilter.pgmigrations.name"];
+        run_on?: parameters["rowFilter.pgmigrations.run_on"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.projects.created_on"];
+        created_by_id?: parameters["rowFilter.projects.created_by_id"];
+        deleted_on?: parameters["rowFilter.projects.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+        updated_on?: parameters["rowFilter.projects.updated_on"];
+        updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+        id?: parameters["rowFilter.projects.id"];
+        bpm?: parameters["rowFilter.projects.bpm"];
+        name?: parameters["rowFilter.projects.name"];
+        swing?: parameters["rowFilter.projects.swing"];
+        volume?: parameters["rowFilter.projects.volume"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.projects.created_on"];
+        created_by_id?: parameters["rowFilter.projects.created_by_id"];
+        deleted_on?: parameters["rowFilter.projects.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+        updated_on?: parameters["rowFilter.projects.updated_on"];
+        updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+        id?: parameters["rowFilter.projects.id"];
+        bpm?: parameters["rowFilter.projects.bpm"];
+        name?: parameters["rowFilter.projects.name"];
+        swing?: parameters["rowFilter.projects.swing"];
+        volume?: parameters["rowFilter.projects.volume"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.projects.created_on"];
+        created_by_id?: parameters["rowFilter.projects.created_by_id"];
+        deleted_on?: parameters["rowFilter.projects.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.projects.deleted_by_id"];
+        updated_on?: parameters["rowFilter.projects.updated_on"];
+        updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+        id?: parameters["rowFilter.projects.id"];
+        bpm?: parameters["rowFilter.projects.bpm"];
+        name?: parameters["rowFilter.projects.name"];
+        swing?: parameters["rowFilter.projects.swing"];
+        volume?: parameters["rowFilter.projects.volume"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.track_section_steps.created_on"];
+        created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+        deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+        updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+        updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+        id?: parameters["rowFilter.track_section_steps.id"];
+        file_id?: parameters["rowFilter.track_section_steps.file_id"];
+        index?: parameters["rowFilter.track_section_steps.index"];
+        track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+        note?: parameters["rowFilter.track_section_steps.note"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.track_section_steps.created_on"];
+        created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+        deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+        updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+        updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+        id?: parameters["rowFilter.track_section_steps.id"];
+        file_id?: parameters["rowFilter.track_section_steps.file_id"];
+        index?: parameters["rowFilter.track_section_steps.index"];
+        track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+        note?: parameters["rowFilter.track_section_steps.note"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.track_section_steps.created_on"];
+        created_by_id?: parameters["rowFilter.track_section_steps.created_by_id"];
+        deleted_on?: parameters["rowFilter.track_section_steps.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.track_section_steps.deleted_by_id"];
+        updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+        updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+        id?: parameters["rowFilter.track_section_steps.id"];
+        file_id?: parameters["rowFilter.track_section_steps.file_id"];
+        index?: parameters["rowFilter.track_section_steps.index"];
+        track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+        note?: parameters["rowFilter.track_section_steps.note"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.track_sections.created_on"];
+        created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+        deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+        updated_on?: parameters["rowFilter.track_sections.updated_on"];
+        updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+        id?: parameters["rowFilter.track_sections.id"];
+        index?: parameters["rowFilter.track_sections.index"];
+        step_count?: parameters["rowFilter.track_sections.step_count"];
+        track_id?: parameters["rowFilter.track_sections.track_id"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.track_sections.created_on"];
+        created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+        deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+        updated_on?: parameters["rowFilter.track_sections.updated_on"];
+        updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+        id?: parameters["rowFilter.track_sections.id"];
+        index?: parameters["rowFilter.track_sections.index"];
+        step_count?: parameters["rowFilter.track_sections.step_count"];
+        track_id?: parameters["rowFilter.track_sections.track_id"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.track_sections.created_on"];
+        created_by_id?: parameters["rowFilter.track_sections.created_by_id"];
+        deleted_on?: parameters["rowFilter.track_sections.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.track_sections.deleted_by_id"];
+        updated_on?: parameters["rowFilter.track_sections.updated_on"];
+        updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+        id?: parameters["rowFilter.track_sections.id"];
+        index?: parameters["rowFilter.track_sections.index"];
+        step_count?: parameters["rowFilter.track_sections.step_count"];
+        track_id?: parameters["rowFilter.track_sections.track_id"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.tracks.created_on"];
+        created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+        deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+        updated_on?: parameters["rowFilter.tracks.updated_on"];
+        updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+        id?: parameters["rowFilter.tracks.id"];
+        index?: parameters["rowFilter.tracks.index"];
+        name?: parameters["rowFilter.tracks.name"];
+        mute?: parameters["rowFilter.tracks.mute"];
+        solo?: parameters["rowFilter.tracks.solo"];
+        pan?: parameters["rowFilter.tracks.pan"];
+        project_id?: parameters["rowFilter.tracks.project_id"];
+        volume?: parameters["rowFilter.tracks.volume"];
+        instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.tracks.created_on"];
+        created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+        deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+        updated_on?: parameters["rowFilter.tracks.updated_on"];
+        updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+        id?: parameters["rowFilter.tracks.id"];
+        index?: parameters["rowFilter.tracks.index"];
+        name?: parameters["rowFilter.tracks.name"];
+        mute?: parameters["rowFilter.tracks.mute"];
+        solo?: parameters["rowFilter.tracks.solo"];
+        pan?: parameters["rowFilter.tracks.pan"];
+        project_id?: parameters["rowFilter.tracks.project_id"];
+        volume?: parameters["rowFilter.tracks.volume"];
+        instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.tracks.created_on"];
+        created_by_id?: parameters["rowFilter.tracks.created_by_id"];
+        deleted_on?: parameters["rowFilter.tracks.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.tracks.deleted_by_id"];
+        updated_on?: parameters["rowFilter.tracks.updated_on"];
+        updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+        id?: parameters["rowFilter.tracks.id"];
+        index?: parameters["rowFilter.tracks.index"];
+        name?: parameters["rowFilter.tracks.name"];
+        mute?: parameters["rowFilter.tracks.mute"];
+        solo?: parameters["rowFilter.tracks.solo"];
+        pan?: parameters["rowFilter.tracks.pan"];
+        project_id?: parameters["rowFilter.tracks.project_id"];
+        volume?: parameters["rowFilter.tracks.volume"];
+        instrument_id?: parameters["rowFilter.tracks.instrument_id"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.users.created_on"];
+        created_by_id?: parameters["rowFilter.users.created_by_id"];
+        deleted_on?: parameters["rowFilter.users.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+        updated_on?: parameters["rowFilter.users.updated_on"];
+        updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+        id?: parameters["rowFilter.users.id"];
+        email?: parameters["rowFilter.users.email"];
+        /** Filtering Columns */
+        select?: parameters["select"];
+        /** Ordering */
+        order?: parameters["order"];
+        /** Limiting and Pagination */
+        offset?: parameters["offset"];
+        /** Limiting and Pagination */
+        limit?: parameters["limit"];
+    };
+    query: {
+        /** Filtering Columns */
+        select?: parameters["select"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.users.created_on"];
+        created_by_id?: parameters["rowFilter.users.created_by_id"];
+        deleted_on?: parameters["rowFilter.users.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+        updated_on?: parameters["rowFilter.users.updated_on"];
+        updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+        id?: parameters["rowFilter.users.id"];
+        email?: parameters["rowFilter.users.email"];
+    };
+    query: {
+        created_on?: parameters["rowFilter.users.created_on"];
+        created_by_id?: parameters["rowFilter.users.created_by_id"];
+        deleted_on?: parameters["rowFilter.users.deleted_on"];
+        deleted_by_id?: parameters["rowFilter.users.deleted_by_id"];
+        updated_on?: parameters["rowFilter.users.updated_on"];
+        updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+        id?: parameters["rowFilter.users.id"];
+        email?: parameters["rowFilter.users.email"];
+    };
+    release?: parameters["rowFilter.instruments.release"];
+    release?: parameters["rowFilter.instruments.release"];
+    release?: parameters["rowFilter.instruments.release"];
+    responses: {
+        /** OK */
+        200: unknown;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["files"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["instruments"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["pgmigrations"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["projects"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["track_section_steps"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["track_sections"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["tracks"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** OK */
+        200: {
+            schema: definitions["users"][];
+        };
+        /** Partial Content */
+        206: unknown;
+    };
+    responses: {
+        /** Created */
+        201: unknown;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    responses: {
+        /** No Content */
+        204: never;
+    };
+    root_note?: parameters["rowFilter.instruments.root_note"];
+    root_note?: parameters["rowFilter.instruments.root_note"];
+    root_note?: parameters["rowFilter.instruments.root_note"];
+    run_on?: parameters["rowFilter.pgmigrations.run_on"];
+    run_on?: parameters["rowFilter.pgmigrations.run_on"];
+    run_on?: parameters["rowFilter.pgmigrations.run_on"];
+    schema: definitions["files"][];
+    schema: definitions["instruments"][];
+    schema: definitions["pgmigrations"][];
+    schema: definitions["projects"][];
+    schema: definitions["track_section_steps"][];
+    schema: definitions["track_sections"][];
+    schema: definitions["tracks"][];
+    schema: definitions["users"][];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    /** Filtering Columns */
+    select?: parameters["select"];
+    size?: parameters["rowFilter.files.size"];
+    size?: parameters["rowFilter.files.size"];
+    size?: parameters["rowFilter.files.size"];
+    solo?: parameters["rowFilter.tracks.solo"];
+    solo?: parameters["rowFilter.tracks.solo"];
+    solo?: parameters["rowFilter.tracks.solo"];
+    step_count?: parameters["rowFilter.track_sections.step_count"];
+    step_count?: parameters["rowFilter.track_sections.step_count"];
+    step_count?: parameters["rowFilter.track_sections.step_count"];
+    swing?: parameters["rowFilter.projects.swing"];
+    swing?: parameters["rowFilter.projects.swing"];
+    swing?: parameters["rowFilter.projects.swing"];
+    track_id?: parameters["rowFilter.track_sections.track_id"];
+    track_id?: parameters["rowFilter.track_sections.track_id"];
+    track_id?: parameters["rowFilter.track_sections.track_id"];
+    track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+    track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+    track_section_id?: parameters["rowFilter.track_section_steps.track_section_id"];
+    /** track_section_steps */
+    track_section_steps?: definitions["track_section_steps"];
+    /** track_section_steps */
+    track_section_steps?: definitions["track_section_steps"];
+    /** track_sections */
+    track_sections?: definitions["track_sections"];
+    /** track_sections */
+    track_sections?: definitions["track_sections"];
+    /** tracks */
+    tracks?: definitions["tracks"];
+    /** tracks */
+    tracks?: definitions["tracks"];
+    type?: parameters["rowFilter.files.type"];
+    type?: parameters["rowFilter.files.type"];
+    type?: parameters["rowFilter.files.type"];
+    updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.files.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.instruments.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.projects.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.track_section_steps.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.track_sections.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.tracks.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+    updated_by_id?: parameters["rowFilter.users.updated_by_id"];
+    updated_on?: parameters["rowFilter.files.updated_on"];
+    updated_on?: parameters["rowFilter.files.updated_on"];
+    updated_on?: parameters["rowFilter.files.updated_on"];
+    updated_on?: parameters["rowFilter.instruments.updated_on"];
+    updated_on?: parameters["rowFilter.instruments.updated_on"];
+    updated_on?: parameters["rowFilter.instruments.updated_on"];
+    updated_on?: parameters["rowFilter.projects.updated_on"];
+    updated_on?: parameters["rowFilter.projects.updated_on"];
+    updated_on?: parameters["rowFilter.projects.updated_on"];
+    updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+    updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+    updated_on?: parameters["rowFilter.track_section_steps.updated_on"];
+    updated_on?: parameters["rowFilter.track_sections.updated_on"];
+    updated_on?: parameters["rowFilter.track_sections.updated_on"];
+    updated_on?: parameters["rowFilter.track_sections.updated_on"];
+    updated_on?: parameters["rowFilter.tracks.updated_on"];
+    updated_on?: parameters["rowFilter.tracks.updated_on"];
+    updated_on?: parameters["rowFilter.tracks.updated_on"];
+    updated_on?: parameters["rowFilter.users.updated_on"];
+    updated_on?: parameters["rowFilter.users.updated_on"];
+    updated_on?: parameters["rowFilter.users.updated_on"];
+    /** users */
+    users?: definitions["users"];
+    /** users */
+    users?: definitions["users"];
+    volume?: parameters["rowFilter.projects.volume"];
+    volume?: parameters["rowFilter.projects.volume"];
+    volume?: parameters["rowFilter.projects.volume"];
+    volume?: parameters["rowFilter.tracks.volume"];
+    volume?: parameters["rowFilter.tracks.volume"];
+    volume?: parameters["rowFilter.tracks.volume"];
 }
 
 export interface definitions {
+    bpm: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `buckets.id`.<fk table='buckets' column='id'/>
+     */
+    bucket_id: string;
+    created_by_id?: string;
+    created_by_id?: string;
+    created_by_id?: string;
+    created_by_id?: string;
+    created_by_id?: string;
+    created_by_id?: string;
+    created_by_id?: string;
+    created_on?: string;
+    created_on?: string;
+    created_on?: string;
+    created_on?: string;
+    created_on?: string;
+    created_on?: string;
+    created_on?: string;
+    curve: "exponential" | "linear";
+    deleted_by_id?: string;
+    deleted_by_id?: string;
+    deleted_by_id?: string;
+    deleted_by_id?: string;
+    deleted_by_id?: string;
+    deleted_by_id?: string;
+    deleted_by_id?: string;
+    deleted_on?: string;
+    deleted_on?: string;
+    deleted_on?: string;
+    deleted_on?: string;
+    deleted_on?: string;
+    deleted_on?: string;
+    deleted_on?: string;
+    description?: string;
+    duration?: number;
+    email: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `files.id`.<fk table='files' column='id'/>
+     */
+    file_id: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `files.id`.<fk table='files' column='id'/>
+     */
+    file_id?: string;
     files: {
         created_on?: string;
         created_by_id?: string;
@@ -1081,6 +3958,54 @@ export interface definitions {
         size?: number;
         type: string;
     };
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    index: number;
+    index: number;
+    index: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `instruments.id`.<fk table='instruments' column='id'/>
+     */
+    instrument_id?: string;
     instruments: {
         created_on?: string;
         created_by_id?: string;
@@ -1104,6 +4029,15 @@ export interface definitions {
         root_note?: string;
         duration?: number;
     };
+    mute: boolean;
+    name: string;
+    name: string;
+    name: string;
+    name: string;
+    name: string;
+    note?: string;
+    pan: number;
+    path: string;
     pgmigrations: {
         /**
          * Note:
@@ -1113,6 +4047,11 @@ export interface definitions {
         name: string;
         run_on: string;
     };
+    /**
+     * Note:
+     * This is a Foreign Key to `projects.id`.<fk table='projects' column='id'/>
+     */
+    project_id: string;
     projects: {
         created_on?: string;
         created_by_id?: string;
@@ -1130,6 +4069,23 @@ export interface definitions {
         swing: number;
         volume: number;
     };
+    release?: number;
+    root_note?: string;
+    run_on: string;
+    size?: number;
+    solo: boolean;
+    step_count: number;
+    swing: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `tracks.id`.<fk table='tracks' column='id'/>
+     */
+    track_id: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `track_sections.id`.<fk table='track_sections' column='id'/>
+     */
+    track_section_id: string;
     track_section_steps: {
         created_on?: string;
         created_by_id?: string;
@@ -1204,6 +4160,21 @@ export interface definitions {
          */
         instrument_id?: string;
     };
+    type: string;
+    updated_by_id?: string;
+    updated_by_id?: string;
+    updated_by_id?: string;
+    updated_by_id?: string;
+    updated_by_id?: string;
+    updated_by_id?: string;
+    updated_by_id?: string;
+    updated_on?: string;
+    updated_on?: string;
+    updated_on?: string;
+    updated_on?: string;
+    updated_on?: string;
+    updated_on?: string;
+    updated_on?: string;
     users: {
         created_on?: string;
         created_by_id?: string;
@@ -1218,129 +4189,131 @@ export interface definitions {
         id: string;
         email: string;
     };
+    volume: number;
+    volume: number;
 }
 
 export interface parameters {
-    /** Preference */
-    preferParams: "params=single-object";
-    /** Preference */
-    preferReturn: "return=representation" | "return=minimal" | "return=none";
-    /** Preference */
-    preferCount: "count=none";
-    /** Filtering Columns */
-    select: string;
-    /** On Conflict */
-    on_conflict: string;
-    /** Ordering */
-    order: string;
-    /** Limiting and Pagination */
-    range: string;
-    /** Limiting and Pagination */
-    rangeUnit: string;
-    /** Limiting and Pagination */
-    offset: string;
-    /** Limiting and Pagination */
-    limit: string;
     /** files */
     "body.files": definitions["files"];
-    "rowFilter.files.created_on": string;
-    "rowFilter.files.created_by_id": string;
-    "rowFilter.files.deleted_on": string;
-    "rowFilter.files.deleted_by_id": string;
-    "rowFilter.files.updated_on": string;
-    "rowFilter.files.updated_by_id": string;
-    "rowFilter.files.id": string;
+    /** instruments */
+    "body.instruments": definitions["instruments"];
+    /** pgmigrations */
+    "body.pgmigrations": definitions["pgmigrations"];
+    /** projects */
+    "body.projects": definitions["projects"];
+    /** track_section_steps */
+    "body.track_section_steps": definitions["track_section_steps"];
+    /** track_sections */
+    "body.track_sections": definitions["track_sections"];
+    /** tracks */
+    "body.tracks": definitions["tracks"];
+    /** users */
+    "body.users": definitions["users"];
     "rowFilter.files.bucket_id": string;
+    "rowFilter.files.created_by_id": string;
+    "rowFilter.files.created_on": string;
+    "rowFilter.files.deleted_by_id": string;
+    "rowFilter.files.deleted_on": string;
     "rowFilter.files.description": string;
+    "rowFilter.files.id": string;
     "rowFilter.files.name": string;
     "rowFilter.files.path": string;
     "rowFilter.files.size": string;
     "rowFilter.files.type": string;
-    /** instruments */
-    "body.instruments": definitions["instruments"];
-    "rowFilter.instruments.created_on": string;
+    "rowFilter.files.updated_by_id": string;
+    "rowFilter.files.updated_on": string;
     "rowFilter.instruments.created_by_id": string;
-    "rowFilter.instruments.deleted_on": string;
-    "rowFilter.instruments.deleted_by_id": string;
-    "rowFilter.instruments.updated_on": string;
-    "rowFilter.instruments.updated_by_id": string;
-    "rowFilter.instruments.id": string;
+    "rowFilter.instruments.created_on": string;
     "rowFilter.instruments.curve": string;
+    "rowFilter.instruments.deleted_by_id": string;
+    "rowFilter.instruments.deleted_on": string;
+    "rowFilter.instruments.duration": string;
     "rowFilter.instruments.file_id": string;
+    "rowFilter.instruments.id": string;
     "rowFilter.instruments.name": string;
     "rowFilter.instruments.release": string;
     "rowFilter.instruments.root_note": string;
-    "rowFilter.instruments.duration": string;
-    /** pgmigrations */
-    "body.pgmigrations": definitions["pgmigrations"];
+    "rowFilter.instruments.updated_by_id": string;
+    "rowFilter.instruments.updated_on": string;
     "rowFilter.pgmigrations.id": string;
     "rowFilter.pgmigrations.name": string;
     "rowFilter.pgmigrations.run_on": string;
-    /** projects */
-    "body.projects": definitions["projects"];
-    "rowFilter.projects.created_on": string;
-    "rowFilter.projects.created_by_id": string;
-    "rowFilter.projects.deleted_on": string;
-    "rowFilter.projects.deleted_by_id": string;
-    "rowFilter.projects.updated_on": string;
-    "rowFilter.projects.updated_by_id": string;
-    "rowFilter.projects.id": string;
     "rowFilter.projects.bpm": string;
+    "rowFilter.projects.created_by_id": string;
+    "rowFilter.projects.created_on": string;
+    "rowFilter.projects.deleted_by_id": string;
+    "rowFilter.projects.deleted_on": string;
+    "rowFilter.projects.id": string;
     "rowFilter.projects.name": string;
     "rowFilter.projects.swing": string;
+    "rowFilter.projects.updated_by_id": string;
+    "rowFilter.projects.updated_on": string;
     "rowFilter.projects.volume": string;
-    /** track_section_steps */
-    "body.track_section_steps": definitions["track_section_steps"];
-    "rowFilter.track_section_steps.created_on": string;
     "rowFilter.track_section_steps.created_by_id": string;
-    "rowFilter.track_section_steps.deleted_on": string;
+    "rowFilter.track_section_steps.created_on": string;
     "rowFilter.track_section_steps.deleted_by_id": string;
-    "rowFilter.track_section_steps.updated_on": string;
-    "rowFilter.track_section_steps.updated_by_id": string;
-    "rowFilter.track_section_steps.id": string;
+    "rowFilter.track_section_steps.deleted_on": string;
     "rowFilter.track_section_steps.file_id": string;
+    "rowFilter.track_section_steps.id": string;
     "rowFilter.track_section_steps.index": string;
-    "rowFilter.track_section_steps.track_section_id": string;
     "rowFilter.track_section_steps.note": string;
-    /** track_sections */
-    "body.track_sections": definitions["track_sections"];
-    "rowFilter.track_sections.created_on": string;
+    "rowFilter.track_section_steps.track_section_id": string;
+    "rowFilter.track_section_steps.updated_by_id": string;
+    "rowFilter.track_section_steps.updated_on": string;
     "rowFilter.track_sections.created_by_id": string;
-    "rowFilter.track_sections.deleted_on": string;
+    "rowFilter.track_sections.created_on": string;
     "rowFilter.track_sections.deleted_by_id": string;
-    "rowFilter.track_sections.updated_on": string;
-    "rowFilter.track_sections.updated_by_id": string;
+    "rowFilter.track_sections.deleted_on": string;
     "rowFilter.track_sections.id": string;
     "rowFilter.track_sections.index": string;
     "rowFilter.track_sections.step_count": string;
     "rowFilter.track_sections.track_id": string;
-    /** tracks */
-    "body.tracks": definitions["tracks"];
-    "rowFilter.tracks.created_on": string;
+    "rowFilter.track_sections.updated_by_id": string;
+    "rowFilter.track_sections.updated_on": string;
     "rowFilter.tracks.created_by_id": string;
-    "rowFilter.tracks.deleted_on": string;
+    "rowFilter.tracks.created_on": string;
     "rowFilter.tracks.deleted_by_id": string;
-    "rowFilter.tracks.updated_on": string;
-    "rowFilter.tracks.updated_by_id": string;
+    "rowFilter.tracks.deleted_on": string;
     "rowFilter.tracks.id": string;
     "rowFilter.tracks.index": string;
-    "rowFilter.tracks.name": string;
+    "rowFilter.tracks.instrument_id": string;
     "rowFilter.tracks.mute": string;
-    "rowFilter.tracks.solo": string;
+    "rowFilter.tracks.name": string;
     "rowFilter.tracks.pan": string;
     "rowFilter.tracks.project_id": string;
+    "rowFilter.tracks.solo": string;
+    "rowFilter.tracks.updated_by_id": string;
+    "rowFilter.tracks.updated_on": string;
     "rowFilter.tracks.volume": string;
-    "rowFilter.tracks.instrument_id": string;
-    /** users */
-    "body.users": definitions["users"];
-    "rowFilter.users.created_on": string;
     "rowFilter.users.created_by_id": string;
-    "rowFilter.users.deleted_on": string;
+    "rowFilter.users.created_on": string;
     "rowFilter.users.deleted_by_id": string;
-    "rowFilter.users.updated_on": string;
-    "rowFilter.users.updated_by_id": string;
-    "rowFilter.users.id": string;
+    "rowFilter.users.deleted_on": string;
     "rowFilter.users.email": string;
+    "rowFilter.users.id": string;
+    "rowFilter.users.updated_by_id": string;
+    "rowFilter.users.updated_on": string;
+    /** Limiting and Pagination */
+    limit: string;
+    /** Limiting and Pagination */
+    offset: string;
+    /** On Conflict */
+    on_conflict: string;
+    /** Ordering */
+    order: string;
+    /** Preference */
+    preferCount: "count=none";
+    /** Preference */
+    preferParams: "params=single-object";
+    /** Preference */
+    preferReturn: "return=representation" | "return=minimal" | "return=none";
+    /** Limiting and Pagination */
+    range: string;
+    /** Limiting and Pagination */
+    rangeUnit: string;
+    /** Filtering Columns */
+    select: string;
 }
 
 export interface operations {}

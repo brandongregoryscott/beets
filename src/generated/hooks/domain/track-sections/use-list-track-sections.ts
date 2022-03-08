@@ -10,6 +10,7 @@ interface UseListTrackSectionsOptions {
     filter?: (
         query: PostgrestFilterBuilder<TrackSection>
     ) => PostgrestFilterBuilder<TrackSection>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackSectionRecord[]) => void;
 }
@@ -23,6 +24,7 @@ const useListTrackSections = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -42,7 +44,7 @@ const useListTrackSections = (
 
     const result = useQuery<TrackSectionRecord[], Error>({
         enabled,
-        key: Tables.TrackSections,
+        key: [Tables.TrackSections, ...key],
         fn: list,
         onError,
         onSuccess,

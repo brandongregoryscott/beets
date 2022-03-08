@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetInstrumentOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetInstrument = (
     options: UseGetInstrumentOptions
 ): UseQueryResult<InstrumentRecord | undefined, Error> => {
     const { fromInstruments } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromInstruments()
@@ -34,7 +35,7 @@ const useGetInstrument = (
 
     const result = useQuery<InstrumentRecord | undefined, Error>({
         enabled,
-        key: [Tables.Instruments, id],
+        key: [Tables.Instruments, id, ...key],
         fn: get,
     });
 

@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetProjectOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetProject = (
     options: UseGetProjectOptions
 ): UseQueryResult<ProjectRecord | undefined, Error> => {
     const { fromProjects } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromProjects().select("*").eq("id", id).limit(1).single();
@@ -30,7 +31,7 @@ const useGetProject = (
 
     const result = useQuery<ProjectRecord | undefined, Error>({
         enabled,
-        key: [Tables.Projects, id],
+        key: [Tables.Projects, id, ...key],
         fn: get,
     });
 

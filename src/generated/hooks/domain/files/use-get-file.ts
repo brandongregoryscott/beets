@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetFileOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetFile = (
     options: UseGetFileOptions
 ): UseQueryResult<FileRecord | undefined, Error> => {
     const { fromFiles } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromFiles().select("*").eq("id", id).limit(1).single();
@@ -30,7 +31,7 @@ const useGetFile = (
 
     const result = useQuery<FileRecord | undefined, Error>({
         enabled,
-        key: [Tables.Files, id],
+        key: [Tables.Files, id, ...key],
         fn: get,
     });
 

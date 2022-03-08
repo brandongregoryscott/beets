@@ -10,6 +10,7 @@ interface UseListProjectsOptions {
     filter?: (
         query: PostgrestFilterBuilder<Project>
     ) => PostgrestFilterBuilder<Project>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: ProjectRecord[]) => void;
 }
@@ -23,6 +24,7 @@ const useListProjects = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -39,7 +41,7 @@ const useListProjects = (
 
     const result = useQuery<ProjectRecord[], Error>({
         enabled,
-        key: Tables.Projects,
+        key: [Tables.Projects, ...key],
         fn: list,
         onError,
         onSuccess,

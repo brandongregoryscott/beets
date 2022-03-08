@@ -10,6 +10,7 @@ interface UseListUsersOptions {
     filter?: (
         query: PostgrestFilterBuilder<User>
     ) => PostgrestFilterBuilder<User>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: UserRecord[]) => void;
 }
@@ -23,6 +24,7 @@ const useListUsers = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -39,7 +41,7 @@ const useListUsers = (
 
     const result = useQuery<UserRecord[], Error>({
         enabled,
-        key: Tables.Users,
+        key: [Tables.Users, ...key],
         fn: list,
         onError,
         onSuccess,

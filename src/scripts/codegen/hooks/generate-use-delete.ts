@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "../log";
 import {
@@ -76,7 +75,7 @@ const generateUseDelete = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useDeleteInitializer(property),
+                initializer: getInitializer(property),
             },
         ],
     });
@@ -86,9 +85,8 @@ const generateUseDelete = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useDeleteInitializer = (property: PropertySignature) => {
+const getInitializer = (property: PropertySignature) => {
     const fromTable = getFromFunctionName(property);
-    const enumValue = getTablesEnumValue(property);
     const optionsInterfaceName = getHookOptionsInterfaceName(
         property,
         HookAction.Delete

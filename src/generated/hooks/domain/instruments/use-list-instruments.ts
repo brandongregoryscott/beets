@@ -10,6 +10,7 @@ interface UseListInstrumentsOptions {
     filter?: (
         query: PostgrestFilterBuilder<Instrument>
     ) => PostgrestFilterBuilder<Instrument>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: InstrumentRecord[]) => void;
 }
@@ -23,6 +24,7 @@ const useListInstruments = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -41,7 +43,7 @@ const useListInstruments = (
 
     const result = useQuery<InstrumentRecord[], Error>({
         enabled,
-        key: Tables.Instruments,
+        key: [Tables.Instruments, ...key],
         fn: list,
         onError,
         onSuccess,

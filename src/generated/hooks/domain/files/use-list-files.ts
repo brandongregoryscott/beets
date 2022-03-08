@@ -24,6 +24,7 @@ const useListFiles = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -38,10 +39,9 @@ const useListFiles = (
         return data?.map((file) => new FileRecord(file)) ?? [];
     };
 
-    console.log("filter", filter);
     const result = useQuery<FileRecord[], Error>({
         enabled,
-        key: [Tables.Files, ...(options?.key ?? [])],
+        key: [Tables.Files, ...key],
         fn: list,
         onError,
         onSuccess,

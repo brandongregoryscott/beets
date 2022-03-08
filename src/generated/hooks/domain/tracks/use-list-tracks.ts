@@ -10,6 +10,7 @@ interface UseListTracksOptions {
     filter?: (
         query: PostgrestFilterBuilder<Track>
     ) => PostgrestFilterBuilder<Track>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackRecord[]) => void;
 }
@@ -23,6 +24,7 @@ const useListTracks = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
     } = options ?? {};
@@ -39,7 +41,7 @@ const useListTracks = (
 
     const result = useQuery<TrackRecord[], Error>({
         enabled,
-        key: Tables.Tracks,
+        key: [Tables.Tracks, ...key],
         fn: list,
         onError,
         onSuccess,
