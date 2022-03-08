@@ -7,8 +7,10 @@ import { useListFiles } from "generated/hooks/domain/files/use-list-files";
 import { FileCard } from "components/files/file-card";
 import { Flex } from "components/flex";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
-import { Spinner } from "evergreen-ui";
+import { majorScale, Spinner, TextInputField } from "evergreen-ui";
 import React from "react";
+import { useInput } from "utils/hooks/use-input";
+import { isEmpty } from "lodash";
 
 interface FileListProps {
     bucketName: BucketName;
@@ -28,7 +30,16 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
             order: SortOrder.DESC,
         },
     });
-    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { value: nameFilter, ...textInputProps } = useInput();
+    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles({
+        filter: (query) => {
+            if (isEmpty(nameFilter)) {
+                return query;
+            }
+
+            return query.ilike("name", `%${nameFilter}%`);
+        },
+    });
     useTimeoutRender();
 
     const groupedFiles = groupBy(
@@ -40,6 +51,12 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
 
     return (
         <Flex.Column>
+            <TextInputField
+                {...textInputProps}
+                label="Filter by name"
+                value={nameFilter}
+                width={majorScale(40)}
+            />
             <Flex.Row flexWrap="wrap" width="100%">
                 {isLoading && <Spinner />}
                 {groupedFiles.map(

@@ -10,6 +10,7 @@ interface UseListFilesOptions {
     filter?: (
         query: PostgrestFilterBuilder<File>
     ) => PostgrestFilterBuilder<File>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: FileRecord[]) => void;
 }
@@ -37,9 +38,10 @@ const useListFiles = (
         return data?.map((file) => new FileRecord(file)) ?? [];
     };
 
+    console.log("filter", filter);
     const result = useQuery<FileRecord[], Error>({
         enabled,
-        key: Tables.Files,
+        key: [Tables.Files, ...(options?.key ?? [])],
         fn: list,
         onError,
         onSuccess,
