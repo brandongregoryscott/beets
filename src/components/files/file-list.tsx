@@ -39,6 +39,7 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
 
             return query.ilike("name", `%${nameFilter}%`);
         },
+        key: [nameFilter],
     });
     useTimeoutRender();
 
@@ -54,6 +55,7 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
             <TextInputField
                 {...textInputProps}
                 label="Filter by name"
+                marginBottom={majorScale(2)}
                 value={nameFilter}
                 width={majorScale(40)}
             />
