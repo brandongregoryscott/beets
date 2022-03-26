@@ -81,18 +81,25 @@ This guide will serve as documentation for the various different pages and featu
 
 -   Stands for _beats per minute_ or the tempo of the song. This is persisted as a property on the [Project](#project).
 
+![Project BPM](./assets/ProjectBPM.png)
+
 ### Swing
 
 -   Value from 0 - 100 that controls how far notes will deviate from the metronome. This can be used for an 'off-beat' sound commonly used in hip-hop.
 
+![Project Swing](./assets/ProjectSwing.png)
+
 ### Volume
 
--   Value (in decibels, or dB) that controls how quiet or loud the audio is. The [Project](#project) has a global volume level, and each [Track](#track) also has its own volume level to allow for mixing.
+-   Value (in decibels, or dB) that controls how quiet or loud the audio is. The [Project](#project) has a global volume level, and each [Track](#track) will eventually have its own volume level to allow for mixing. (See [beets#68](https://github.com/brandongregoryscott/beets/issues/68))
+
+![Project Volume](./assets/ProjectVolume.png)
 
 ### Mute
 
 -   Controls whether or not the audio is playing. The whole [Project](#project) can be muted, and individual [Tracks](#track) can be muted to play certain parts together.
 
+![Mute Project](./assets/MuteProject.png)
 ![Mute Track](./assets/MuteTrack.png)
 
 ### Solo
