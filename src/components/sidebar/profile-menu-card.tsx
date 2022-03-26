@@ -1,4 +1,5 @@
 import { AboutDialog } from "components/sidebar/about-dialog";
+import { HelpDialog } from "components/sidebar/help-dialog";
 import { ProfileMenu } from "components/sidebar/profile-menu";
 import {
     Card,
@@ -28,6 +29,8 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     } = useBoolean(false);
     const [isAboutDialogOpen, handleOpenAboutDialog, handleCloseAboutDialog] =
         useDialog();
+    const [isHelpDialogOpen, handleOpenHelpDialog, handleCloseHelpDialog] =
+        useDialog();
 
     const isLoginOrRegisterRoute =
         useRouteMatch([Sitemap.login, Sitemap.register])?.isExact ?? false;
@@ -44,6 +47,7 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
                     <ProfileMenu
                         onAboutDialogClick={handleOpenAboutDialog}
                         onClose={handleClosePopover}
+                        onHelpDialogClick={handleOpenHelpDialog}
                     />
                 )}
                 onClose={handleClose}
@@ -59,6 +63,9 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
             </Popover>
             {isAboutDialogOpen && (
                 <AboutDialog onCloseComplete={handleCloseAboutDialog} />
+            )}
+            {isHelpDialogOpen && (
+                <HelpDialog onCloseComplete={handleCloseHelpDialog} />
             )}
         </React.Fragment>
     );
