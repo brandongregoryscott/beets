@@ -14,7 +14,7 @@ This guide will serve as documentation for the various different pages and featu
 
 ### Project
 
--   Container for parts of a musical composition. Has a name, [BPM](#bpm), [swing](#swing) and global volume values.
+-   Container for parts of a musical composition. Has a name, [BPM](#bpm), [swing](#swing) and global [volume](#volume) values.
 -   Projects are private and only available for registered users.
 -   Consists of one or more [Tracks](#track)
 

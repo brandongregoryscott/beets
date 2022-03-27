@@ -9,28 +9,39 @@ import {
     majorScale,
     defaultTheme,
 } from "evergreen-ui";
-import gfmPlugin from "remark-gfm";
-import { last, omit } from "lodash";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import gfm from "remark-gfm";
+import { last, merge, omit } from "lodash";
 import { NormalComponents } from "react-markdown/lib/complex-types";
 import { SpecialComponents } from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
+import { useMemo } from "react";
 
-interface MarkdownProps {
+export type MarkdownComponentMap = Partial<
+    Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
+>;
+
+export interface MarkdownProps {
     children: string;
+    components?: MarkdownComponentMap;
 }
 
-const components: Partial<
-    Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
-> = {
-    a: (props) => <Link {...omitIs(props)} target="_blank" />,
+const defaultComponents: MarkdownComponentMap = {
+    a: (props) => (
+        <Link
+            {...omitIs(props)}
+            target={props.href?.includes("#") ? undefined : "_blank"}
+        />
+    ),
     h3: (props) => (
-        <Heading {...omitIs(props)} marginTop={majorScale(2)} size={600} />
+        <Heading {...omitIs(props)} marginY={majorScale(2)} size={600} />
     ),
     h4: (props) => (
-        <Heading {...omitIs(props)} marginTop={majorScale(2)} size={500} />
+        <Heading {...omitIs(props)} marginY={majorScale(2)} size={500} />
     ),
     img: (props) => (
-        <Pane>
+        <Pane marginY={majorScale(2)}>
             <Image
                 {...omitIs(props)}
                 borderRadius={majorScale(1)}
@@ -45,9 +56,17 @@ const components: Partial<
 };
 
 const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
-    const { children } = props;
+    const { children, components: componentsOverrides = {} } = props;
+    const components = useMemo(
+        () => merge({}, defaultComponents, componentsOverrides),
+        [componentsOverrides]
+    );
+
     return (
-        <ReactMarkdown components={components} remarkPlugins={[gfmPlugin]}>
+        <ReactMarkdown
+            components={components}
+            rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings]}
+            remarkPlugins={[gfm]}>
             {children}
         </ReactMarkdown>
     );

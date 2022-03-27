@@ -64,8 +64,6 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
 };
 
 const sanitizeContent = (content: string): string =>
-    content
-        .replace("# Usage", "")
-        .replace(/\[([a-zA-Z0-9 ']+)\]\(#[a-zA-Z-]+\)/g, "$1");
+    content.replace("# Usage", "");
 
 export { HelpDialog };
