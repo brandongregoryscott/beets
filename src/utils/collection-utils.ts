@@ -43,24 +43,21 @@ const groupBy = <TLeft, TRight>(
     left = List.isList(left) ? left.toArray() : List(left).toArray();
     right = List.isList(right) ? right.toArray() : List(right).toArray();
 
-    left = _.intersectionWith(left, right, comparator).sort();
-    right = _.intersectionWith(right, left, (right, left) =>
-        comparator(left, right)
-    ).sort();
+    const grouped: Array<Grouping<TLeft, TRight> | undefined> = left.map(
+        (leftValue: TLeft) => {
+            const rightValue = right?.find((rightValue: TRight) =>
+                comparator(leftValue, rightValue)
+            );
 
-    const zipped = _.zipWith(
-        left,
-        right,
-        (left: TLeft, right: TRight): Grouping<TLeft, TRight> | undefined => {
-            if (left == null || right == null || !comparator(left, right)) {
+            if (rightValue == null) {
                 return undefined;
             }
 
-            return { left, right };
+            return { left: leftValue, right: rightValue };
         }
     );
 
-    return List(_.compact(zipped));
+    return List(_.compact(grouped));
 };
 
 const hasValues = <T extends any[] | List<any> = any[] | List<any>>(

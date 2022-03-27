@@ -67,6 +67,7 @@
         "collation": "0.7.1",
         "dotenv": "10.0.0",
         "husky": "7.0.4",
+        "jest-extended": "1.2.1",
         "node-pg-migrate": "6.0.0",
         "openapi-typescript": "4.4.0",
         "pluralize": "8.0.0",
