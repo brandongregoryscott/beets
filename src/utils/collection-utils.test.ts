@@ -1,6 +1,7 @@
 import { List, Range } from "immutable";
 import { random } from "lodash";
 import { TrackRecord } from "models/track-record";
+import { TrackSectionRecord } from "models/track-section-record";
 import { groupBy } from "./collection-utils";
 
 describe("CollectionUtils", () => {
@@ -44,12 +45,30 @@ describe("CollectionUtils", () => {
                 .map(() => new TrackRecord())
                 .toList();
             const left = List(objects);
-            const right = List(objects).sort(() => random());
+            const right = List(
+                objects.map((track) =>
+                    new TrackSectionRecord().merge({ track_id: track.id })
+                )
+            ).sort(() => random(-1, 1, false));
 
-            const result = groupBy(left, right, matchById);
+            const result = groupBy(
+                left,
+                right,
+                (left, right) => left.id === right.track_id
+            );
 
             expect(result).not.toBeEmpty();
-            expect(result.count()).toBe(objects.count());
+            expect(result.count()).toBe(left.count());
+            left.forEach((left) => {
+                expect(
+                    result.find((grouping) => grouping.left === left)
+                ).not.toBeNil();
+            });
+            right.forEach((right) => {
+                expect(
+                    result.find((grouping) => grouping.right === right)
+                ).not.toBeNil();
+            });
         });
     });
 });
