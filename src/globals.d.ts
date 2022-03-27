@@ -15,3 +15,5 @@ declare module "opus-media-recorder" {
 
     export = OpusMediaRecorder;
 }
+
+declare module "*.md";

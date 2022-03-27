@@ -10,6 +10,7 @@ import {
     CaretDownIcon,
     CaretUpIcon,
     Heading,
+    Tooltip,
 } from "evergreen-ui";
 import React, { ChangeEvent, useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
@@ -122,11 +123,13 @@ const SongControls: React.FC<SongControlsProps> = (
                     marginRight={marginRight}
                     toggleIsPlaying={toggleIsPlaying}
                 />
-                <IconButton
-                    icon={mute ? VolumeOffIcon : VolumeUpIcon}
-                    marginRight={marginRight}
-                    onClick={toggleMute}
-                />
+                <Tooltip content="Mute Project">
+                    <IconButton
+                        icon={mute ? VolumeOffIcon : VolumeUpIcon}
+                        marginRight={marginRight}
+                        onClick={toggleMute}
+                    />
+                </Tooltip>
                 <Label
                     fontSize="x-small"
                     marginRight={marginRight}
@@ -163,16 +166,20 @@ const SongControls: React.FC<SongControlsProps> = (
                     width={minorScale(3)}>
                     {volume}
                 </Label>
-                <IconButton
-                    icon={CaretDownIcon}
-                    marginRight={marginRight}
-                    onClick={handleDecrementVolume}
-                />
-                <IconButton
-                    icon={CaretUpIcon}
-                    marginRight={marginRight}
-                    onClick={handleIncrementVolume}
-                />
+                <Tooltip content="Volume Down">
+                    <IconButton
+                        icon={CaretDownIcon}
+                        marginRight={marginRight}
+                        onClick={handleDecrementVolume}
+                    />
+                </Tooltip>
+                <Tooltip content="Volume Up">
+                    <IconButton
+                        icon={CaretUpIcon}
+                        marginRight={marginRight}
+                        onClick={handleIncrementVolume}
+                    />
+                </Tooltip>
             </Pane>
         </Pane>
     );

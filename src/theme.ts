@@ -47,6 +47,9 @@ const theme = mergeTheme(defaultTheme, {
         },
         Input: {
             appearances: {
+                default: {
+                    border: `1px solid ${defaultTheme.colors.gray400}`,
+                },
                 editableParagraph: {
                     "&:hover": {
                         border: `1px solid ${defaultTheme.colors.gray500}`,
