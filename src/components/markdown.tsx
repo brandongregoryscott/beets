@@ -14,7 +14,10 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import gfm from "remark-gfm";
 import { last, merge, omit } from "lodash";
 import { NormalComponents } from "react-markdown/lib/complex-types";
-import { SpecialComponents } from "react-markdown/lib/ast-to-react";
+import {
+    SpecialComponents,
+    TransformImage,
+} from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
 import { useMemo } from "react";
 
@@ -25,6 +28,7 @@ export type MarkdownComponentMap = Partial<
 export interface MarkdownProps {
     children: string;
     components?: MarkdownComponentMap;
+    transformImageUri?: (src: string) => string;
 }
 
 const defaultComponents: MarkdownComponentMap = {
@@ -66,7 +70,8 @@ const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
         <ReactMarkdown
             components={components}
             rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings]}
-            remarkPlugins={[gfm]}>
+            remarkPlugins={[gfm]}
+            transformImageUri={props.transformImageUri ?? transformImageUri}>
             {children}
         </ReactMarkdown>
     );
@@ -74,5 +79,8 @@ const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
 
 const omitIs = <T extends { is?: string | undefined }>(props: T) =>
     omit(props, "is");
+
+const transformImageUri: TransformImage = (src: string) =>
+    src.replace("../../public", "");
 
 export { Markdown };
