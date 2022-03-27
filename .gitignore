@@ -23,3 +23,5 @@ yarn-error.log*
 
 .yalc
 yalc.lock
+
+public/assets

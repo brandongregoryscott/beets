@@ -27,11 +27,15 @@
         "react-beautiful-dnd": "13.1.0",
         "react-dom": "17.0.2",
         "react-hotkeys-hook": "3.4.4",
+        "react-markdown": "8.0.1",
         "react-query": "3.22.0",
         "react-router": "5.2.1",
         "react-router-config": "5.1.1",
         "react-router-dom": "5.3.0",
         "react-scripts": "4.0.3",
+        "rehype-autolink-headings": "6.1.1",
+        "rehype-slug": "5.0.1",
+        "remark-gfm": "3.0.1",
         "rooks": "5.7.2",
         "slugify": "1.6.0",
         "tone": "14.7.77",
@@ -80,11 +84,12 @@
     "name": "beets",
     "private": true,
     "scripts": {
-        "build": "react-scripts build",
+        "build": "react-scripts build && npm run copy-assets",
         "build:migrations": "echo Building src/scripts/migrations && echo Using TypeScript && tsc -v && tsc --project src/scripts/migrations",
         "clean:generated": "rm -rf src/generated",
         "clean:migrations": "rm -rf src/scripts/migrations/dist",
         "codegen": "ts-node src/scripts/codegen/main.ts",
+        "copy-assets": "rm -rf public/assets && cp -rf src/docs/assets public/assets",
         "eject": "react-scripts eject",
         "format": "prettier --write",
         "migrations:create": "node-pg-migrate --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts create",
@@ -100,5 +105,5 @@
         "start": "react-scripts start",
         "test": "react-scripts test"
     },
-    "version": "1.6.0"
+    "version": "0.0.0"
 }
