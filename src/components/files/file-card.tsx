@@ -48,7 +48,10 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
             marginRight={majorScale(2)}
             maxWidth={majorScale(40)}
             width="100%">
-            <Flex.Row justifyContent="flex-start">
+            <Flex.Row
+                justifyContent="flex-start"
+                overflow="hidden"
+                width="100%">
                 <Flex.Row alignItems="center">
                     <Pane
                         marginLeft={majorScale(2)}

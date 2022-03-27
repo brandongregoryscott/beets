@@ -26,6 +26,7 @@ interface FileUploaderProps {
 const acceptedMimeTypes = [MimeType.mp3, MimeType.wav];
 const maxFiles = 10;
 const maxSizeInBytes = 10 * 1024 ** 2; // 10 MB
+const width = majorScale(40);
 
 const FileUploader: React.FC<FileUploaderProps> = (
     props: FileUploaderProps
@@ -101,7 +102,7 @@ const FileUploader: React.FC<FileUploaderProps> = (
         getAcceptedTypesMessage(acceptedMimeTypes),
     ].join(" ");
     return (
-        <Pane marginBottom={majorScale(2)} maxWidth={majorScale(60)}>
+        <Pane marginBottom={majorScale(2)} maxWidth={width} width={width}>
             <EvergreenFileUploader
                 acceptedMimeTypes={acceptedMimeTypes}
                 description={description}
