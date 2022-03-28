@@ -28,6 +28,7 @@ import { InstrumentRecord } from "models/instrument-record";
 import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { unsoloAll } from "utils/track-utils";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -45,13 +46,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
 ) => {
     const [
         sequencerDialogOpen,
-        handleOpenSequencerDialog,
+        openSequencerDialog,
         handleCloseSequencerDialog,
     ] = useDialog();
 
     const [
         pianoRollDialogOpen,
-        handleOpenPianoRollDialog,
+        openPianoRollDialog,
         handleClosePianoRollDialog,
     ] = useDialog();
 
@@ -75,7 +76,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
         trackId: trackSection.track_id,
     });
 
-    const { state: workstationState } = useWorkstationState();
+    const { state: workstationState, setCurrentState: setWorkstationState } =
+        useWorkstationState();
     const stepCount = workstationState.getStepCount();
     const { isSelected, onSelect } = useClipboardState();
 
@@ -85,6 +87,23 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = (
     } = useTrackSectionStepsState({ trackSectionId: trackSection.id });
     const { resultObject: files } = useListFiles();
     const theme = useTheme();
+
+    const unsoloTracks = useCallback(() => {
+        setWorkstationState((prev) => {
+            const { tracks } = prev;
+            return prev.merge({ tracks: unsoloAll(tracks) });
+        });
+    }, [setWorkstationState]);
+
+    const handleOpenSequencerDialog = useCallback(() => {
+        unsoloTracks();
+        openSequencerDialog();
+    }, [openSequencerDialog, unsoloTracks]);
+
+    const handleOpenPianoRollDialog = useCallback(() => {
+        unsoloTracks();
+        openPianoRollDialog();
+    }, [openPianoRollDialog, unsoloTracks]);
 
     const handleRemove = useCallback(
         () => remove(trackSection),
