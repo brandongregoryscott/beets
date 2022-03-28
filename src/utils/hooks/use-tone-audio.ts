@@ -27,6 +27,7 @@ import MediaRecorder, {
 import OpusMediaRecorder from "opus-media-recorder";
 import { toaster } from "evergreen-ui";
 import { env } from "utils/env";
+import { useWillUnmount } from "rooks";
 
 interface UseToneAudioOptions
     extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision">,
@@ -247,6 +248,12 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         updateTracks({ isPlaying: false, loop: true }, toneTracksRef.current);
     }, [isRecording, lengthInMs, mimeType, onRecordingComplete]);
 
+    useWillUnmount(() => {
+        cleanupTracks(toneTracksRef.current);
+        toneTracksRef.current = Map();
+        Tone.Transport.stop();
+    });
+
     const isLoading = loadingState.some((loading) => loading);
 
     return {
@@ -254,10 +261,19 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
     };
 };
 
+const cleanupTracks = (tracks: Map<string, ToneTrack>): void => {
+    tracks.forEach((toneTrack) => {
+        const { channel, sampler, sequence } = toneTrack;
+        channel.dispose();
+        sampler.dispose();
+        sequence.dispose();
+    });
+};
+
 const updateTracks = (
     options: Pick<UseToneAudioOptions, "loop" | "isPlaying">,
     tracks: Map<string, ToneTrack>
-) => {
+): void => {
     const { loop, isPlaying } = options;
     tracks.forEach((toneTrack) => {
         if (loop != null) {
