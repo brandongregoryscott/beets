@@ -13,14 +13,15 @@ const itemHeight = 33;
 const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
     props: FileSelectMenuItemProps
 ) => {
-    const { item, ...rest } = props;
+    const { item, isSelectable, isSelected, onSelect, onDeselect, ...rest } =
+        props;
     const {
         value: isPlaying,
         toggle: toggleIsPlaying,
         setFalse: setIsPlayingFalse,
     } = useBoolean();
     const audioRef = useRef<HTMLAudioElement>(null);
-    const handleClick = useCallback((isPlaying: boolean) => {
+    const handlePlayClick = useCallback((isPlaying: boolean) => {
         if (isPlaying) {
             audioRef.current?.pause();
             return;
@@ -29,19 +30,47 @@ const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
         audioRef.current?.play();
     }, []);
 
+    const handleClick = useCallback(
+        (event: React.MouseEvent) => {
+            const { target } = event;
+
+            if (!isSelectable) {
+                return;
+            }
+
+            // Prevent events from the <PlayButton /> from selecting/deselecting item
+            if (
+                target instanceof SVGSVGElement ||
+                target instanceof HTMLButtonElement
+            ) {
+                return;
+            }
+
+            if (isSelected) {
+                onDeselect();
+                return;
+            }
+
+            onSelect();
+        },
+        [isSelectable, isSelected, onDeselect, onSelect]
+    );
+
     return (
         <Option
             {...rest}
             height={itemHeight}
+            isSelected={isSelected}
             maxHeight={itemHeight}
-            minHeight={itemHeight}>
+            minHeight={itemHeight}
+            onClick={handleClick}>
             <PlayButton
                 appearance="minimal"
                 isPlaying={isPlaying}
                 marginLeft={minorScale(1)}
                 marginRight={majorScale(1)}
                 marginY={minorScale(1)}
-                onClick={handleClick}
+                onClick={handlePlayClick}
                 size="small"
                 toggleIsPlaying={toggleIsPlaying}
             />

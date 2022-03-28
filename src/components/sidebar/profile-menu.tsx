@@ -1,5 +1,6 @@
 import { Menu } from "components/menu/menu";
 import {
+    HelpIcon,
     InfoSignIcon,
     LogInIcon,
     LogOutIcon,
@@ -14,10 +15,11 @@ import { useGlobalState } from "utils/hooks/use-global-state";
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;
     onClose: () => void;
+    onHelpDialogClick: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
-    const { onAboutDialogClick, onClose } = props;
+    const { onAboutDialogClick, onHelpDialogClick, onClose } = props;
     const { isAuthenticated, setGlobalState } = useGlobalState();
 
     const handleLogoutsettled = useCallback(
@@ -52,6 +54,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         <Menu>
             <Menu.Item icon={InfoSignIcon} onSelect={onAboutDialogClick}>
                 About
+            </Menu.Item>
+            <Menu.Item icon={HelpIcon} onSelect={onHelpDialogClick}>
+                Help
             </Menu.Item>
             {isAuthenticated && (
                 <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>
