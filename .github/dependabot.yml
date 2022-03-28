@@ -1,0 +1,20 @@
+version: 2
+updates:
+    - package-ecosystem: "npm"
+      directory: "/src"
+      schedule:
+          interval: "daily"
+      allow:
+          - dependency-name: "@supabase/supabase-js"
+          - dependency-name: "collation"
+          - dependency-name: "evergreen-ui"
+          - dependency-name: "jotai"
+          - dependency-name: "lodash"
+          - dependency-name: "luxon"
+          - dependency-name: "openapi-typescript"
+          - dependency-name: "react*"
+          - dependency-name: "rooks"
+          - dependency-name: "tone"
+          - dependency-name: "ts-morph"
+          - dependency-name: "ts-node"
+          - dependency-name: "typescript"
