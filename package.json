@@ -68,7 +68,7 @@
         "husky": "7.0.4",
         "jest-extended": "1.2.1",
         "node-pg-migrate": "6.0.0",
-        "openapi-typescript": "4.4.0",
+        "openapi-typescript": "5.2.0",
         "pluralize": "8.0.0",
         "prettier": "2.5.1",
         "ts-morph": "14.0.0",
