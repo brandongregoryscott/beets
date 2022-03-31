@@ -1,5 +1,4 @@
 import {
-    Heading,
     Link,
     Image,
     Pane,
