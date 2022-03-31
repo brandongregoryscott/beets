@@ -35,6 +35,16 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
     const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
     const history = useHistory();
 
+    const handleAboutDialogClick = useCallback(() => {
+        onClose();
+        onAboutDialogClick();
+    }, [onAboutDialogClick, onClose]);
+
+    const handleHelpDialogClick = useCallback(() => {
+        onClose();
+        onHelpDialogClick();
+    }, [onClose, onHelpDialogClick]);
+
     const handleLogoutSelect = useCallback(() => {
         onClose();
         setTimeout(logout, 25); // Slight delay to allow popover to close
@@ -52,10 +62,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
 
     return (
         <Menu>
-            <Menu.Item icon={InfoSignIcon} onSelect={onAboutDialogClick}>
+            <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>
-            <Menu.Item icon={HelpIcon} onSelect={onHelpDialogClick}>
+            <Menu.Item icon={HelpIcon} onSelect={handleHelpDialogClick}>
                 Help
             </Menu.Item>
             {isAuthenticated && (
