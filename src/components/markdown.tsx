@@ -20,6 +20,7 @@ import {
 } from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
 import { useMemo } from "react";
+import { CopyableHeading } from "components/copyable-heading";
 
 export type MarkdownComponentMap = Partial<
     Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
@@ -39,10 +40,18 @@ const defaultComponents: MarkdownComponentMap = {
         />
     ),
     h3: (props) => (
-        <Heading {...omitIs(props)} marginY={majorScale(2)} size={600} />
+        <CopyableHeading
+            {...omitIs(props)}
+            marginY={majorScale(2)}
+            size={600}
+        />
     ),
     h4: (props) => (
-        <Heading {...omitIs(props)} marginY={majorScale(2)} size={500} />
+        <CopyableHeading
+            {...omitIs(props)}
+            marginY={majorScale(2)}
+            size={500}
+        />
     ),
     img: (props) => (
         <Pane marginY={majorScale(2)}>
