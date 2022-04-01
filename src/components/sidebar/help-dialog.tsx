@@ -1,37 +1,55 @@
 import React, { useCallback, useState } from "react";
 import { Dialog, DialogProps } from "components/dialog";
-import UsageMarkdown from "docs/usage.md";
-import { useQuery } from "utils/hooks/use-query";
-import { Spinner, Tablist, Tab, IconButton, CrossIcon } from "evergreen-ui";
+import {
+    Spinner,
+    Tablist,
+    Tab,
+    IconButton,
+    CrossIcon,
+    MinimizeIcon,
+    MaximizeIcon,
+    majorScale,
+    ShareIcon,
+} from "evergreen-ui";
 import { Markdown } from "components/markdown";
 import { Flex } from "components/flex";
+import { HelpResource } from "enums/help-resource";
+import { useHelpDocs } from "utils/hooks/use-help-docs";
+import { useBoolean } from "utils/hooks/use-boolean";
+import { Sitemap } from "sitemap";
+import upath from "upath";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
-enum HelpTab {
-    Usage = "Usage",
-}
-
-const tabs = [HelpTab.Usage];
+const tabs = [HelpResource.Usage];
 
 const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     const { onCloseComplete } = props;
-    const [selectedTab, setSelectedTab] = useState<HelpTab>(HelpTab.Usage);
-    const { resultObject: markdownContent, isLoading } = useQuery<string>({
-        fn: async () => {
-            const response = await fetch(UsageMarkdown);
-            const content = await response.text();
-            return sanitizeContent(content);
-        },
-    });
+    const [selectedTab, setSelectedTab] = useState<HelpResource>(
+        HelpResource.Usage
+    );
+    const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
+    const { isLoading, content } = useHelpDocs({ resource: selectedTab });
+
+    const handleShareClick = useCallback(() => {
+        window.open(upath.join(Sitemap.help.home, selectedTab.toLowerCase()));
+    }, [selectedTab]);
 
     const handleTabSelected = useCallback(
-        (tab: HelpTab) => () => setSelectedTab(tab),
+        (tab: HelpResource) => () => setSelectedTab(tab),
         []
     );
 
     return (
         <Dialog
+            containerProps={
+                isFullscreen
+                    ? {
+                          marginY: majorScale(2),
+                          maxHeight: `calc(100% - ${majorScale(4)}px)`,
+                      }
+                    : undefined
+            }
             hasFooter={false}
             header={({ close }) => (
                 <Flex.Row alignItems="center" width="100%">
@@ -47,8 +65,20 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
                     </Tablist>
                     <IconButton
                         appearance="minimal"
-                        icon={CrossIcon}
+                        icon={ShareIcon}
                         marginLeft="auto"
+                        onClick={handleShareClick}
+                    />
+                    <IconButton
+                        appearance="minimal"
+                        icon={isFullscreen ? MinimizeIcon : MaximizeIcon}
+                        marginLeft={majorScale(1)}
+                        onClick={handleFullscreenClick}
+                    />
+                    <IconButton
+                        appearance="minimal"
+                        icon={CrossIcon}
+                        marginLeft={majorScale(1)}
                         onClick={close}
                     />
                 </Flex.Row>
@@ -56,14 +86,11 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
             isShown={true}
             onCloseComplete={onCloseComplete}
             title="Usage"
-            width="60%">
+            width={isFullscreen ? "100%" : undefined}>
             {isLoading && <Spinner />}
-            {!isLoading && <Markdown>{markdownContent!}</Markdown>}
+            {!isLoading && <Markdown>{content}</Markdown>}
         </Dialog>
     );
 };
-
-const sanitizeContent = (content: string): string =>
-    content.replace("# Usage", "");
 
 export { HelpDialog };
