@@ -42,7 +42,7 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     const { draggableId } = useDraggable();
     const isCurrentElementDragging = draggableId != null && draggableId === id;
     const isOtherElementDragging = draggableId != null && draggableId !== id;
-    const visibility: VisibilityState = isCurrentElementDragging
+    const visibility: DocumentVisibilityState = isCurrentElementDragging
         ? "visible"
         : "hidden";
 
