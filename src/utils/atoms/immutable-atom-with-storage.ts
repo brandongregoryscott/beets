@@ -15,6 +15,7 @@ const immutableAtomWithStorage = <T extends Record<any>>(
 
             return new constructor(JSON.parse(value));
         },
+        removeItem: (key: string) => localStorage.removeItem(key),
         setItem: (key: string, newValue: T) =>
             localStorage.setItem(key, JSON.stringify(newValue.toJS())),
     });
