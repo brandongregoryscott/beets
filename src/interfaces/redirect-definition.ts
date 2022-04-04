@@ -1,6 +1,4 @@
 interface RedirectDefinition {
-    exact?: boolean;
-    from?: string;
     to: string;
 }
 

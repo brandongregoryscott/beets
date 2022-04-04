@@ -4,7 +4,6 @@ import React from "react";
 
 interface RouteDefinition {
     component?: JSX.Element;
-    exact?: boolean;
     icon?: React.FC<any>;
     name: string;
     path: string;
