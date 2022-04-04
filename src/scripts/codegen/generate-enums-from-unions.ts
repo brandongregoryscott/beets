@@ -1,19 +1,7 @@
 import _, { capitalize, isEmpty } from "lodash";
-import {
-    InterfaceDeclaration,
-    Project,
-    PropertySignature,
-    SyntaxKind,
-} from "ts-morph";
+import { InterfaceDeclaration, Project } from "ts-morph";
 import { log } from "./log";
-import {
-    getInterfaceName,
-    getTableName,
-    stripQuotes,
-    toKebabCase,
-    withExt,
-} from "./utils";
-import upath from "upath";
+import { joinPaths, stripQuotes, toKebabCase, withExt } from "./utils";
 import { Paths } from "./constants/paths";
 
 const generateEnumsFromUnions = (
@@ -42,7 +30,7 @@ const generateEnumsFromUnions = (
             .map((type) => type.getText());
 
         const file = project.createSourceFile(
-            upath.join(Paths.base, "enums", withExt(toKebabCase(name))),
+            joinPaths(Paths.base, "enums", withExt(toKebabCase(name))),
             undefined,
             {
                 overwrite: true,
@@ -53,7 +41,7 @@ const generateEnumsFromUnions = (
         property.setType(name);
         _interface.getSourceFile().addImportDeclaration({
             namedImports: [name],
-            moduleSpecifier: upath.join(
+            moduleSpecifier: joinPaths(
                 Paths.baseImport,
                 "enums",
                 toKebabCase(name)

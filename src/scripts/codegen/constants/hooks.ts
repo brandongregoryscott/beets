@@ -1,5 +1,4 @@
-import upath from "upath";
-import { toKebabCase } from "../utils";
+import { joinPaths, toKebabCase } from "../utils";
 
 const hooks = "hooks";
 const useQuery = "useQuery";
@@ -10,12 +9,12 @@ const Hooks = {
     [useMutation]: {
         name: useMutation,
         interfaceName: "UseMutationResult",
-        importPath: upath.join("utils", hooks, toKebabCase(useMutation)),
+        importPath: joinPaths("utils", hooks, toKebabCase(useMutation)),
     },
     [useQuery]: {
         name: useQuery,
         interfaceName: "UseQueryResult",
-        importPath: upath.join("utils", hooks, toKebabCase(useQuery)),
+        importPath: joinPaths("utils", hooks, toKebabCase(useQuery)),
     },
     [useQueryClient]: {
         name: useQueryClient,
