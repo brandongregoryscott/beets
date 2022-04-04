@@ -1,18 +1,17 @@
-import { NestedRoutes } from "components/nested-routes";
 import { WorkstationTabs } from "components/workstation/workstation-tabs";
 import { Pane } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
+import { Outlet } from "react-router";
 
 interface WorkstationLayoutProps extends RouteProps {}
 
 const WorkstationLayout: React.FC<WorkstationLayoutProps> = (
     props: WorkstationLayoutProps
 ) => {
-    const { route } = props;
     return (
-        <Pane width="100%" height="100%">
+        <Pane height="100%" width="100%">
             <WorkstationTabs />
-            <NestedRoutes route={route} />
+            <Outlet />
         </Pane>
     );
 };

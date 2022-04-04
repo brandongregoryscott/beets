@@ -1,31 +1,24 @@
-import { RouteDefinition } from "interfaces/route-definition";
-import { RouteMap } from "interfaces/route-map";
-import { compact } from "lodash";
 import React from "react";
-import { Redirect, Switch } from "react-router-dom";
-import { renderRoutes } from "utils/route-utils";
+import { Route, Routes } from "react-router";
+import { flattenRoutes } from "utils/route-utils";
+import { RouteMap } from "interfaces/route-map";
 
 interface NestedRoutesProps {
-    route?: RouteDefinition;
     routes?: RouteMap;
 }
 
 const NestedRoutes: React.FC<NestedRoutesProps> = (
     props: NestedRoutesProps
 ) => {
-    const { route, routes } = props;
-    const redirects = compact(
-        route?.redirects?.map((redirect, index) => (
-            <Redirect key={index} {...redirect} />
-        ))
-    );
-
-    return (
-        <Switch>
-            {redirects}
-            {renderRoutes(routes ?? route?.routes)}
-        </Switch>
-    );
+    const { routes } = props;
+    return <Routes>{renderRoutes(routes)}</Routes>;
 };
+
+const renderRoutes = (routes?: RouteMap): JSX.Element[] =>
+    flattenRoutes(routes).map((route, index) => (
+        <Route element={route.component} key={index} path={route.path}>
+            {renderRoutes(route?.routes)}
+        </Route>
+    ));
 
 export { NestedRoutes };

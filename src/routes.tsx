@@ -49,20 +49,20 @@ export interface RouteMap extends GenericRouteMap {
 
 const Routes: RouteMap = {
     root: {
-        component: ApplicationLayout,
+        component: <ApplicationLayout />,
         exact: false,
         name: "ApplicationLayout",
         path: Sitemap.home,
         routes: {
             help: {
-                component: HelpLayout,
+                component: <HelpLayout />,
                 exact: false,
                 icon: HelpIcon,
                 name: "Help",
                 path: Sitemap.help.home,
                 routes: {
                     usage: {
-                        component: UsagePage,
+                        component: <UsagePage />,
                         exact: true,
                         name: HelpResource.Usage,
                         path: Sitemap.help.usage,
@@ -70,7 +70,7 @@ const Routes: RouteMap = {
                 },
             },
             library: {
-                component: LibraryLayout,
+                component: <LibraryLayout />,
                 exact: false,
                 icon: MusicIcon,
                 name: "Library",
@@ -84,13 +84,13 @@ const Routes: RouteMap = {
                 ],
                 routes: {
                     files: {
-                        component: FilesPage,
+                        component: <FilesPage />,
                         exact: true,
                         name: "Files",
                         path: Sitemap.library.files,
                     },
                     instruments: {
-                        component: InstrumentsPage,
+                        component: <InstrumentsPage />,
                         exact: true,
                         name: "Instruments",
                         path: Sitemap.library.instruments,
@@ -98,34 +98,34 @@ const Routes: RouteMap = {
                 },
             },
             login: {
-                component: LoginPage,
+                component: <LoginPage />,
                 exact: true,
                 icon: LogInIcon,
                 name: "Login",
                 path: Sitemap.login,
             },
             logout: {
-                component: LogoutPage,
+                component: <LogoutPage />,
                 exact: true,
                 icon: LogOutIcon,
                 name: "Logout",
                 path: Sitemap.logout,
             },
             register: {
-                component: RegisterPage,
+                component: <RegisterPage />,
                 exact: true,
                 name: "Register",
                 path: Sitemap.register,
             },
             workstation: {
-                component: WorkstationLayout,
+                component: <WorkstationLayout />,
                 exact: false,
                 icon: HomeIcon,
                 name: "WorkstationLayout",
                 path: Sitemap.home,
                 routes: {
                     workstation: {
-                        component: WorkstationPage,
+                        component: <WorkstationPage />,
                         exact: true,
                         name: "Workstation",
                         path: Sitemap.home,
