@@ -2,8 +2,6 @@ import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
 import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback } from "react";
-import { Sitemap } from "sitemap";
-import upath from "upath";
 
 interface LibraryLayoutProps extends RouteProps {}
 
@@ -26,7 +24,7 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
     );
     const handleClick = useCallback(
         (tab: PageTab) => () => {
-            navigate(upath.join(Sitemap.library.home, tab.toLowerCase()));
+            navigate(tab.toLowerCase());
         },
         [navigate]
     );

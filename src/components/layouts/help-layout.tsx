@@ -2,8 +2,6 @@ import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
 import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback } from "react";
-import { Sitemap } from "sitemap";
-import upath from "upath";
 import { HelpResource } from "enums/help-resource";
 
 interface HelpLayoutProps extends RouteProps {}
@@ -20,7 +18,7 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     );
     const handleClick = useCallback(
         (tab: HelpResource) => () => {
-            navigate(upath.join(Sitemap.help.home, tab.toLowerCase()));
+            navigate(tab.toLowerCase());
         },
         [navigate]
     );

@@ -9,4 +9,6 @@ const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     return Object.keys(routes).map((key) => routes[key]);
 };
 
-export { flattenRoutes };
+const joinPaths = (...paths: string[]): string => paths.join("/");
+
+export { flattenRoutes, joinPaths };
