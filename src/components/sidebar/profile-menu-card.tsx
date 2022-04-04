@@ -10,8 +10,6 @@ import {
     Position,
 } from "evergreen-ui";
 import React from "react";
-import { useRouteMatch } from "react-router";
-import { Sitemap } from "sitemap";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useTheme } from "utils/hooks/use-theme";
@@ -32,8 +30,7 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     const [isHelpDialogOpen, handleOpenHelpDialog, handleCloseHelpDialog] =
         useDialog();
 
-    const isLoginOrRegisterRoute =
-        useRouteMatch([Sitemap.login, Sitemap.register])?.isExact ?? false;
+    const isLoginOrRegisterRoute = false;
 
     const background =
         isOpen || isLoginOrRegisterRoute

@@ -2,7 +2,7 @@ import { AuthChangeEvent, Session } from "@supabase/gotrue-js";
 import { GlobalStateRecord } from "models/global-state-record";
 import { SupabaseUserRecord } from "models/supabase-user-record";
 import { useCallback, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useGlobalState } from "utils/hooks/use-global-state";
@@ -17,7 +17,7 @@ const useSubscribeToAuthStatus = () => {
         onConflict: "id",
     });
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const setUserFromSession = useCallback(
         (session: Session | null) => {
@@ -49,7 +49,7 @@ const useSubscribeToAuthStatus = () => {
             if (event === "SIGNED_OUT") {
                 toaster.notify("You were signed out.");
                 setUserFromSession(null);
-                history.push(Sitemap.login);
+                navigate(Sitemap.login);
                 return;
             }
 
@@ -63,9 +63,9 @@ const useSubscribeToAuthStatus = () => {
             const user = UserRecord.fromSupabaseUser(supabaseUser);
             createOrUpdateUser(user);
             setUserFromSession(session);
-            history.push(Sitemap.home);
+            navigate(Sitemap.home);
         },
-        [createOrUpdateUser, history, setUserFromSession]
+        [createOrUpdateUser, navigate, setUserFromSession]
     );
 
     useEffect(() => {

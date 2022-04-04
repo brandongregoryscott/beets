@@ -1,7 +1,7 @@
 import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
 import { NestedRoutes } from "components/nested-routes";
-import { useHistory, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useCallback } from "react";
 import { Sitemap } from "sitemap";
 import upath from "upath";
@@ -20,7 +20,7 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
 ) => {
     const { route } = props;
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const isTabSelected = useCallback(
         (tab: PageTab): boolean =>
             location.pathname.endsWith(tab.toLowerCase()),
@@ -28,9 +28,9 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
     );
     const handleClick = useCallback(
         (tab: PageTab) => () => {
-            history.push(upath.join(Sitemap.library.home, tab.toLowerCase()));
+            navigate(upath.join(Sitemap.library.home, tab.toLowerCase()));
         },
-        [history]
+        [navigate]
     );
 
     return (

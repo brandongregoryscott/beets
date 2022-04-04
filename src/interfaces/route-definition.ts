@@ -1,11 +1,9 @@
 import { RedirectDefinition } from "interfaces/redirect-definition";
 import { RouteMap } from "interfaces/route-map";
 import React from "react";
-import { RouteConfig } from "react-router-config";
 
-interface RouteDefinition
-    extends Omit<RouteConfig, "component" | "path" | "routes"> {
-    component?: React.FC<any>;
+interface RouteDefinition {
+    component?: JSX.Element;
     exact?: boolean;
     icon?: React.FC<any>;
     name: string;
