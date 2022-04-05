@@ -2,7 +2,9 @@ import { Card, Icon, majorScale, minorScale } from "evergreen-ui";
 import { RouteDefinition } from "interfaces/route-definition";
 import { PropsWithChildren } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { hasValues } from "utils/collection-utils";
 import { useTheme } from "utils/hooks/use-theme";
+import { matchRoutes } from "utils/route-utils";
 
 interface SidebarLinkProps {
     matchingRoutes?: RouteDefinition[];
@@ -16,10 +18,8 @@ const SidebarLink: React.FC<PropsWithChildren<SidebarLinkProps>> = (
     const { matchingRoutes = [route] } = props;
     const location = useLocation();
     const theme = useTheme();
-    const matches = matchingRoutes.map(
-        (route) => location.pathname === route.path
-    );
-    const background = matches.some((match) => match)
+    const matches = matchRoutes(matchingRoutes, location);
+    const background = hasValues(matches)
         ? theme.colors.gray300
         : theme.colors.gray100;
     return (

@@ -1,5 +1,11 @@
 import { RouteMap } from "interfaces/route-map";
 import { RouteDefinition } from "interfaces/route-definition";
+import {
+    RouteMatch,
+    RouteObject,
+    matchRoutes as reactRouterMatchRoutes,
+} from "react-router";
+import { flatMap } from "lodash";
 
 const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     if (routes == null) {
@@ -11,4 +17,23 @@ const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
 
 const joinPaths = (...paths: string[]): string => paths.join("/");
 
-export { flattenRoutes, joinPaths };
+const matchRoutes = (
+    routes: RouteDefinition[],
+    location: Partial<Location> | string
+): RouteMatch[] | null => {
+    const routeObjects = flatMap(routes, toRouteObject);
+    return reactRouterMatchRoutes(routeObjects, location);
+};
+
+const toRouteObject = (route: RouteDefinition): RouteObject => {
+    const { path, component: element, routes } = route ?? {};
+    const children = flattenRoutes(routes).map(toRouteObject);
+
+    return {
+        path,
+        element,
+        children,
+    };
+};
+
+export { flattenRoutes, joinPaths, matchRoutes, toRouteObject };

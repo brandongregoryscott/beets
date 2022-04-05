@@ -10,9 +10,13 @@ import {
     Position,
 } from "evergreen-ui";
 import React from "react";
+import { useLocation } from "react-router";
+import { Routes } from "routes";
+import { hasValues } from "utils/collection-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useTheme } from "utils/hooks/use-theme";
+import { matchRoutes } from "utils/route-utils";
 
 interface ProfileMenuCardProps {}
 
@@ -30,12 +34,21 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     const [isHelpDialogOpen, handleOpenHelpDialog, handleCloseHelpDialog] =
         useDialog();
 
-    const isLoginOrRegisterRoute = false;
+    const location = useLocation();
+    const isProfileRoute = hasValues(
+        matchRoutes(
+            [
+                Routes.root.routes.login,
+                Routes.root.routes.logout,
+                Routes.root.routes.register,
+                Routes.root.routes.help,
+            ],
+            location
+        )
+    );
 
     const background =
-        isOpen || isLoginOrRegisterRoute
-            ? theme.colors.gray300
-            : theme.colors.gray100;
+        isOpen || isProfileRoute ? theme.colors.gray300 : theme.colors.gray100;
 
     return (
         <React.Fragment>
