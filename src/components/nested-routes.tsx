@@ -16,7 +16,7 @@ const NestedRoutes: React.FC<NestedRoutesProps> = (
 
 const renderRoutes = (routes?: RouteMap): JSX.Element[] =>
     flattenRoutes(routes).map((route, index) => (
-        <Route element={route.component} key={index} path={route.path}>
+        <Route element={route.element} key={index} path={route.path}>
             {route.redirects?.map((redirect, index) => (
                 <Route
                     element={<Navigate {...redirect} />}
@@ -24,7 +24,7 @@ const renderRoutes = (routes?: RouteMap): JSX.Element[] =>
                     key={index}
                 />
             ))}
-            {renderRoutes(route.routes)}
+            {renderRoutes(route.children)}
         </Route>
     ));
 

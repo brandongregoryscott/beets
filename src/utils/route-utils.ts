@@ -26,8 +26,8 @@ const matchRoutes = (
 };
 
 const toRouteObject = (route: RouteDefinition): RouteObject => {
-    const { path, component: element, routes } = route ?? {};
-    const children = flattenRoutes(routes).map(toRouteObject);
+    const { path, element, children: childRouteDefinitions } = route ?? {};
+    const children = flattenRoutes(childRouteDefinitions).map(toRouteObject);
 
     return {
         path,

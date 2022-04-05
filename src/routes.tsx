@@ -23,14 +23,14 @@ import { HelpResource } from "enums/help-resource";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
-        routes: {
+        children: {
             help: RouteDefinition & {
-                routes: {
+                children: {
                     usage: RouteDefinition;
                 };
             };
             library: RouteDefinition & {
-                routes: {
+                children: {
                     files: RouteDefinition;
                     instruments: RouteDefinition;
                 };
@@ -39,7 +39,7 @@ export interface RouteMap extends GenericRouteMap {
             logout: RouteDefinition;
             register: RouteDefinition;
             workstation: RouteDefinition & {
-                routes: {
+                children: {
                     workstation: RouteDefinition;
                 };
             };
@@ -49,26 +49,26 @@ export interface RouteMap extends GenericRouteMap {
 
 const Routes: RouteMap = {
     root: {
-        component: <ApplicationLayout />,
+        element: <ApplicationLayout />,
         name: "ApplicationLayout",
         path: Sitemap.home,
-        routes: {
+        children: {
             help: {
-                component: <HelpLayout />,
+                element: <HelpLayout />,
                 icon: HelpIcon,
                 name: "Help",
                 path: Sitemap.help.home,
                 redirects: [{ to: Sitemap.help.usage }],
-                routes: {
+                children: {
                     usage: {
-                        component: <UsagePage />,
+                        element: <UsagePage />,
                         name: HelpResource.Usage,
                         path: Sitemap.help.usage,
                     },
                 },
             },
             library: {
-                component: <LibraryLayout />,
+                element: <LibraryLayout />,
                 icon: MusicIcon,
                 name: "Library",
                 path: Sitemap.library.home,
@@ -77,44 +77,44 @@ const Routes: RouteMap = {
                         to: Sitemap.library.files,
                     },
                 ],
-                routes: {
+                children: {
                     files: {
-                        component: <FilesPage />,
+                        element: <FilesPage />,
                         name: "Files",
                         path: Sitemap.library.files,
                     },
                     instruments: {
-                        component: <InstrumentsPage />,
+                        element: <InstrumentsPage />,
                         name: "Instruments",
                         path: Sitemap.library.instruments,
                     },
                 },
             },
             login: {
-                component: <LoginPage />,
+                element: <LoginPage />,
                 icon: LogInIcon,
                 name: "Login",
                 path: Sitemap.login,
             },
             logout: {
-                component: <LogoutPage />,
+                element: <LogoutPage />,
                 icon: LogOutIcon,
                 name: "Logout",
                 path: Sitemap.logout,
             },
             register: {
-                component: <RegisterPage />,
+                element: <RegisterPage />,
                 name: "Register",
                 path: Sitemap.register,
             },
             workstation: {
-                component: <WorkstationLayout />,
+                element: <WorkstationLayout />,
                 icon: HomeIcon,
                 name: "WorkstationLayout",
                 path: Sitemap.home,
-                routes: {
+                children: {
                     workstation: {
-                        component: <WorkstationPage />,
+                        element: <WorkstationPage />,
                         name: "Workstation",
                         path: Sitemap.home,
                     },

@@ -38,10 +38,10 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     const isProfileRoute = hasValues(
         matchRoutes(
             [
-                Routes.root.routes.login,
-                Routes.root.routes.logout,
-                Routes.root.routes.register,
-                Routes.root.routes.help,
+                Routes.root.children.login,
+                Routes.root.children.logout,
+                Routes.root.children.register,
+                Routes.root.children.help,
             ],
             location
         )

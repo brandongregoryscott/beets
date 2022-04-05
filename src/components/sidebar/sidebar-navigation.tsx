@@ -21,10 +21,10 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
             height="100%"
             width={SidebarNavigationWidth}>
             <Pane display="flex" flexDirection="column">
-                <SidebarLink route={Routes.root.routes.workstation} />
+                <SidebarLink route={Routes.root.children.workstation} />
                 <SidebarLink
-                    matchingRoutes={[Routes.root.routes.library]}
-                    route={Routes.root.routes.library}
+                    matchingRoutes={[Routes.root.children.library]}
+                    route={Routes.root.children.library}
                 />
             </Pane>
             <Pane
