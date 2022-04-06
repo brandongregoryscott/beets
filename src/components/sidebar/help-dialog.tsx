@@ -16,8 +16,9 @@ import { Flex } from "components/flex";
 import { HelpResource } from "enums/help-resource";
 import { useHelpDocs } from "utils/hooks/use-help-docs";
 import { useBoolean } from "utils/hooks/use-boolean";
+import { Link } from "react-router-dom";
 import { Sitemap } from "sitemap";
-import upath from "upath";
+import { joinPaths } from "utils/route-utils";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
@@ -30,11 +31,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     );
     const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
     const { isLoading, content } = useHelpDocs({ resource: selectedTab });
-
-    const handleShareClick = useCallback(() => {
-        window.open(upath.join(Sitemap.help.home, selectedTab.toLowerCase()));
-    }, [selectedTab]);
-
+    const sharePath = joinPaths(Sitemap.help.home, selectedTab);
     const handleTabSelected = useCallback(
         (tab: HelpResource) => () => setSelectedTab(tab),
         []
@@ -66,8 +63,10 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
                     <IconButton
                         appearance="minimal"
                         icon={ShareIcon}
+                        is={Link}
                         marginLeft="auto"
-                        onClick={handleShareClick}
+                        target="_blank"
+                        to={sharePath}
                     />
                     <IconButton
                         appearance="minimal"

@@ -7,9 +7,9 @@ import {
     getFromFunctionName,
     getTableName,
     toKebabCase,
+    joinPaths,
 } from "./utils";
 import { Enums } from "./constants/enums";
-import upath from "upath";
 import { Paths } from "./constants/paths";
 import { Variables } from "./constants/variables";
 
@@ -23,7 +23,7 @@ const generateSupabaseClient = (
     const name = SupabaseClient;
 
     const file = project.createSourceFile(
-        upath.join(Paths.base, `${toKebabCase(name)}.ts`),
+        joinPaths(Paths.base, `${toKebabCase(name)}.ts`),
         undefined,
         {
             overwrite: true,

@@ -1,12 +1,11 @@
-import {
-    renderRoutes as reactRouterRenderRoutes,
-    RouteConfig,
-} from "react-router-config";
 import { RouteMap } from "interfaces/route-map";
 import { RouteDefinition } from "interfaces/route-definition";
-
-const renderRoutes = (routes?: RouteMap): JSX.Element | null =>
-    reactRouterRenderRoutes(flattenRoutes(routes) as RouteConfig[]);
+import {
+    RouteMatch,
+    RouteObject,
+    matchRoutes as reactRouterMatchRoutes,
+} from "react-router";
+import { flatMap, toLower } from "lodash";
 
 const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     if (routes == null) {
@@ -16,4 +15,25 @@ const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     return Object.keys(routes).map((key) => routes[key]);
 };
 
-export { flattenRoutes, renderRoutes };
+const joinPaths = (...paths: string[]): string => paths.map(toLower).join("/");
+
+const matchRoutes = (
+    routes: RouteDefinition[],
+    location: Partial<Location> | string
+): RouteMatch[] | null => {
+    const routeObjects = flatMap(routes, toRouteObject);
+    return reactRouterMatchRoutes(routeObjects, location);
+};
+
+const toRouteObject = (route: RouteDefinition): RouteObject => {
+    const { path, element, children: childRouteDefinitions } = route ?? {};
+    const children = flattenRoutes(childRouteDefinitions).map(toRouteObject);
+
+    return {
+        path,
+        element,
+        children,
+    };
+};
+
+export { flattenRoutes, joinPaths, matchRoutes, toRouteObject };

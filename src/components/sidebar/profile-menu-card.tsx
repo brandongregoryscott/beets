@@ -10,11 +10,13 @@ import {
     Position,
 } from "evergreen-ui";
 import React from "react";
-import { useRouteMatch } from "react-router";
-import { Sitemap } from "sitemap";
+import { useLocation } from "react-router";
+import { Routes } from "routes";
+import { hasValues } from "utils/collection-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useTheme } from "utils/hooks/use-theme";
+import { matchRoutes } from "utils/route-utils";
 
 interface ProfileMenuCardProps {}
 
@@ -32,13 +34,21 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     const [isHelpDialogOpen, handleOpenHelpDialog, handleCloseHelpDialog] =
         useDialog();
 
-    const isLoginOrRegisterRoute =
-        useRouteMatch([Sitemap.login, Sitemap.register])?.isExact ?? false;
+    const location = useLocation();
+    const isProfileRoute = hasValues(
+        matchRoutes(
+            [
+                Routes.root.children.login,
+                Routes.root.children.logout,
+                Routes.root.children.register,
+                Routes.root.children.help,
+            ],
+            location
+        )
+    );
 
     const background =
-        isOpen || isLoginOrRegisterRoute
-            ? theme.colors.gray300
-            : theme.colors.gray100;
+        isOpen || isProfileRoute ? theme.colors.gray300 : theme.colors.gray100;
 
     return (
         <React.Fragment>

@@ -1,10 +1,7 @@
 import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
-import { NestedRoutes } from "components/nested-routes";
-import { useHistory, useLocation } from "react-router";
+import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback } from "react";
-import { Sitemap } from "sitemap";
-import upath from "upath";
 import { HelpResource } from "enums/help-resource";
 
 interface HelpLayoutProps extends RouteProps {}
@@ -12,9 +9,8 @@ interface HelpLayoutProps extends RouteProps {}
 const tabs = Object.values(HelpResource);
 
 const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
-    const { route } = props;
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const isTabSelected = useCallback(
         (tab: HelpResource): boolean =>
             location.pathname.endsWith(tab.toLowerCase()),
@@ -22,9 +18,9 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     );
     const handleClick = useCallback(
         (tab: HelpResource) => () => {
-            history.push(upath.join(Sitemap.help.home, tab.toLowerCase()));
+            navigate(tab);
         },
-        [history]
+        [navigate]
     );
 
     return (
@@ -41,7 +37,7 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
                     ))}
                 </TabNavigation>
                 <Pane margin={majorScale(2)}>
-                    <NestedRoutes route={route} />
+                    <Outlet />
                 </Pane>
             </Pane>
         </Pane>

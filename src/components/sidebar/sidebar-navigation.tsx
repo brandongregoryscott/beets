@@ -3,7 +3,6 @@ import { useTheme } from "utils/hooks/use-theme";
 import { SidebarLink } from "components/sidebar/sidebar-link";
 import { ProfileMenuCard } from "components/sidebar/profile-menu-card";
 import { Routes } from "routes";
-import { flattenRoutes } from "utils/route-utils";
 
 interface SidebarNavigationProps {}
 
@@ -22,12 +21,10 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = (
             height="100%"
             width={SidebarNavigationWidth}>
             <Pane display="flex" flexDirection="column">
-                <SidebarLink route={Routes.root.routes.workstation} />
+                <SidebarLink route={Routes.root.children.workstation} />
                 <SidebarLink
-                    matchingRoutes={flattenRoutes(
-                        Routes.root.routes.library.routes
-                    )}
-                    route={Routes.root.routes.library}
+                    matchingRoutes={[Routes.root.children.library]}
+                    route={Routes.root.children.library}
                 />
             </Pane>
             <Pane

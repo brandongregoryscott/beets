@@ -23,14 +23,14 @@ import { HelpResource } from "enums/help-resource";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
-        routes: {
+        children: {
             help: RouteDefinition & {
-                routes: {
+                children: {
                     usage: RouteDefinition;
                 };
             };
             library: RouteDefinition & {
-                routes: {
+                children: {
                     files: RouteDefinition;
                     instruments: RouteDefinition;
                 };
@@ -39,7 +39,7 @@ export interface RouteMap extends GenericRouteMap {
             logout: RouteDefinition;
             register: RouteDefinition;
             workstation: RouteDefinition & {
-                routes: {
+                children: {
                     workstation: RouteDefinition;
                 };
             };
@@ -49,84 +49,72 @@ export interface RouteMap extends GenericRouteMap {
 
 const Routes: RouteMap = {
     root: {
-        component: ApplicationLayout,
-        exact: false,
+        element: <ApplicationLayout />,
         name: "ApplicationLayout",
         path: Sitemap.home,
-        routes: {
+        children: {
             help: {
-                component: HelpLayout,
-                exact: false,
+                element: <HelpLayout />,
                 icon: HelpIcon,
                 name: "Help",
                 path: Sitemap.help.home,
-                routes: {
+                redirects: [{ to: Sitemap.help.usage }],
+                children: {
                     usage: {
-                        component: UsagePage,
-                        exact: true,
+                        element: <UsagePage />,
                         name: HelpResource.Usage,
                         path: Sitemap.help.usage,
                     },
                 },
             },
             library: {
-                component: LibraryLayout,
-                exact: false,
+                element: <LibraryLayout />,
                 icon: MusicIcon,
                 name: "Library",
                 path: Sitemap.library.home,
                 redirects: [
                     {
-                        exact: true,
-                        from: Sitemap.library.home,
                         to: Sitemap.library.files,
                     },
                 ],
-                routes: {
+                children: {
                     files: {
-                        component: FilesPage,
-                        exact: true,
+                        element: <FilesPage />,
                         name: "Files",
                         path: Sitemap.library.files,
                     },
                     instruments: {
-                        component: InstrumentsPage,
-                        exact: true,
+                        element: <InstrumentsPage />,
                         name: "Instruments",
                         path: Sitemap.library.instruments,
                     },
                 },
             },
             login: {
-                component: LoginPage,
-                exact: true,
+                element: <LoginPage />,
                 icon: LogInIcon,
                 name: "Login",
                 path: Sitemap.login,
             },
             logout: {
-                component: LogoutPage,
-                exact: true,
+                element: <LogoutPage />,
                 icon: LogOutIcon,
                 name: "Logout",
                 path: Sitemap.logout,
             },
             register: {
-                component: RegisterPage,
-                exact: true,
+                element: <RegisterPage />,
                 name: "Register",
                 path: Sitemap.register,
             },
             workstation: {
-                component: WorkstationLayout,
-                exact: false,
+                element: <WorkstationLayout />,
                 icon: HomeIcon,
                 name: "WorkstationLayout",
                 path: Sitemap.home,
-                routes: {
+                children: {
                     workstation: {
-                        component: WorkstationPage,
-                        exact: true,
+                        element: <WorkstationPage />,
                         name: "Workstation",
                         path: Sitemap.home,
                     },
