@@ -1,7 +1,3 @@
-import { RouteDefinition } from "interfaces/route-definition";
-
-interface RouteProps {
-    route?: RouteDefinition;
-}
+interface RouteProps {}
 
 export type { RouteProps };
