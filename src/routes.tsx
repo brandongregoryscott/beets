@@ -20,6 +20,7 @@ import { InstrumentsPage } from "components/pages/instruments-page";
 import { HelpLayout } from "components/layouts/help-layout";
 import { UsagePage } from "components/pages/usage-page";
 import { HelpResource } from "enums/help-resource";
+import { ResetPasswordPage } from "./components/pages/reset-password-page";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
@@ -106,6 +107,11 @@ const Routes: RouteMap = {
                 element: <RegisterPage />,
                 name: "Register",
                 path: Sitemap.register,
+            },
+            resetPassword: {
+                element: <ResetPasswordPage />,
+                name: "Reset Password",
+                path: Sitemap.resetPassword,
             },
             workstation: {
                 element: <WorkstationLayout />,
