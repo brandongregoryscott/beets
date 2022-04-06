@@ -31,7 +31,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     );
     const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
     const { isLoading, content } = useHelpDocs({ resource: selectedTab });
-    const sharePath = joinPaths(Sitemap.help.home, selectedTab.toLowerCase());
+    const sharePath = joinPaths(Sitemap.help.home, selectedTab);
     const handleTabSelected = useCallback(
         (tab: HelpResource) => () => setSelectedTab(tab),
         []

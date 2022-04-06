@@ -18,7 +18,7 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     );
     const handleClick = useCallback(
         (tab: HelpResource) => () => {
-            navigate(tab.toLowerCase());
+            navigate(tab);
         },
         [navigate]
     );

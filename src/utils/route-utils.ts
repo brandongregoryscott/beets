@@ -5,7 +5,7 @@ import {
     RouteObject,
     matchRoutes as reactRouterMatchRoutes,
 } from "react-router";
-import { flatMap } from "lodash";
+import { flatMap, toLower } from "lodash";
 
 const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     if (routes == null) {
@@ -15,7 +15,7 @@ const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     return Object.keys(routes).map((key) => routes[key]);
 };
 
-const joinPaths = (...paths: string[]): string => paths.join("/");
+const joinPaths = (...paths: string[]): string => paths.map(toLower).join("/");
 
 const matchRoutes = (
     routes: RouteDefinition[],
