@@ -1,10 +1,10 @@
 import { UserCredentials } from "interfaces/user-credentials";
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
-import { Session, User } from "@supabase/supabase-js";
+import { ApiError, Session, User } from "@supabase/supabase-js";
 
 interface SignupResult {
-    error: Error | null;
+    error: ApiError | null;
     session: Session | null;
     user: User | null;
 }
