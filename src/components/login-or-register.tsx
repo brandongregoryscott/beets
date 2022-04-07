@@ -123,9 +123,8 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
             </Link>
             {renderError && <Alert intent="danger">{error?.message}</Alert>}
             {isRegisterSuccess && showRegister && (
-                <Alert intent="success">
-                    Account successfully created. Check your email for a
-                    confirmation link to sign in.
+                <Alert intent="success" title="Account successfully created.">
+                    Check your email for a confirmation link to sign in.
                 </Alert>
             )}
         </Form>
