@@ -2,7 +2,13 @@ import { ErrorAlert } from "components/error-alert";
 import { Flex } from "components/flex";
 import { Form } from "components/forms/form";
 import { ErrorMessages } from "constants/error-messages";
-import { Alert, Button, majorScale, TextInputField } from "evergreen-ui";
+import {
+    Alert,
+    Button,
+    Heading,
+    majorScale,
+    TextInputField,
+} from "evergreen-ui";
 import { isEmpty } from "lodash";
 import { useCallback } from "react";
 import { useResetPassword } from "utils/hooks/supabase/use-reset-password";
@@ -40,6 +46,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
 
     return (
         <Flex.Column alignItems="center" maxWidth={majorScale(60)}>
+            <Heading marginBottom={majorScale(2)} size={800}>
+                Reset your password
+            </Heading>
             <Form onSubmit={handleSubmit} width={majorScale(30)}>
                 <TextInputField
                     {...emailValidation}
