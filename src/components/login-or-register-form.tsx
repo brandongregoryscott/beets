@@ -7,7 +7,6 @@ import {
     Link,
     Heading,
 } from "evergreen-ui";
-import _ from "lodash";
 import { useInput } from "rooks";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useLogin } from "utils/hooks/supabase/use-login";
@@ -16,6 +15,12 @@ import { Form } from "components/forms/form";
 import { useCallback, useMemo } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { Flex } from "components/flex";
+import { SupabaseUser } from "types/supabase-user";
+import { UserRecord } from "models/user-record";
+import { useCreateOrUpdateUser } from "generated/hooks/domain/users/use-create-or-update-user";
+import { useGlobalState } from "utils/hooks/use-global-state";
+import { useNavigate } from "react-router";
+import { Sitemap } from "sitemap";
 
 interface LoginOrRegisterFormProps {
     initialShowRegister: boolean;
@@ -27,6 +32,8 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
     props: LoginOrRegisterFormProps
 ) => {
     const { initialShowRegister } = props;
+    const { setGlobalState } = useGlobalState();
+    const navigate = useNavigate();
     const { value: showRegister, toggle: toggleShowRegister } =
         useBoolean(initialShowRegister);
     const { value: email, onChange: handleEmailChange } = useInput("");
@@ -35,6 +42,9 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
         useBoolean(false);
     const { value: passwordIsInvalid, setValue: setPasswordIsInvalid } =
         useBoolean(false);
+    const { mutate: createOrUpdateUser } = useCreateOrUpdateUser({
+        onConflict: "id",
+    });
     const {
         mutate: register,
         reset: resetRegister,
@@ -47,7 +57,14 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
         reset: resetLogin,
         isLoading: isLoginLoading,
         error: loginError,
-    } = useLogin();
+    } = useLogin({
+        onSuccess: (supabaseUser: SupabaseUser) => {
+            const user = UserRecord.fromSupabaseUser(supabaseUser);
+            createOrUpdateUser(user);
+            setGlobalState((prev) => prev.setUser(supabaseUser));
+            navigate(Sitemap.home);
+        },
+    });
 
     const error = loginError ?? registerError;
 
