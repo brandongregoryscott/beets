@@ -17,14 +17,14 @@ import { useCallback, useMemo } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { Flex } from "components/flex";
 
-interface LoginOrRegisterProps {
+interface LoginOrRegisterFormProps {
     initialShowRegister: boolean;
 }
 
 const marginBottom = majorScale(3);
 
-const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
-    props: LoginOrRegisterProps
+const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
+    props: LoginOrRegisterFormProps
 ) => {
     const { initialShowRegister } = props;
     const { value: showRegister, toggle: toggleShowRegister } =
@@ -152,4 +152,4 @@ const LoginOrRegister: React.FC<LoginOrRegisterProps> = (
     );
 };
 
-export { LoginOrRegister };
+export { LoginOrRegisterForm };
