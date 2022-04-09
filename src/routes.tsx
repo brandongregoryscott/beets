@@ -129,8 +129,6 @@ const Routes: RouteMap = {
             },
             notFound: {
                 element: <NotFoundPage />,
-                icon: HomeIcon,
-
                 name: "Not Found",
                 path: "*",
             },
