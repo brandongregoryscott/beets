@@ -3,10 +3,10 @@ import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { joinPaths } from "utils/route-utils";
 
-interface UseResetPasswordResult
+interface UseRequestPasswordResetResult
     extends UseMutationResult<void, Error, string> {}
 
-const useResetPassword = (): UseResetPasswordResult => {
+const useRequestPasswordReset = (): UseRequestPasswordResetResult => {
     const auth = useAuth();
 
     const result = useMutation<void, Error, string>({
@@ -28,4 +28,4 @@ const useResetPassword = (): UseResetPasswordResult => {
     return result;
 };
 
-export { useResetPassword };
+export { useRequestPasswordReset };

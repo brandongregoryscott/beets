@@ -1,7 +1,6 @@
 import { ErrorAlert } from "components/error-alert";
 import { Flex } from "components/flex";
 import { Form } from "components/forms/form";
-import { ErrorMessages } from "constants/error-messages";
 import {
     Alert,
     Button,
@@ -12,7 +11,7 @@ import {
 import { isEmpty } from "lodash";
 import { useCallback } from "react";
 import { isNotFoundError } from "utils/error-utils";
-import { useResetPassword } from "utils/hooks/supabase/use-reset-password";
+import { useRequestPasswordReset } from "utils/hooks/supabase/use-request-password-reset";
 import { useInput } from "utils/hooks/use-input";
 
 interface ResetPasswordFormProps {}
@@ -29,8 +28,8 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
         isLoading,
         isSuccess,
         error,
-        mutate: resetPassword,
-    } = useResetPassword();
+        mutate: requestPasswordReset,
+    } = useRequestPasswordReset();
 
     const handleSubmit = useCallback(
         (event: React.FormEvent) => {
@@ -40,9 +39,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
                 return;
             }
 
-            resetPassword(email!);
+            requestPasswordReset(email!);
         },
-        [email, resetPassword]
+        [email, requestPasswordReset]
     );
 
     return (
