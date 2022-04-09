@@ -13,12 +13,15 @@ import { isEmpty } from "lodash";
 import { useCallback } from "react";
 import { useResetPassword } from "utils/hooks/supabase/use-reset-password";
 import { useInput } from "utils/hooks/use-input";
+import { useResetPasswordRoute } from "utils/hooks/use-reset-password-route";
 
 interface ResetPasswordFormProps {}
 
 const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
     props: ResetPasswordFormProps
 ) => {
+    const { error_description } = useResetPasswordRoute();
+
     const {
         value: email,
         onChange: handleEmailChange,
