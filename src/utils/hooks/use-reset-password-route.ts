@@ -1,9 +1,9 @@
 import { isEmpty, zip } from "lodash";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { useSearchParams } from "react-router-dom";
 
-interface UseResetPasswordRouteResult {
+interface ResetPasswordQueryParams {
     access_token?: string;
     error_code?: number;
     error_description?: string;
@@ -13,7 +13,11 @@ interface UseResetPasswordRouteResult {
     type?: string;
 }
 
-const keys: Array<keyof UseResetPasswordRouteResult> = [
+interface UseResetPasswordRouteResult extends ResetPasswordQueryParams {
+    clear: () => void;
+}
+
+const keys: Array<keyof ResetPasswordQueryParams> = [
     "access_token",
     "error_code",
     "error_description",
@@ -26,7 +30,8 @@ const keys: Array<keyof UseResetPasswordRouteResult> = [
 const useResetPasswordRoute = () => {
     const { hash } = useLocation();
     const [, setSearchParams] = useSearchParams();
-    const [result, setResult] = useState<UseResetPasswordRouteResult>({});
+    const [result, setResult] = useState<ResetPasswordQueryParams>({});
+    const clear = useCallback(() => setResult({}), []);
 
     useEffect(() => {
         if (isEmpty(hash)) {
@@ -36,7 +41,7 @@ const useResetPasswordRoute = () => {
         const searchParams = new URLSearchParams(hash.replace("#", ""));
         const values = keys.map((key) => searchParams.get(key) ?? undefined);
         setResult(
-            Object.fromEntries(zip(keys, values)) as UseResetPasswordRouteResult
+            Object.fromEntries(zip(keys, values)) as ResetPasswordQueryParams
         );
     }, [hash]);
 
@@ -48,7 +53,8 @@ const useResetPasswordRoute = () => {
         setSearchParams(new URLSearchParams());
     }, [hash, setSearchParams]);
 
-    return result;
+    return { ...result, clear };
 };
 
 export { useResetPasswordRoute };
+export type { ResetPasswordQueryParams, UseResetPasswordRouteResult };

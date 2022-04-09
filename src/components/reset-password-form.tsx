@@ -11,17 +11,15 @@ import {
 } from "evergreen-ui";
 import { isEmpty } from "lodash";
 import { useCallback } from "react";
+import { isNotFoundError } from "utils/error-utils";
 import { useResetPassword } from "utils/hooks/supabase/use-reset-password";
 import { useInput } from "utils/hooks/use-input";
-import { useResetPasswordRoute } from "utils/hooks/use-reset-password-route";
 
 interface ResetPasswordFormProps {}
 
 const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
     props: ResetPasswordFormProps
 ) => {
-    const { error_description } = useResetPasswordRoute();
-
     const {
         value: email,
         onChange: handleEmailChange,
@@ -81,8 +79,5 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
         </Flex.Column>
     );
 };
-
-const isNotFoundError = (error: Error | null) =>
-    error != null && error.message === ErrorMessages.USER_NOT_FOUND;
 
 export { ResetPasswordForm };
