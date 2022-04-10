@@ -1,4 +1,3 @@
-import { ErrorMessages } from "constants/error-messages";
 import {
     TextInputField,
     majorScale,
@@ -39,16 +38,22 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
     const navigate = useNavigate();
     const { value: showRegister, toggle: toggleShowRegister } =
         useBoolean(initialShowRegister);
-    const { value: email, onChange: handleEmailChange } = useInput({
+    const {
+        value: email,
+        onChange: handleEmailChange,
+        ...emailValidation
+    } = useInput({
         initialValue: "",
+        isRequired: true,
     });
-    const { value: password, onChange: handlePasswordChange } = useInput({
+    const {
+        value: password,
+        onChange: handlePasswordChange,
+        ...passwordValidation
+    } = useInput({
         initialValue: "",
+        isRequired: true,
     });
-    const { value: emailIsInvalid, setValue: setEmailIsInvalid } =
-        useBoolean(false);
-    const { value: passwordIsInvalid, setValue: setPasswordIsInvalid } =
-        useBoolean(false);
     const { mutate: createOrUpdateUser } = useCreateOrUpdateUser({
         onConflict: "id",
     });
@@ -87,12 +92,8 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
         const emailIsInvalid = isNilOrEmpty(email);
         const passwordIsInvalid = isNilOrEmpty(password);
         const isValid = !emailIsInvalid && !passwordIsInvalid;
-
-        setEmailIsInvalid(emailIsInvalid);
-        setPasswordIsInvalid(passwordIsInvalid);
-
         return isValid;
-    }, [email, password, setEmailIsInvalid, setPasswordIsInvalid]);
+    }, [email, password]);
 
     const handleLogin = useCallback(
         (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
@@ -141,26 +142,18 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
                 onSubmit={handleSubmit}
                 width={majorScale(30)}>
                 <TextInputField
+                    {...emailValidation}
                     disabled={showRegister ? isRegisterLoading : isLoginLoading}
                     label="Email"
                     onChange={handleEmailChange}
-                    validationMessage={
-                        emailIsInvalid
-                            ? ErrorMessages.REQUIRED_FIELD
-                            : undefined
-                    }
                     value={email}
                 />
                 <TextInputField
+                    {...passwordValidation}
                     disabled={showRegister ? isRegisterLoading : isLoginLoading}
                     label="Password"
                     onChange={handlePasswordChange}
                     type="password"
-                    validationMessage={
-                        passwordIsInvalid
-                            ? ErrorMessages.REQUIRED_FIELD
-                            : undefined
-                    }
                     value={password}
                 />
                 <Button
