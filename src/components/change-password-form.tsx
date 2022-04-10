@@ -10,7 +10,7 @@ import {
     toaster,
 } from "evergreen-ui";
 import { isEmpty } from "lodash";
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 import { Sitemap } from "sitemap";
 import { useChangePassword } from "utils/hooks/supabase/use-change-password";
@@ -27,7 +27,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
     const navigate = useNavigate();
     const {
         value: password,
-        onChange: handlePasswordChange,
+        onChange: onPasswordChange,
         ...passwordValidation
     } = useInput({ isRequired: true });
 
@@ -37,6 +37,8 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
         setValidation: setPasswordConfirmationValidation,
         ...passwordConfirmationValidation
     } = useInput({ isRequired: true });
+
+    const validationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const handleChangePasswordSuccess = useCallback(() => {
         toaster.success("Password successfully updated!");
@@ -51,29 +53,46 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
         onSuccess: handleChangePasswordSuccess,
     });
 
-    const handlePasswordConfirmationChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const { value } = event.target;
-            onPasswordConfirmationChange(event);
-            const passwordsDoNotMatch =
-                password != null &&
-                password.length < value.length &&
-                value !== password;
+    const updateValidation = useCallback(
+        (password?: string, passwordConfirmation?: string) => {
+            const passwordsAreEmpty =
+                isEmpty(password) || isEmpty(passwordConfirmation);
+            const passwordsMatch = password === passwordConfirmation;
 
-            if (!passwordsDoNotMatch) {
+            if (validationTimeoutRef.current != null) {
+                clearTimeout(validationTimeoutRef.current);
+            }
+
+            if (passwordsAreEmpty || passwordsMatch) {
                 return;
             }
 
-            setPasswordConfirmationValidation({
-                isInvalid: true,
-                validationMessage: ErrorMessages.PASSWORDS_DO_NOT_MATCH,
-            });
+            validationTimeoutRef.current = setTimeout(() => {
+                setPasswordConfirmationValidation({
+                    isInvalid: true,
+                    validationMessage: ErrorMessages.PASSWORDS_DO_NOT_MATCH,
+                });
+            }, 300);
         },
-        [
-            onPasswordConfirmationChange,
-            password,
-            setPasswordConfirmationValidation,
-        ]
+        [setPasswordConfirmationValidation]
+    );
+
+    const handlePasswordChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const { value: password } = event.target;
+            onPasswordChange(event);
+            updateValidation(password, passwordConfirmation);
+        },
+        [onPasswordChange, passwordConfirmation, updateValidation]
+    );
+
+    const handlePasswordConfirmationChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const { value: passwordConfirmation } = event.target;
+            onPasswordConfirmationChange(event);
+            updateValidation(password, passwordConfirmation);
+        },
+        [onPasswordConfirmationChange, password, updateValidation]
     );
 
     const handleSubmit = useCallback(
@@ -83,8 +102,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
             const isInvalid =
                 isEmpty(password) ||
                 isEmpty(passwordConfirmation) ||
-                passwordValidation.isInvalid ||
-                passwordConfirmationValidation.isInvalid;
+                password !== passwordConfirmation;
 
             if (isInvalid) {
                 return;
@@ -92,14 +110,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
 
             changePassword({ access_token, password });
         },
-        [
-            access_token,
-            changePassword,
-            password,
-            passwordConfirmation,
-            passwordConfirmationValidation.isInvalid,
-            passwordValidation.isInvalid,
-        ]
+        [access_token, changePassword, password, passwordConfirmation]
     );
 
     return (
