@@ -7,7 +7,6 @@ import {
     Link,
     Heading,
 } from "evergreen-ui";
-import { useInput } from "rooks";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { useLogin } from "utils/hooks/supabase/use-login";
 import { useRegister } from "utils/hooks/supabase/use-register";
@@ -24,6 +23,7 @@ import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { ErrorAlert } from "components/error-alert";
 import { absolutePath } from "utils/route-utils";
+import { useInput } from "utils/hooks/use-input";
 
 interface LoginOrRegisterFormProps {
     initialShowRegister: boolean;
@@ -39,8 +39,12 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
     const navigate = useNavigate();
     const { value: showRegister, toggle: toggleShowRegister } =
         useBoolean(initialShowRegister);
-    const { value: email, onChange: handleEmailChange } = useInput("");
-    const { value: password, onChange: handlePasswordChange } = useInput("");
+    const { value: email, onChange: handleEmailChange } = useInput({
+        initialValue: "",
+    });
+    const { value: password, onChange: handlePasswordChange } = useInput({
+        initialValue: "",
+    });
     const { value: emailIsInvalid, setValue: setEmailIsInvalid } =
         useBoolean(false);
     const { value: passwordIsInvalid, setValue: setPasswordIsInvalid } =
@@ -97,7 +101,7 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
                 return;
             }
 
-            login({ email, password });
+            login({ email: email!, password: password! });
         },
         [email, login, password, validate]
     );
@@ -110,7 +114,7 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
                 return;
             }
 
-            register({ email, password });
+            register({ email: email!, password: password! });
         },
         [email, password, register, validate]
     );
