@@ -12,6 +12,7 @@ const Sitemap = {
     login: "login",
     logout: "logout",
     register: "register",
+    resetPassword: "reset-password",
 };
 
 export { Sitemap };
