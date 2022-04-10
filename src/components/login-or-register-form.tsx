@@ -12,7 +12,7 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { useLogin } from "utils/hooks/supabase/use-login";
 import { useRegister } from "utils/hooks/supabase/use-register";
 import { Form } from "components/forms/form";
-import { useCallback, useMemo } from "react";
+import { FormEvent, MouseEvent, useCallback, useMemo } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 import { Flex } from "components/flex";
 import { SupabaseUser } from "types/supabase-user";
@@ -20,7 +20,10 @@ import { UserRecord } from "models/user-record";
 import { useCreateOrUpdateUser } from "generated/hooks/domain/users/use-create-or-update-user";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useNavigate } from "react-router";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
+import { ErrorAlert } from "components/error-alert";
+import { absolutePath } from "utils/route-utils";
 
 interface LoginOrRegisterFormProps {
     initialShowRegister: boolean;
@@ -87,21 +90,30 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
         return isValid;
     }, [email, password, setEmailIsInvalid, setPasswordIsInvalid]);
 
-    const handleLogin = useCallback(() => {
-        if (!validate()) {
-            return;
-        }
+    const handleLogin = useCallback(
+        (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+            if (!validate()) {
+                return;
+            }
 
-        login({ email, password });
-    }, [email, login, password, validate]);
+            login({ email, password });
+        },
+        [email, login, password, validate]
+    );
 
-    const handleRegister = useCallback(() => {
-        if (!validate()) {
-            return;
-        }
+    const handleRegister = useCallback(
+        (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
 
-        register({ email, password });
-    }, [email, password, register, validate]);
+            if (!validate()) {
+                return;
+            }
+
+            register({ email, password });
+        },
+        [email, password, register, validate]
+    );
 
     const handleSubmit = useMemo(
         () => (showRegister ? handleRegister : handleLogin),
@@ -158,8 +170,14 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
                 <Link marginBottom={marginBottom} onClick={toggleAndReset}>
                     {toggleLinkText}
                 </Link>
+                <Link
+                    is={ReactRouterLink}
+                    marginBottom={marginBottom}
+                    to={absolutePath(Sitemap.resetPassword)}>
+                    Forgot your password?
+                </Link>
             </Form>
-            {renderError && <Alert intent="danger">{error?.message}</Alert>}
+            {renderError && <ErrorAlert error={error} />}
             {isRegisterSuccess && showRegister && (
                 <Alert intent="success" title="Account successfully created.">
                     Check your email for a confirmation link to sign in.

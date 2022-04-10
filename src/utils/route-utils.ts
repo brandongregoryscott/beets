@@ -5,7 +5,9 @@ import {
     RouteObject,
     matchRoutes as reactRouterMatchRoutes,
 } from "react-router";
-import { flatMap, toLower } from "lodash";
+import { flatMap, isEmpty, toLower } from "lodash";
+
+const absolutePath = (path?: string) => (isEmpty(path) ? "/" : `/${path}`);
 
 const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
     if (routes == null) {
@@ -36,4 +38,4 @@ const toRouteObject = (route: RouteDefinition): RouteObject => {
     };
 };
 
-export { flattenRoutes, joinPaths, matchRoutes, toRouteObject };
+export { absolutePath, flattenRoutes, joinPaths, matchRoutes, toRouteObject };
