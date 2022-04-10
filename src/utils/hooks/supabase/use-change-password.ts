@@ -7,10 +7,17 @@ interface ChangePasswordOptions
     extends Pick<ResetPasswordQueryParams, "access_token">,
         Pick<UserAttributes, "password"> {}
 
+interface UseChangePasswordOptions {
+    onSuccess?: () => void;
+}
+
 interface UseChangePasswordResult
     extends UseMutationResult<void, Error, ChangePasswordOptions> {}
 
-const useChangePassword = (): UseChangePasswordResult => {
+const useChangePassword = (
+    options?: UseChangePasswordOptions
+): UseChangePasswordResult => {
+    const { onSuccess } = options ?? {};
     const auth = useAuth();
 
     const result = useMutation<void, Error, ChangePasswordOptions>({
@@ -25,6 +32,7 @@ const useChangePassword = (): UseChangePasswordResult => {
                 throw error;
             }
         },
+        onSuccess,
     });
 
     return result;

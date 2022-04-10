@@ -2,9 +2,17 @@ import { ErrorAlert } from "components/error-alert";
 import { Flex } from "components/flex";
 import { Form } from "components/forms/form";
 import { ErrorMessages } from "constants/error-messages";
-import { Button, Heading, majorScale, TextInputField } from "evergreen-ui";
+import {
+    Button,
+    Heading,
+    majorScale,
+    TextInputField,
+    toaster,
+} from "evergreen-ui";
 import { isEmpty } from "lodash";
 import { ChangeEvent, useCallback } from "react";
+import { useNavigate } from "react-router";
+import { Sitemap } from "sitemap";
 import { useChangePassword } from "utils/hooks/supabase/use-change-password";
 import { useInput } from "utils/hooks/use-input";
 import { ResetPasswordQueryParams } from "utils/hooks/use-reset-password-route";
@@ -16,6 +24,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
     props: ChangePasswordFormProps
 ) => {
     const { access_token } = props;
+    const navigate = useNavigate();
     const {
         value: password,
         onChange: handlePasswordChange,
@@ -29,7 +38,18 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
         ...passwordConfirmationValidation
     } = useInput({ isRequired: true });
 
-    const { isLoading, error, mutate: changePassword } = useChangePassword();
+    const handleChangePasswordSuccess = useCallback(() => {
+        toaster.success("Password successfully updated!");
+        navigate(Sitemap.home);
+    }, [navigate]);
+
+    const {
+        isLoading,
+        error,
+        mutate: changePassword,
+    } = useChangePassword({
+        onSuccess: handleChangePasswordSuccess,
+    });
 
     const handlePasswordConfirmationChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
