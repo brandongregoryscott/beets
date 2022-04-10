@@ -2,22 +2,20 @@ import { ErrorAlert } from "components/error-alert";
 import { Flex } from "components/flex";
 import { Form } from "components/forms/form";
 import { ErrorMessages } from "constants/error-messages";
-import {
-    Alert,
-    Button,
-    Heading,
-    majorScale,
-    TextInputField,
-} from "evergreen-ui";
+import { Button, Heading, majorScale, TextInputField } from "evergreen-ui";
+import { isEmpty } from "lodash";
 import { ChangeEvent, useCallback } from "react";
-import { isNotFoundError } from "utils/error-utils";
+import { useChangePassword } from "utils/hooks/supabase/use-change-password";
 import { useInput } from "utils/hooks/use-input";
+import { ResetPasswordQueryParams } from "utils/hooks/use-reset-password-route";
 
-interface ChangePasswordFormProps {}
+interface ChangePasswordFormProps
+    extends Pick<ResetPasswordQueryParams, "access_token"> {}
 
 const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
     props: ChangePasswordFormProps
 ) => {
+    const { access_token } = props;
     const {
         value: password,
         onChange: handlePasswordChange,
@@ -30,6 +28,8 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
         setValidation: setPasswordConfirmationValidation,
         ...passwordConfirmationValidation
     } = useInput({ isRequired: true });
+
+    const { isLoading, error, mutate: changePassword } = useChangePassword();
 
     const handlePasswordConfirmationChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -56,13 +56,31 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
         ]
     );
 
-    const isLoading = false;
-    const isSuccess = false;
-    const error = null;
+    const handleSubmit = useCallback(
+        (event: React.FormEvent) => {
+            event.preventDefault();
 
-    const handleSubmit = useCallback((event: React.FormEvent) => {
-        event.preventDefault();
-    }, []);
+            const isInvalid =
+                isEmpty(password) ||
+                isEmpty(passwordConfirmation) ||
+                passwordValidation.isInvalid ||
+                passwordConfirmationValidation.isInvalid;
+
+            if (isInvalid) {
+                return;
+            }
+
+            changePassword({ access_token, password });
+        },
+        [
+            access_token,
+            changePassword,
+            password,
+            passwordConfirmation,
+            passwordConfirmationValidation.isInvalid,
+            passwordValidation.isInvalid,
+        ]
+    );
 
     return (
         <Flex.Column alignItems="center" maxWidth={majorScale(60)}>
@@ -95,6 +113,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
                     Change Password
                 </Button>
             </Form>
+            {error != null && <ErrorAlert error={error} />}
         </Flex.Column>
     );
 };

@@ -25,7 +25,9 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = (
 
     return (
         <Flex.Column alignItems="center" justifyContent="center" width="100%">
-            {showPasswordChangeForm && <ChangePasswordForm />}
+            {showPasswordChangeForm && (
+                <ChangePasswordForm access_token={access_token} />
+            )}
             {showExpiredToken && (
                 <Flex.Column alignItems="center">
                     <EmptyState
