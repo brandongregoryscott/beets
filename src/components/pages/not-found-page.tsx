@@ -17,7 +17,11 @@ const NotFoundPage: React.FC<NotFoundPageProps> = (
     const { colors } = useTheme();
     const { pathname } = useLocation();
     return (
-        <Flex.Row alignItems="center" justifyContent="center" width="100%">
+        <Flex.Row
+            alignItems="center"
+            justifyContent="center"
+            padding={majorScale(4)}
+            width="100%">
             <Flex.Column maxHeight={majorScale(26)} maxWidth={majorScale(100)}>
                 <EmptyState
                     background="dark"
