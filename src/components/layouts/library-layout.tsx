@@ -24,7 +24,7 @@ const LibraryLayout: React.FC<LibraryLayoutProps> = (
     );
     const handleClick = useCallback(
         (tab: PageTab) => () => {
-            navigate(tab);
+            navigate(tab.toLowerCase());
         },
         [navigate]
     );
