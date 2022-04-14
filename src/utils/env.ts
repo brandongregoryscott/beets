@@ -10,5 +10,7 @@ interface Environment extends NodeJS.ProcessEnv {
 
 const env: Environment = process.env;
 
-export { env };
+const isDevelopment = () => env.NODE_ENV === "development";
+
+export { env, isDevelopment };
 export type { Environment };
