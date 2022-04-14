@@ -86,7 +86,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         setValidation: setNameValidation,
         ...nameValidation
     } = useInput({
-        initialValue: initialInstrument?.name,
+        initialValue: initialInstrument?.name ?? "",
     });
     const {
         displayValue: releaseDisplayValue,

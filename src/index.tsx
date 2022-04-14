@@ -7,8 +7,10 @@ import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";
 import "./index.css";
 import { registerIndexStyleMutation } from "utils/register-index-style-mutation";
+import { registerConsoleErrorToasts } from "utils/register-console-error-toasts";
 
 registerIndexStyleMutation();
+registerConsoleErrorToasts();
 
 const queryClient = new QueryClient({
     defaultOptions: {
