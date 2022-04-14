@@ -3,7 +3,7 @@ import { List, Map } from "immutable";
 import { ToneState } from "interfaces/tone-state";
 import { ToneStepGroup } from "interfaces/tone-step-group";
 import { ToneTrack } from "interfaces/tone-track";
-import { pick } from "lodash";
+import { isEmpty, pick } from "lodash";
 import { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import { TrackRecord } from "models/track-record";
@@ -130,6 +130,11 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 ? toSequencerMap(files)
                 : toInstrumentMap(getFileById(instrument?.file_id, files));
 
+            // If there's no samples to play yet, don't bother initializing a track etc.
+            if (isEmpty(sampleMap)) {
+                return;
+            }
+
             const toneTrack = toneTracksRef.current.get<ToneTrack | undefined>(
                 track.id,
                 undefined
@@ -159,11 +164,20 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 new Tone.Sequence(
                     (time: number, stepGroup: ToneStepGroup) => {
                         stepGroup.steps.forEach((step) => {
-                            sampler.triggerAttackRelease(
-                                step.note,
-                                step.duration ?? 0.5,
-                                time
-                            );
+                            try {
+                                sampler.triggerAttackRelease(
+                                    step.note,
+                                    step.duration ?? 0.5,
+                                    time
+                                );
+                            } catch (error) {
+                                console.error(
+                                    error instanceof Error
+                                        ? error.message
+                                        : `Failed to play ${step.note} for Track ${track.id}`,
+                                    error
+                                );
+                            }
                         });
                     },
                     steps,
