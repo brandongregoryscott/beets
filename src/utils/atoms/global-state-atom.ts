@@ -4,7 +4,7 @@ import { GlobalStateRecord } from "models/global-state-record";
 const GlobalStateAtom = immutableAtomWithStorage<GlobalStateRecord>(
     "globalState",
     new GlobalStateRecord(),
-    GlobalStateRecord
+    (args) => new GlobalStateRecord(args)
 );
 
 export { GlobalStateAtom };

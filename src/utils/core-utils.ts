@@ -1,7 +1,8 @@
 import { BorderPropsOptions } from "interfaces/border-props-options";
 import { BorderProps } from "interfaces/border-props";
 import { RequiredOrUndefined } from "types/required-or-undefined";
-import { List } from "immutable";
+import { List, Record } from "immutable";
+import { isEqual as lodashIsEqual } from "lodash";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;
@@ -44,6 +45,20 @@ const getBorderXProps = (options: BorderPropsOptions): BorderProps => {
     return borderProps;
 };
 
+const isEqual = <
+    TLeft extends Record<any> | any,
+    TRight extends Record<any> | any
+>(
+    left: TLeft,
+    right: TRight
+): boolean => {
+    if (Record.isRecord(left) && Record.isRecord(right)) {
+        return left.equals(right);
+    }
+
+    return lodashIsEqual(left, right);
+};
+
 const isNilOrEmpty = <T = string | any[] | List<any>>(
     value: T | any[] | List<any> | null | undefined
 ): value is null | undefined => {
@@ -81,6 +96,7 @@ const unixTime = (date?: Date): number =>
 export {
     getBorderYProps,
     getBorderXProps,
+    isEqual,
     isNilOrEmpty,
     isNotNilOrEmpty,
     makeDefaultValues,
