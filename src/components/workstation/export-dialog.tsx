@@ -7,10 +7,7 @@ import {
     Paragraph,
     RecordIcon,
     Spinner,
-    Pane,
-    TextInput,
-    Label,
-    minorScale,
+    TextInputField,
 } from "evergreen-ui";
 import { List } from "immutable";
 import React, { useCallback, useMemo, useState } from "react";
@@ -30,6 +27,8 @@ import slugify from "slugify";
 import { unixTime } from "utils/core-utils";
 import { useInput } from "utils/hooks/use-input";
 import { isEmpty } from "lodash";
+import { FormField } from "components/forms/form-field";
+import { Flex } from "components/flex";
 
 interface ExportDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
@@ -61,7 +60,11 @@ const ExportDialog: React.FC<ExportDialogProps> = (
         setFalse: stopRecording,
     } = useBoolean();
 
-    const { value: fileName, ...inputProps } = useInput({
+    const {
+        value: fileName,
+        onChange: handleFileNameChange,
+        validation: fileNameValidation,
+    } = useInput({
         initialValue: getDefaultFileName(state.project),
         isRequired: true,
     });
@@ -132,39 +135,36 @@ const ExportDialog: React.FC<ExportDialogProps> = (
                         below. Recording happens in real-time, and you'll be
                         able to download the file once complete.
                     </Paragraph>
-                    <Pane
-                        display="flex"
-                        flexDirection="row"
-                        marginBottom={majorScale(2)}>
-                        <Pane
-                            display="flex"
-                            flexDirection="column"
-                            marginRight={majorScale(1)}
-                            width="88%">
-                            <Label marginBottom={minorScale(1)}>Name</Label>
-                            <TextInput
-                                {...inputProps}
+                    <Flex.Row>
+                        <Flex.Column marginRight={majorScale(1)} width="88%">
+                            <TextInputField
+                                label="Name"
+                                {...fileNameValidation}
+                                onChange={handleFileNameChange}
                                 value={fileName}
                                 width="100%"
                             />
-                        </Pane>
-                        <Pane display="flex" flexDirection="column" width="12%">
-                            <Label marginBottom={minorScale(1)}>Type</Label>
-                            <SelectMenu
-                                calculateHeight={true}
-                                closeOnSelect={true}
-                                hasFilter={false}
-                                isMultiSelect={false}
-                                onSelect={handleSelect}
-                                options={options}
-                                title="Type"
-                                width={majorScale(16)}>
-                                <Button disabled={hasFile || isRecording}>
-                                    {getExtension(mimeType)}
-                                </Button>
-                            </SelectMenu>
-                        </Pane>
-                    </Pane>
+                        </Flex.Column>
+                        <Flex.Column width="12%">
+                            <FormField label="Type">
+                                <SelectMenu
+                                    calculateHeight={true}
+                                    closeOnSelect={true}
+                                    hasFilter={false}
+                                    isMultiSelect={false}
+                                    onSelect={handleSelect}
+                                    options={options}
+                                    title="Type"
+                                    width={majorScale(12)}>
+                                    <Button
+                                        disabled={hasFile || isRecording}
+                                        width={58}>
+                                        {getExtension(mimeType)}
+                                    </Button>
+                                </SelectMenu>
+                            </FormField>
+                        </Flex.Column>
+                    </Flex.Row>
                     <Button
                         allowUnsafeHref={true}
                         appearance={hasFile ? "primary" : "default"}

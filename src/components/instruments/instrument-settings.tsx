@@ -84,15 +84,15 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         value: name,
         onChange: onNameChange,
         setValidation: setNameValidation,
-        ...nameValidation
+        validation: nameValidation,
     } = useInput({
-        initialValue: initialInstrument?.name ?? "",
+        initialValue: initialInstrument?.name,
     });
     const {
         displayValue: releaseDisplayValue,
         value: release,
         onChange: onReleaseChange,
-        ...releaseValidation
+        validation: releaseValidation,
     } = useNumberInput({
         initialValue:
             initialInstrument?.release ??
@@ -105,7 +105,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         displayValue: durationDisplayValue,
         value: duration,
         onChange: onDurationChange,
-        ...durationValidation
+        validation: durationValidation,
     } = useNumberInput({
         initialValue: initialInstrument?.duration,
         allowFloating: true,

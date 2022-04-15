@@ -41,17 +41,15 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
     const {
         value: email,
         onChange: handleEmailChange,
-        ...emailValidation
+        validation: emailValidation,
     } = useInput({
-        initialValue: "",
         isRequired: true,
     });
     const {
         value: password,
         onChange: handlePasswordChange,
-        ...passwordValidation
+        validation: passwordValidation,
     } = useInput({
-        initialValue: "",
         isRequired: true,
     });
     const { mutate: createOrUpdateUser } = useCreateOrUpdateUser({

@@ -11,10 +11,11 @@ interface UseNumberInputOptions {
     min?: number;
 }
 
-interface UseNumberInputResult extends ValidationState {
+interface UseNumberInputResult {
     displayValue?: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    setValidation: (validation?: ValidationState) => void;
+    setValidation?: (validation?: ValidationState) => void;
+    validation: ValidationState;
     value?: number;
 }
 
@@ -30,7 +31,7 @@ const useNumberInput = (
     } = options ?? {};
     const [validation, setValidation] = useState<ValidationState | undefined>();
     const [displayValue, setDisplayValue] = useState<string | undefined>(
-        initialValue?.toString()
+        initialValue?.toString() ?? ""
     );
     const [value, setValue] = useState<number | undefined>(initialValue);
 
@@ -77,7 +78,7 @@ const useNumberInput = (
     );
 
     return {
-        ...validation,
+        validation: validation ?? {},
         displayValue,
         onChange: handleChange,
         setValidation,
