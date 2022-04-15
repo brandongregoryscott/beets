@@ -6,7 +6,17 @@ import { useCallback, useEffect, useState } from "react";
 import { TrackRecord } from "models/track-record";
 
 interface UseSampleSelectionOptions {
+    /**
+     * List of files that can be selected
+     */
     files: List<FileRecord>;
+    /**
+     * Maximum number of samples to be selected at one time
+     */
+    maxSelected?: number;
+    /**
+     * Track that the samples will be associated with
+     */
     track: TrackRecord;
 }
 
@@ -20,7 +30,7 @@ interface UseSampleSelectionResult {
 const useSampleSelection = (
     options: UseSampleSelectionOptions
 ): UseSampleSelectionResult => {
-    const { files, track } = options;
+    const { files, maxSelected = 4, track } = options;
     const [sampleSelection, setSampleSelection] = useAtom(SampleSelectionAtom);
     const [selected, setSelected] = useState<List<FileRecord>>(
         getFilesFromSelectionMap(sampleSelection, track, files)
@@ -36,10 +46,14 @@ const useSampleSelection = (
 
     const onSelect = useCallback(
         (file: FileRecord) =>
-            setSelected((prev) =>
-                prev.includes(file) ? prev : prev.push(file)
-            ),
-        []
+            setSelected((prev) => {
+                if (maxSelected != null && prev.count() >= maxSelected) {
+                    return prev;
+                }
+
+                return prev.includes(file) ? prev : prev.push(file);
+            }),
+        [maxSelected]
     );
 
     const onClear = useCallback(() => {
