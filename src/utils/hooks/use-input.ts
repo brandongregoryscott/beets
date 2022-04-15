@@ -8,14 +8,15 @@ interface UseInputOptions {
     isRequired?: boolean;
 }
 
-interface useInputResult extends ValidationState {
+interface useInputResult {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     setValidation: (validation?: ValidationState) => void;
+    validation: ValidationState;
     value?: string;
 }
 
 const useInput = (input?: UseInputOptions): useInputResult => {
-    const { isRequired = false, initialValue } = input ?? {};
+    const { isRequired = false, initialValue = "" } = input ?? {};
     const [validation, setValidation] = useState<ValidationState | undefined>();
     const [value, setValue] = useState<string | undefined>(initialValue);
 
@@ -38,7 +39,7 @@ const useInput = (input?: UseInputOptions): useInputResult => {
     );
 
     return {
-        ...validation,
+        validation: validation ?? {},
         onChange: handleChange,
         setValidation,
         value,

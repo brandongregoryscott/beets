@@ -28,14 +28,14 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
     const {
         value: password,
         onChange: onPasswordChange,
-        ...passwordValidation
+        validation: passwordValidation,
     } = useInput({ isRequired: true });
 
     const {
         value: passwordConfirmation,
         onChange: onPasswordConfirmationChange,
         setValidation: setPasswordConfirmationValidation,
-        ...passwordConfirmationValidation
+        validation: passwordConfirmationValidation,
     } = useInput({ isRequired: true });
 
     const validationTimeoutRef = useRef<NodeJS.Timeout | null>(null);

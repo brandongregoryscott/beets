@@ -22,7 +22,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
     const {
         value: email,
         onChange: handleEmailChange,
-        ...emailValidation
+        validation: emailValidation,
     } = useInput({ isRequired: true });
     const {
         isLoading,

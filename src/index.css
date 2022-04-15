@@ -13,3 +13,7 @@ html {
     width: 100%;
     max-width: 100%;
 }
+
+iframe {
+    pointer-events: "none";
+}
