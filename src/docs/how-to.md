@@ -1,5 +1,7 @@
 # How To
 
+This section of the guide details individual features and functionality of the app. If you find the information is lacking or inaccurate, or you'd like to propose a new section, [please open up an issue](https://github.com/brandongregoryscott/beets/issues/new) or [shoot me an email](mailto:contact@brandonscott.me). I'll do my best to respond and add documentation or assist where possible!
+
 ## Track
 
 For additional information, see [Overview - Track](./overview#track)
