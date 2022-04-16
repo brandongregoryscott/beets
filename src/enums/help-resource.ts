@@ -1,5 +1,5 @@
 enum HelpResource {
-    Usage = "Usage",
+    Overview = "Overview",
 }
 
 export { HelpResource };

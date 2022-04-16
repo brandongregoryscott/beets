@@ -6,11 +6,13 @@ import { useHelpDocs } from "utils/hooks/use-help-docs";
 import { useScrollToHash } from "utils/hooks/use-scroll-to-hash";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 
-interface UsagePageProps {}
+interface OverviewPageProps {}
 
-const UsagePage: React.FC<UsagePageProps> = (props: UsagePageProps) => {
+const OverviewPage: React.FC<OverviewPageProps> = (
+    props: OverviewPageProps
+) => {
     const { isLoading, content } = useHelpDocs({
-        resource: HelpResource.Usage,
+        resource: HelpResource.Overview,
     });
     useTimeoutRender();
     useScrollToHash();
@@ -23,4 +25,4 @@ const UsagePage: React.FC<UsagePageProps> = (props: UsagePageProps) => {
     );
 };
 
-export { UsagePage };
+export { OverviewPage };

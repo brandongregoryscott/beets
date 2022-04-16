@@ -22,12 +22,12 @@ import { joinPaths } from "utils/route-utils";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
-const tabs = [HelpResource.Usage];
+const tabs = [HelpResource.Overview];
 
 const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     const { onCloseComplete } = props;
     const [selectedTab, setSelectedTab] = useState<HelpResource>(
-        HelpResource.Usage
+        HelpResource.Overview
     );
     const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
     const { isLoading, content } = useHelpDocs({ resource: selectedTab });

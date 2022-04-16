@@ -1,7 +1,7 @@
 const Sitemap = {
     help: {
         home: "help",
-        usage: "usage",
+        overview: "overview",
     },
     home: "/",
     library: {

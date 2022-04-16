@@ -18,7 +18,7 @@ import { RouteDefinition } from "interfaces/route-definition";
 import { RouteMap as GenericRouteMap } from "interfaces/route-map";
 import { InstrumentsPage } from "components/pages/instruments-page";
 import { HelpLayout } from "components/layouts/help-layout";
-import { UsagePage } from "components/pages/usage-page";
+import { OverviewPage } from "components/pages/overview-page";
 import { HelpResource } from "enums/help-resource";
 import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
@@ -60,12 +60,12 @@ const Routes: RouteMap = {
                 icon: HelpIcon,
                 name: "Help",
                 path: Sitemap.help.home,
-                redirects: [{ to: Sitemap.help.usage }],
+                redirects: [{ to: Sitemap.help.overview }],
                 children: {
                     usage: {
-                        element: <UsagePage />,
-                        name: HelpResource.Usage,
-                        path: Sitemap.help.usage,
+                        element: <OverviewPage />,
+                        name: HelpResource.Overview,
+                        path: Sitemap.help.overview,
                     },
                 },
             },
