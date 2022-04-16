@@ -8,6 +8,7 @@ import {
     majorScale,
     defaultTheme,
 } from "evergreen-ui";
+import { Link as ReactRouterLink } from "react-router-dom";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import gfm from "remark-gfm";
@@ -16,6 +17,7 @@ import { NormalComponents } from "react-markdown/lib/complex-types";
 import {
     SpecialComponents,
     TransformImage,
+    TransformLink,
 } from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
 import { useMemo } from "react";
@@ -29,13 +31,23 @@ export interface MarkdownProps {
     children: string;
     components?: MarkdownComponentMap;
     transformImageUri?: (src: string) => string;
+    transformLinkUri?: (href: string) => string;
 }
 
 const defaultComponents: MarkdownComponentMap = {
     a: (props) => (
         <Link
             {...omitIs(props)}
+            is={ReactRouterLink}
             target={props.href?.includes("#") ? undefined : "_blank"}
+            to={props.href!}
+        />
+    ),
+    h2: (props) => (
+        <CopyableHeading
+            {...omitIs(props)}
+            marginY={majorScale(2)}
+            size={700}
         />
     ),
     h3: (props) => (
@@ -62,9 +74,9 @@ const defaultComponents: MarkdownComponentMap = {
             />
         </Pane>
     ),
-    li: (props) => <ListItem {...omitIs(props)} />,
+    li: (props) => <ListItem {...omitIs(props, "ordered")} />,
     p: (props) => <Paragraph {...omitIs(props)} />,
-    ul: (props) => <UnorderedList {...omitIs(props)} />,
+    ul: (props) => <UnorderedList {...omitIs(props, "ordered")} />,
 };
 
 const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
@@ -79,16 +91,22 @@ const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
             components={components}
             rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings]}
             remarkPlugins={[gfm]}
-            transformImageUri={props.transformImageUri ?? transformImageUri}>
+            transformImageUri={props.transformImageUri ?? transformImageUri}
+            transformLinkUri={props.transformLinkUri ?? transformLinkUri}>
             {children}
         </ReactMarkdown>
     );
 };
 
-const omitIs = <T extends { is?: string | undefined }>(props: T) =>
-    omit(props, "is");
+const omitIs = <T extends { is?: string | undefined }>(
+    props: T,
+    ...additionalKeys: Array<keyof T>
+) => omit(props, "is", ...additionalKeys);
 
 const transformImageUri: TransformImage = (src: string) =>
     src.replace("../../public", "");
+
+const transformLinkUri: TransformLink = (href: string) =>
+    href.replace("./", "../");
 
 export { Markdown };

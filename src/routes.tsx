@@ -22,6 +22,7 @@ import { OverviewPage } from "components/pages/overview-page";
 import { HelpResource } from "enums/help-resource";
 import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
+import { HowToPage } from "components/pages/how-to-page";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
@@ -66,6 +67,11 @@ const Routes: RouteMap = {
                         element: <OverviewPage />,
                         name: HelpResource.Overview,
                         path: Sitemap.help.overview,
+                    },
+                    howTo: {
+                        element: <HowToPage />,
+                        name: HelpResource.HowTo,
+                        path: Sitemap.help.howTo,
                     },
                 },
             },

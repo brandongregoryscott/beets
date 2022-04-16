@@ -22,7 +22,7 @@ import { joinPaths } from "utils/route-utils";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
-const tabs = [HelpResource.Overview];
+const tabs = [HelpResource.Overview, HelpResource.HowTo];
 
 const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     const { onCloseComplete } = props;

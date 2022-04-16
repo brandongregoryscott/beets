@@ -1,5 +1,6 @@
 import { useQuery } from "utils/hooks/use-query";
 import OverviewMarkdown from "docs/overview.md";
+import HowToMarkdown from "docs/how-to.md";
 import { HelpResource } from "enums/help-resource";
 
 interface UseHelpDocsOptions {
@@ -26,8 +27,12 @@ const useHelpDocs = (options?: UseHelpDocsOptions): UseHelpDocsResult => {
     return { content, isLoading };
 };
 
-const resourceToModule = (resource: HelpResource): typeof OverviewMarkdown => {
+const resourceToModule = (
+    resource: HelpResource
+): typeof OverviewMarkdown | typeof HowToMarkdown => {
     switch (resource) {
+        case HelpResource.HowTo:
+            return HowToMarkdown;
         case HelpResource.Overview:
         default:
             return OverviewMarkdown;
@@ -35,6 +40,6 @@ const resourceToModule = (resource: HelpResource): typeof OverviewMarkdown => {
 };
 
 const sanitizeContent = (content: string): string =>
-    content.replace("# Overview", "");
+    content.replace(/# [a-zA-Z ]+/, "");
 
 export { useHelpDocs };

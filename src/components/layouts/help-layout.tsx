@@ -3,6 +3,7 @@ import { RouteProps } from "interfaces/route-props";
 import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback } from "react";
 import { HelpResource } from "enums/help-resource";
+import { joinPaths } from "utils/route-utils";
 
 interface HelpLayoutProps extends RouteProps {}
 
@@ -13,12 +14,12 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     const navigate = useNavigate();
     const isTabSelected = useCallback(
         (tab: HelpResource): boolean =>
-            location.pathname.endsWith(tab.toLowerCase()),
+            location.pathname.endsWith(joinPaths(tab)),
         [location]
     );
     const handleClick = useCallback(
         (tab: HelpResource) => () => {
-            navigate(tab.toLowerCase());
+            navigate(joinPaths(tab));
         },
         [navigate]
     );
