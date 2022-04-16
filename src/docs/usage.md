@@ -58,13 +58,17 @@ This guide will serve as documentation for the various different pages and featu
 ### Piano Roll
 
 -   Dialog that can be used to program in [Track Section Steps](#track-section-step) for an [Instrument](#instrument) type [Track's](#track) [Track Section](#track-section). It can be opened by hovering over a [Track Section](#track-section) and clicking the middle button:
+
     ![Open Piano Roll Dialog](../../public/assets/OpenPianoRoll.png)
+
     ![Piano Roll Dialog](../../public/assets/PianoRoll.png)
 
 ### Sequencer
 
 -   Dialog that can be used to program in [Track Section Steps](#track-section-step) for a given [Track Section](#track-section). It can be opened by hovering over a [Track Section](#track-section) and clicking the middle button:
+
     ![Open Sequencer Dialog](../../public/assets/OpenSequencer.png)
+
     ![Sequencer Dialog](../../public/assets/Sequencer.png)
 
 #### Adding Steps
@@ -75,7 +79,8 @@ This guide will serve as documentation for the various different pages and featu
    ![Assign samples in Sequencer Dialog](../../public/assets/SequencerSelectAssignSamples.gif)
     - If a sample has already been assigned to a tile, it will not be readded. However, any additional samples that are currently selected will be added to the tile when clicked.
 1. To remove a sample, click on its name within the tile. You do not need to have any samples selected, and having samples selected will not add them to the tile when removing a sample.
-   ![Remove samples in Sequencer Dialog](../../public/assets/SequencerRemoveSamples.gif)
+
+    ![Remove samples in Sequencer Dialog](../../public/assets/SequencerRemoveSamples.gif)
 
 ### BPM
 
@@ -100,6 +105,7 @@ This guide will serve as documentation for the various different pages and featu
 -   Controls whether or not the audio is playing. The whole [Project](#project) can be muted, and individual [Tracks](#track) can be muted to play certain parts together.
 
 ![Mute Project](../../public/assets/MuteProject.png)
+
 ![Mute Track](../../public/assets/MuteTrack.png)
 
 ### Solo
