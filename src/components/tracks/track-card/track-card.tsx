@@ -30,6 +30,7 @@ import { ContextualIconButton } from "components/contextual-icon-button";
 import { css, select } from "glamor";
 import { TrackTime } from "components/tracks/track-time/track-time";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { Flex } from "components/flex";
 
 interface TrackCardProps {
     track: TrackRecord;
@@ -107,10 +108,8 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
             )}
             <Draggable draggableId={track.id} index={track.index}>
                 {(provided) => (
-                    <Pane
+                    <Flex.Row
                         alignItems="center"
-                        display="flex"
-                        flexDirection="row"
                         marginY={majorScale(1)}
                         ref={provided.innerRef}
                         {...provided.draggableProps}>
@@ -125,9 +124,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             padding={majorScale(1)}
                             position="relative"
                             width={width}>
-                            <Pane
-                                display="flex"
-                                flexDirection="row"
+                            <Flex.Row
                                 justifyContent="flex-end"
                                 marginTop={-majorScale(1)}
                                 minWidth={width}
@@ -140,7 +137,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                     intent="danger"
                                     isLastCard={true}
                                     onClick={handleRemove}
-                                    tooltipText="Remove section"
+                                    tooltipText="Remove track"
                                 />
                                 <ContextualIconButton
                                     className={contextualButtonClass}
@@ -150,14 +147,14 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                     isCornerButton={true}
                                     isLastCard={true}
                                     marginRight={majorScale(1)}
-                                    tooltipText="Move section"
+                                    tooltipText="Move track"
                                 />
-                            </Pane>
+                            </Flex.Row>
                             <EditableParagraph
                                 onChange={setName}
                                 value={name}
                             />
-                            <Pane display="flex" flexDirection="row">
+                            <Flex.Row>
                                 <Tooltip content="Mute Track">
                                     <IconButton
                                         icon={
@@ -176,7 +173,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                         onClick={toggleSolo}
                                     />
                                 </Tooltip>
-                            </Pane>
+                            </Flex.Row>
                         </Card>
                         <DragDropContext
                             onDragEnd={onDragEnd}
@@ -185,15 +182,13 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 direction="horizontal"
                                 droppableId={track.id}>
                                 {(provided, snapshot) => (
-                                    <Pane
+                                    <Flex.Row
                                         border={`2px dashed ${
                                             snapshot.isDraggingOver
                                                 ? theme.colors.blue300
                                                 : "transparent"
                                         }`}
                                         borderRadius={minorScale(1)}
-                                        display="flex"
-                                        flexDirection="row"
                                         margin={-2}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}>
@@ -205,7 +200,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                             trackSections={trackSections}
                                         />
                                         {provided.placeholder}
-                                    </Pane>
+                                    </Flex.Row>
                                 )}
                             </Droppable>
                         </DragDropContext>
@@ -220,7 +215,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 onClick={handleAddTrackSection}
                             />
                         </Tooltip>
-                    </Pane>
+                    </Flex.Row>
                 )}
             </Draggable>
         </Pane>
