@@ -7,7 +7,7 @@ import { joinPaths } from "utils/route-utils";
 
 interface HelpLayoutProps extends RouteProps {}
 
-const tabs = Object.values(HelpResource);
+const tabs = [HelpResource.Overview, HelpResource.HowTo];
 
 const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     const location = useLocation();
