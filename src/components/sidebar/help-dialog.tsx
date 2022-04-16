@@ -84,7 +84,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
             )}
             isShown={true}
             onCloseComplete={onCloseComplete}
-            title="Usage"
+            title="Overview"
             width={isFullscreen ? "100%" : undefined}>
             {isLoading && <Spinner />}
             {!isLoading && <Markdown>{content}</Markdown>}

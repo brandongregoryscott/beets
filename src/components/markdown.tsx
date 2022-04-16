@@ -1,7 +1,6 @@
 import {
     Link,
     Image,
-    Pane,
     ListItem,
     Paragraph,
     UnorderedList,
@@ -65,14 +64,14 @@ const defaultComponents: MarkdownComponentMap = {
         />
     ),
     img: (props) => (
-        <Pane marginY={majorScale(2)}>
-            <Image
-                {...omitIs(props)}
-                borderRadius={majorScale(1)}
-                boxShadow={last(defaultTheme.shadows)}
-                maxWidth="100%"
-            />
-        </Pane>
+        <Image
+            {...omitIs(props)}
+            borderRadius={majorScale(1)}
+            boxShadow={last(defaultTheme.shadows)}
+            display="block"
+            marginY={majorScale(2)}
+            maxWidth="100%"
+        />
     ),
     li: (props) => <ListItem {...omitIs(props, "ordered")} />,
     p: (props) => <Paragraph {...omitIs(props)} />,
