@@ -12,6 +12,12 @@ This guide will serve as high-level documentation for the various different page
 
 -   Data structure that contains persisted entities that make up a song: a [Project](#project), [Tracks](#track), [Track Sections](#track-section), and [Track Section Steps](#track-section-step). A Workstation is not persisted, but acts as a 1:1 container to a [Project](#project)
 
+### Library
+
+-   Refers to the pages of the site for [File](#file) and [Instrument](#instrument) management. It can be accessed via the music note icon on the sidebar.
+
+![Library page](../../public/assets/Library.png)
+
 ### Project
 
 -   Container for parts of a musical composition. Has a name, [BPM](#bpm), [swing](#swing) and global [volume](#volume) values.
@@ -40,6 +46,12 @@ This guide will serve as high-level documentation for the various different page
 -   A single step/note of audio. In an [Instrument](#instrument) type [Track](#track), these can be layered to form a chord. In a [Sequencer](#sequencer) type [Track](#track), up to 4 samples (usually drum sounds) can be layered per step index.
 
 ![Track Section Step components](../../public/assets/TrackSectionStep.png)
+
+### File
+
+-   An uploaded music sample.
+
+![File Card](../../public/assets/FileCard.png)
 
 ### Instrument
 

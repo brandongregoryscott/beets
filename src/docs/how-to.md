@@ -4,7 +4,7 @@ This section of the guide details individual features and functionality of the a
 
 ## Workstation
 
-### Export File
+### Export Project
 
 -   To export the project as an audio file, open the [Export Dialog](#export-dialog) from clicking `File > Export`.
 
@@ -19,6 +19,16 @@ This section of the guide details individual features and functionality of the a
 -   Currently supported file formats are `.wav`, `.webm`, and `.ogg`.
 
 ![Export Dialog](../../public/assets/ExportDialog.png)
+
+## File
+
+### Renaming a File
+
+-   To rename a [File](#file), click on the settings button in the [Library](./overview#library).
+
+![File Settings Button](../../public/assets/FileSettingsButton.png)
+
+![File Settings Dialog](../../public/assets/FileSettingsDialog.png)
 
 ## Track
 
