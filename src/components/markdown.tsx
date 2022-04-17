@@ -1,4 +1,5 @@
 import {
+    Code,
     Link,
     Image,
     ListItem,
@@ -36,14 +37,18 @@ interface MarkdownProps {
 }
 
 const defaultComponents: MarkdownComponentMap = {
-    a: (props) => (
-        <Link
-            {...omitIs(props)}
-            is={ReactRouterLink}
-            target={props.href?.includes("#") ? undefined : "_blank"}
-            to={props.href!}
-        />
-    ),
+    a: (props) => {
+        const { href } = props;
+        const isHashLink = href?.includes("#") ?? false;
+        return (
+            <Link
+                {...omitIs(props)}
+                is={isHashLink ? ReactRouterLink : Link}
+                target={isHashLink ? undefined : "_blank"}
+                to={isHashLink ? props.href! : undefined}
+            />
+        );
+    },
     h2: (props) => (
         <CopyableHeading
             {...omitIs(props)}
@@ -78,6 +83,7 @@ const defaultComponents: MarkdownComponentMap = {
     li: (props) => <ListItem {...omitIs(props, "ordered")} />,
     p: (props) => <Paragraph {...omitIs(props)} />,
     ul: (props) => <UnorderedList {...omitIs(props, "ordered")} />,
+    code: (props) => <Code {...omitIs(props, "inline")} size={300} />,
 };
 
 const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {

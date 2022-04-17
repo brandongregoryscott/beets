@@ -22,10 +22,9 @@ import { absolutePath, joinPaths, toPathCase } from "utils/route-utils";
 import { HelpDialogLink } from "components/sidebar/help-dialog/help-dialog-link";
 import { omitIs } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
+import { HelpResourceTabs } from "constants/help-resource-tabs";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
-
-const tabs = [HelpResource.Overview, HelpResource.HowTo];
 
 const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     const { onCloseComplete } = props;
@@ -59,7 +58,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
             header={({ close }) => (
                 <Flex.Row alignItems="center" width="100%">
                     <Tablist>
-                        {tabs.map((tab) => (
+                        {HelpResourceTabs.map((tab) => (
                             <Tab
                                 isSelected={tab === selectedTab}
                                 key={tab}

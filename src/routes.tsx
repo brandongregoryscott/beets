@@ -23,13 +23,16 @@ import { HelpResource } from "enums/help-resource";
 import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
 import { HowToPage } from "components/pages/how-to-page";
+import { ContributingPage } from "components/pages/contributing-page";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
         children: {
             help: RouteDefinition & {
                 children: {
-                    usage: RouteDefinition;
+                    contributing: RouteDefinition;
+                    howTo: RouteDefinition;
+                    overview: RouteDefinition;
                 };
             };
             library: RouteDefinition & {
@@ -63,7 +66,12 @@ const Routes: RouteMap = {
                 path: Sitemap.help.home,
                 redirects: [{ to: Sitemap.help.overview }],
                 children: {
-                    usage: {
+                    contributing: {
+                        element: <ContributingPage />,
+                        name: HelpResource.Contributing,
+                        path: Sitemap.help.contributing,
+                    },
+                    overview: {
                         element: <OverviewPage />,
                         name: HelpResource.Overview,
                         path: Sitemap.help.overview,

@@ -74,6 +74,9 @@
         "ts-node": "10.7.0",
         "typescript": "4.6.3"
     },
+    "engines": {
+        "node": ">=14.18"
+    },
     "eslintConfig": {
         "extends": [
             "react-app",

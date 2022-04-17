@@ -13,10 +13,9 @@ import { useCallback, useRef } from "react";
 import { HelpResource } from "enums/help-resource";
 import { toPathCase } from "utils/route-utils";
 import { useTheme } from "utils/hooks/use-theme";
+import { HelpResourceTabs } from "constants/help-resource-tabs";
 
 interface HelpLayoutProps extends RouteProps {}
-
-const tabs = [HelpResource.Overview, HelpResource.HowTo];
 
 const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     const location = useLocation();
@@ -43,7 +42,7 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
         <Pane height="100%" overflow="auto" ref={pageRef} width="100%">
             <Pane marginLeft={majorScale(2)} marginTop={majorScale(2)}>
                 <TabNavigation>
-                    {tabs.map((tab) => (
+                    {HelpResourceTabs.map((tab) => (
                         <Tab
                             isSelected={isTabSelected(tab)}
                             key={tab}
