@@ -66,7 +66,7 @@ For additional information, see [Overview - Track Section](./overview#track-sect
 
 ## Instrument
 
-For additional information, see [Overview - Sequencer](./overview#instrument)
+For additional information, see [Overview - Instrument](./overview#instrument)
 
 ### Creating an Instrument
 

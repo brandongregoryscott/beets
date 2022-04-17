@@ -11,22 +11,24 @@ import { Link as ReactRouterLink } from "react-router-dom";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import gfm from "remark-gfm";
-import { last, merge, omit } from "lodash";
+import { last } from "lodash";
 import { NormalComponents } from "react-markdown/lib/complex-types";
-import {
-    SpecialComponents,
-    TransformImage,
-    TransformLink,
-} from "react-markdown/lib/ast-to-react";
+import { SpecialComponents } from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
 import { useMemo } from "react";
 import { CopyableHeading } from "components/copyable-heading";
+import {
+    mergeComponentMap,
+    omitIs,
+    transformImageUri,
+    transformLinkUri,
+} from "utils/markdown-utils";
 
-export type MarkdownComponentMap = Partial<
+type MarkdownComponentMap = Partial<
     Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
 >;
 
-export interface MarkdownProps {
+interface MarkdownProps {
     children: string;
     components?: MarkdownComponentMap;
     transformImageUri?: (src: string) => string;
@@ -81,7 +83,7 @@ const defaultComponents: MarkdownComponentMap = {
 const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
     const { children, components: componentsOverrides = {} } = props;
     const components = useMemo(
-        () => merge({}, defaultComponents, componentsOverrides),
+        () => mergeComponentMap(componentsOverrides),
         [componentsOverrides]
     );
 
@@ -97,15 +99,5 @@ const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
     );
 };
 
-const omitIs = <T extends { is?: string | undefined }>(
-    props: T,
-    ...additionalKeys: Array<keyof T>
-) => omit(props, "is", ...additionalKeys);
-
-const transformImageUri: TransformImage = (src: string) =>
-    src.replace("../../public", "");
-
-const transformLinkUri: TransformLink = (href: string) =>
-    href.replace("./", "../");
-
-export { Markdown };
+export { defaultComponents, Markdown };
+export type { MarkdownProps, MarkdownComponentMap };

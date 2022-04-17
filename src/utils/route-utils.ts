@@ -5,7 +5,7 @@ import {
     RouteObject,
     matchRoutes as reactRouterMatchRoutes,
 } from "react-router";
-import { flatMap, isEmpty, kebabCase, toLower } from "lodash";
+import { flatMap, isEmpty } from "lodash";
 
 const absolutePath = (path?: string) => (isEmpty(path) ? "/" : `/${path}`);
 
@@ -18,7 +18,7 @@ const flattenRoutes = (routes?: RouteMap): RouteDefinition[] => {
 };
 
 const joinPaths = (...paths: string[]): string =>
-    paths.map(toLower).map(kebabCase).join("/");
+    paths.map(toPathCase).join("/");
 
 const matchRoutes = (
     routes: RouteDefinition[],
@@ -27,6 +27,8 @@ const matchRoutes = (
     const routeObjects = flatMap(routes, toRouteObject);
     return reactRouterMatchRoutes(routeObjects, location);
 };
+
+const toPathCase = (path: string) => path.replace(" ", "-").toLowerCase();
 
 const toRouteObject = (route: RouteDefinition): RouteObject => {
     const { path, element, children: childRouteDefinitions } = route ?? {};
@@ -39,4 +41,11 @@ const toRouteObject = (route: RouteDefinition): RouteObject => {
     };
 };
 
-export { absolutePath, flattenRoutes, joinPaths, matchRoutes, toRouteObject };
+export {
+    absolutePath,
+    flattenRoutes,
+    joinPaths,
+    matchRoutes,
+    toPathCase,
+    toRouteObject,
+};

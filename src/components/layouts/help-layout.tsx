@@ -11,7 +11,7 @@ import { RouteProps } from "interfaces/route-props";
 import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback, useRef } from "react";
 import { HelpResource } from "enums/help-resource";
-import { joinPaths } from "utils/route-utils";
+import { toPathCase } from "utils/route-utils";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface HelpLayoutProps extends RouteProps {}
@@ -25,12 +25,12 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
     const pageRef = useRef<HTMLDivElement | null>(null);
     const isTabSelected = useCallback(
         (tab: HelpResource): boolean =>
-            location.pathname.endsWith(joinPaths(tab)),
+            location.pathname.endsWith(toPathCase(tab)),
         [location]
     );
     const handleClick = useCallback(
         (tab: HelpResource) => () => {
-            navigate(joinPaths(tab));
+            navigate(toPathCase(tab));
         },
         [navigate]
     );

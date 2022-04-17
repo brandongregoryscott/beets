@@ -1,5 +1,5 @@
 import { AboutDialog } from "components/sidebar/about-dialog";
-import { HelpDialog } from "components/sidebar/help-dialog";
+import { HelpDialog } from "components/sidebar/help-dialog/help-dialog";
 import { ProfileMenu } from "components/sidebar/profile-menu";
 import {
     Card,
