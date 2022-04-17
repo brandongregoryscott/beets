@@ -2,6 +2,24 @@
 
 This section of the guide details individual features and functionality of the app. If you find the information is lacking or inaccurate, or you'd like to propose a new section, [please open up an issue](https://github.com/brandongregoryscott/beets/issues/new) or [shoot me an email](mailto:contact@brandonscott.me). I'll do my best to respond and add documentation or assist where possible!
 
+## Workstation
+
+### Export File
+
+-   To export the project as an audio file, open the [Export Dialog](#export-dialog) from clicking `File > Export`.
+
+![File Export Menu](../../public/assets/FileExportMenu.png)
+
+### Export Dialog
+
+-   This dialog allows you to bounce a version of the project to a file. It takes into account the current project configuration (any [muted](./overview#mute) or [solo'd](./overview#solo) [Tracks](#track), [volume](./overview#volume), etc.)
+
+-   Bouncing happens in real-time, and a file will be ready to download after the project has finished playing.
+
+-   Currently supported file formats are `.wav`, `.webm`, and `.ogg`.
+
+![Export Dialog](../../public/assets/ExportDialog.png)
+
 ## Track
 
 For additional information, see [Overview - Track](./overview#track)
@@ -28,11 +46,23 @@ For additional information, see [Overview - Track](./overview#track)
 
 For additional information, see [Overview - Track Section](./overview#track-section)
 
+### Creating a Track Section
+
+-   To create a new [Track Section](#track-section), click the beside the [Track](#track).
+
+![Add Track Section](../../public/assets/AddTrackSection.png)
+
 ### Moving a Track Section
 
 -   To reorder a [Track Section](#track-section), hover over its card and drag the handle in the top right corner. The other [Track Sections](#track-section) should reorder as you drag.
 
 ![Move Track Section](../../public/assets/MoveTrackSection.gif)
+
+### Duplicating a Track Section
+
+-   To duplicate a [Track Section](#track-section), click on its card to select it. Select `Edit > Duplicate` or use the `⌘+D` keyboard shortcut to duplicate the selection. Multiple [Track Sections](#track-section) can be selected and duplicated at once.
+
+![Duplicate Track Section](../../public/assets/DuplicateTrackSection.gif)
 
 ## Instrument
 
