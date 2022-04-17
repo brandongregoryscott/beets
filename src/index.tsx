@@ -27,11 +27,9 @@ const queryClient = new QueryClient({
 const root = createRoot(document.getElementById("root")!);
 
 root.render(
-    <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider value={theme}>
-                <App />
-            </ThemeProvider>
-        </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+        <ThemeProvider value={theme}>
+            <App />
+        </ThemeProvider>
+    </QueryClientProvider>
 );

@@ -1,13 +1,18 @@
 import { Pane, PaneProps } from "evergreen-ui";
+import React, { forwardRef } from "react";
 
 interface FlexProps extends Omit<PaneProps, "display" | "flexDirection"> {}
 
-const Column: React.FC<FlexProps> = (props: FlexProps) => (
-    <Pane display="flex" flexDirection="column" {...props} />
+const Column: React.FC<FlexProps> = forwardRef(
+    (props: FlexProps, ref: React.ForwardedRef<HTMLDivElement>) => (
+        <Pane display="flex" flexDirection="column" ref={ref} {...props} />
+    )
 );
 
-const Row: React.FC<FlexProps> = (props: FlexProps) => (
-    <Pane display="flex" flexDirection="row" {...props} />
+const Row: React.FC<FlexProps> = forwardRef(
+    (props: FlexProps, ref: React.ForwardedRef<HTMLDivElement>) => (
+        <Pane display="flex" flexDirection="row" ref={ref} {...props} />
+    )
 );
 
 const Flex = {

@@ -1,5 +1,7 @@
 import { toaster } from "evergreen-ui";
+import { isString } from "lodash";
 import { isDevelopment } from "utils/env";
+import { format } from "utils/string-utils";
 
 const registerConsoleErrorToasts = () => {
     if (!isDevelopment()) {
@@ -9,7 +11,12 @@ const registerConsoleErrorToasts = () => {
     const consoleError = console.error;
     console.error = (message: string, ...args: any[]) => {
         consoleError(message, args);
-        toaster.danger(message, { id: [message, JSON.stringify(args)].join() });
+        toaster.danger(
+            isString(message) ? format(message, args) : JSON.stringify(message),
+            {
+                id: [message, JSON.stringify(args)].join(),
+            }
+        );
     };
 };
 
