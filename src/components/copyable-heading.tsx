@@ -8,6 +8,7 @@ import {
     majorScale,
     TickIcon,
     toaster,
+    Tooltip,
 } from "evergreen-ui";
 import { isEmpty, isString, kebabCase, omit } from "lodash";
 import { useCallback, useMemo, useState } from "react";
@@ -56,14 +57,16 @@ const CopyableHeading: React.FC<CopyableHeadingProps> = (
 
     return (
         <Flex.Row alignItems="center">
-            <IconButton
-                appearance="minimal"
-                icon={copied ? TickIcon : LinkIcon}
-                intent={copied ? "success" : "none"}
-                marginRight={majorScale(1)}
-                onClick={handleClick}
-                size="small"
-            />
+            <Tooltip content="Copy link">
+                <IconButton
+                    appearance="minimal"
+                    icon={copied ? TickIcon : LinkIcon}
+                    intent={copied ? "success" : "none"}
+                    marginRight={majorScale(1)}
+                    onClick={handleClick}
+                    size="small"
+                />
+            </Tooltip>
             <Heading {...omit(props, "selectedTab")} />
         </Flex.Row>
     );
