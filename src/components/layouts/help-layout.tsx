@@ -14,6 +14,7 @@ import { HelpResource } from "enums/help-resource";
 import { toPathCase } from "utils/route-utils";
 import { useTheme } from "utils/hooks/use-theme";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
+import { first, isEmpty } from "lodash";
 
 interface HelpLayoutProps extends RouteProps {}
 
@@ -36,7 +37,14 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
 
     const handleReturnToTopClick = useCallback(() => {
         pageRef.current?.scrollTo({ top: 0 });
-    }, []);
+        const { hash, pathname } = window.location;
+        if (isEmpty(hash)) {
+            return;
+        }
+
+        // Strip off the hash when returning to the top of the page
+        navigate(first(pathname.split("#"))!);
+    }, [navigate]);
 
     return (
         <Pane height="100%" overflow="auto" ref={pageRef} width="100%">

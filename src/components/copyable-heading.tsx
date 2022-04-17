@@ -13,7 +13,7 @@ import {
 import { isEmpty, isString, kebabCase, omit } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { Sitemap } from "sitemap";
-import { joinPaths } from "utils/route-utils";
+import { joinPaths, toPathCase } from "utils/route-utils";
 
 interface CopyableHeadingProps extends HeadingProps {
     selectedTab?: HelpResource;
@@ -34,7 +34,7 @@ const CopyableHeading: React.FC<CopyableHeadingProps> = (
             hash = children.find(isString) as string;
         }
 
-        return isEmpty(hash) ? undefined : kebabCase(hash);
+        return isEmpty(hash) ? undefined : toPathCase(hash!);
     }, [children]);
 
     const handleClick = useCallback(() => {

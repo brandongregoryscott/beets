@@ -25,9 +25,7 @@ npm install
 
 ## Env File
 
-To run the app locally, you'll need to ensure you have a [Supabase](https://supabase.com/) account with a project setup for beets.
-
-Copy the sample `.env` and update the file to reflect your Supabase project's API key and URLs.
+To run the app locally, you'll need to ensure you have a [Supabase](https://supabase.com/) account with a project setup for beets. Configuration values to connect with your Supabase project are controlled with environment variables. Copy the sample `.env` and update the file to reflect your Supabase project's API key and URLs.
 
 ```
 cp .env.sample .env
@@ -76,6 +74,8 @@ Database migrations are managed in code via [`node-pg-migrate`](https://salsita.
 ### Setup Storage Policies
 
 The scripts that need to be run manually in the Supabase SQL Editor are related to storage buckets and objects (files). The SQL editor can be found at `https://app.supabase.io/project/{your-project-id}/sql` and the page should look like this:
+
+![Supabase SQL Editor](../../public/assets/SupabaseSQLEditor.png)
 
 These two scripts can be run in any order:
 
