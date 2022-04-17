@@ -18,6 +18,22 @@ For additional information, see [Overview - Track](./overview#track)
 
 ![Rename Track](../../public/assets/RenameTrack.png)
 
+### Moving a Track
+
+-   To reorder a [Track](#track), hover over its card and drag the handle in the top right corner. The other [Tracks](#track) should reorder as you drag.
+
+![Move Track](../../public/assets/MoveTrack.gif)
+
+## Track Section
+
+For additional information, see [Overview - Track Section](./overview#track-section)
+
+### Moving a Track Section
+
+-   To reorder a [Track Section](#track-section), hover over its card and drag the handle in the top right corner. The other [Track Sections](#track-section) should reorder as you drag.
+
+![Move Track Section](../../public/assets/MoveTrackSection.gif)
+
 ## Instrument
 
 For additional information, see [Overview - Sequencer](./overview#instrument)
