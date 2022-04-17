@@ -6,13 +6,14 @@ import { useHelpDocs } from "utils/hooks/use-help-docs";
 import { useScrollToHash } from "utils/hooks/use-scroll-to-hash";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 
-interface ContributingPageProps {}
+interface HelpPageProps {
+    resource: HelpResource;
+}
 
-const ContributingPage: React.FC<ContributingPageProps> = (
-    props: ContributingPageProps
-) => {
+const HelpPage: React.FC<HelpPageProps> = (props: HelpPageProps) => {
+    const { resource } = props;
     const { isLoading, content } = useHelpDocs({
-        resource: HelpResource.Contributing,
+        resource,
     });
     useTimeoutRender();
     useScrollToHash();
@@ -25,4 +26,4 @@ const ContributingPage: React.FC<ContributingPageProps> = (
     );
 };
 
-export { ContributingPage };
+export { HelpPage };
