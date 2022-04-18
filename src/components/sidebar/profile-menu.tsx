@@ -7,7 +7,7 @@ import {
     NewPersonIcon,
 } from "evergreen-ui";
 import React, { Fragment, useCallback } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import { Sitemap } from "sitemap";
 import { useLogout } from "utils/hooks/supabase/use-logout";
 import { useGlobalState } from "utils/hooks/use-global-state";
@@ -33,7 +33,17 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         [setGlobalState]
     );
     const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
-    const history = useHistory();
+    const navigate = useNavigate();
+
+    const handleAboutDialogClick = useCallback(() => {
+        onClose();
+        onAboutDialogClick();
+    }, [onAboutDialogClick, onClose]);
+
+    const handleHelpDialogClick = useCallback(() => {
+        onClose();
+        onHelpDialogClick();
+    }, [onClose, onHelpDialogClick]);
 
     const handleLogoutSelect = useCallback(() => {
         onClose();
@@ -42,20 +52,20 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
 
     const handleLoginSelect = useCallback(() => {
         onClose();
-        history.push(Sitemap.login);
-    }, [history, onClose]);
+        navigate(Sitemap.login);
+    }, [navigate, onClose]);
 
     const handleRegisterSelect = useCallback(() => {
         onClose();
-        history.push(Sitemap.register);
-    }, [history, onClose]);
+        navigate(Sitemap.register);
+    }, [navigate, onClose]);
 
     return (
         <Menu>
-            <Menu.Item icon={InfoSignIcon} onSelect={onAboutDialogClick}>
+            <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>
-            <Menu.Item icon={HelpIcon} onSelect={onHelpDialogClick}>
+            <Menu.Item icon={HelpIcon} onSelect={handleHelpDialogClick}>
                 Help
             </Menu.Item>
             {isAuthenticated && (

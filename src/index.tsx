@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { App } from "app";
 import reportWebVitals from "reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -7,8 +7,15 @@ import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";
 import "./index.css";
 import { registerIndexStyleMutation } from "utils/register-index-style-mutation";
+import { registerConsoleErrorToasts } from "utils/register-console-error-toasts";
 
 registerIndexStyleMutation();
+registerConsoleErrorToasts();
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -17,19 +24,12 @@ const queryClient = new QueryClient({
         },
     },
 });
+const root = createRoot(document.getElementById("root")!);
 
-ReactDOM.render(
-    <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider value={theme}>
-                <App />
-            </ThemeProvider>
-        </QueryClientProvider>
-    </React.StrictMode>,
-    document.getElementById("root")
+root.render(
+    <QueryClientProvider client={queryClient}>
+        <ThemeProvider value={theme}>
+            <App />
+        </ThemeProvider>
+    </QueryClientProvider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

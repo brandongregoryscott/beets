@@ -1,4 +1,4 @@
-import { LoginOrRegister } from "components/login-or-register";
+import { LoginOrRegisterForm } from "components/login-or-register-form";
 import { Pane } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
 
@@ -14,7 +14,7 @@ const RegisterPage: React.FC<RegisterPageProps> = (
             flexDirection="column"
             justifyContent="center"
             width="100%">
-            <LoginOrRegister initialShowRegister={true} />
+            <LoginOrRegisterForm initialShowRegister={true} />
         </Pane>
     );
 };

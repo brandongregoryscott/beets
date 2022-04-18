@@ -11,6 +11,7 @@ import React from "react";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useLatestRelease } from "utils/hooks/use-latest-release";
 import { Dialog, DialogProps } from "components/dialog";
+import { isDevelopment } from "utils/env";
 
 enum Environment {
     Development = "Development",
@@ -74,7 +75,7 @@ const AboutDialog: React.FC<AboutDialogProps> = (props: AboutDialogProps) => {
 };
 
 const getCurrentEnvironment = (): Environment => {
-    if (process.env.NODE_ENV === "development") {
+    if (isDevelopment()) {
         return Environment.Local;
     }
 

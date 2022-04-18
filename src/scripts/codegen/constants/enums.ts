@@ -1,5 +1,4 @@
-import { toKebabCase } from "../utils";
-import upath from "upath";
+import { joinPaths, toKebabCase, withExt } from "../utils";
 import { Paths } from "./paths";
 
 const enums = "enums";
@@ -7,10 +6,10 @@ const Tables = "Tables";
 
 const Enums = {
     [Tables]: {
-        filename: `${toKebabCase(Tables)}.ts`,
+        filename: withExt(toKebabCase(Tables)),
         name: Tables,
-        filePath: upath.join(Paths.base, enums, `${toKebabCase(Tables)}.ts`),
-        importPath: upath.join(Paths.baseImport, enums, toKebabCase(Tables)),
+        filePath: joinPaths(Paths.base, enums, withExt(toKebabCase(Tables))),
+        importPath: joinPaths(Paths.baseImport, enums, toKebabCase(Tables)),
     },
 };
 

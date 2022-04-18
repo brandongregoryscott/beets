@@ -20,16 +20,11 @@ Web-based DAW (Digital Audio Workstation) written in React for making music.
 
 ## Quick Start
 
-![Quick start image](./assets/quick-start.png)
-
 The app can be accessed now at [beets.studio](https://beets.studio). While no account is necessary to begin using the app, functionality is limited.
 
-1. Project name and controls for playing/pausing, muting, changing tempo, swing or global volume level.
-2. Context menu for opening, saving, or updating project settings.
-3. Track name and controls for muting, soloing or deleting. Tracks can be renamed in-line by clicking on the label. A track consists of one or more track sections `(5)`.
-4. Button for adding a new track to the project.
-5. Track section which contains sequencer steps. A track section can be between 1 and 64 steps and is added by the `+` button `(6)`.
-6. Button for adding a new track section to the track.
+https://user-images.githubusercontent.com/11774799/163682665-69db80cf-22ba-44be-87bd-ad27e24138fd.mp4
+
+Additional documentation can be found in markdown files under [`src/docs`](https://github.com/brandongregoryscott/beets/tree/main/src/docs) or in-app at [beets.studio/help](https://beets.studio/help).
 
 ## Features
 
@@ -41,6 +36,7 @@ The app can be accessed now at [beets.studio](https://beets.studio). While no ac
     -   Keyboard shortcut `⌘S` to save the project
     -   Keyboard shortcut `⌘D` to duplicate track section(s) while selected
 -   Project management (saving, opening, deleting)
+-   Export project as a wav file
 
 ## Issues
 

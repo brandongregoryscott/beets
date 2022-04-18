@@ -5,6 +5,8 @@ import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<SupabaseUser>({
     id: "",
+    invited_at: undefined,
+    identities: undefined,
     app_metadata: {
         provider: undefined,
     },

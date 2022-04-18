@@ -6,9 +6,9 @@ import {
     SelectMenuProps as EvergreenSelectMenuProps,
 } from "evergreen-ui";
 import { List } from "immutable";
-import _ from "lodash";
+import { intersectionWith, isArray, pick } from "lodash";
 import { useCallback, useMemo } from "react";
-import { isNotNilOrEmpty } from "utils/core-utils";
+import { isEqual, isNotNilOrEmpty } from "utils/core-utils";
 
 type FirstParameter<TFunction extends undefined | ((...args: any[]) => any)> =
     Parameters<NonNullable<TFunction>>[0];
@@ -59,7 +59,7 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
     const options: EvergreenSelectMenuItem[] | undefined = useMemo(
         () =>
             optionValues?.map((optionValue) => ({
-                ..._.pick<SelectMenuItem<T>, keyof SelectMenuItem<T>>(
+                ...pick<SelectMenuItem<T>, keyof SelectMenuItem<T>>(
                     optionValue,
                     "disabled",
                     "label",
@@ -77,11 +77,11 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
             _selectedValues = _selectedValues.toArray();
         }
 
-        if (_.isArray(_selectedValues)) {
-            return _.intersectionWith(
+        if (isArray(_selectedValues)) {
+            return intersectionWith(
                 optionValues,
                 _selectedValues,
-                (option, selected) => option.value === selected
+                (option, selected) => isEqual(option.value, selected)
             ).map((selected) => selected.id);
         }
 

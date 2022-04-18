@@ -1,9 +1,8 @@
 import { SequencerStep } from "components/sequencer/sequencer-step";
-import { Button, majorScale, Pane } from "evergreen-ui";
+import { Button, CrossIcon, majorScale, Pane } from "evergreen-ui";
 import _ from "lodash";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
-import { useCallback, useState } from "react";
 import pluralize from "pluralize";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
@@ -14,6 +13,8 @@ import { PlayButton } from "components/workstation/play-button";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
 import { toDataAttributes } from "utils/data-attribute-utils";
+import { useSampleSelection } from "utils/hooks/use-sample-selection";
+import { IconButton } from "components/icon-button";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -38,24 +39,11 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         trackSection,
     } = props;
 
+    const { selected, onSelect, onDeselect, onClear } = useSampleSelection({
+        files,
+        track,
+    });
     const { value: isPlaying, toggle: toggleIsPlaying } = useBoolean();
-    const [selected, setSelected] = useState<List<FileRecord>>(List());
-
-    const handleDeselect = useCallback(
-        (file: FileRecord) =>
-            setSelected((prev) =>
-                prev.includes(file) ? prev.remove(prev.indexOf(file)) : prev
-            ),
-        [setSelected]
-    );
-
-    const handleSelect = useCallback(
-        (file: FileRecord) =>
-            setSelected((prev) =>
-                prev.includes(file) ? prev : prev.push(file)
-            ),
-        [setSelected]
-    );
 
     const { isLoading } = useToneAudio({
         isPlaying,
@@ -78,14 +66,24 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 />
                 <FileSelectMenu
                     isMultiSelect={true}
-                    onDeselect={handleDeselect}
-                    onSelect={handleSelect}
+                    onDeselect={onDeselect}
+                    onSelect={onSelect}
                     selected={selected}
                     title="Current Samples">
-                    <Button marginRight={buttonMarginRight}>
+                    <Button
+                        borderBottomRightRadius={0}
+                        borderTopRightRadius={0}>
                         {sampleButtonText}
                     </Button>
                 </FileSelectMenu>
+                <IconButton
+                    borderBottomLeftRadius={0}
+                    borderLeft="none"
+                    borderTopLeftRadius={0}
+                    icon={CrossIcon}
+                    marginRight={buttonMarginRight}
+                    onClick={onClear}
+                />
                 <StepCountSelectMenu
                     onChange={onStepCountChange}
                     stepCount={stepCount}

@@ -1,20 +1,21 @@
-import { Record } from "immutable";
+import { Collection, Record } from "immutable";
 import { atomWithStorage } from "jotai/utils";
 
-const immutableAtomWithStorage = <T extends Record<any>>(
+const immutableAtomWithStorage = <T extends Record<any> | Collection<any, any>>(
     key: string,
     initialValue: T,
-    constructor: new (...args: any[]) => T
+    constructorOrFactory: (...args: any[]) => T
 ) =>
     atomWithStorage(key, initialValue, {
         getItem: (key: string) => {
             const value = localStorage.getItem(key);
             if (value == null) {
-                return new constructor();
+                return constructorOrFactory();
             }
 
-            return new constructor(JSON.parse(value));
+            return constructorOrFactory(JSON.parse(value));
         },
+        removeItem: (key: string) => localStorage.removeItem(key),
         setItem: (key: string, newValue: T) =>
             localStorage.setItem(key, JSON.stringify(newValue.toJS())),
     });

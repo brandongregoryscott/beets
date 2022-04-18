@@ -3,7 +3,7 @@ import openapi from "openapi-typescript";
 import { env } from "../../utils/env";
 import { Project } from "ts-morph";
 import { Paths } from "./constants/paths";
-import upath from "upath";
+import { joinPaths } from "./utils";
 
 interface GenerateSupabaseTypesOptions {
     /**
@@ -21,7 +21,7 @@ const generateSupabaseTypes = async (
     log.info(`Loading supabase types...`);
 
     if (useExistingFile) {
-        return project.addSourceFileAtPath(upath.join(Paths.base, filename));
+        return project.addSourceFileAtPath(joinPaths(Paths.base, filename));
     }
 
     const output = await openapi(
@@ -29,7 +29,7 @@ const generateSupabaseTypes = async (
     );
 
     const file = project.createSourceFile(
-        upath.join(Paths.base, filename),
+        joinPaths(Paths.base, filename),
         output,
         {
             overwrite: true,

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import pluralize from "pluralize";
 import { Project, PropertySignature, SourceFile } from "ts-morph";
-import upath from "upath";
 import { Paths } from "./constants/paths";
 import { HookAction } from "./enums/hook-action";
 import { log } from "./log";
@@ -13,7 +12,7 @@ const getInterfaceName = (property: PropertySignature): string =>
     pluralize(snakeToTitleCase(property.getName()), 1);
 
 const getInterfacePath = (property: PropertySignature): string =>
-    upath.join(
+    joinPaths(
         Paths.base,
         "interfaces",
         `${toKebabCase(getInterfaceName(property))}.ts`
@@ -23,7 +22,7 @@ const getInterfaceImportPath = (property: PropertySignature): string =>
     removeExt(getInterfacePath(property).replace("src/", ""));
 
 const getHookPath = (property: PropertySignature, action: HookAction): string =>
-    upath.join(
+    joinPaths(
         Paths.base,
         "hooks",
         "domain",
@@ -57,7 +56,7 @@ const getHookOptionsInterfaceName = (
 };
 
 const getRecordImportPath = (property: PropertySignature): string =>
-    upath.join("models", removeExt(getRecordFileName(property)));
+    joinPaths("models", removeExt(getRecordFileName(property)));
 
 const getRecordName = (property: PropertySignature): string =>
     `${getInterfaceName(property)}Record`;
@@ -89,7 +88,9 @@ const getTablesEnumValue = (property: PropertySignature): string =>
 const getTableName = (property: PropertySignature): string =>
     pluralize(getInterfaceName(property), 2);
 
-const removeExt = (filename: string) => upath.removeExt(filename, ".ts");
+const joinPaths = (...paths: string[]): string => paths.join("/");
+
+const removeExt = (filename: string) => filename.replace(".ts", "");
 
 const snakeToTitleCase = (value: string) => {
     if (!value.includes("_")) {
@@ -136,6 +137,7 @@ export {
     getRecordSourceFile,
     getTablesEnumValue,
     getTableName,
+    joinPaths,
     stripQuotes,
     toKebabCase,
     withExt,
