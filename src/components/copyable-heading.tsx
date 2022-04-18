@@ -10,7 +10,7 @@ import {
     toaster,
     Tooltip,
 } from "evergreen-ui";
-import { isEmpty, isString, kebabCase, omit } from "lodash";
+import { isEmpty, isString, omit } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { Sitemap } from "sitemap";
 import { joinPaths, toPathCase } from "utils/route-utils";
