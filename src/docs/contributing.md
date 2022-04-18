@@ -2,6 +2,23 @@
 
 This section of the guide details how to setup the app for local development and contributing back. If you find the information is lacking or inaccurate, or you'd like to propose a new section, [please open up an issue](https://github.com/brandongregoryscott/beets/issues/new) or [shoot me an email](mailto:contact@brandonscott.me). I'll do my best to respond and add documentation or assist where possible!
 
+## Table of Contents
+
+-   [Getting Started](#getting-started)
+    -   [Prerequisites](#prerequisites)
+    -   [Fork and Clone](#fork-and-clone)
+    -   [Install Dependencies](#install-dependencies)
+    -   [Env File](#env-file)
+        -   [REACT_APP_SUPABASE_ANON_KEY and REACT_APP_SUPABASE_URL](#react_app_supabase_anon_key-and-react_app_supabase_url)
+        -   [DATABASE_URL](#database_url)
+        -   [REACT_APP_SUPABASE_STORAGE_PUBLIC_URL](#react_app_supabase_storage_public_url)
+    -   [Configuring File Storage](#configuring-file-storage)
+        -   [Create Bucket and Policies](#create-bucket-and-policies)
+        -   [Upload Public Samples](#upload-public-samples)
+    -   [Migrating the Database](#migrating-the-database)
+        -   [Run Migrations](#run-migrations)
+    -   [Start the App](#start-the-app)
+
 ## Getting Started
 
 ### Prerequisites
@@ -69,25 +86,47 @@ The value for `REACT_APP_SUPABASE_STORAGE_PUBLIC_URL` should be:
 https://ef7c47561c6e47.supabase.in/storage/v1/object/public
 ```
 
-### Migrating the Database
+### Configuring File Storage
 
-Database migrations are managed in code via [`node-pg-migrate`](https://salsita.github.io/node-pg-migrate). There are a few SQL scripts that need to be run manually in the Supabase SQL Editor due to permissioning issues, but most migrations can be run from the command line.
+The file storage system provided by Supabase needs to be configured with a few SQL scripts that need to be run in the Supabase SQL editor.
 
-#### Setup Storage Policies
+#### Create Bucket and Policies
 
-The scripts that need to be run manually in the Supabase SQL Editor are related to storage buckets and objects (files). The SQL editor can be found at `https://app.supabase.io/project/{your-project-id}/sql` and the page should look like this:
+The SQL editor can be found at `https://app.supabase.io/project/{your-project-id}/sql` and the page should look like this:
 
 ![Supabase SQL Editor](../../public/assets/SupabaseSQLEditor.png)
 
 These two scripts can be run in any order:
 
 -   [Storage Bucket Policies](https://github.com/brandongregoryscott/beets/blob/main/src/scripts/storage_buckets_policies.sql)
-    -   This script adds a [RLS (Row-Level Security)](https://supabase.com/docs/guides/auth/row-level-security) permission entry for anyone to read information from the `storage.buckets` table. More granular permissioning is added in the [Storage File Policies](https://github.com/brandongregoryscott/beets/blob/main/src/scripts/storage_file_policies.sql) script.
+    -   Creates the `samples` bucket
+    -   Adds a [RLS (Row-Level Security)](https://supabase.com/docs/guides/auth/row-level-security) permission entry for anyone to read information from the `storage.buckets` table.
+        -   More granular permissioning is added in the [Storage File Policies](https://github.com/brandongregoryscott/beets/blob/main/src/scripts/storage_file_policies.sql) script.
 -   [Storage File Policies](https://github.com/brandongregoryscott/beets/blob/main/src/scripts/storage_file_policies.sql)
     -   Adds the following [RLS (Row-Level Security)](https://supabase.com/docs/guides/auth/row-level-security) permissions:
         -   Restricts file creation to authenticated users only.
         -   Restricts file deletion to the file's owner only.
         -   Restricts file reads to the file's owner OR for any file in the `public` directory, which is used to hold public samples for the demo project.
+
+#### Upload Public Samples
+
+There are a few samples that are provided in the `public` directory of the `samples` bucket to allow unauthenticated users to experiment with the demo project. These samples were purchased from [Samplified](https://samplified.us/) and should not be considered free - please go support them and purchase their packs if you like these sounds!
+
+The samples that are currently available in the demo project/unauthenticated version of the app are located in the repo at [assets/public-samples](https://github.com/brandongregoryscott/beets/blob/main/assets/public-samples).
+
+These samples can be uploaded in the Supabase UI. Navigate to the Storage section of your Supabase account at `https://app.supabase.io/project/{your-project-id}/storage` and click on your `samples` bucket created from the earlier steps.
+
+![Supabase Storage Bucket](../../public/assets/SupabaseStorageBucket.png)
+
+From there, click the `Create Folder` button and enter the name `public`. This folder has special permissions so that anyone (even unauthenticated users) can read from it.
+
+Once the folder has been created, click into it. You should be able to drag and drop the samples into this area to upload them.
+
+![Supabase Storage Bucket Public folder](../../public/assets/SupabaseStorageBucketPublic.png)
+
+### Migrating the Database
+
+Database migrations are managed in code via [`node-pg-migrate`](https://salsita.github.io/node-pg-migrate). It uses the [DATABASE_URL](#database_url) environment variable to connect to your Supabase database.
 
 #### Run Migrations
 
@@ -95,4 +134,12 @@ To ensure your database is up-to-date, there's an `npm` script that transpiles a
 
 ```
 npm run migrations:up
+```
+
+### Start the App
+
+You should now be ready to run the app! In your terminal, run:
+
+```
+npm start
 ```

@@ -81,7 +81,7 @@ const defaultComponents: MarkdownComponentMap = {
         />
     ),
     li: (props) => <ListItem {...omitIs(props, "ordered")} />,
-    p: (props) => <Paragraph {...omitIs(props)} />,
+    p: (props) => <Paragraph {...omitIs(props)} marginBottom={majorScale(1)} />,
     ul: (props) => <UnorderedList {...omitIs(props, "ordered")} />,
     code: (props) => <Code {...omitIs(props, "inline")} size={300} />,
 };
