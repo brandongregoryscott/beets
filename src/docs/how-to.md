@@ -2,6 +2,27 @@
 
 This section of the guide details individual features and functionality of the app. If you find the information is lacking or inaccurate, or you'd like to propose a new section, [please open up an issue](https://github.com/brandongregoryscott/beets/issues/new) or [shoot me an email](mailto:contact@brandonscott.me). I'll do my best to respond and add documentation or assist where possible!
 
+## Table of Contents
+
+-   [Workstation](#workstation)
+    -   [Export Project](#export-project)
+    -   [Export Dialog](#export-dialog)
+-   [File](#file)
+    -   [Renaming a File](#renaming-a-file)
+-   [Track](#track)
+    -   [Creating a Track](#creating-a-track)
+    -   [Naming a Track](#naming-a-track)
+    -   [Moving a Track](#moving-a-track)
+-   [Track Section](#track-section)
+    -   [Creating a Track Section](#creating-a-track-section)
+    -   [Moving a Track Section](#moving-a-track-section)
+    -   [Duplicating a Track Section](#duplicating-a-track-section)
+-   [Instrument](#instrument)
+    -   [Creating an Instrument](#creating-an-instrument)
+-   [Sequencer](#sequencer)
+    -   [Adding Steps](#adding-steps)
+    -   [Removing Steps](#removing-steps)
+
 ## Workstation
 
 ### Export Project
@@ -93,11 +114,18 @@ For additional information, see [Overview - Sequencer](./overview#sequener)
 
 ### Adding Steps
 
-1. To add steps, first select one or more samples from the dropdown menu.
-   ![Select samples in Sequencer Dialog](../../public/assets/SequencerSelectSamples.png)
-1. Once at least one sample is selected, click on a tile. Up to 4 samples can be assigned to one tile.
-   ![Assign samples in Sequencer Dialog](../../public/assets/SequencerSelectAssignSamples.gif)
-    - If a sample has already been assigned to a tile, it will not be readded. However, any additional samples that are currently selected will be added to the tile when clicked.
-1. To remove a sample, click on its name within the tile. You do not need to have any samples selected, and having samples selected will not add them to the tile when removing a sample.
+To add steps, first select one or more samples from the dropdown menu.
 
-    ![Remove samples in Sequencer Dialog](../../public/assets/SequencerRemoveSamples.gif)
+![Select samples in Sequencer Dialog](../../public/assets/SequencerSelectSamples.png)
+
+Once at least one sample is selected, click on a tile. Up to 4 samples can be assigned to one tile.
+
+![Assign samples in Sequencer Dialog](../../public/assets/SequencerSelectAssignSamples.gif)
+
+> If a sample has already been assigned to a tile, it will not be readded. However, any additional samples that are currently selected will be added to the tile when clicked.
+
+### Removing Steps
+
+To remove a sample, click on its name within the tile. You do not need to have any samples selected, and having samples selected will not add them to the tile when removing a sample.
+
+![Remove samples in Sequencer Dialog](../../public/assets/SequencerRemoveSamples.gif)
