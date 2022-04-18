@@ -1,5 +1,6 @@
 import { useQuery } from "utils/hooks/use-query";
 import OverviewMarkdown from "docs/overview.md";
+import ContributingMarkdown from "docs/contributing.md";
 import HowToMarkdown from "docs/how-to.md";
 import { HelpResource } from "enums/help-resource";
 
@@ -29,8 +30,13 @@ const useHelpDocs = (options?: UseHelpDocsOptions): UseHelpDocsResult => {
 
 const resourceToModule = (
     resource: HelpResource
-): typeof OverviewMarkdown | typeof HowToMarkdown => {
+):
+    | typeof OverviewMarkdown
+    | typeof HowToMarkdown
+    | typeof ContributingMarkdown => {
     switch (resource) {
+        case HelpResource.Contributing:
+            return ContributingMarkdown;
         case HelpResource.HowTo:
             return HowToMarkdown;
         case HelpResource.Overview:

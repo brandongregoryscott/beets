@@ -1,6 +1,7 @@
 const Sitemap = {
     help: {
         home: "help",
+        contributing: "contributing",
         overview: "overview",
         howTo: "how-to",
     },

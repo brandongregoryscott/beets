@@ -18,18 +18,19 @@ import { RouteDefinition } from "interfaces/route-definition";
 import { RouteMap as GenericRouteMap } from "interfaces/route-map";
 import { InstrumentsPage } from "components/pages/instruments-page";
 import { HelpLayout } from "components/layouts/help-layout";
-import { OverviewPage } from "components/pages/overview-page";
 import { HelpResource } from "enums/help-resource";
 import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
-import { HowToPage } from "components/pages/how-to-page";
+import { HelpPage } from "components/pages/help-page";
 
 export interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
         children: {
             help: RouteDefinition & {
                 children: {
-                    usage: RouteDefinition;
+                    contributing: RouteDefinition;
+                    howTo: RouteDefinition;
+                    overview: RouteDefinition;
                 };
             };
             library: RouteDefinition & {
@@ -63,13 +64,20 @@ const Routes: RouteMap = {
                 path: Sitemap.help.home,
                 redirects: [{ to: Sitemap.help.overview }],
                 children: {
-                    usage: {
-                        element: <OverviewPage />,
+                    contributing: {
+                        element: (
+                            <HelpPage resource={HelpResource.Contributing} />
+                        ),
+                        name: HelpResource.Contributing,
+                        path: Sitemap.help.contributing,
+                    },
+                    overview: {
+                        element: <HelpPage resource={HelpResource.Overview} />,
                         name: HelpResource.Overview,
                         path: Sitemap.help.overview,
                     },
                     howTo: {
-                        element: <HowToPage />,
+                        element: <HelpPage resource={HelpResource.HowTo} />,
                         name: HelpResource.HowTo,
                         path: Sitemap.help.howTo,
                     },

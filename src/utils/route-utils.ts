@@ -28,7 +28,7 @@ const matchRoutes = (
     return reactRouterMatchRoutes(routeObjects, location);
 };
 
-const toPathCase = (path: string) => path.replace(" ", "-").toLowerCase();
+const toPathCase = (path: string) => path.replace(/ /g, "-").toLowerCase();
 
 const toRouteObject = (route: RouteDefinition): RouteObject => {
     const { path, element, children: childRouteDefinitions } = route ?? {};

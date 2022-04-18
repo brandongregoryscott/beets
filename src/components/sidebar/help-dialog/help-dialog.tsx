@@ -11,6 +11,8 @@ import {
     majorScale,
     ShareIcon,
     Pane,
+    Tooltip,
+    CircleArrowUpIcon,
 } from "evergreen-ui";
 import { Markdown, MarkdownComponentMap } from "components/markdown";
 import { Flex } from "components/flex";
@@ -23,13 +25,14 @@ import { absolutePath, joinPaths, toPathCase } from "utils/route-utils";
 import { HelpDialogLink } from "components/sidebar/help-dialog/help-dialog-link";
 import { omitIs } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
+import { HelpResourceTabs } from "constants/help-resource-tabs";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
-const tabs = [HelpResource.Overview, HelpResource.HowTo];
-
 const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     const { onCloseComplete } = props;
+    const { colors } = useTheme();
     const contentContainerRef = useRef<HTMLDivElement | null>(null);
     const [selectedTab, setSelectedTab] = useState<HelpResource>(
         HelpResource.Overview
@@ -37,12 +40,17 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
     const { isLoading, content } = useHelpDocs({ resource: selectedTab });
     const sharePath = joinPaths(Sitemap.help.home, selectedTab);
+
+    const handleReturnToTop = useCallback(() => {
+        contentContainerRef.current?.scrollTo({ top: 0 });
+    }, []);
+
     const handleTabSelected = useCallback(
         (tab: HelpResource) => () => {
             setSelectedTab(tab);
-            contentContainerRef.current?.scrollTo({ top: 0 });
+            handleReturnToTop();
         },
-        []
+        [handleReturnToTop]
     );
 
     return (
@@ -60,7 +68,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
             header={({ close }) => (
                 <Flex.Row alignItems="center" width="100%">
                     <Tablist>
-                        {tabs.map((tab) => (
+                        {HelpResourceTabs.map((tab) => (
                             <Tab
                                 isSelected={tab === selectedTab}
                                 key={tab}
@@ -107,6 +115,19 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
                     </Markdown>
                 </Pane>
             )}
+            <Pane
+                bottom={majorScale(1)}
+                position="absolute"
+                right={majorScale(3)}>
+                <Tooltip content="Return to top">
+                    <IconButton
+                        appearance="minimal"
+                        background={colors.white}
+                        icon={CircleArrowUpIcon}
+                        onClick={handleReturnToTop}
+                    />
+                </Tooltip>
+            </Pane>
         </Dialog>
     );
 };
