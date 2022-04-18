@@ -30,7 +30,7 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
             order: SortOrder.DESC,
         },
     });
-    const { value: nameFilter, ...textInputProps } = useInput();
+    const { value: nameFilter, onChange: handleNameFilterChange } = useInput();
     const { resultObject: files, isLoading: isLoadingFiles } = useListFiles({
         filter: (query) => {
             if (isEmpty(nameFilter)) {
@@ -53,9 +53,9 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
     return (
         <Flex.Column>
             <TextInputField
-                {...textInputProps}
                 label="Filter by name"
                 marginBottom={majorScale(2)}
+                onChange={handleNameFilterChange}
                 value={nameFilter}
                 width={majorScale(40)}
             />
