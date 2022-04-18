@@ -21,6 +21,8 @@ This section of the guide details how to setup the app for local development and
 
 ## Getting Started
 
+This section outlines the steps to get the app running locally and pointing against your own instance of Supabase. I have not had much luck with running a local version of Supabase with Docker, but this section of the guide may be updated in the future if this process becomes easier. For now, you'll need to create an account and configure a project for beets.
+
 ### Prerequisites
 
 -   [`npm`](https://www.npmjs.com/) v7 and [`node`](https://nodejs.org/) v14.18 installed
