@@ -10,6 +10,7 @@ import {
     MaximizeIcon,
     majorScale,
     ShareIcon,
+    Pane,
 } from "evergreen-ui";
 import { Markdown, MarkdownComponentMap } from "components/markdown";
 import { Flex } from "components/flex";
@@ -94,11 +95,16 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
             width={isFullscreen ? "100%" : undefined}>
             {isLoading && <Spinner />}
             {!isLoading && (
-                <Markdown
-                    components={getComponentMap(selectedTab, setSelectedTab)}
-                    transformLinkUri={transformLinkUri(selectedTab)}>
-                    {content}
-                </Markdown>
+                <Pane maxWidth={isFullscreen ? majorScale(90) : undefined}>
+                    <Markdown
+                        components={getComponentMap(
+                            selectedTab,
+                            setSelectedTab
+                        )}
+                        transformLinkUri={transformLinkUri(selectedTab)}>
+                        {content}
+                    </Markdown>
+                </Pane>
             )}
         </Dialog>
     );

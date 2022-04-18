@@ -59,7 +59,7 @@ const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
                         </Tab>
                     ))}
                 </TabNavigation>
-                <Pane margin={majorScale(2)}>
+                <Pane margin={majorScale(2)} maxWidth={majorScale(90)}>
                     <Outlet />
                 </Pane>
             </Pane>

@@ -2,23 +2,37 @@
 
 This guide will serve as high-level documentation for the various different pages, features, and domain terms in the application. If you find the information is lacking or inaccurate, or you'd like to propose a new section, [please open up an issue](https://github.com/brandongregoryscott/beets/issues/new) or [shoot me an email](mailto:contact@brandonscott.me). I'll do my best to respond and add documentation or assist where possible!
 
-### Workstation page
+## Table of Contents
+
+-   [Workstation page](#workstation-page)
+-   [Workstation](#workstation)
+-   [Project](#project)
+    -   [Track](#track)
+        -   [Piano Roll](#piano-roll)
+        -   [Sequencer](#sequencer)
+    -   [Track Section](#track-section)
+    -   [Track Section Step](#track-section-step)
+-   [Library](#library)
+    -   [File](#file)
+    -   [Instrument](#instrument)
+-   [Terms and Controls](#terms-and-controls)
+    -   [BPM](#bpm)
+    -   [Swing](#swing)
+    -   [Volume](#volume)
+    -   [Mute](#mute)
+    -   [Solo](#solo)
+
+## Workstation page
 
 -   Refers to the page on initial site load. This page holds audio controls and UI components for building out your project.
 
 ![Workstation page](../../public/assets/WorkstationPage.png)
 
-### Workstation
+## Workstation
 
 -   Data structure that contains persisted entities that make up a song: a [Project](#project), [Tracks](#track), [Track Sections](#track-section), and [Track Section Steps](#track-section-step). A Workstation is not persisted, but acts as a 1:1 container to a [Project](#project)
 
-### Library
-
--   Refers to the pages of the site for [File](#file) and [Instrument](#instrument) management. It can be accessed via the music note icon on the sidebar.
-
-![Library page](../../public/assets/Library.png)
-
-### Project
+## Project
 
 -   Container for parts of a musical composition. Has a name, [BPM](#bpm), [swing](#swing) and global [volume](#volume) values.
 -   Projects are private and only available for registered users.
@@ -35,6 +49,22 @@ This guide will serve as high-level documentation for the various different page
 
 ![Track component](../../public/assets/Track.png)
 
+#### Piano Roll
+
+-   Dialog that can be used to program in [Track Section Steps](#track-section-step) for an [Instrument](#instrument) type [Track's](#track) [Track Section](#track-section). It can be opened by hovering over a [Track Section](#track-section) and clicking the middle button:
+
+    ![Open Piano Roll Dialog](../../public/assets/OpenPianoRoll.png)
+
+    ![Piano Roll Dialog](../../public/assets/PianoRoll.png)
+
+#### Sequencer
+
+-   Dialog that can be used to program in [Track Section Steps](#track-section-step) for a given [Track Section](#track-section). It can be opened by hovering over a [Track Section](#track-section) and clicking the middle button:
+
+    ![Open Sequencer Dialog](../../public/assets/OpenSequencer.png)
+
+    ![Sequencer Dialog](../../public/assets/Sequencer.png)
+
 ### Track Section
 
 -   Collection of steps or notes of audio. Depending on the [Track](#track) type, these steps are added via the [Piano Roll](#piano-roll) or [Sequencer](#sequencer) dialogs.
@@ -47,6 +77,12 @@ This guide will serve as high-level documentation for the various different page
 
 ![Track Section Step components](../../public/assets/TrackSectionStep.png)
 
+## Library
+
+-   Refers to the pages of the site for [File](#file) and [Instrument](#instrument) management. It can be accessed via the music note icon on the sidebar.
+
+![Library page](../../public/assets/Library.png)
+
 ### File
 
 -   An uploaded music sample.
@@ -58,21 +94,7 @@ This guide will serve as high-level documentation for the various different page
 -   A persisted configuration for a sampled instrument. This allows you to set the root note, its duration, the release time, and curve of the sample.
 -   Samples that are configured as instruments can be pitched up or down in the [Piano Roll](#piano-roll) component, whereas standard [Sequencer](#sequencer) [Tracks](#track) cannot be.
 
-### Piano Roll
-
--   Dialog that can be used to program in [Track Section Steps](#track-section-step) for an [Instrument](#instrument) type [Track's](#track) [Track Section](#track-section). It can be opened by hovering over a [Track Section](#track-section) and clicking the middle button:
-
-    ![Open Piano Roll Dialog](../../public/assets/OpenPianoRoll.png)
-
-    ![Piano Roll Dialog](../../public/assets/PianoRoll.png)
-
-### Sequencer
-
--   Dialog that can be used to program in [Track Section Steps](#track-section-step) for a given [Track Section](#track-section). It can be opened by hovering over a [Track Section](#track-section) and clicking the middle button:
-
-    ![Open Sequencer Dialog](../../public/assets/OpenSequencer.png)
-
-    ![Sequencer Dialog](../../public/assets/Sequencer.png)
+## Terms and Controls
 
 ### BPM
 
