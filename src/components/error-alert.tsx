@@ -1,7 +1,8 @@
+import { ApiError } from "@supabase/supabase-js";
 import { Alert, majorScale } from "evergreen-ui";
 
 interface ErrorAlertProps {
-    error?: Error | null;
+    error?: ApiError | Error | null;
 }
 
 const ErrorAlert: React.FC<ErrorAlertProps> = (props: ErrorAlertProps) => {
