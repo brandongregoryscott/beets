@@ -4,6 +4,7 @@ import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import { SortOptions } from "interfaces/sort-options";
 
 interface UseListProjectsOptions {
     enabled?: boolean;
@@ -13,6 +14,7 @@ interface UseListProjectsOptions {
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: ProjectRecord[]) => void;
+    sortBy?: SortOptions<Project>;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<Project>) => query;
@@ -27,10 +29,17 @@ const useListProjects = (
         key = [],
         onError,
         onSuccess,
+        sortBy,
     } = options ?? {};
 
     const list = async () => {
-        const query = fromProjects().select("*");
+        let query = fromProjects().select("*");
+        if (sortBy != null) {
+            query = query.order(sortBy.column, {
+                ascending: sortBy.order === "asc",
+            });
+        }
+
         const { data, error } = await filter(query);
         if (error != null) {
             throw error;
@@ -41,7 +50,7 @@ const useListProjects = (
 
     const result = useQuery<ProjectRecord[], Error>({
         enabled,
-        key: [Tables.Projects, ...key],
+        key: [Tables.Projects, sortBy, ...key],
         fn: list,
         onError,
         onSuccess,

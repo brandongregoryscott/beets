@@ -17,6 +17,7 @@ import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
 import { Paths } from "../constants/paths";
+import { kebabCase } from "lodash";
 
 const {
     defaultFilter,
@@ -25,6 +26,8 @@ const {
     key,
     onError,
     onSuccess,
+    sortBy,
+    SortOptions,
     SupabaseClient,
 } = Variables;
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
@@ -77,6 +80,11 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         moduleSpecifier: "@supabase/postgrest-js",
     });
 
+    file.addImportDeclaration({
+        namedImports: [SortOptions],
+        moduleSpecifier: `interfaces/${kebabCase(SortOptions)}`,
+    });
+
     file.addInterface({
         name: getHookOptionsInterfaceName(property, HookAction.List),
         properties: [
@@ -104,6 +112,11 @@ const generateUseList = (project: Project, property: PropertySignature) => {
                 name: onSuccess,
                 hasQuestionToken: true,
                 type: `(resultObjects: ${typeName}[]) => void`,
+            },
+            {
+                name: sortBy,
+                hasQuestionToken: true,
+                type: `${SortOptions}<${interfaceName}>`,
             },
         ],
     });
@@ -152,11 +165,16 @@ const getInitializer = (property: PropertySignature, useRecord: boolean) => {
             ${filter} = ${defaultFilter},
             ${key} = [],
             ${onError},
-            ${onSuccess}
+            ${onSuccess},
+            ${sortBy},
         } = options ?? {};
 
         const list = async () => {
-            const query = ${fromTable}().select("*");
+            let query = ${fromTable}().select("*");
+            if (${sortBy} != null) {
+                query = query.order(sortBy.column, { ascending: ${sortBy}.order === "asc" })
+            }
+
             const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
@@ -167,7 +185,7 @@ const getInitializer = (property: PropertySignature, useRecord: boolean) => {
 
         const result = ${useQuery}<${returnType}[], Error>({
             ${enabled},
-            key: [${getTablesEnumValue(property)}, ...${key}],
+            key: [${getTablesEnumValue(property)}, ${sortBy}, ...${key}],
             fn: list,
             ${onError},
             ${onSuccess},

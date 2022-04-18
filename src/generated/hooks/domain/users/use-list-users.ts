@@ -4,6 +4,7 @@ import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import { SortOptions } from "interfaces/sort-options";
 
 interface UseListUsersOptions {
     enabled?: boolean;
@@ -13,6 +14,7 @@ interface UseListUsersOptions {
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: UserRecord[]) => void;
+    sortBy?: SortOptions<User>;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<User>) => query;
@@ -27,10 +29,17 @@ const useListUsers = (
         key = [],
         onError,
         onSuccess,
+        sortBy,
     } = options ?? {};
 
     const list = async () => {
-        const query = fromUsers().select("*");
+        let query = fromUsers().select("*");
+        if (sortBy != null) {
+            query = query.order(sortBy.column, {
+                ascending: sortBy.order === "asc",
+            });
+        }
+
         const { data, error } = await filter(query);
         if (error != null) {
             throw error;
@@ -41,7 +50,7 @@ const useListUsers = (
 
     const result = useQuery<UserRecord[], Error>({
         enabled,
-        key: [Tables.Users, ...key],
+        key: [Tables.Users, sortBy, ...key],
         fn: list,
         onError,
         onSuccess,

@@ -4,6 +4,7 @@ import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import { SortOptions } from "interfaces/sort-options";
 
 interface UseListTrackSectionsOptions {
     enabled?: boolean;
@@ -13,6 +14,7 @@ interface UseListTrackSectionsOptions {
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackSectionRecord[]) => void;
+    sortBy?: SortOptions<TrackSection>;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<TrackSection>) => query;
@@ -27,10 +29,17 @@ const useListTrackSections = (
         key = [],
         onError,
         onSuccess,
+        sortBy,
     } = options ?? {};
 
     const list = async () => {
-        const query = fromTrackSections().select("*");
+        let query = fromTrackSections().select("*");
+        if (sortBy != null) {
+            query = query.order(sortBy.column, {
+                ascending: sortBy.order === "asc",
+            });
+        }
+
         const { data, error } = await filter(query);
         if (error != null) {
             throw error;
@@ -44,7 +53,7 @@ const useListTrackSections = (
 
     const result = useQuery<TrackSectionRecord[], Error>({
         enabled,
-        key: [Tables.TrackSections, ...key],
+        key: [Tables.TrackSections, sortBy, ...key],
         fn: list,
         onError,
         onSuccess,

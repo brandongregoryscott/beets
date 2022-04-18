@@ -10,11 +10,10 @@ import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 import { Button, majorScale, Spinner, TextInputField } from "evergreen-ui";
 import React, { useCallback, useState } from "react";
 import { useInput } from "utils/hooks/use-input";
-import { flatMap, isEmpty, kebabCase } from "lodash";
+import { isEmpty } from "lodash";
 import { SortOptions } from "interfaces/sort-options";
 import { File } from "generated/interfaces/file";
 import { SelectMenu, SelectMenuItem } from "components/select-menu";
-import { titleCase } from "humanize-plus";
 import { formatSortOptionLabel, toSortOptions } from "utils/select-menu-utils";
 import { FormField } from "components/forms/form-field";
 
@@ -41,10 +40,6 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
     } = useListStorageProviderFiles({
         bucketName,
         path: globalState.userId(),
-        sortBy: {
-            column: "created_at",
-            order: SortOrder.DESC,
-        },
     });
     const [sortBy, setSortBy] = useState<SortOptions<File>>({
         column: "created_on",
@@ -60,12 +55,13 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
             return query.ilike("name", `%${nameFilter}%`);
         },
         key: [nameFilter],
+        sortBy,
     });
     useTimeoutRender();
 
     const groupedFiles = groupBy(
-        storageProviderFiles,
         files,
+        storageProviderFiles,
         (a, b) => a.id === b.id
     );
     const isLoading = isLoadingFiles || isLoadingStorageProviderFiles;
@@ -108,7 +104,7 @@ const FileList: React.FC<FileListProps> = (props: FileListProps) => {
             <Flex.Row flexWrap="wrap" width="100%">
                 {isLoading && <Spinner />}
                 {groupedFiles.map(
-                    ({ left: storageProviderFile, right: file }) => (
+                    ({ left: file, right: storageProviderFile }) => (
                         <FileCard
                             file={file}
                             key={file.id}
