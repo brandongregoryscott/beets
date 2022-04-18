@@ -116,10 +116,7 @@ const generateUseCreateOrUpdate = (
         declarations: [
             {
                 name,
-                initializer: useCreateOrUpdateInitializer(
-                    property,
-                    recordSourceFile != null
-                ),
+                initializer: getInitializer(property, recordSourceFile != null),
             },
         ],
     });
@@ -129,10 +126,7 @@ const generateUseCreateOrUpdate = (
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useCreateOrUpdateInitializer = (
-    property: PropertySignature,
-    useRecord: boolean
-) => {
+const getInitializer = (property: PropertySignature, useRecord: boolean) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);

@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "../log";
 import {
@@ -19,7 +18,7 @@ import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
 import { Paths } from "../constants/paths";
 
-const { enabled, id, SupabaseClient } = Variables;
+const { enabled, id, key, SupabaseClient } = Variables;
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 
 const generateUseGet = (project: Project, property: PropertySignature) => {
@@ -74,6 +73,11 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
                 hasQuestionToken: false,
                 type: "string",
             },
+            {
+                name: key,
+                hasQuestionToken: true,
+                type: "any[]",
+            },
         ],
     });
 
@@ -82,10 +86,7 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useGetInitializer(
-                    property,
-                    recordSourceFile != null
-                ),
+                initializer: getInitializer(property, recordSourceFile != null),
             },
         ],
     });
@@ -95,7 +96,7 @@ const generateUseGet = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
+const getInitializer = (property: PropertySignature, useRecord: boolean) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
@@ -107,7 +108,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
     const returnValue = !useRecord ? "data" : `new ${recordName}(data)`;
     return `(options: ${optionsInterfaceName}): ${UseQueryResult}<${returnType}, Error> => {
         const { ${fromTable} } = ${SupabaseClient};
-        const { ${id}, ${enabled} } = options;
+        const { ${id}, ${enabled}, ${key} = [] } = options;
 
         const get = async () => {
             const query = ${fromTable}()
@@ -129,7 +130,7 @@ const useGetInitializer = (property: PropertySignature, useRecord: boolean) => {
 
         const result = ${useQuery}<${returnType}, Error>({
             ${enabled},
-            key: [${getTablesEnumValue(property)}, id],
+            key: [${getTablesEnumValue(property)}, id, ...${key}],
             fn: get,
         });
 

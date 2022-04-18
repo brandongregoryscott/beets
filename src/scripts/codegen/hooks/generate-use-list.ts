@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "../log";
 import {
@@ -18,9 +17,19 @@ import { Hooks } from "../constants/hooks";
 import { HookAction } from "../enums/hook-action";
 import { Variables } from "../constants/variables";
 import { Paths } from "../constants/paths";
+import { kebabCase } from "lodash";
 
-const { defaultFilter, enabled, filter, onError, onSuccess, SupabaseClient } =
-    Variables;
+const {
+    defaultFilter,
+    enabled,
+    filter,
+    key,
+    onError,
+    onSuccess,
+    sortBy,
+    SortOptions,
+    SupabaseClient,
+} = Variables;
 const PostgrestFilterBuilder = "PostgrestFilterBuilder";
 const { interfaceName: UseQueryResult, name: useQuery } = Hooks.useQuery;
 
@@ -71,6 +80,11 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         moduleSpecifier: "@supabase/postgrest-js",
     });
 
+    file.addImportDeclaration({
+        namedImports: [SortOptions],
+        moduleSpecifier: `interfaces/${kebabCase(SortOptions)}`,
+    });
+
     file.addInterface({
         name: getHookOptionsInterfaceName(property, HookAction.List),
         properties: [
@@ -85,6 +99,11 @@ const generateUseList = (project: Project, property: PropertySignature) => {
                 type: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => ${PostgrestFilterBuilder}<${interfaceName}>`,
             },
             {
+                name: key,
+                hasQuestionToken: true,
+                type: "any[]",
+            },
+            {
                 name: onError,
                 hasQuestionToken: true,
                 type: "(error: Error) => void",
@@ -93,6 +112,11 @@ const generateUseList = (project: Project, property: PropertySignature) => {
                 name: onSuccess,
                 hasQuestionToken: true,
                 type: `(resultObjects: ${typeName}[]) => void`,
+            },
+            {
+                name: sortBy,
+                hasQuestionToken: true,
+                type: `${SortOptions}<${interfaceName}>`,
             },
         ],
     });
@@ -112,10 +136,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name,
-                initializer: useListInitializer(
-                    property,
-                    recordSourceFile != null
-                ),
+                initializer: getInitializer(property, recordSourceFile != null),
             },
         ],
     });
@@ -125,10 +146,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
     log.info(`Writing hook '${name}' to ${file.getBaseName()}...`);
 };
 
-const useListInitializer = (
-    property: PropertySignature,
-    useRecord: boolean
-) => {
+const getInitializer = (property: PropertySignature, useRecord: boolean) => {
     const interfaceName = getInterfaceName(property);
     const recordName = getRecordName(property);
     const fromTable = getFromFunctionName(property);
@@ -145,12 +163,18 @@ const useListInitializer = (
         const {
             ${enabled},
             ${filter} = ${defaultFilter},
+            ${key} = [],
             ${onError},
-            ${onSuccess}
+            ${onSuccess},
+            ${sortBy},
         } = options ?? {};
 
         const list = async () => {
-            const query = ${fromTable}().select("*");
+            let query = ${fromTable}().select("*");
+            if (${sortBy} != null) {
+                query = query.order(sortBy.column, { ascending: ${sortBy}.order === "asc" })
+            }
+
             const { data, error } = await filter(query);
             if (error != null) {
                 throw error;
@@ -161,7 +185,7 @@ const useListInitializer = (
 
         const result = ${useQuery}<${returnType}[], Error>({
             ${enabled},
-            key: ${getTablesEnumValue(property)},
+            key: [${getTablesEnumValue(property)}, ${sortBy}, ...${key}],
             fn: list,
             ${onError},
             ${onSuccess},

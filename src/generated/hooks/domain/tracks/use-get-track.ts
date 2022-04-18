@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetTrackOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetTrack = (
     options: UseGetTrackOptions
 ): UseQueryResult<TrackRecord | undefined, Error> => {
     const { fromTracks } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromTracks().select("*").eq("id", id).limit(1).single();
@@ -30,7 +31,7 @@ const useGetTrack = (
 
     const result = useQuery<TrackRecord | undefined, Error>({
         enabled,
-        key: [Tables.Tracks, id],
+        key: [Tables.Tracks, id, ...key],
         fn: get,
     });
 

@@ -4,14 +4,17 @@ import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import { SortOptions } from "interfaces/sort-options";
 
 interface UseListTracksOptions {
     enabled?: boolean;
     filter?: (
         query: PostgrestFilterBuilder<Track>
     ) => PostgrestFilterBuilder<Track>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackRecord[]) => void;
+    sortBy?: SortOptions<Track>;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<Track>) => query;
@@ -23,12 +26,20 @@ const useListTracks = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
+        sortBy,
     } = options ?? {};
 
     const list = async () => {
-        const query = fromTracks().select("*");
+        let query = fromTracks().select("*");
+        if (sortBy != null) {
+            query = query.order(sortBy.column, {
+                ascending: sortBy.order === "asc",
+            });
+        }
+
         const { data, error } = await filter(query);
         if (error != null) {
             throw error;
@@ -39,7 +50,7 @@ const useListTracks = (
 
     const result = useQuery<TrackRecord[], Error>({
         enabled,
-        key: Tables.Tracks,
+        key: [Tables.Tracks, sortBy, ...key],
         fn: list,
         onError,
         onSuccess,

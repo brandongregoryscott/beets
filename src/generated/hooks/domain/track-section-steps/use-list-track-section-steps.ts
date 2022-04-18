@@ -4,14 +4,17 @@ import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import { SortOptions } from "interfaces/sort-options";
 
 interface UseListTrackSectionStepsOptions {
     enabled?: boolean;
     filter?: (
         query: PostgrestFilterBuilder<TrackSectionStep>
     ) => PostgrestFilterBuilder<TrackSectionStep>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackSectionStepRecord[]) => void;
+    sortBy?: SortOptions<TrackSectionStep>;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<TrackSectionStep>) =>
@@ -24,12 +27,20 @@ const useListTrackSectionSteps = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
+        sortBy,
     } = options ?? {};
 
     const list = async () => {
-        const query = fromTrackSectionSteps().select("*");
+        let query = fromTrackSectionSteps().select("*");
+        if (sortBy != null) {
+            query = query.order(sortBy.column, {
+                ascending: sortBy.order === "asc",
+            });
+        }
+
         const { data, error } = await filter(query);
         if (error != null) {
             throw error;
@@ -45,7 +56,7 @@ const useListTrackSectionSteps = (
 
     const result = useQuery<TrackSectionStepRecord[], Error>({
         enabled,
-        key: Tables.TrackSectionSteps,
+        key: [Tables.TrackSectionSteps, sortBy, ...key],
         fn: list,
         onError,
         onSuccess,

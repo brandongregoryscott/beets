@@ -85,8 +85,9 @@ const SelectMenu = <T,>(props: SelectMenuProps<T>) => {
             ).map((selected) => selected.id);
         }
 
-        return optionValues?.find((option) => option.value === selectedValues)
-            ?.id;
+        return optionValues?.find((option) =>
+            isEqual(option.value, selectedValues)
+        )?.id;
     }, [optionValues, selectedValues]);
 
     const handleSelect = useCallback(

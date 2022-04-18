@@ -4,14 +4,17 @@ import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import { SortOptions } from "interfaces/sort-options";
 
 interface UseListFilesOptions {
     enabled?: boolean;
     filter?: (
         query: PostgrestFilterBuilder<File>
     ) => PostgrestFilterBuilder<File>;
+    key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: FileRecord[]) => void;
+    sortBy?: SortOptions<File>;
 }
 
 const defaultFilter = (query: PostgrestFilterBuilder<File>) => query;
@@ -23,12 +26,20 @@ const useListFiles = (
     const {
         enabled,
         filter = defaultFilter,
+        key = [],
         onError,
         onSuccess,
+        sortBy,
     } = options ?? {};
 
     const list = async () => {
-        const query = fromFiles().select("*");
+        let query = fromFiles().select("*");
+        if (sortBy != null) {
+            query = query.order(sortBy.column, {
+                ascending: sortBy.order === "asc",
+            });
+        }
+
         const { data, error } = await filter(query);
         if (error != null) {
             throw error;
@@ -39,7 +50,7 @@ const useListFiles = (
 
     const result = useQuery<FileRecord[], Error>({
         enabled,
-        key: Tables.Files,
+        key: [Tables.Files, sortBy, ...key],
         fn: list,
         onError,
         onSuccess,

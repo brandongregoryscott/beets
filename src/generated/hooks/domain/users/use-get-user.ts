@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetUserOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetUser = (
     options: UseGetUserOptions
 ): UseQueryResult<UserRecord | undefined, Error> => {
     const { fromUsers } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromUsers().select("*").eq("id", id).limit(1).single();
@@ -30,7 +31,7 @@ const useGetUser = (
 
     const result = useQuery<UserRecord | undefined, Error>({
         enabled,
-        key: [Tables.Users, id],
+        key: [Tables.Users, id, ...key],
         fn: get,
     });
 

@@ -6,13 +6,14 @@ import { useQuery, UseQueryResult } from "utils/hooks/use-query";
 interface UseGetTrackSectionStepOptions {
     enabled?: boolean;
     id: string;
+    key?: any[];
 }
 
 const useGetTrackSectionStep = (
     options: UseGetTrackSectionStepOptions
 ): UseQueryResult<TrackSectionStepRecord | undefined, Error> => {
     const { fromTrackSectionSteps } = SupabaseClient;
-    const { id, enabled } = options;
+    const { id, enabled, key = [] } = options;
 
     const get = async () => {
         const query = fromTrackSectionSteps()
@@ -34,7 +35,7 @@ const useGetTrackSectionStep = (
 
     const result = useQuery<TrackSectionStepRecord | undefined, Error>({
         enabled,
-        key: [Tables.TrackSectionSteps, id],
+        key: [Tables.TrackSectionSteps, id, ...key],
         fn: get,
     });
 

@@ -35,6 +35,10 @@ const diffUpdatedEntities = <T extends Auditable>(
         })
     );
 
+/**
+ * Groups two collections of entities by the provided comparator. For sorting purposes, the left
+ * collection's order will be retained
+ */
 const groupBy = <TLeft, TRight>(
     left: List<TLeft> | TLeft[] | undefined,
     right: List<TRight> | TRight[] | undefined,

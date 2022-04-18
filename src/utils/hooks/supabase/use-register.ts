@@ -12,7 +12,7 @@ interface SignupResult {
 const useRegister = () => {
     const auth = useAuth();
 
-    const result = useMutation<void, Error, UserCredentials>({
+    const result = useMutation<void, ApiError, UserCredentials>({
         fn: async (credentials: UserCredentials) => {
             const { email, password, redirectTo } = credentials;
             const signUpResult: SignupResult = await auth.signUp(
