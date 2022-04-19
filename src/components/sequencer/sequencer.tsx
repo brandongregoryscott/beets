@@ -7,7 +7,7 @@ import pluralize from "pluralize";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
-import { FileSelectMenu } from "components/file-select-menu";
+import { FileSelectMenu } from "components/files/file-select-menu";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";
 import { useToneAudio } from "utils/hooks/use-tone-audio";

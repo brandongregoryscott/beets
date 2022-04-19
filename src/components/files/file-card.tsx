@@ -15,7 +15,7 @@ import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
-import { FileDialog } from "components/files/file-dialog";
+import { FileSettingsDialog } from "components/files/file-settings-dialog";
 import { Flex } from "components/flex";
 import { IconButton } from "components/icon-button";
 
@@ -104,7 +104,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                 />
             </Flex.Row>
             {isOpen && (
-                <FileDialog
+                <FileSettingsDialog
                     file={file}
                     isShown={isOpen}
                     onCloseComplete={handleCloseDialog}

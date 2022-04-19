@@ -1,30 +1,40 @@
 import { Link, TextInputField } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
-import { useState, ChangeEvent } from "react";
+import { useCallback } from "react";
 import { useUpdateFile } from "utils/hooks/domain/files/use-update-file";
 import { Dialog, DialogProps } from "components/dialog";
+import { useInput } from "utils/hooks/use-input";
+import humanize from "humanize-plus";
 
-interface FileDialogProps
+interface FileSettingsDialogProps
     extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
     file: FileRecord;
     storageProviderFile: StorageProviderFileRecord;
 }
 
-const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
-    const { isShown, onCloseComplete, file: initialFile } = props;
-    const title = "Edit File";
-    const [file, setFile] = useState<FileRecord>(initialFile);
+const title = "Edit File";
+
+const FileSettingsDialog: React.FC<FileSettingsDialogProps> = (
+    props: FileSettingsDialogProps
+) => {
+    const { isShown, onCloseComplete, file } = props;
+    const {
+        value: name,
+        onChange: handleNameChange,
+        validation: nameValidation,
+    } = useInput({ initialValue: file.name, isRequired: true });
     const { mutate: updateFile, isLoading } = useUpdateFile({
         onSettled: onCloseComplete,
     });
 
-    const handleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
-        setFile((prev) => prev.set("name", event.target.value));
+    const handleSave = useCallback(() => {
+        if (nameValidation.isInvalid) {
+            return;
+        }
 
-    const handleSave = () => {
-        updateFile(file);
-    };
+        updateFile(file.merge({ name }));
+    }, [file, name, nameValidation.isInvalid, updateFile]);
 
     return (
         <Dialog
@@ -36,9 +46,10 @@ const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
             shouldCloseOnOverlayClick={false}
             title={title}>
             <TextInputField
+                {...nameValidation}
                 label="Name"
                 onChange={handleNameChange}
-                value={file.name}
+                value={name}
             />
             <TextInputField
                 disabled={true}
@@ -56,7 +67,7 @@ const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
                 disabled={true}
                 label="Size"
                 readOnly={true}
-                value={`${file.size} bytes`}
+                value={humanize.fileSize(file.size!, 0)}
             />
             {file.getPublicUrl() != null && (
                 <Link href={file.getPublicUrl()}>View File</Link>
@@ -65,4 +76,4 @@ const FileDialog: React.FC<FileDialogProps> = (props: FileDialogProps) => {
     );
 };
 
-export { FileDialog };
+export { FileSettingsDialog };
