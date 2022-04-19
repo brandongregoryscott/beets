@@ -23,6 +23,7 @@ import { toDataAttributes } from "utils/data-attribute-utils";
 import { Flex } from "components/flex";
 
 interface PianoRollProps {
+    centerControls?: boolean;
     file?: FileRecord;
     instrument?: InstrumentRecord;
     onChange: (value: List<TrackSectionStepRecord>) => void;
@@ -41,6 +42,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
     const {
         instrument,
         file,
+        centerControls,
         onChange,
         onStepCountChange,
         stepCount,
@@ -74,7 +76,9 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
 
     return (
         <Pane {...toDataAttributes({ stepCount })}>
-            <Pane marginBottom={majorScale(1)}>
+            <Flex.Row
+                justifyContent={centerControls ? "center" : undefined}
+                marginBottom={majorScale(1)}>
                 <PlayButton
                     isLoading={isLoading}
                     isPlaying={isPlaying}
@@ -97,7 +101,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     onChange={onStepCountChange}
                     stepCount={stepCount}
                 />
-            </Pane>
+            </Flex.Row>
             <Flex.Column flexGrow={1} width="100%">
                 <PianoSteps
                     file={file}
