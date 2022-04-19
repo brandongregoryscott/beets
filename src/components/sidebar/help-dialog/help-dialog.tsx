@@ -5,9 +5,6 @@ import {
     Tablist,
     Tab,
     IconButton,
-    CrossIcon,
-    MinimizeIcon,
-    MaximizeIcon,
     majorScale,
     ShareIcon,
     Pane,
@@ -15,7 +12,6 @@ import {
     CircleArrowUpIcon,
 } from "evergreen-ui";
 import { Markdown, MarkdownComponentMap } from "components/markdown";
-import { Flex } from "components/flex";
 import { HelpResource } from "enums/help-resource";
 import { useHelpDocs } from "utils/hooks/use-help-docs";
 import { useBoolean } from "utils/hooks/use-boolean";
@@ -55,18 +51,11 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
 
     return (
         <Dialog
-            containerProps={
-                isFullscreen
-                    ? {
-                          marginY: majorScale(2),
-                          maxHeight: `calc(100% - ${majorScale(4)}px)`,
-                      }
-                    : undefined
-            }
+            allowFullscreen={true}
             contentContainerProps={{ ref: contentContainerRef }}
             hasFooter={false}
-            header={({ close }) => (
-                <Flex.Row alignItems="center" width="100%">
+            header={
+                <React.Fragment>
                     <Tablist>
                         {HelpResourceTabs.map((tab) => (
                             <Tab
@@ -85,23 +74,11 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
                         target="_blank"
                         to={sharePath}
                     />
-                    <IconButton
-                        appearance="minimal"
-                        icon={isFullscreen ? MinimizeIcon : MaximizeIcon}
-                        marginLeft={majorScale(1)}
-                        onClick={handleFullscreenClick}
-                    />
-                    <IconButton
-                        appearance="minimal"
-                        icon={CrossIcon}
-                        marginLeft={majorScale(1)}
-                        onClick={close}
-                    />
-                </Flex.Row>
-            )}
+                </React.Fragment>
+            }
             isShown={true}
             onCloseComplete={onCloseComplete}
-            width={isFullscreen ? "100%" : undefined}>
+            onFullscreenClick={handleFullscreenClick}>
             {isLoading && <Spinner />}
             {!isLoading && (
                 <Pane maxWidth={isFullscreen ? majorScale(90) : undefined}>

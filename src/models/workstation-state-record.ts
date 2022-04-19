@@ -1,3 +1,4 @@
+import { defaultNote } from "constants/midi-notes";
 import { DemoInstrument } from "enums/demo-instrument";
 import { List, Record } from "immutable";
 import { WorkstationState } from "interfaces/workstation-state";
@@ -19,7 +20,6 @@ import {
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
-import { MidiNoteUtils } from "utils/midi-note-utils";
 import { getByTrack } from "utils/track-section-utils";
 
 interface WorkstationStateDiff {
@@ -91,7 +91,7 @@ class WorkstationStateRecord
             index: 0,
             file_id: wavyPad?.id,
             track_section_id: padTrackSection.id,
-            note: MidiNoteUtils.defaultNote,
+            note: defaultNote,
         });
 
         const kickSteps = [

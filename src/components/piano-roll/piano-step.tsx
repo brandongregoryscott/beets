@@ -1,4 +1,5 @@
-import { majorScale, Pane } from "evergreen-ui";
+import { Flex } from "components/flex";
+import { majorScale } from "evergreen-ui";
 import { useCallback } from "react";
 import { MidiNote } from "types/midi-note";
 import { useTheme } from "utils/hooks/use-theme";
@@ -21,13 +22,12 @@ const PianoStep: React.FC<PianoStepProps> = (props: PianoStepProps) => {
     );
 
     return (
-        <Pane
+        <Flex.Row
             alignItems="center"
             background={isSelected ? colors.gray700 : colors.gray300}
             borderWidth={1}
             cursor="pointer"
             data-index={index}
-            display="flex"
             flexGrow={1}
             height={height}
             hoverElevation={1}

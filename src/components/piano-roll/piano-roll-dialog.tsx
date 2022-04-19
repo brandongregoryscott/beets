@@ -7,6 +7,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
 import { InstrumentRecord } from "models/instrument-record";
 import { TrackRecord } from "models/track-record";
+import { useBoolean } from "utils/hooks/use-boolean";
 
 interface PianoRollDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     file?: FileRecord;
@@ -31,6 +32,7 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
         trackSectionSteps: initialValue,
         trackSection,
     } = props;
+    const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
     const [trackSectionSteps, setTrackSectionSteps] =
         useState<List<TrackSectionStepRecord>>(initialValue);
     const [stepCount, setStepCount] = useState<number>(trackSection.step_count);
@@ -53,11 +55,14 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
 
     return (
         <Dialog
+            allowFullscreen={true}
             isShown={true}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
+            onFullscreenClick={handleFullscreenClick}
             title="Piano Roll">
             <PianoRoll
+                centerControls={isFullscreen}
                 file={file}
                 instrument={instrument}
                 onChange={setTrackSectionSteps}

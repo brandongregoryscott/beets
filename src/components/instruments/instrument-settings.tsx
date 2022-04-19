@@ -21,7 +21,6 @@ import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/
 import { useDeleteInstrument } from "generated/hooks/domain/instruments/use-delete-instrument";
 import { isNilOrEmpty } from "utils/core-utils";
 import { useNumberInput } from "utils/hooks/use-number-input";
-import { MidiNoteUtils } from "utils/midi-note-utils";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
 import { DialogFooter } from "components/dialog-footer";
@@ -31,6 +30,7 @@ import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { List } from "immutable";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
+import { defaultNote } from "constants/midi-notes";
 
 interface InstrumentSettingsProps {
     instrument?: InstrumentRecord;
@@ -122,7 +122,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         initialInstrument?.curve ?? InstrumentCurve.Exponential
     );
     const [rootNote, setRootNote] = useState<MidiNote>(
-        (initialInstrument?.root_note as MidiNote) ?? MidiNoteUtils.defaultNote
+        (initialInstrument?.root_note as MidiNote) ?? defaultNote
     );
     const { value: isAttemptingDelete, setTrue: handleDeleteClick } =
         useBoolean();

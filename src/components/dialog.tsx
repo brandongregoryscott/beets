@@ -1,11 +1,24 @@
+import { Flex } from "components/flex";
 import {
+    CrossIcon,
     Dialog as EvergreenDialog,
     DialogProps as EvergreenDialogProps,
+    Heading,
+    IconButton,
+    majorScale,
+    MaximizeIcon,
+    MinimizeIcon,
 } from "evergreen-ui";
-import React from "react";
+import { isFunction } from "lodash";
+import React, { useCallback } from "react";
 import { attachEventSource } from "utils/event-utils";
+import { useBoolean } from "utils/hooks/use-boolean";
 
-interface DialogProps extends EvergreenDialogProps {}
+interface DialogProps extends EvergreenDialogProps {
+    allowFullscreen?: boolean;
+    initialIsFullscreen?: boolean;
+    onFullscreenClick?: () => void;
+}
 
 const defaultProps: Partial<DialogProps> = {
     contentContainerProps: {
@@ -20,8 +33,78 @@ const defaultProps: Partial<DialogProps> = {
 };
 
 const Dialog: React.FC<DialogProps> = (props: DialogProps) => {
-    const { children } = props;
-    return <EvergreenDialog {...props}>{children}</EvergreenDialog>;
+    const {
+        children,
+        containerProps,
+        allowFullscreen = false,
+        header,
+        hasHeader = true,
+        initialIsFullscreen,
+        onFullscreenClick,
+        title,
+        width,
+        ...rest
+    } = props;
+    const { value: isFullscreen, toggle: toggleFullscreen } =
+        useBoolean(initialIsFullscreen);
+
+    const handleFullscreenClick = useCallback(() => {
+        toggleFullscreen();
+        onFullscreenClick?.();
+    }, [onFullscreenClick, toggleFullscreen]);
+
+    return (
+        <EvergreenDialog
+            {...rest}
+            containerProps={
+                allowFullscreen && isFullscreen
+                    ? {
+                          marginY: majorScale(2),
+                          maxHeight: `calc(100% - ${majorScale(4)}px)`,
+                          ...(containerProps ?? {}),
+                      }
+                    : containerProps
+            }
+            header={
+                hasHeader
+                    ? ({ close }) => (
+                          <Flex.Row
+                              alignItems="center"
+                              marginLeft="auto"
+                              width="100%">
+                              {title != null && (
+                                  <Heading flex={1} is="h4" size={600}>
+                                      {title}
+                                  </Heading>
+                              )}
+                              {isFunction(header) && header({ close })}
+                              {header != null && !isFunction(header) && header}
+                              {allowFullscreen && (
+                                  <IconButton
+                                      appearance="minimal"
+                                      icon={
+                                          isFullscreen
+                                              ? MinimizeIcon
+                                              : MaximizeIcon
+                                      }
+                                      marginLeft={majorScale(1)}
+                                      onClick={handleFullscreenClick}
+                                  />
+                              )}
+                              <IconButton
+                                  appearance="minimal"
+                                  icon={CrossIcon}
+                                  marginLeft={majorScale(1)}
+                                  onClick={close}
+                              />
+                          </Flex.Row>
+                      )
+                    : undefined
+            }
+            width={allowFullscreen && isFullscreen ? "100%" : width}>
+            {children}
+        </EvergreenDialog>
+    );
 };
 
 Dialog.defaultProps = defaultProps;

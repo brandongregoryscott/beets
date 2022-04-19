@@ -131,4 +131,6 @@ const MidiNotes: MidiNote[] = [
     "G8",
 ];
 
-export { MidiNotes };
+const defaultNote = "C4";
+
+export { defaultNote, MidiNotes };
