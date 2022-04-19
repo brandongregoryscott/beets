@@ -1,4 +1,4 @@
-import { FileSelectMenuItem } from "components/file-select-menu-item";
+import { FileSelectMenuItem } from "components/files/file-select-menu-item";
 import {
     SelectMenu,
     SelectMenuItem,
@@ -55,11 +55,11 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
             hasFilter={hasFilter}
             hasTitle={hasTitle}
             isMultiSelect={isMultiSelect}
+            itemRenderer={(props) => <FileSelectMenuItem {...props} />}
             onDeselect={handleDeselect}
             onSelect={handleSelect}
             options={options}
             selected={selected}
-            itemRenderer={(props) => <FileSelectMenuItem {...props} />}
             title={title}>
             {isLoading ? (
                 <Pane
