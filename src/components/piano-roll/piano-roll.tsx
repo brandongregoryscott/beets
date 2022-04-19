@@ -14,13 +14,13 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";
-import { MidiNotes } from "constants/midi-notes";
+import { defaultNote, MidiNotes } from "constants/midi-notes";
 import { InstrumentRecord } from "models/instrument-record";
-import { MidiNoteUtils } from "utils/midi-note-utils";
 import { MidiNote } from "types/midi-note";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
 import { toDataAttributes } from "utils/data-attribute-utils";
+import { Flex } from "components/flex";
 
 interface PianoRollProps {
     file?: FileRecord;
@@ -34,7 +34,7 @@ interface PianoRollProps {
 }
 
 const buttonMarginRight = majorScale(1);
-const defaultNoteIndex = MidiNotes.indexOf(MidiNoteUtils.defaultNote);
+const defaultNoteIndex = MidiNotes.indexOf(defaultNote);
 const indexRange = 12; // Chromatic scale
 
 const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
@@ -98,11 +98,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     stepCount={stepCount}
                 />
             </Pane>
-            <Pane
-                display="flex"
-                flexDirection="column"
-                flexGrow={1}
-                width="100%">
+            <Flex.Column flexGrow={1} width="100%">
                 <PianoSteps
                     file={file}
                     indexRange={indexRange}
@@ -112,7 +108,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     trackSectionSteps={trackSectionSteps}
                     viewableIndex={viewableIndex}
                 />
-            </Pane>
+            </Flex.Column>
         </Pane>
     );
 };

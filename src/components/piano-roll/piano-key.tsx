@@ -1,15 +1,17 @@
 import { majorScale, Text, Pane } from "evergreen-ui";
-import { memo } from "react";
+import { isNumber } from "lodash";
 import { MidiNote } from "types/midi-note";
-import { MidiNoteUtils } from "utils/midi-note-utils";
+import { isMidiNote, isSharp } from "utils/midi-note-utils";
 
 interface PianoKeyProps {
-    note: MidiNote;
+    noteOrIndex?: MidiNote | number;
 }
 
 const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
-    const { note } = props;
-    const isBlackKey = MidiNoteUtils.isSharp(note);
+    const { noteOrIndex } = props;
+    const isSharpNote = isMidiNote(noteOrIndex) && isSharp(noteOrIndex);
+    const is4thBeat = isNumber(noteOrIndex) && noteOrIndex % 4 === 0;
+    const isBlackKey = isSharpNote || is4thBeat;
     const background = isBlackKey ? "black" : "white";
     const textColor = isBlackKey ? "white" : "black";
     const height = majorScale(4);
@@ -28,12 +30,10 @@ const PianoKey: React.FC<PianoKeyProps> = (props: PianoKeyProps) => {
             minWidth={width}
             width={width}>
             <Text color={textColor} cursor="default" size={300}>
-                {note}
+                {noteOrIndex}
             </Text>
         </Pane>
     );
 };
 
-const MemoizedPianoKey = memo(PianoKey);
-
-export { MemoizedPianoKey as PianoKey };
+export { PianoKey };
