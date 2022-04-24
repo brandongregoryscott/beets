@@ -16,6 +16,8 @@ import { isNotNilOrEmpty } from "utils/core-utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ExportDialog } from "components/workstation/export-dialog";
 
+const shortcutKey = navigator.platform.includes("Mac") ? "⌘" : "Ctrl+";
+
 interface FileTabProps {}
 
 enum ConfirmationAction {
@@ -205,7 +207,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                         </Menu.Item>
                         <Menu.Item
                             onClick={handleSave(closePopover)}
-                            secondaryText={"⌘S" as any}>
+                            secondaryText={shortcutKey + "S" as any}>
                             Save
                         </Menu.Item>
                         <Menu.Item onClick={handleExportClick(closePopover)}>

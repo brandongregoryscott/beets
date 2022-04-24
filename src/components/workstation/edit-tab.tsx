@@ -12,6 +12,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
 import { useToneControls } from "utils/hooks/use-tone-controls";
 
+const shortcutKey = navigator.platform.includes("Mac") ? "⌘" : "Ctrl+";
+
 interface EditTabProps {}
 
 const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
@@ -40,7 +42,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                                 closePopover,
                                 duplicateSelected
                             )}
-                            secondaryText={"⌘D" as any}>
+                            secondaryText={shortcutKey + "D" as any}>
                             Duplicate
                         </Menu.Item>
                         <Menu.Item
