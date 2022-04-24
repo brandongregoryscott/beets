@@ -129,7 +129,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
     );
 
     useHotkeys(
-        "cmd+s",
+        "cmd+s, ctrl+s",
         (event) => {
             event.preventDefault();
             handleSave()();

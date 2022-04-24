@@ -26,7 +26,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         []
     );
 
-    useHotkeys("cmd+d", duplicateSelected, [isPlaying, selectedState]);
+    useHotkeys("cmd+d, ctrl+d", duplicateSelected, [isPlaying, selectedState]);
 
     return (
         <React.Fragment>
