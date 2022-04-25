@@ -20,7 +20,7 @@ Web-based DAW (Digital Audio Workstation) written in React for making music.
 
 ## Quick Start
 
-The app can be accessed now at [beets.studio](https://beets.studio). While no account is necessary to begin using the app, functionality is limited.
+The app can be accessed at [beets.studio](https://beets.studio). While no account is necessary to begin using the app, functionality is limited.
 
 https://user-images.githubusercontent.com/11774799/163682665-69db80cf-22ba-44be-87bd-ad27e24138fd.mp4
 
@@ -33,10 +33,11 @@ Additional documentation can be found in markdown files under [`src/docs`](https
 -   Workstation with tracks, a piano roll and step sequencer
     -   Drag & Drop to reorder tracks or sections
     -   Sampler instrument creation
-    -   Keyboard shortcut `⌘S` to save the project
-    -   Keyboard shortcut `⌘D` to duplicate track section(s) while selected
+    -   Keyboard shortcut `⌘S` & `Ctrl+S` to save the project
+    -   Keyboard shortcut `⌘D` & `Ctrl+D` to duplicate track section(s) while selected
+    -   Keyboard shortcut `Shift+Click` to select multiple track sections
 -   Project management (saving, opening, deleting)
--   Export project as a wav file
+-   Export project as a wav, ogg or webm file
 
 ## Issues
 
