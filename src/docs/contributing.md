@@ -7,6 +7,7 @@ This section of the guide details how to setup the app for local development and
 -   [Getting Started](#getting-started)
     -   [Prerequisites](#prerequisites)
     -   [Fork and Clone](#fork-and-clone)
+        -   [Branching and Deployments](#branching-and-deployments)
     -   [Install Dependencies](#install-dependencies)
     -   [Env File](#env-file)
         -   [REACT_APP_SUPABASE_ANON_KEY and REACT_APP_SUPABASE_URL](#react_app_supabase_anon_key-and-react_app_supabase_url)
@@ -21,7 +22,9 @@ This section of the guide details how to setup the app for local development and
 
 ## Getting Started
 
-This section outlines the steps to get the app running locally and pointing against your own instance of Supabase. I have not had much luck with running a local version of Supabase with Docker, but this section of the guide may be updated in the future if this process becomes easier. For now, you'll need to create an account and configure a project for beets.
+This section outlines the steps to get the app running locally and pointing against your own instance of [Supabase](https://supabase.com/). [Supabase](https://supabase.com/) is a free, open-source alternative to Firebase and provides a hosted database and backend services that powers beets.
+
+I have not had much luck with running a local version of Supabase with Docker, but this section of the guide may be updated in the future if this process becomes easier. For now, you'll need to create an account and configure a project for beets.
 
 ### Prerequisites
 
@@ -35,6 +38,16 @@ To get started, [fork](https://github.com/brandongregoryscott/beets/fork) and cl
 ```
 git clone git@github.com:{username}/beets.git && cd beets
 ```
+
+#### Branching and Deployments
+
+The [`main`](https://github.com/brandongregoryscott/beets/tree/main)/default branch of the repo holds the [production version](https://beets.studio) of the app, and is auto-deployed on merge via [Netlify](https://www.netlify.com/).
+
+The [`development`](https://github.com/brandongregoryscott/beets/tree/development) branch of the repo holds the latest code that might not yet be deployed to production, is auto-deployed on merge, and can include new features, bug fixes, etc. It lives on the [development site](https://development.beets.studio), which connects to a separate [Supabase](https://supabase.com/) project from the production app.
+
+> You're free to create an account and test out this version of the app, but I wouldn't keep any important files or data on it.
+
+Generally speaking, for building out new features or fixing bugs, you should branch off of and PR into `development`.
 
 ### Install Dependencies
 
