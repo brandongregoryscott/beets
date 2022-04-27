@@ -1,6 +1,6 @@
 import { BorderPropsOptions } from "interfaces/border-props-options";
 import { BorderProps } from "interfaces/border-props";
-import { RequiredOrUndefined } from "types/required-or-undefined";
+import { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
 import { isEqual as lodashIsEqual } from "lodash";
 
@@ -81,7 +81,7 @@ const isNotNilOrEmpty = <T = string | any[] | List<any>>(
     value: T | any[] | List<any> | null | undefined
 ): value is T => !isNilOrEmpty(value);
 
-const makeDefaultValues = <T>(defaultValues: RequiredOrUndefined<T>): T =>
+const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>
     defaultValues as T;
 
 const randomFloat = (min: number, max: number): number =>

@@ -5,15 +5,16 @@ import { Instrument } from "generated/interfaces/instrument";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { AuditableRecord } from "models/auditable-record";
+import { defaultNote } from "constants/midi-notes";
 
 const defaultValues = makeDefaultValues<Instrument>({
     ...AuditableDefaultValues,
     curve: InstrumentCurve.Exponential,
-    duration: undefined,
+    duration: null,
     file_id: undefined,
-    name: undefined,
+    name: "",
     release: 0.1,
-    root_note: undefined,
+    root_note: defaultNote,
 });
 
 class InstrumentRecord

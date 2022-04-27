@@ -56,4 +56,5 @@ const DialogFooter: React.FC<DialogFooterProps> = (
     );
 };
 
+export type { DialogFooterProps };
 export { DialogFooter };

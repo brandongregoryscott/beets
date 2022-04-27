@@ -23,7 +23,7 @@ import { isNilOrEmpty } from "utils/core-utils";
 import { useNumberInput } from "utils/hooks/use-number-input";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
-import { DialogFooter } from "components/dialog-footer";
+import { DialogFooter, DialogFooterProps } from "components/dialog-footer";
 import { MidiNote } from "types/midi-note";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
@@ -32,9 +32,11 @@ import { List } from "immutable";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { defaultNote } from "constants/midi-notes";
 
-interface InstrumentSettingsProps {
+interface InstrumentSettingsProps
+    extends Pick<DialogFooterProps, "confirmLabel"> {
     instrument?: InstrumentRecord;
     onCancel?: () => void;
+    onChange?: (instrument: InstrumentRecord) => void;
     onCreateOrUpdate?: (instrument: InstrumentRecord) => void;
     onDelete?: () => void;
 }
@@ -46,8 +48,10 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     props: InstrumentSettingsProps
 ) => {
     const {
+        confirmLabel,
         instrument: initialInstrument,
         onCreateOrUpdate,
+        onChange,
         onCancel,
         onDelete,
     } = props;
@@ -133,7 +137,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             duration,
             name,
             release,
-            file_id: file?.id,
+            file_id: file?.id ?? initialInstrument?.file_id,
             root_note: rootNote,
         };
 
@@ -143,6 +147,10 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
 
         return instrument;
     }, [curve, duration, file?.id, initialInstrument, name, release, rootNote]);
+
+    useEffect(() => {
+        onChange?.(instrument);
+    }, [instrument, onChange]);
 
     const handleFileSelected = useCallback(
         (file: FileRecord) => {
@@ -292,7 +300,9 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     </Button>
                 </SelectMenu>
             </FormField>
-            <FormField label="Sample" {...fileValidation}>
+            <FormField
+                label="Sample"
+                validationMessage={fileValidation?.validationMessage}>
                 <FileSelectMenu
                     hasTitle={false}
                     onDeselect={handleFileSelected}
@@ -334,6 +344,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             )}
             <ErrorAlert error={error} />
             <DialogFooter
+                confirmLabel={confirmLabel}
                 isConfirmDisabled={isAttemptingDelete}
                 isConfirmLoading={isLoading}
                 onCancel={onCancel}

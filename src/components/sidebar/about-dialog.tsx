@@ -29,7 +29,6 @@ const AboutDialog: React.FC<AboutDialogProps> = (props: AboutDialogProps) => {
         <Dialog
             confirmLabel="Close"
             hasCancel={false}
-            isShown={true}
             onCloseComplete={onCloseComplete}
             title="About">
             {isLoading && <Spinner />}

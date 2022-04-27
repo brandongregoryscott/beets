@@ -2,7 +2,7 @@ import { Alert, IntentTypes } from "evergreen-ui";
 import { Dialog, DialogProps } from "components/dialog";
 import React from "react";
 
-interface ConfirmationDialogProps extends DialogProps {
+interface ConfirmationDialogProps extends Omit<DialogProps, "onCancel"> {
     alertDescription: string;
     alertIntent?: IntentTypes;
     alertTitle?: string;
@@ -17,7 +17,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = (
         alertDescription,
         confirmLabel = "Confirm",
         isConfirmLoading,
-        isShown,
         onCloseComplete,
         onConfirm,
         title = "Are you sure?",
@@ -27,7 +26,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = (
         <Dialog
             confirmLabel={confirmLabel}
             isConfirmLoading={isConfirmLoading}
-            isShown={isShown}
             onCloseComplete={onCloseComplete}
             onConfirm={onConfirm}
             shouldCloseOnOverlayClick={false}

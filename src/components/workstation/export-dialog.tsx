@@ -30,8 +30,7 @@ import { isEmpty } from "lodash";
 import { FormField } from "components/forms/form-field";
 import { Flex } from "components/flex";
 
-interface ExportDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
+interface ExportDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
 const options: Array<SelectMenuItem<MimeType>> = enumToSelectMenuItems(
     MimeType
@@ -45,7 +44,7 @@ const title = "Export as Audio";
 const ExportDialog: React.FC<ExportDialogProps> = (
     props: ExportDialogProps
 ) => {
-    const { isShown, onCloseComplete } = props;
+    const { onCloseComplete } = props;
     const { colors } = useTheme();
     const { resultObject: files = List(), isLoading: isLoadingFiles } =
         useListFiles();
@@ -123,7 +122,6 @@ const ExportDialog: React.FC<ExportDialogProps> = (
         <Dialog
             confirmLabel="Close"
             hasCancel={false}
-            isShown={isShown}
             onCloseComplete={handleClose}
             shouldCloseOnOverlayClick={false}
             title={title}>

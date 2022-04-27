@@ -7,7 +7,7 @@ import { useGlobalState } from "utils/hooks/use-global-state";
 import { InstrumentSettings } from "components/instruments/instrument-settings";
 
 interface ChooseOrCreateInstrumentDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
+    extends Pick<DialogProps, "onCloseComplete"> {
     instrument?: InstrumentRecord;
     onSubmit?: (instrument: InstrumentRecord) => void;
     showTabs?: boolean;
@@ -25,7 +25,6 @@ const ChooseOrCreateInstrumentDialog: React.FC<
 > = (props: ChooseOrCreateInstrumentDialogProps) => {
     const {
         instrument: initialInstrument,
-        isShown,
         onCloseComplete,
         onSubmit,
         showTabs = true,
@@ -69,7 +68,6 @@ const ChooseOrCreateInstrumentDialog: React.FC<
                 selectedTab === DialogTab.ChooseInstrument &&
                 selectedInstrument == null
             }
-            isShown={isShown}
             onCloseComplete={onCloseComplete}
             onSubmit={handleSelectInstrumentSubmit}
             title="Instrument Settings">

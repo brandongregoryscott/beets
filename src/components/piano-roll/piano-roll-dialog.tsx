@@ -56,7 +56,6 @@ const PianoRollDialog: React.FC<PianoRollDialogProps> = (
     return (
         <Dialog
             allowFullscreen={true}
-            isShown={true}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
             onFullscreenClick={handleFullscreenClick}

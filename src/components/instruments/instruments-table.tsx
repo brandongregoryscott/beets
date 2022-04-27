@@ -2,18 +2,19 @@ import {
     Table,
     Spinner,
     EmptyState,
-    StyleIcon,
     TableRowProps,
+    StepChartIcon,
 } from "evergreen-ui";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { InstrumentRecord } from "models/instrument-record";
-import { theme } from "theme";
 import { hasValues } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { getFileById } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
+    onDeselect?: (instrument: InstrumentRecord) => void;
     onSelect?: (instrument: InstrumentRecord) => void;
     selected?: InstrumentRecord;
 }
@@ -21,7 +22,8 @@ interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
 const InstrumentsTable: React.FC<InstrumentsTableProps> = (
     props: InstrumentsTableProps
 ) => {
-    const { isSelectable, onSelect, selected } = props;
+    const { colors } = useTheme();
+    const { isSelectable, onDeselect, onSelect, selected } = props;
     const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
     const { resultObject: instruments, isLoading: isLoadingInstruments } =
         useListInstruments({ files });
@@ -37,13 +39,18 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                 <Table.TextHeaderCell>Updated On</Table.TextHeaderCell>
             </Table.Head>
             <Table.Body>
-                {isLoading && <Spinner margin="auto" />}
+                {isLoading && (
+                    <Table.Row>
+                        <Spinner margin="auto" />
+                    </Table.Row>
+                )}
                 {hasInstruments &&
                     instruments?.map((instrument) => (
                         <Table.Row
                             isSelectable={isSelectable}
                             isSelected={instrument.equals(selected)}
                             key={instrument.id}
+                            onDeselect={() => onDeselect?.(instrument)}
                             onSelect={() => onSelect?.(instrument)}>
                             <Table.TextCell>{instrument.name}</Table.TextCell>
                             <Table.TextCell>
@@ -56,9 +63,9 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                     ))}
                 {!hasInstruments && !isLoading && (
                     <EmptyState
-                        description="Save a new instrument to begin"
-                        icon={<StyleIcon color={theme.colors.gray800} />}
-                        iconBgColor={theme.colors.gray100}
+                        description="Save a new Instrument to begin"
+                        icon={<StepChartIcon color={colors.gray500} />}
+                        iconBgColor={colors.gray200}
                         title="No Instruments Found"
                     />
                 )}

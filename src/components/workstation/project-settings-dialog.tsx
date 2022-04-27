@@ -11,12 +11,12 @@ import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { Dialog, DialogProps } from "components/dialog";
 
 interface ProjectSettingsDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
+    extends Pick<DialogProps, "onCloseComplete"> {}
 
 const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
     props: ProjectSettingsDialogProps
 ) => {
-    const { isShown, onCloseComplete } = props;
+    const { onCloseComplete } = props;
     const title = "Project Settings";
     const { state, setState } = useWorkstationState();
     const { state: project, setCurrentState: setCurrentProject } =
@@ -62,7 +62,6 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
     return (
         <Dialog
             isConfirmDisabled={isAttemptingDelete}
-            isShown={isShown}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
             shouldCloseOnOverlayClick={false}
