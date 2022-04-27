@@ -12,7 +12,7 @@ import {
 } from "evergreen-ui";
 import { RouteProps } from "interfaces/route-props";
 import { InstrumentRecord } from "models/instrument-record";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTheme } from "utils/hooks/use-theme";
@@ -25,6 +25,9 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
 ) => {
     const { globalState } = useGlobalState();
     const { colors, intents } = useTheme();
+    const [stagedInstrument, setStagedInstrument] = useState<
+        InstrumentRecord | undefined
+    >();
     const [instrument, setInstrument] = useState<
         InstrumentRecord | undefined
     >();
@@ -38,29 +41,38 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
     ] = useDialog();
     useTimeoutRender();
 
+    const isDirty = useMemo(
+        () =>
+            initialInstrument != null && !initialInstrument.equals(instrument),
+        [initialInstrument, instrument]
+    );
+
     const resetInstrument = useCallback(() => {
         setInstrument(undefined);
         setInitialInstrument(undefined);
     }, []);
 
     const handleCancel = useCallback(() => {
-        if (!initialInstrument?.equals(instrument)) {
+        if (isDirty) {
             handleOpenConfirmationDialog();
             return;
         }
 
         resetInstrument();
-    }, [
-        handleOpenConfirmationDialog,
-        initialInstrument,
-        instrument,
-        resetInstrument,
-    ]);
+    }, [handleOpenConfirmationDialog, isDirty, resetInstrument]);
 
     const handleConfirmDiscardChanges = useCallback(() => {
-        resetInstrument();
+        if (stagedInstrument == null) {
+            resetInstrument();
+            closeConfirmationDialog();
+            return;
+        }
+
+        setInitialInstrument(stagedInstrument);
+        setInstrument(stagedInstrument);
+        setStagedInstrument(undefined);
         closeConfirmationDialog();
-    }, [closeConfirmationDialog, resetInstrument]);
+    }, [closeConfirmationDialog, resetInstrument, stagedInstrument]);
 
     const handleChange = useCallback((instrument: InstrumentRecord) => {
         setInstrument(instrument);
@@ -77,10 +89,20 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
         setInitialInstrument(newInstrument);
     }, []);
 
-    const handleSelect = useCallback((instrument: InstrumentRecord) => {
-        setInitialInstrument(instrument);
-        setInstrument(instrument);
-    }, []);
+    const handleSelect = useCallback(
+        (selectedInstrument: InstrumentRecord) => {
+            if (isDirty) {
+                // Persist instrument selection but show warning dialog if current form is dirty
+                setStagedInstrument(selectedInstrument);
+                handleOpenConfirmationDialog();
+                return;
+            }
+
+            setInitialInstrument(selectedInstrument);
+            setInstrument(selectedInstrument);
+        },
+        [handleOpenConfirmationDialog, isDirty]
+    );
 
     const handleDelete = useCallback(() => {
         resetInstrument();
@@ -106,6 +128,8 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                                 <InstrumentSettings
                                     confirmLabel="Save"
                                     instrument={instrument}
+                                    /** Explicitly setting key here to force a re-render when instrument is changed */
+                                    key={instrument.id}
                                     onCancel={handleCancel}
                                     onChange={handleChange}
                                     onCreateOrUpdate={handleCreateOrUpdate}
@@ -117,6 +141,7 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                             <Pane marginRight={majorScale(2)}>
                                 <EmptyState
                                     background="dark"
+                                    description="Select an Instrument to edit or create a new one."
                                     icon={
                                         <Icon
                                             color={colors.gray500}
@@ -130,7 +155,7 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                                             Create Instrument
                                         </EmptyState.PrimaryButton>
                                     }
-                                    title="Select an Instrument on the left to edit or create a new one."
+                                    title="Select an Instrument"
                                 />
                             </Pane>
                         )}
