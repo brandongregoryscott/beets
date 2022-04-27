@@ -23,6 +23,8 @@ interface ContextualIconButtonProps
     tooltipText: string;
 }
 
+type VisibilityState = "visible" | "hidden";
+
 const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     props: ContextualIconButtonProps
 ) => {
@@ -42,7 +44,7 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     const { draggableId } = useDraggable();
     const isCurrentElementDragging = draggableId != null && draggableId === id;
     const isOtherElementDragging = draggableId != null && draggableId !== id;
-    const visibility: DocumentVisibilityState = isCurrentElementDragging
+    const visibility: VisibilityState = isCurrentElementDragging
         ? "visible"
         : "hidden";
 
