@@ -224,7 +224,6 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                         </Pane>
                         {instrumentDialogOpen && (
                             <ChooseOrCreateInstrumentDialog
-                                isShown={true}
                                 onCloseComplete={handleCloseInstrumentDialog}
                                 onSubmit={handleInstrumentSubmit}
                                 showTabs={globalState.isAuthenticated()}

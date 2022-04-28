@@ -207,7 +207,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                         </Menu.Item>
                         <Menu.Item
                             onClick={handleSave(closePopover)}
-                            secondaryText={shortcutKey + "S" as any}>
+                            secondaryText={(shortcutKey + "S") as any}>
                             Save
                         </Menu.Item>
                         <Menu.Item onClick={handleExportClick(closePopover)}>
@@ -251,13 +251,11 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
             </Popover>
             {isSaveProjectDialogOpen && (
                 <SaveProjectDialog
-                    isShown={isSaveProjectDialogOpen}
                     onCloseComplete={handleCloseSaveProjectDialog}
                 />
             )}
             {isOpenProjectDialogOpen && (
                 <OpenProjectDialog
-                    isShown={isOpenProjectDialogOpen}
                     onCloseComplete={handleCloseOpenProjectDialog}
                 />
             )}
@@ -265,22 +263,17 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                 <ConfirmationDialog
                     alertDescription={alertDecription}
                     alertTitle="You currently have unsaved changes."
-                    isShown={isConfirmDialogOpen}
                     onCloseComplete={handleCloseConfirmDialog}
                     onConfirm={handleDirtyConfirm}
                 />
             )}
             {isSettingsDialogOpen && (
                 <ProjectSettingsDialog
-                    isShown={isSettingsDialogOpen}
                     onCloseComplete={handleCloseSettingsDialog}
                 />
             )}
             {isExportDialogOpen && (
-                <ExportDialog
-                    isShown={isExportDialogOpen}
-                    onCloseComplete={handleCloseExportDialog}
-                />
+                <ExportDialog onCloseComplete={handleCloseExportDialog} />
             )}
         </React.Fragment>
     );

@@ -76,7 +76,6 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
                     />
                 </React.Fragment>
             }
-            isShown={true}
             onCloseComplete={onCloseComplete}
             onFullscreenClick={handleFullscreenClick}>
             {isLoading && <Spinner />}

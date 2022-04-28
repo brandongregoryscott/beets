@@ -19,14 +19,13 @@ import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { Dialog, DialogProps } from "components/dialog";
 
-interface SaveProjectDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
+interface SaveProjectDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
 const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     props: SaveProjectDialogProps
 ) => {
     const { isAuthenticated } = useGlobalState();
-    const { isShown, onCloseComplete } = props;
+    const { onCloseComplete } = props;
     const { state, setState } = useWorkstationState();
     const theme = useTheme();
     const title = "New Project";
@@ -75,7 +74,6 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             confirmLabel={isAuthenticated ? "Save" : "Done"}
             hasCancel={isAuthenticated}
             isConfirmLoading={isLoading}
-            isShown={isShown}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
             shouldCloseOnOverlayClick={false}

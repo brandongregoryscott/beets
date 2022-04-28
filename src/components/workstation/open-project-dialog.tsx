@@ -10,13 +10,12 @@ import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { Dialog, DialogProps } from "components/dialog";
 
-interface OpenProjectDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {}
+interface OpenProjectDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
 const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     props: OpenProjectDialogProps
 ) => {
-    const { isShown, onCloseComplete } = props;
+    const { onCloseComplete } = props;
     const theme = useTheme();
     const { isDirty, state, setState } = useWorkstationState();
     const { resultObject: workstations, isLoading } = useListWorkstations({});
@@ -64,7 +63,6 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                     selected?.equals(state.project)
                 }
                 isConfirmLoading={false}
-                isShown={isShown}
                 onCloseComplete={onCloseComplete}
                 onConfirm={handleConfirm}
                 shouldCloseOnOverlayClick={false}
@@ -123,7 +121,6 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                 <ConfirmationDialog
                     alertDescription="Opening a new project will wipe out any unsaved changes."
                     alertTitle="You currently have unsaved changes."
-                    isShown={isConfirmDialogOpen}
                     onCloseComplete={handleCloseConfirmDialog}
                     onConfirm={handleDirtyConfirm}
                 />

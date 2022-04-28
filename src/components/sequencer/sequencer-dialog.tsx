@@ -63,7 +63,6 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
 
     return (
         <Dialog
-            isShown={true}
             onCloseComplete={onCloseComplete}
             onConfirm={handleConfirm}
             title="Sequencer">

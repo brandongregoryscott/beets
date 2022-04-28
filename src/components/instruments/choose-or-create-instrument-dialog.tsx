@@ -1,13 +1,24 @@
 import { FormDialog } from "components/forms/form-dialog";
 import { InstrumentsTable } from "components/instruments/instruments-table";
-import { DialogProps, majorScale, Tab, Tablist } from "evergreen-ui";
+import {
+    DialogProps,
+    EmptyState,
+    majorScale,
+    StepChartIcon,
+    Tab,
+    Tablist,
+} from "evergreen-ui";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useState } from "react";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { InstrumentSettings } from "components/instruments/instrument-settings";
+import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useTheme } from "utils/hooks/use-theme";
+import { generateId } from "utils/id-utils";
 
 interface ChooseOrCreateInstrumentDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
+    extends Pick<DialogProps, "onCloseComplete"> {
     instrument?: InstrumentRecord;
     onSubmit?: (instrument: InstrumentRecord) => void;
     showTabs?: boolean;
@@ -24,13 +35,18 @@ const ChooseOrCreateInstrumentDialog: React.FC<
     ChooseOrCreateInstrumentDialogProps
 > = (props: ChooseOrCreateInstrumentDialogProps) => {
     const {
-        instrument: initialInstrument,
-        isShown,
+        instrument: initialInstrument = new InstrumentRecord().merge({
+            id: generateId(),
+        }),
         onCloseComplete,
         onSubmit,
         showTabs = true,
     } = props;
     const { globalState } = useGlobalState();
+    const { colors } = useTheme();
+    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { resultObject: instruments, isLoading: isLoadingInstruments } =
+        useListInstruments({ files });
     const [selectedTab, setSelectedTab] = useState<DialogTab>(
         globalState.isAuthenticated()
             ? DialogTab.CreateInstrument
@@ -69,7 +85,6 @@ const ChooseOrCreateInstrumentDialog: React.FC<
                 selectedTab === DialogTab.ChooseInstrument &&
                 selectedInstrument == null
             }
-            isShown={isShown}
             onCloseComplete={onCloseComplete}
             onSubmit={handleSelectInstrumentSubmit}
             title="Instrument Settings">
@@ -87,6 +102,17 @@ const ChooseOrCreateInstrumentDialog: React.FC<
             )}
             {selectedTab === DialogTab.ChooseInstrument && (
                 <InstrumentsTable
+                    emptyState={
+                        <EmptyState
+                            description="Save a new Instrument to begin"
+                            icon={<StepChartIcon color={colors.gray500} />}
+                            iconBgColor={colors.gray200}
+                            title="No Instruments Found"
+                        />
+                    }
+                    files={files}
+                    instruments={instruments}
+                    isLoading={isLoadingFiles || isLoadingInstruments}
                     isSelectable={true}
                     onSelect={setSelectedInstrument}
                     selected={selectedInstrument}

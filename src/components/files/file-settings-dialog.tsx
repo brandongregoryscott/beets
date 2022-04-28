@@ -7,8 +7,7 @@ import { Dialog, DialogProps } from "components/dialog";
 import { useInput } from "utils/hooks/use-input";
 import humanize from "humanize-plus";
 
-interface FileSettingsDialogProps
-    extends Pick<DialogProps, "isShown" | "onCloseComplete"> {
+interface FileSettingsDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     file: FileRecord;
     storageProviderFile: StorageProviderFileRecord;
 }
@@ -18,7 +17,7 @@ const title = "Edit File";
 const FileSettingsDialog: React.FC<FileSettingsDialogProps> = (
     props: FileSettingsDialogProps
 ) => {
-    const { isShown, onCloseComplete, file } = props;
+    const { onCloseComplete, file } = props;
     const {
         value: name,
         onChange: handleNameChange,
@@ -40,7 +39,6 @@ const FileSettingsDialog: React.FC<FileSettingsDialogProps> = (
         <Dialog
             confirmLabel="Save"
             isConfirmLoading={isLoading}
-            isShown={isShown}
             onCloseComplete={onCloseComplete}
             onConfirm={handleSave}
             shouldCloseOnOverlayClick={false}

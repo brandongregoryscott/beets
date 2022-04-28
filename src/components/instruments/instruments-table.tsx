@@ -1,19 +1,17 @@
-import {
-    Table,
-    Spinner,
-    EmptyState,
-    StyleIcon,
-    TableRowProps,
-} from "evergreen-ui";
-import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { Table, Spinner, TableRowProps } from "evergreen-ui";
 import { InstrumentRecord } from "models/instrument-record";
-import { theme } from "theme";
 import { hasValues } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { getFileById } from "utils/file-utils";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { List } from "immutable";
+import { FileRecord } from "models/file-record";
 
 interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
+    emptyState?: React.ReactNode;
+    files?: List<FileRecord> | FileRecord[];
+    instruments?: List<InstrumentRecord> | InstrumentRecord[];
+    isLoading?: boolean;
+    onDeselect?: (instrument: InstrumentRecord) => void;
     onSelect?: (instrument: InstrumentRecord) => void;
     selected?: InstrumentRecord;
 }
@@ -21,12 +19,17 @@ interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
 const InstrumentsTable: React.FC<InstrumentsTableProps> = (
     props: InstrumentsTableProps
 ) => {
-    const { isSelectable, onSelect, selected } = props;
-    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
-    const { resultObject: instruments, isLoading: isLoadingInstruments } =
-        useListInstruments({ files });
+    const {
+        isSelectable,
+        onDeselect,
+        onSelect,
+        selected,
+        isLoading,
+        emptyState,
+        instruments,
+        files,
+    } = props;
 
-    const isLoading = isLoadingFiles || isLoadingInstruments;
     const hasInstruments = !isLoading && hasValues(instruments);
 
     return (
@@ -37,13 +40,18 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                 <Table.TextHeaderCell>Updated On</Table.TextHeaderCell>
             </Table.Head>
             <Table.Body>
-                {isLoading && <Spinner margin="auto" />}
+                {isLoading && (
+                    <Table.Row>
+                        <Spinner margin="auto" />
+                    </Table.Row>
+                )}
                 {hasInstruments &&
                     instruments?.map((instrument) => (
                         <Table.Row
                             isSelectable={isSelectable}
                             isSelected={instrument.equals(selected)}
                             key={instrument.id}
+                            onDeselect={() => onDeselect?.(instrument)}
                             onSelect={() => onSelect?.(instrument)}>
                             <Table.TextCell>{instrument.name}</Table.TextCell>
                             <Table.TextCell>
@@ -54,14 +62,7 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                             </Table.TextCell>
                         </Table.Row>
                     ))}
-                {!hasInstruments && !isLoading && (
-                    <EmptyState
-                        description="Save a new instrument to begin"
-                        icon={<StyleIcon color={theme.colors.gray800} />}
-                        iconBgColor={theme.colors.gray100}
-                        title="No Instruments Found"
-                    />
-                )}
+                {!hasInstruments && !isLoading && emptyState}
             </Table.Body>
         </Table>
     );

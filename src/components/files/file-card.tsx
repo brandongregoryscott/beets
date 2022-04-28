@@ -106,7 +106,6 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
             {isOpen && (
                 <FileSettingsDialog
                     file={file}
-                    isShown={isOpen}
                     onCloseComplete={handleCloseDialog}
                     storageProviderFile={storageProviderFile}
                 />

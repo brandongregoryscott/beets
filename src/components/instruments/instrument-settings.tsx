@@ -7,7 +7,13 @@ import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
 import { Button, TextInputField, toaster, TrashIcon } from "evergreen-ui";
 import { capitalize } from "lodash";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
@@ -23,7 +29,7 @@ import { isNilOrEmpty } from "utils/core-utils";
 import { useNumberInput } from "utils/hooks/use-number-input";
 import { useInput } from "utils/hooks/use-input";
 import { Instrument } from "generated/interfaces/instrument";
-import { DialogFooter } from "components/dialog-footer";
+import { DialogFooter, DialogFooterProps } from "components/dialog-footer";
 import { MidiNote } from "types/midi-note";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
@@ -32,9 +38,11 @@ import { List } from "immutable";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { defaultNote } from "constants/midi-notes";
 
-interface InstrumentSettingsProps {
+interface InstrumentSettingsProps
+    extends Pick<DialogFooterProps, "confirmLabel"> {
     instrument?: InstrumentRecord;
     onCancel?: () => void;
+    onChange?: (instrument: InstrumentRecord) => void;
     onCreateOrUpdate?: (instrument: InstrumentRecord) => void;
     onDelete?: () => void;
 }
@@ -46,8 +54,10 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     props: InstrumentSettingsProps
 ) => {
     const {
+        confirmLabel,
         instrument: initialInstrument,
         onCreateOrUpdate,
+        onChange,
         onCancel,
         onDelete,
     } = props;
@@ -112,6 +122,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         min: 0,
         max: 30,
     });
+    const stopPlayingTimeoutRef = useRef<NodeJS.Timeout | undefined>();
     const [fileValidation, setFileValidation] = useState<
         ValidationState | undefined
     >();
@@ -133,7 +144,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             duration,
             name,
             release,
-            file_id: file?.id,
+            file_id: file?.id ?? initialInstrument?.file_id,
             root_note: rootNote,
         };
 
@@ -143,6 +154,10 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
 
         return instrument;
     }, [curve, duration, file?.id, initialInstrument, name, release, rootNote]);
+
+    useEffect(() => {
+        onChange?.(instrument);
+    }, [instrument, onChange]);
 
     const handleFileSelected = useCallback(
         (file: FileRecord) => {
@@ -229,7 +244,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         [rootNote, trackSection.id]
     );
 
-    const { isLoading: isLoadingSamples } = useToneAudio({
+    const { isLoading: isLoadingSamples, dispose } = useToneAudio({
         isPlaying,
         loop: false,
         files: file != null ? List.of(file) : undefined,
@@ -239,13 +254,25 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         trackSectionSteps: trackSectionSteps,
     });
 
-    const handlePlay = useCallback(() => {
-        // Toggle the 'isPlaying' boolean after the duration of the sample which should reset to
-        // a 'Play' state instead of 'Pause'
-        setTimeout(stopPlaying, (duration ?? 0.5) * 1000);
-    }, [duration, stopPlaying]);
+    const handlePlay = useCallback(
+        (updatedIsPlaying: boolean) => {
+            if (updatedIsPlaying) {
+                dispose();
+                if (stopPlayingTimeoutRef.current != null) {
+                    clearTimeout(stopPlayingTimeoutRef.current);
+                }
+                return;
+            }
 
-    useEffect(() => stopPlaying(), [stopPlaying]);
+            // Toggle the 'isPlaying' boolean after the duration of the sample which should reset to
+            // a 'Play' state instead of 'Pause'
+            stopPlayingTimeoutRef.current = setTimeout(
+                stopPlaying,
+                (duration ?? 0.5) * 1000
+            );
+        },
+        [dispose, duration, stopPlaying]
+    );
 
     return (
         <React.Fragment>
@@ -292,7 +319,9 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     </Button>
                 </SelectMenu>
             </FormField>
-            <FormField label="Sample" {...fileValidation}>
+            <FormField
+                label="Sample"
+                validationMessage={fileValidation?.validationMessage}>
                 <FileSelectMenu
                     hasTitle={false}
                     onDeselect={handleFileSelected}
@@ -334,6 +363,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
             )}
             <ErrorAlert error={error} />
             <DialogFooter
+                confirmLabel={confirmLabel}
                 isConfirmDisabled={isAttemptingDelete}
                 isConfirmLoading={isLoading}
                 onCancel={onCancel}

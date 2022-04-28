@@ -14,7 +14,7 @@ import React, { useCallback } from "react";
 import { attachEventSource } from "utils/event-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 
-interface DialogProps extends EvergreenDialogProps {
+interface DialogProps extends Omit<EvergreenDialogProps, "isShown"> {
     allowFullscreen?: boolean;
     initialIsFullscreen?: boolean;
     onFullscreenClick?: () => void;
@@ -101,6 +101,7 @@ const Dialog: React.FC<DialogProps> = (props: DialogProps) => {
                       )
                     : undefined
             }
+            isShown={true}
             width={allowFullscreen && isFullscreen ? "100%" : width}>
             {children}
         </EvergreenDialog>

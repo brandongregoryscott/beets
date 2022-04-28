@@ -9,7 +9,7 @@ import { InstrumentRecord } from "models/instrument-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
 import { intersectionWith } from "utils/collection-utils";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
@@ -28,6 +28,8 @@ import OpusMediaRecorder from "opus-media-recorder";
 import { toaster } from "evergreen-ui";
 import { env } from "utils/env";
 import { useWillUnmount } from "rooks";
+import { isEqual } from "utils/core-utils";
+import { MidiNote } from "types/midi-note";
 
 interface UseToneAudioOptions
     extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision">,
@@ -46,6 +48,10 @@ interface UseToneAudioOptions
 }
 
 interface UseToneAudioResult {
+    /**
+     * Disposes all tracks/channels/etc. Useful if audio needs to be manually cut off
+     */
+    dispose: () => void;
     isLoading: boolean;
 }
 
@@ -154,6 +160,14 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 release: instrument?.release,
             });
 
+            const sampleMapIsDirty =
+                toneTrack != null && !isEqual(sampleMap, toneTrack.sampleMap);
+            if (sampleMapIsDirty) {
+                Object.entries(sampleMap).forEach(([note, value]) => {
+                    sampler.add(note as MidiNote, value);
+                });
+            }
+
             const isLoading = toneTrack?.sampler == null;
             if (isLoading) {
                 setLoadingState((prev) => prev.set(track.id, true));
@@ -188,6 +202,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
             sequence.loop = loop;
 
             const updatedToneTrack: ToneTrack = {
+                sampleMap,
                 channel,
                 sampler,
                 sequence,
@@ -262,15 +277,18 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
         updateTracks({ isPlaying: false, loop: true }, toneTracksRef.current);
     }, [isRecording, lengthInMs, mimeType, onRecordingComplete]);
 
-    useWillUnmount(() => {
+    const dispose = useCallback(() => {
         cleanupTracks(toneTracksRef.current);
         toneTracksRef.current = Map();
         Tone.Transport.stop();
-    });
+    }, []);
+
+    useWillUnmount(dispose);
 
     const isLoading = loadingState.some((loading) => loading);
 
     return {
+        dispose,
         isLoading,
     };
 };
