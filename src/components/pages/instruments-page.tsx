@@ -17,6 +17,7 @@ import { useDialog } from "utils/hooks/use-dialog";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
+import { generateId } from "utils/id-utils";
 
 interface InstrumentsPageProps extends RouteProps {}
 
@@ -84,7 +85,9 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
     }, []);
 
     const handleCreate = useCallback(() => {
-        const newInstrument = new InstrumentRecord();
+        const newInstrument = new InstrumentRecord().merge({
+            id: generateId(),
+        });
         setInstrument(newInstrument);
         setInitialInstrument(newInstrument);
     }, []);

@@ -7,7 +7,13 @@ import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
 import { Button, TextInputField, toaster, TrashIcon } from "evergreen-ui";
 import { capitalize } from "lodash";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { InstrumentRecord } from "models/instrument-record";
 import { ValidationState } from "interfaces/validation-state";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
@@ -116,6 +122,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         min: 0,
         max: 30,
     });
+    const stopPlayingTimeoutRef = useRef<NodeJS.Timeout | undefined>();
     const [fileValidation, setFileValidation] = useState<
         ValidationState | undefined
     >();
@@ -237,7 +244,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         [rootNote, trackSection.id]
     );
 
-    const { isLoading: isLoadingSamples } = useToneAudio({
+    const { isLoading: isLoadingSamples, dispose } = useToneAudio({
         isPlaying,
         loop: false,
         files: file != null ? List.of(file) : undefined,
@@ -247,13 +254,25 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         trackSectionSteps: trackSectionSteps,
     });
 
-    const handlePlay = useCallback(() => {
-        // Toggle the 'isPlaying' boolean after the duration of the sample which should reset to
-        // a 'Play' state instead of 'Pause'
-        setTimeout(stopPlaying, (duration ?? 0.5) * 1000);
-    }, [duration, stopPlaying]);
+    const handlePlay = useCallback(
+        (updatedIsPlaying: boolean) => {
+            if (updatedIsPlaying) {
+                dispose();
+                if (stopPlayingTimeoutRef.current != null) {
+                    clearTimeout(stopPlayingTimeoutRef.current);
+                }
+                return;
+            }
 
-    useEffect(() => stopPlaying(), [stopPlaying]);
+            // Toggle the 'isPlaying' boolean after the duration of the sample which should reset to
+            // a 'Play' state instead of 'Pause'
+            stopPlayingTimeoutRef.current = setTimeout(
+                stopPlaying,
+                (duration ?? 0.5) * 1000
+            );
+        },
+        [dispose, duration, stopPlaying]
+    );
 
     return (
         <React.Fragment>
