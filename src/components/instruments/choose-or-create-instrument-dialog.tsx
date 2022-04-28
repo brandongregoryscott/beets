@@ -15,6 +15,7 @@ import { InstrumentSettings } from "components/instruments/instrument-settings";
 import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useTheme } from "utils/hooks/use-theme";
+import { generateId } from "utils/id-utils";
 
 interface ChooseOrCreateInstrumentDialogProps
     extends Pick<DialogProps, "onCloseComplete"> {
@@ -34,7 +35,9 @@ const ChooseOrCreateInstrumentDialog: React.FC<
     ChooseOrCreateInstrumentDialogProps
 > = (props: ChooseOrCreateInstrumentDialogProps) => {
     const {
-        instrument: initialInstrument,
+        instrument: initialInstrument = new InstrumentRecord().merge({
+            id: generateId(),
+        }),
         onCloseComplete,
         onSubmit,
         showTabs = true,
