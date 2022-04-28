@@ -1,19 +1,16 @@
-import {
-    Table,
-    Spinner,
-    EmptyState,
-    TableRowProps,
-    StepChartIcon,
-} from "evergreen-ui";
-import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { Table, Spinner, TableRowProps } from "evergreen-ui";
 import { InstrumentRecord } from "models/instrument-record";
 import { hasValues } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { getFileById } from "utils/file-utils";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useTheme } from "utils/hooks/use-theme";
+import { List } from "immutable";
+import { FileRecord } from "models/file-record";
 
 interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
+    emptyState?: React.ReactNode;
+    files?: List<FileRecord> | FileRecord[];
+    instruments?: List<InstrumentRecord> | InstrumentRecord[];
+    isLoading?: boolean;
     onDeselect?: (instrument: InstrumentRecord) => void;
     onSelect?: (instrument: InstrumentRecord) => void;
     selected?: InstrumentRecord;
@@ -22,13 +19,17 @@ interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
 const InstrumentsTable: React.FC<InstrumentsTableProps> = (
     props: InstrumentsTableProps
 ) => {
-    const { colors } = useTheme();
-    const { isSelectable, onDeselect, onSelect, selected } = props;
-    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
-    const { resultObject: instruments, isLoading: isLoadingInstruments } =
-        useListInstruments({ files });
+    const {
+        isSelectable,
+        onDeselect,
+        onSelect,
+        selected,
+        isLoading,
+        emptyState,
+        instruments,
+        files,
+    } = props;
 
-    const isLoading = isLoadingFiles || isLoadingInstruments;
     const hasInstruments = !isLoading && hasValues(instruments);
 
     return (
@@ -61,14 +62,7 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
                             </Table.TextCell>
                         </Table.Row>
                     ))}
-                {!hasInstruments && !isLoading && (
-                    <EmptyState
-                        description="Save a new Instrument to begin"
-                        icon={<StepChartIcon color={colors.gray500} />}
-                        iconBgColor={colors.gray200}
-                        title="No Instruments Found"
-                    />
-                )}
+                {!hasInstruments && !isLoading && emptyState}
             </Table.Body>
         </Table>
     );

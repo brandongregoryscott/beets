@@ -10,9 +10,12 @@ import {
     BanCircleIcon,
     StepChartIcon,
 } from "evergreen-ui";
+import { useListFiles } from "generated/hooks/domain/files/use-list-files";
+import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
 import { RouteProps } from "interfaces/route-props";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useMemo, useState } from "react";
+import { hasValues } from "utils/collection-utils";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTheme } from "utils/hooks/use-theme";
@@ -26,6 +29,10 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
 ) => {
     const { globalState } = useGlobalState();
     const { colors, intents } = useTheme();
+    const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
+    const { resultObject: instruments, isLoading: isLoadingInstruments } =
+        useListInstruments();
+
     const [stagedInstrument, setStagedInstrument] = useState<
         InstrumentRecord | undefined
     >();
@@ -111,12 +118,34 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
         resetInstrument();
     }, [resetInstrument]);
 
+    const isLoading = isLoadingFiles || isLoadingInstruments;
+    const hasInstruments = !isLoading && hasValues(instruments);
+
     return (
         <Pane marginRight={majorScale(2)} marginTop={majorScale(1)}>
             {globalState.isAuthenticated() && (
                 <Flex.Row>
                     <Pane width={majorScale(65)}>
                         <InstrumentsTable
+                            emptyState={
+                                <EmptyState
+                                    description="Create a new Instrument to begin"
+                                    icon={
+                                        <StepChartIcon color={colors.gray500} />
+                                    }
+                                    iconBgColor={colors.gray200}
+                                    primaryCta={
+                                        <EmptyState.PrimaryButton
+                                            onClick={handleCreate}>
+                                            Create Instrument
+                                        </EmptyState.PrimaryButton>
+                                    }
+                                    title="No Instruments Found"
+                                />
+                            }
+                            files={files}
+                            instruments={instruments}
+                            isLoading={isLoadingFiles || isLoadingInstruments}
                             isSelectable={true}
                             onSelect={handleSelect}
                             selected={initialInstrument}
@@ -137,7 +166,7 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                                 onDelete={handleDelete}
                             />
                         )}
-                        {instrument == null && (
+                        {instrument == null && hasInstruments && (
                             <Pane marginRight={majorScale(2)}>
                                 <EmptyState
                                     background="dark"
