@@ -115,7 +115,7 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
         <Pane marginRight={majorScale(2)} marginTop={majorScale(1)}>
             {globalState.isAuthenticated() && (
                 <Flex.Row>
-                    <Pane maxWidth="40%" minWidth="40%">
+                    <Pane width={majorScale(65)}>
                         <InstrumentsTable
                             isSelectable={true}
                             onSelect={handleSelect}
@@ -124,21 +124,18 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                     </Pane>
                     <Flex.Column
                         marginLeft={majorScale(2)}
-                        maxWidth="60%"
-                        minWidth="60%">
+                        width={majorScale(60)}>
                         {instrument != null && (
-                            <Pane maxWidth="75%">
-                                <InstrumentSettings
-                                    confirmLabel="Save"
-                                    instrument={instrument}
-                                    /** Explicitly setting key here to force a re-render when instrument is changed */
-                                    key={instrument.id}
-                                    onCancel={handleCancel}
-                                    onChange={handleChange}
-                                    onCreateOrUpdate={handleCreateOrUpdate}
-                                    onDelete={handleDelete}
-                                />
-                            </Pane>
+                            <InstrumentSettings
+                                confirmLabel="Save"
+                                instrument={instrument}
+                                /** Explicitly setting key here to force a re-render when instrument is changed */
+                                key={instrument.id}
+                                onCancel={handleCancel}
+                                onChange={handleChange}
+                                onCreateOrUpdate={handleCreateOrUpdate}
+                                onDelete={handleDelete}
+                            />
                         )}
                         {instrument == null && (
                             <Pane marginRight={majorScale(2)}>
