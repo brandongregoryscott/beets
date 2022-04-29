@@ -14,7 +14,7 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { TrackRecord } from "models/track-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
@@ -31,17 +31,20 @@ import { css, select } from "glamor";
 import { TrackTime } from "components/tracks/track-time/track-time";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { Flex } from "components/flex";
+import { Slider } from "@mantine/core";
 
 interface TrackCardProps {
     track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
+const maxVolume = 12;
+const minVolume = -12;
 const width = majorScale(21);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { track } = props;
-    const { id, name, mute, solo, instrument_id, index } = track;
+    const { id, name, mute, solo, instrument_id, index, volume } = track;
     const { state: workstationState } = useWorkstationState();
     const { update, remove, state: tracks } = useTracksState();
     const {
@@ -64,7 +67,10 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         [files, instrument]
     );
 
-    const theme = useTheme();
+    const [localVolume, setLocalVolume] = useState<number>(volume);
+    useEffect(() => setLocalVolume(volume), [volume]);
+
+    const { colors } = useTheme();
 
     const setName = useCallback(
         (value: string) => update(id, (prev) => prev.merge({ name: value })),
@@ -78,6 +84,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const toggleSolo = useCallback(
         () => update(id, (prev) => prev.merge({ solo: !prev.solo })),
+        [id, update]
+    );
+
+    const handleVolumeChangeEnd = useCallback(
+        (updatedVolume: number) =>
+            update(id, (prev) => prev.merge({ volume: updatedVolume })),
         [id, update]
     );
 
@@ -115,7 +127,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                         {...provided.draggableProps}>
                         <Card
                             alignItems="flex-start"
-                            background={theme.colors.gray200}
+                            background={colors.gray200}
                             className={cardClass}
                             display="flex"
                             flexDirection="column"
@@ -154,7 +166,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 onChange={setName}
                                 value={name}
                             />
-                            <Flex.Row>
+                            <Flex.Row alignItems="center">
                                 <Tooltip content="Mute Track">
                                     <IconButton
                                         icon={
@@ -173,6 +185,18 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                         onClick={toggleSolo}
                                     />
                                 </Tooltip>
+                                <Pane width={majorScale(8)}>
+                                    <Slider
+                                        defaultValue={0}
+                                        max={maxVolume}
+                                        min={minVolume}
+                                        onChange={setLocalVolume}
+                                        onChangeEnd={handleVolumeChangeEnd}
+                                        radius="sm"
+                                        size="sm"
+                                        value={localVolume}
+                                    />
+                                </Pane>
                             </Flex.Row>
                         </Card>
                         <DragDropContext
@@ -185,7 +209,7 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                     <Flex.Row
                                         border={`2px dashed ${
                                             snapshot.isDraggingOver
-                                                ? theme.colors.blue300
+                                                ? colors.blue300
                                                 : "transparent"
                                         }`}
                                         borderRadius={minorScale(1)}
@@ -222,5 +246,5 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     );
 };
 
-export { TrackCard };
 export type { TrackCardProps };
+export { TrackCard };
