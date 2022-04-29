@@ -14,7 +14,7 @@
     "dependencies": {
         "@octokit/rest": "18.12.0",
         "@supabase/supabase-js": "1.35.2",
-        "evergreen-ui": "6.9.6",
+        "evergreen-ui": "6.9.8",
         "glamor": "2.20.40",
         "humanize-plus": "1.8.2",
         "immutable": "4.0.0",
