@@ -5,9 +5,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
-        "lib": [
-            "esnext"
-        ],
+        "lib": ["esnext"],
         "module": "CommonJS",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
@@ -16,5 +14,5 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "es5"
-    },
+    }
 }

@@ -42,7 +42,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                                 closePopover,
                                 duplicateSelected
                             )}
-                            secondaryText={shortcutKey + "D" as any}>
+                            secondaryText={(shortcutKey + "D") as any}>
                             Duplicate
                         </Menu.Item>
                         <Menu.Item
