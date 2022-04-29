@@ -7,8 +7,6 @@ import {
     Label,
     TextInput,
     majorScale,
-    CaretDownIcon,
-    CaretUpIcon,
     Heading,
     Tooltip,
 } from "evergreen-ui";
@@ -22,13 +20,14 @@ import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { List } from "immutable";
 import { InstrumentRecord } from "models/instrument-record";
 import { FileRecord } from "models/file-record";
+import { Slider } from "components/mantine/slider";
 
 interface SongControlsProps {
     files?: List<FileRecord>;
     instruments?: List<InstrumentRecord>;
 }
 
-const marginRight = minorScale(2);
+const marginRight = majorScale(1);
 const SongControlsHeight = majorScale(9);
 
 const SongControls: React.FC<SongControlsProps> = (
@@ -90,20 +89,14 @@ const SongControls: React.FC<SongControlsProps> = (
         [setCurrentState]
     );
 
-    const setSwing = useCallback(
+    const handleSwingChange = useCallback(
         (swing: number) => setCurrentState((prev) => prev.merge({ swing })),
         [setCurrentState]
     );
 
-    const handleDecrementVolume = useCallback(
-        () =>
-            setCurrentState((prev) => prev.merge({ volume: prev.volume - 1 })),
-        [setCurrentState]
-    );
-
-    const handleIncrementVolume = useCallback(
-        () =>
-            setCurrentState((prev) => prev.merge({ volume: prev.volume + 1 })),
+    const handleVolumeChange = useCallback(
+        (updatedVolume: number) =>
+            setCurrentState((prev) => prev.merge({ volume: updatedVolume })),
         [setCurrentState]
     );
 
@@ -142,44 +135,20 @@ const SongControls: React.FC<SongControlsProps> = (
                     onChange={handleNumberChange(1, 200, setBpm)}
                     value={bpm.toString()}
                 />
-                <Label
-                    fontSize="x-small"
-                    marginRight={marginRight}
-                    textTransform="uppercase">
-                    Swing
-                </Label>
-                <TextInput
-                    marginRight={marginRight}
-                    maxWidth={majorScale(6)}
-                    onChange={handleNumberChange(0, 100, setSwing)}
-                    value={swing.toString()}
+                <Slider
+                    label="Swing"
+                    marginX={minorScale(1)}
+                    max={100}
+                    min={0}
+                    onChange={handleSwingChange}
+                    value={swing}
                 />
-                <Label
-                    fontSize="x-small"
-                    marginRight={marginRight}
-                    textTransform="uppercase">
-                    Vol
-                </Label>
-                <Label
-                    fontSize="x-small"
-                    marginRight={marginRight}
-                    width={minorScale(3)}>
-                    {volume}
-                </Label>
-                <Tooltip content="Volume Down">
-                    <IconButton
-                        icon={CaretDownIcon}
-                        marginRight={marginRight}
-                        onClick={handleDecrementVolume}
-                    />
-                </Tooltip>
-                <Tooltip content="Volume Up">
-                    <IconButton
-                        icon={CaretUpIcon}
-                        marginRight={marginRight}
-                        onClick={handleIncrementVolume}
-                    />
-                </Tooltip>
+                <Slider
+                    label="Vol"
+                    marginX={minorScale(1)}
+                    onChange={handleVolumeChange}
+                    value={volume}
+                />
             </Pane>
         </Pane>
     );
