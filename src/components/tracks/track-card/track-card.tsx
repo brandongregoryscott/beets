@@ -31,15 +31,13 @@ import { css, select } from "glamor";
 import { TrackTime } from "components/tracks/track-time/track-time";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { Flex } from "components/flex";
-import { Slider } from "@mantine/core";
+import { Slider } from "components/mantine/slider";
 
 interface TrackCardProps {
     track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
-const maxVolume = 12;
-const minVolume = -12;
 const width = majorScale(21);
 
 const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
@@ -185,18 +183,12 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                         onClick={toggleSolo}
                                     />
                                 </Tooltip>
-                                <Pane width={majorScale(8)}>
-                                    <Slider
-                                        defaultValue={0}
-                                        max={maxVolume}
-                                        min={minVolume}
-                                        onChange={setLocalVolume}
-                                        onChangeEnd={handleVolumeChangeEnd}
-                                        radius="sm"
-                                        size="sm"
-                                        value={localVolume}
-                                    />
-                                </Pane>
+                                <Slider
+                                    label="Vol"
+                                    onChange={setLocalVolume}
+                                    onChangeEnd={handleVolumeChangeEnd}
+                                    value={localVolume}
+                                />
                             </Flex.Row>
                         </Card>
                         <DragDropContext
