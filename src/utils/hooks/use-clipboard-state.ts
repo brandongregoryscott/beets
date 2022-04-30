@@ -48,7 +48,7 @@ const useClipboardState = (): UseClipboardStateResult => {
 
             const { track_id } = selectedState.first()!;
 
-            // Pull from current state's trackSections to ensure any changes after selection are propogated
+            // Pull from current state's trackSections to ensure any changes after selection are propagated
             const trackSections = intersectionWith(
                 selectedState,
                 state.trackSections,
