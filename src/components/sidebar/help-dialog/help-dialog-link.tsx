@@ -10,7 +10,7 @@ import {
 import { ReactMarkdownProps } from "react-markdown/lib/complex-types";
 import { Sitemap } from "sitemap";
 import { hasValues } from "utils/collection-utils";
-import { omitIs } from "utils/markdown-utils";
+import { omitProps } from "utils/markdown-utils";
 import { absolutePath, toPathCase } from "utils/route-utils";
 import { scrollToHash } from "utils/scroll-utils";
 
@@ -59,7 +59,7 @@ const HelpDialogLink: React.FC<HelpDialogLinkProps> = (
 
     return (
         <Link
-            {...omitIs(rest)}
+            {...omitProps(rest)}
             href={href}
             onClick={handleClick}
             target={isHashLink ? undefined : "_blank"}

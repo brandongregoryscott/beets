@@ -19,7 +19,7 @@ import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { absolutePath, joinPaths, toPathCase } from "utils/route-utils";
 import { HelpDialogLink } from "components/sidebar/help-dialog/help-dialog-link";
-import { omitIs } from "utils/markdown-utils";
+import { omitProps } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
 import { useTheme } from "utils/hooks/use-theme";
@@ -115,7 +115,7 @@ const getComponentMap = (
     a: (props) => <HelpDialogLink {...props} setSelectedTab={setSelectedTab} />,
     h2: (props) => (
         <CopyableHeading
-            {...omitIs(props)}
+            {...omitProps(props)}
             marginY={majorScale(2)}
             selectedTab={selectedTab}
             size={700}
@@ -123,7 +123,7 @@ const getComponentMap = (
     ),
     h3: (props) => (
         <CopyableHeading
-            {...omitIs(props)}
+            {...omitProps(props)}
             marginY={majorScale(2)}
             selectedTab={selectedTab}
             size={600}
@@ -131,7 +131,7 @@ const getComponentMap = (
     ),
     h4: (props) => (
         <CopyableHeading
-            {...omitIs(props)}
+            {...omitProps(props)}
             marginY={majorScale(2)}
             selectedTab={selectedTab}
             size={500}

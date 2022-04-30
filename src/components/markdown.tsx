@@ -7,20 +7,21 @@ import {
     UnorderedList,
     majorScale,
     defaultTheme,
+    Table,
 } from "evergreen-ui";
 import { Link as ReactRouterLink } from "react-router-dom";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import gfm from "remark-gfm";
-import { last } from "lodash";
+import { flatMap, last } from "lodash";
 import { NormalComponents } from "react-markdown/lib/complex-types";
 import { SpecialComponents } from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
-import { useMemo } from "react";
+import { ReactElement, useMemo } from "react";
 import { CopyableHeading } from "components/copyable-heading";
 import {
     mergeComponentMap,
-    omitIs,
+    omitProps,
     transformImageUri,
     transformLinkUri,
 } from "utils/markdown-utils";
@@ -42,7 +43,7 @@ const defaultComponents: MarkdownComponentMap = {
         const isHashLink = href?.includes("#") ?? false;
         return (
             <Link
-                {...omitIs(props)}
+                {...omitProps(props)}
                 is={isHashLink ? ReactRouterLink : Link}
                 target={isHashLink ? undefined : "_blank"}
                 to={isHashLink ? props.href! : undefined}
@@ -51,28 +52,28 @@ const defaultComponents: MarkdownComponentMap = {
     },
     h2: (props) => (
         <CopyableHeading
-            {...omitIs(props)}
+            {...omitProps(props)}
             marginY={majorScale(2)}
             size={700}
         />
     ),
     h3: (props) => (
         <CopyableHeading
-            {...omitIs(props)}
+            {...omitProps(props)}
             marginY={majorScale(2)}
             size={600}
         />
     ),
     h4: (props) => (
         <CopyableHeading
-            {...omitIs(props)}
+            {...omitProps(props)}
             marginY={majorScale(2)}
             size={500}
         />
     ),
     img: (props) => (
         <Image
-            {...omitIs(props)}
+            {...omitProps(props)}
             borderRadius={majorScale(1)}
             boxShadow={last(defaultTheme.shadows)}
             display="block"
@@ -80,10 +81,34 @@ const defaultComponents: MarkdownComponentMap = {
             maxWidth="100%"
         />
     ),
-    li: (props) => <ListItem {...omitIs(props, "ordered")} />,
-    p: (props) => <Paragraph {...omitIs(props)} marginBottom={majorScale(1)} />,
-    ul: (props) => <UnorderedList {...omitIs(props, "ordered")} />,
-    code: (props) => <Code {...omitIs(props, "inline")} size={300} />,
+    li: (props) => <ListItem {...omitProps(props)} />,
+    p: (props) => (
+        <Paragraph {...omitProps(props)} marginBottom={majorScale(1)} />
+    ),
+    ul: (props) => <UnorderedList {...omitProps(props)} />,
+    code: (props) => <Code {...omitProps(props)} size={300} />,
+    table: (props) => <Table {...omitProps(props)} />,
+    th: (props) => <Table.TextCell {...omitProps(props)} />,
+    tr: (props) => <Table.Row {...omitProps(props)} />,
+    tbody: (props) => <Table.Body {...omitProps(props)} />,
+    thead: (props) => {
+        // Markdown version adds an additional <tr> around the <th> list which breaks the Evergreen
+        // table format, so reach into it and grab its children
+        const children = flatMap(
+            props.children,
+            (child: ReactElement) => child.props.children
+        ) as React.ReactNode[];
+        return <Table.Head {...omitProps(props)}>{children}</Table.Head>;
+    },
+    td: (props) => (
+        <Table.TextCell
+            {...omitProps(props)}
+            textProps={{
+                size: 400,
+                whiteSpace: "break-spaces",
+            }}
+        />
+    ),
 };
 
 const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
@@ -105,5 +130,5 @@ const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
     );
 };
 
-export { defaultComponents, Markdown };
 export type { MarkdownProps, MarkdownComponentMap };
+export { defaultComponents, Markdown };

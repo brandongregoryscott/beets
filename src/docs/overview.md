@@ -131,10 +131,8 @@ This guide will serve as high-level documentation for the various different page
 
 ## Keyboard Shortcuts
 
-beets ships with a few context keyboard shortcuts that can be used to speed up your workflow.
-
-| Key Combination | Context                                                                 | Description                                                               |
-| --------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Ctrl/⌘ + S      | [Workstation Page](#workstation-page)                                   | Saves the project                                                         |
-| Ctrl/⌘ + D      | [Workstation Page](#workstation-page)                                   | Duplicates one or more [Track Sections](#track-section) that are selected |
-| Shift + Click   | [Workstation Page](#workstation-page) > [Track Section](#track-section) | Allows multi-selection of [Track Sections](#track-section)                |
+| Key Combination | Context                               | Description                                                                           |
+| --------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| Ctrl/⌘ + S      | [Workstation Page](#workstation-page) | Saves the project                                                                     |
+| Ctrl/⌘ + D      | [Workstation Page](#workstation-page) | Duplicates one or more [Track Sections](#track-section) that are selected             |
+| Shift + Click   | [Track Section](#track-section)       | Allows multi-selection of [Track Sections](#track-section) to prepare for duplication |
