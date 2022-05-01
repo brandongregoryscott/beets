@@ -8,6 +8,7 @@ import {
     majorScale,
     defaultTheme,
     Table,
+    minorScale,
 } from "evergreen-ui";
 import { Link as ReactRouterLink } from "react-router-dom";
 import rehypeSlug from "rehype-slug";
@@ -89,7 +90,13 @@ const defaultComponents: MarkdownComponentMap = {
     code: (props) => <Code {...omitProps(props)} size={300} />,
     table: (props) => <Table {...omitProps(props)} />,
     th: (props) => <Table.TextCell {...omitProps(props)} />,
-    tr: (props) => <Table.Row {...omitProps(props)} />,
+    tr: (props) => (
+        <Table.Row
+            {...omitProps(props)}
+            height="unset"
+            minHeight={majorScale(8)}
+        />
+    ),
     tbody: (props) => <Table.Body {...omitProps(props)} />,
     thead: (props) => {
         // Markdown version adds an additional <tr> around the <th> list which breaks the Evergreen
@@ -103,6 +110,7 @@ const defaultComponents: MarkdownComponentMap = {
     td: (props) => (
         <Table.TextCell
             {...omitProps(props)}
+            padding={minorScale(3)}
             textProps={{
                 size: 400,
                 whiteSpace: "break-spaces",
