@@ -9,7 +9,7 @@ interface UseKeyboardShortcutResult {
 }
 
 /**
- * Wrapper around `useHotkeys` from `react-hotkeys-hook` to handle cross-platform key handling and
+ * Wrapper around `useHotkeys` from `react-hotkeys-hook` to handle cross-platform key mapping and
  * generation of a display label for components
  *
  * @param shortcut Comma-separated string or array of keyboard shortcuts such as "ctrl+s,ctrl+a" or ["ctrl+s", "ctrl+a"]
