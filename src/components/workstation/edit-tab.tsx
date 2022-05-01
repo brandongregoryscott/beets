@@ -1,4 +1,5 @@
 import { Menu } from "components/menu/menu";
+import { Key } from "enums/key";
 import {
     AnnotationIcon,
     Button,
@@ -26,10 +27,11 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         []
     );
 
-    const { label } = useKeyboardShortcut("ctrl+d", duplicateSelected, [
-        isPlaying,
-        selectedState,
-    ]);
+    const { label } = useKeyboardShortcut(
+        `${Key.Control}+d`,
+        duplicateSelected,
+        [isPlaying, selectedState]
+    );
 
     return (
         <React.Fragment>

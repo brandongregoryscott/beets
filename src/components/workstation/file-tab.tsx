@@ -15,6 +15,7 @@ import { ProjectSettingsDialog } from "components/workstation/project-settings-d
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { ExportDialog } from "components/workstation/export-dialog";
 import { useKeyboardShortcut } from "utils/hooks/use-keyboard-shortcut";
+import { Key } from "enums/key";
 
 interface FileTabProps {}
 
@@ -128,7 +129,9 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         ]
     );
 
-    const { label } = useKeyboardShortcut("ctrl+s", () => handleSave()());
+    const { label } = useKeyboardShortcut(`${Key.Control}+s`, () =>
+        handleSave()()
+    );
 
     const handleRevertToSavedClick = useCallback(
         (closePopover: () => void) => () => {

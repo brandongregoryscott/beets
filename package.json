@@ -107,7 +107,8 @@
         "premigrations:up": "npm run build:migrations",
         "prepare": "husky install",
         "start": "react-scripts start",
-        "test": "react-scripts test"
+        "test": "react-scripts test",
+        "test:watch": "react-scripts test --watch"
     },
     "version": "0.0.0"
 }
