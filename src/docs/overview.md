@@ -21,6 +21,7 @@ This guide will serve as high-level documentation for the various different page
     -   [Volume](#volume)
     -   [Mute](#mute)
     -   [Solo](#solo)
+-   [Keyboard Shortcuts](#keyboard-shortcuts)
 
 ## Workstation page
 
@@ -127,3 +128,11 @@ This guide will serve as high-level documentation for the various different page
 -   Plays a specific [Track](#track) alone. This may be easier than muting all other [Tracks](#track) in a [Project](#project) to listen to just one part.
 
 ![Solo Track](../../public/assets/SoloTrack.png)
+
+## Keyboard Shortcuts
+
+| Key Combination | Context                               | Description                                                                           |
+| --------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| Ctrl/⌘ + S      | [Workstation Page](#workstation-page) | Saves the project                                                                     |
+| Ctrl/⌘ + D      | [Workstation Page](#workstation-page) | Duplicates one or more [Track Sections](#track-section) that are selected             |
+| Shift + Click   | [Track Section](#track-section)       | Allows multi-selection of [Track Sections](#track-section) to prepare for duplication |

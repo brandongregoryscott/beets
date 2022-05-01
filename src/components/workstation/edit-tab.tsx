@@ -1,4 +1,5 @@
 import { Menu } from "components/menu/menu";
+import { Key } from "enums/key";
 import {
     AnnotationIcon,
     Button,
@@ -8,11 +9,9 @@ import {
     SquareIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
+import { useKeyboardShortcut } from "utils/hooks/use-keyboard-shortcut";
 import { useToneControls } from "utils/hooks/use-tone-controls";
-
-const shortcutKey = navigator.platform.includes("Mac") ? "⌘" : "Ctrl+";
 
 interface EditTabProps {}
 
@@ -28,7 +27,11 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
         []
     );
 
-    useHotkeys("cmd+d, ctrl+d", duplicateSelected, [isPlaying, selectedState]);
+    const { label } = useKeyboardShortcut(
+        `${Key.Control}+d`,
+        duplicateSelected,
+        [isPlaying, selectedState]
+    );
 
     return (
         <React.Fragment>
@@ -42,7 +45,7 @@ const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
                                 closePopover,
                                 duplicateSelected
                             )}
-                            secondaryText={(shortcutKey + "D") as any}>
+                            secondaryText={label}>
                             Duplicate
                         </Menu.Item>
                         <Menu.Item

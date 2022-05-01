@@ -13,10 +13,9 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useDialog } from "utils/hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
-import { useHotkeys } from "react-hotkeys-hook";
 import { ExportDialog } from "components/workstation/export-dialog";
-
-const shortcutKey = navigator.platform.includes("Mac") ? "⌘" : "Ctrl+";
+import { useKeyboardShortcut } from "utils/hooks/use-keyboard-shortcut";
+import { Key } from "enums/key";
 
 interface FileTabProps {}
 
@@ -130,13 +129,8 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         ]
     );
 
-    useHotkeys(
-        "cmd+s, ctrl+s",
-        (event) => {
-            event.preventDefault();
-            handleSave()();
-        },
-        [handleSave]
+    const { label } = useKeyboardShortcut(`${Key.Control}+s`, () =>
+        handleSave()()
     );
 
     const handleRevertToSavedClick = useCallback(
@@ -207,7 +201,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                         </Menu.Item>
                         <Menu.Item
                             onClick={handleSave(closePopover)}
-                            secondaryText={(shortcutKey + "S") as any}>
+                            secondaryText={label}>
                             Save
                         </Menu.Item>
                         <Menu.Item onClick={handleExportClick(closePopover)}>

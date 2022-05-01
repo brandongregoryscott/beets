@@ -6,10 +6,22 @@ const mergeComponentMap = (
     componentMap: MarkdownComponentMap
 ): MarkdownComponentMap => merge({}, defaultComponents, componentMap);
 
-const omitIs = <T extends { is?: string | undefined }>(
+/**
+ * Omits 'is' and other unnecessary props added by react-markdown that may conflict or cause React warnings
+ */
+const omitProps = <T extends { is?: string | undefined }>(
     props: T,
     ...additionalKeys: Array<keyof T>
-) => omit(props, "is", ...additionalKeys);
+) =>
+    omit(
+        props,
+        "is",
+        "node",
+        "isHeader",
+        "inline",
+        "ordered",
+        ...additionalKeys
+    );
 
 const transformImageUri: TransformImage = (src: string) =>
     src.replace("../../public", "");
@@ -17,4 +29,4 @@ const transformImageUri: TransformImage = (src: string) =>
 const transformLinkUri: TransformLink = (href: string) =>
     href.replace("./", "../");
 
-export { mergeComponentMap, omitIs, transformImageUri, transformLinkUri };
+export { mergeComponentMap, omitProps, transformImageUri, transformLinkUri };
