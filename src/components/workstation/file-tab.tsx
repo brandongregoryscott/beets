@@ -129,8 +129,10 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         ]
     );
 
-    const { label } = useKeyboardShortcut(`${Key.Control}+s`, () =>
-        handleSave()()
+    const { label } = useKeyboardShortcut(
+        `${Key.Control}+s`,
+        () => handleSave()(),
+        [handleSave]
     );
 
     const handleRevertToSavedClick = useCallback(
