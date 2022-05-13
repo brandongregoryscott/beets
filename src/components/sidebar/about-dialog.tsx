@@ -2,6 +2,7 @@ import {
     Alert,
     Code,
     Heading,
+    InlineAlert,
     Link,
     majorScale,
     Pane,
@@ -12,16 +13,11 @@ import React from "react";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useLatestRelease } from "utils/hooks/use-latest-release";
 import { Dialog, DialogProps } from "components/dialog";
-import { isDevelopment } from "utils/env";
+import { getCurrentEnvironment, EnvironmentName } from "utils/env";
 import { Markdown, MarkdownComponentMap } from "components/markdown";
 import { omitProps } from "utils/markdown-utils";
 import { isString } from "lodash";
-
-enum Environment {
-    Development = "Development",
-    Local = "Local",
-    Production = "Production",
-}
+import { REPO_URL } from "constants/repo-url";
 
 interface AboutDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
@@ -70,15 +66,13 @@ const AboutDialog: React.FC<AboutDialogProps> = (props: AboutDialogProps) => {
             {!isLoading && (
                 <Pane maxWidth={majorScale(80)}>
                     <Paragraph>
-                        <Link
-                            href="https://github.com/brandongregoryscott/beets"
-                            target="_blank">
-                            <Code>beets</Code>
+                        <Link href={REPO_URL} target="_blank">
+                            <Code size={300}>beets</Code>
                         </Link>{" "}
                         is a web-based DAW (Digital Audio Workstation) written
                         in React for making music.
                     </Paragraph>
-                    {environment !== Environment.Production && (
+                    {environment !== EnvironmentName.Production && (
                         <Alert
                             intent="warning"
                             marginTop={majorScale(1)}
@@ -104,25 +98,20 @@ const AboutDialog: React.FC<AboutDialogProps> = (props: AboutDialogProps) => {
                             {release.body}
                         </Markdown>
                     )}
+                    {release?.hasNewCommits === true && (
+                        <InlineAlert marginBottom={majorScale(1)}>
+                            There may be more recent commits to{" "}
+                            <Code size={300}></Code> that are not reflected in
+                            these release notes.{" "}
+                            <Link href={release.compareUrl} target="_blank">
+                                See diff
+                            </Link>
+                        </InlineAlert>
+                    )}
                 </Pane>
             )}
         </Dialog>
     );
-};
-
-const getCurrentEnvironment = (): Environment => {
-    if (isDevelopment()) {
-        return Environment.Local;
-    }
-
-    if (
-        process.env.NODE_ENV === "production" &&
-        window.location.hostname.startsWith("development")
-    ) {
-        return Environment.Development;
-    }
-
-    return Environment.Production;
 };
 
 export { AboutDialog };
