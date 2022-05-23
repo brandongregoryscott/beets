@@ -4,10 +4,12 @@ import { majorScale, minorScale, Option } from "evergreen-ui";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";
 import React, { useCallback, useRef } from "react";
+import { isInstanceOf } from "utils/core-utils";
 
 interface FileSelectMenuItemProps
     extends SelectMenuItemRendererProps<FileRecord> {}
 
+const ignoredClickTargets = [SVGSVGElement, SVGPathElement, HTMLButtonElement];
 const itemHeight = 33;
 
 const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
@@ -39,10 +41,7 @@ const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
             }
 
             // Prevent events from the <PlayButton /> from selecting/deselecting item
-            if (
-                target instanceof SVGSVGElement ||
-                target instanceof HTMLButtonElement
-            ) {
+            if (isInstanceOf(target, ...ignoredClickTargets)) {
                 return;
             }
 

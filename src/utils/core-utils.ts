@@ -3,6 +3,7 @@ import { BorderProps } from "interfaces/border-props";
 import { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
 import { isEqual as lodashIsEqual } from "lodash";
+import { Constructor } from "types/constructor";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;
@@ -59,6 +60,11 @@ const isEqual = <
     return lodashIsEqual(left, right);
 };
 
+const isInstanceOf = <T, C extends Constructor[]>(
+    value: T,
+    ...construtors: C
+): boolean => construtors.some((constructor) => value instanceof constructor);
+
 const isNilOrEmpty = <T = string | any[] | List<any>>(
     value: T | any[] | List<any> | null | undefined
 ): value is null | undefined => {
@@ -97,6 +103,7 @@ export {
     getBorderYProps,
     getBorderXProps,
     isEqual,
+    isInstanceOf,
     isNilOrEmpty,
     isNotNilOrEmpty,
     makeDefaultValues,
