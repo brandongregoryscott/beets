@@ -1,7 +1,7 @@
 import { ConfirmButton } from "components/confirm-button";
 import { ErrorAlert } from "components/error-alert";
 import { FileSelectMenu } from "components/files/file-select-menu";
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";

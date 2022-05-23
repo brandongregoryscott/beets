@@ -1,4 +1,4 @@
-import { SelectMenuItemRendererProps } from "components/select-menu";
+import { SelectMenuItemRendererProps } from "components/select-menu/select-menu";
 import { FileRecord } from "models/file-record";
 import { majorScale, minorScale, Option } from "evergreen-ui";
 import { useBoolean } from "utils/hooks/use-boolean";

@@ -1,4 +1,4 @@
-import { SelectMenuItem } from "components/select-menu";
+import { SelectMenuItem } from "components/select-menu/select-menu";
 import { List, Map } from "immutable";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";

@@ -1,10 +1,12 @@
 import { FileSelectMenuItem } from "components/files/file-select-menu-item";
+import { IconButton } from "components/icon-button";
 import {
     SelectMenu,
     SelectMenuItem,
     SelectMenuProps,
-} from "components/select-menu";
-import { Spinner, majorScale, Pane } from "evergreen-ui";
+} from "components/select-menu/select-menu";
+import { SelectMenuTitle } from "components/select-menu/select-menu-title";
+import { Spinner, majorScale, Pane, Popover } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import React from "react";
 import { PropsWithChildren, useCallback, useMemo } from "react";
@@ -60,7 +62,10 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
             onSelect={handleSelect}
             options={options}
             selected={selected}
-            title={title}>
+            title={title}
+            titleView={({ close }) => (
+                <SelectMenuTitle close={close} title={title} />
+            )}>
             {isLoading ? (
                 <Pane
                     alignItems="center"

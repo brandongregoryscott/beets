@@ -21,7 +21,7 @@ import { ProjectRecord } from "models/project-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { MimeType } from "enums/mime-type";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { getExtension } from "utils/mime-type-utils";
 import slugify from "slugify";
 import { unixTime } from "utils/core-utils";

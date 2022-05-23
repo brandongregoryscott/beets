@@ -1,4 +1,4 @@
-import { SelectMenuItem } from "components/select-menu";
+import { SelectMenuItem } from "components/select-menu/select-menu";
 import { SortOrder } from "enums/sort-order";
 import { titleCase } from "humanize-plus";
 import { SortOptions } from "interfaces/sort-options";
