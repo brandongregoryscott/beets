@@ -3,8 +3,8 @@ import {
     FileSelectMenuFilters,
 } from "components/files/file-select-menu";
 import { Flex } from "components/flex";
+import { SelectMenuTitle } from "components/select-menu/select-menu-title";
 import {
-    Text,
     FilterIcon,
     IconButton,
     majorScale,
@@ -24,6 +24,7 @@ import React, { useCallback, useState } from "react";
 interface FileSelectMenuFilterPopoverProps
     extends Pick<PopoverProps, "isShown"> {
     filters: FileSelectMenuFilters;
+    onClose: () => void;
     onConfirm: (updated: FileSelectMenuFilters) => void;
     onToggle: () => void;
 }
@@ -31,7 +32,13 @@ interface FileSelectMenuFilterPopoverProps
 const FileSelectMenuFilterPopover: React.FC<
     FileSelectMenuFilterPopoverProps
 > = (props: FileSelectMenuFilterPopoverProps) => {
-    const { filters: initialFilters, onConfirm, isShown, onToggle } = props;
+    const {
+        filters: initialFilters,
+        onConfirm,
+        onClose,
+        isShown,
+        onToggle,
+    } = props;
     const [filters, setFilters] =
         useState<FileSelectMenuFilters>(initialFilters);
 
@@ -70,15 +77,7 @@ const FileSelectMenuFilterPopover: React.FC<
         <Popover
             content={
                 <Flex.Column>
-                    <Flex.Row
-                        alignItems="center"
-                        borderBottom={true}
-                        height={majorScale(5)}
-                        padding={majorScale(1)}>
-                        <Text size={300} textTransform="uppercase">
-                            Sort & Filter
-                        </Text>
-                    </Flex.Row>
+                    <SelectMenuTitle close={onClose} title="Sort & Filter" />
                     <Flex.Column padding={majorScale(1)}>
                         <Flex.Row marginBottom={majorScale(1)}>
                             <Switch

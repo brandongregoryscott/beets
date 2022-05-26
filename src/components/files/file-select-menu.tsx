@@ -50,7 +50,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     } = props;
     const {
         value: isFilterPopoverOpen,
-        setFalse: handleCloseFilterPopover,
+        setFalse: closeFilterPopover,
         toggle: handleToggleFilterPopover,
     } = useBoolean();
     const [filters, setFilters] =
@@ -81,12 +81,17 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         [onSelect]
     );
 
+    const handleCloseFilterPopover = useCallback(() => {
+        // Intentionally schedule the popover close outside of standard React state queue
+        // so that the close event doesn't trigger for both popovers - we're conditionally setting
+        // shouldCloseOnExternalClick in the base popover
+        setTimeout(closeFilterPopover, 0);
+    }, [closeFilterPopover]);
+
     const handleConfirmFilter = useCallback(
         (updatedFilters: FileSelectMenuFilters) => {
             setFilters(updatedFilters);
-            // Intentionally schedule the popover close outside of standard React state queue
-            // so that the confirmation doesn't close both popovers
-            setTimeout(handleCloseFilterPopover, 0);
+            handleCloseFilterPopover();
         },
         [handleCloseFilterPopover]
     );
@@ -108,6 +113,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
                     <FileSelectMenuFilterPopover
                         filters={filters}
                         isShown={isFilterPopoverOpen}
+                        onClose={handleCloseFilterPopover}
                         onConfirm={handleConfirmFilter}
                         onToggle={handleToggleFilterPopover}
                     />
