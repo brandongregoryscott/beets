@@ -1,17 +1,20 @@
+import { FileSelectMenuFilterPopover } from "components/files/file-select-menu-filter-popover";
 import { FileSelectMenuItem } from "components/files/file-select-menu-item";
-import { IconButton } from "components/icon-button";
 import {
     SelectMenu,
     SelectMenuItem,
     SelectMenuProps,
 } from "components/select-menu/select-menu";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
-import { Spinner, majorScale, Pane, Popover } from "evergreen-ui";
+import { Spinner, majorScale, Pane } from "evergreen-ui";
+import { castArray } from "lodash";
 import { FileRecord } from "models/file-record";
-import React from "react";
+import React, { useState } from "react";
 import { PropsWithChildren, useCallback, useMemo } from "react";
+import { intersectionWith } from "utils/collection-utils";
 import { toSelectMenuItems } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useBoolean } from "utils/hooks/use-boolean";
 
 interface FileSelectMenuProps
     extends Pick<
@@ -21,6 +24,14 @@ interface FileSelectMenuProps
     onDeselect?: (file: FileRecord) => void;
     onSelect?: (file: FileRecord) => void;
 }
+
+interface FileSelectMenuFilters {
+    showSelectedOnly: boolean;
+}
+
+const initialFilters: FileSelectMenuFilters = {
+    showSelectedOnly: false,
+};
 
 const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     props: PropsWithChildren<FileSelectMenuProps>
@@ -35,12 +46,28 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         selected,
         title,
     } = props;
+    const {
+        value: isFilterPopoverOpen,
+        setFalse: handleCloseFilterPopover,
+        toggle: handleToggleFilterPopover,
+    } = useBoolean();
+    const [filters, setFilters] =
+        useState<FileSelectMenuFilters>(initialFilters);
     const { resultObject: files, isLoading } = useListFiles();
+    const { showSelectedOnly } = filters;
 
-    const options: Array<SelectMenuItem<FileRecord>> = useMemo(
-        () => toSelectMenuItems(files),
-        [files]
-    );
+    const options: Array<SelectMenuItem<FileRecord>> = useMemo(() => {
+        const filteredFiles = showSelectedOnly
+            ? intersectionWith(
+                  files ?? [],
+                  selected instanceof FileRecord
+                      ? castArray(selected)
+                      : selected ?? [],
+                  (left, right) => left.id === right.id
+              )
+            : files;
+        return toSelectMenuItems(filteredFiles);
+    }, [files, selected, showSelectedOnly]);
 
     const handleDeselect = useCallback(
         (item: SelectMenuItem<FileRecord>) => onDeselect?.(item.value),
@@ -50,6 +77,16 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     const handleSelect = useCallback(
         (item: SelectMenuItem<FileRecord>) => onSelect?.(item.value),
         [onSelect]
+    );
+
+    const handleConfirmFilter = useCallback(
+        (updatedFilters: FileSelectMenuFilters) => {
+            setFilters(updatedFilters);
+            // Intentionally schedule the popover close outside of standard React state queue
+            // so that the confirmation doesn't close both popovers
+            setTimeout(handleCloseFilterPopover, 0);
+        },
+        [handleCloseFilterPopover]
     );
 
     return (
@@ -62,9 +99,17 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
             onSelect={handleSelect}
             options={options}
             selected={selected}
+            shouldCloseOnExternalClick={!isFilterPopoverOpen}
             title={title}
             titleView={({ close }) => (
-                <SelectMenuTitle close={close} title={title} />
+                <SelectMenuTitle close={close} title={title}>
+                    <FileSelectMenuFilterPopover
+                        filters={filters}
+                        isShown={isFilterPopoverOpen}
+                        onConfirm={handleConfirmFilter}
+                        onToggle={handleToggleFilterPopover}
+                    />
+                </SelectMenuTitle>
             )}>
             {isLoading ? (
                 <Pane
@@ -82,4 +127,5 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     );
 };
 
-export { FileSelectMenu };
+export type { FileSelectMenuProps, FileSelectMenuFilters };
+export { FileSelectMenu, initialFilters };

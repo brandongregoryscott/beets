@@ -19,7 +19,9 @@ const SelectMenuTitle: React.FC<SelectMenuTitleProps> = (
             height={majorScale(5)}
             padding={majorScale(1)}>
             <Flex.Row alignItems="center" flex={1}>
-                <Text textTransform="uppercase">{title}</Text>
+                <Text size={300} textTransform="uppercase">
+                    {title}
+                </Text>
             </Flex.Row>
             {children}
             {isFunction(close) && (
