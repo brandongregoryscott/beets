@@ -1,4 +1,7 @@
-import { FileSelectMenuFilters } from "components/files/file-select-menu";
+import {
+    defaultFilters,
+    FileSelectMenuFilters,
+} from "components/files/file-select-menu";
 import { Flex } from "components/flex";
 import {
     Text,
@@ -12,7 +15,10 @@ import {
     Label,
     PopoverProps,
     Pane,
+    Tooltip,
+    FilterListIcon,
 } from "evergreen-ui";
+import { isEqual } from "lodash";
 import React, { useCallback, useState } from "react";
 
 interface FileSelectMenuFilterPopoverProps
@@ -29,25 +35,36 @@ const FileSelectMenuFilterPopover: React.FC<
     const [filters, setFilters] =
         useState<FileSelectMenuFilters>(initialFilters);
 
-    const handleShowSelectedOnlyChange = useCallback(
+    const handleShowSelectedChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             setFilters((prev) => ({
                 ...prev,
-                showSelectedOnly: event.target.checked,
+                showSelected: event.target.checked,
             }));
         },
         []
     );
 
-    const handleClear = useCallback(
-        () => setFilters(initialFilters),
-        [initialFilters]
+    const handleShowAssignedChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setFilters((prev) => ({
+                ...prev,
+                showAssigned: event.target.checked,
+            }));
+        },
+        []
     );
+
+    const handleClear = useCallback(() => setFilters(defaultFilters), []);
 
     const handleConfirm = useCallback(
         () => onConfirm(filters),
         [filters, onConfirm]
     );
+
+    const icon = isEqual(initialFilters, defaultFilters)
+        ? FilterIcon
+        : FilterListIcon;
 
     return (
         <Popover
@@ -63,14 +80,31 @@ const FileSelectMenuFilterPopover: React.FC<
                         </Text>
                     </Flex.Row>
                     <Flex.Column padding={majorScale(1)}>
+                        <Flex.Row marginBottom={majorScale(1)}>
+                            <Switch
+                                checked={filters.showSelected}
+                                onChange={handleShowSelectedChange}
+                            />
+                            <Tooltip
+                                content="Filters the list to selected samples"
+                                showDelay={750}>
+                                <Label marginLeft={majorScale(1)} size={300}>
+                                    Show selected
+                                </Label>
+                            </Tooltip>
+                        </Flex.Row>
                         <Flex.Row>
                             <Switch
-                                checked={filters.showSelectedOnly}
-                                onChange={handleShowSelectedOnlyChange}
+                                checked={filters.showAssigned}
+                                onChange={handleShowAssignedChange}
                             />
-                            <Label marginLeft={majorScale(1)} size={300}>
-                                Show selected only
-                            </Label>
+                            <Tooltip
+                                content="Filters the list to samples that have been assigned to a step"
+                                showDelay={750}>
+                                <Label marginLeft={majorScale(1)} size={300}>
+                                    Show assigned
+                                </Label>
+                            </Tooltip>
                         </Flex.Row>
                     </Flex.Column>
                     <Flex.Row borderTop={true} padding={majorScale(1)}>
@@ -97,7 +131,7 @@ const FileSelectMenuFilterPopover: React.FC<
                 <IconButton
                     appearance="minimal"
                     height={majorScale(3)}
-                    icon={FilterIcon}
+                    icon={icon}
                     marginRight={minorScale(1)}
                     onClick={onToggle}
                 />

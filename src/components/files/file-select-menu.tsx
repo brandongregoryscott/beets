@@ -26,11 +26,13 @@ interface FileSelectMenuProps
 }
 
 interface FileSelectMenuFilters {
-    showSelectedOnly: boolean;
+    showAssigned: boolean;
+    showSelected: boolean;
 }
 
-const initialFilters: FileSelectMenuFilters = {
-    showSelectedOnly: false,
+const defaultFilters: FileSelectMenuFilters = {
+    showSelected: false,
+    showAssigned: false,
 };
 
 const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
@@ -52,12 +54,12 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         toggle: handleToggleFilterPopover,
     } = useBoolean();
     const [filters, setFilters] =
-        useState<FileSelectMenuFilters>(initialFilters);
+        useState<FileSelectMenuFilters>(defaultFilters);
     const { resultObject: files, isLoading } = useListFiles();
-    const { showSelectedOnly } = filters;
+    const { showSelected } = filters;
 
     const options: Array<SelectMenuItem<FileRecord>> = useMemo(() => {
-        const filteredFiles = showSelectedOnly
+        const filteredFiles = showSelected
             ? intersectionWith(
                   files ?? [],
                   selected instanceof FileRecord
@@ -67,7 +69,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
               )
             : files;
         return toSelectMenuItems(filteredFiles);
-    }, [files, selected, showSelectedOnly]);
+    }, [files, selected, showSelected]);
 
     const handleDeselect = useCallback(
         (item: SelectMenuItem<FileRecord>) => onDeselect?.(item.value),
@@ -128,4 +130,4 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
 };
 
 export type { FileSelectMenuProps, FileSelectMenuFilters };
-export { FileSelectMenu, initialFilters };
+export { FileSelectMenu, defaultFilters };
