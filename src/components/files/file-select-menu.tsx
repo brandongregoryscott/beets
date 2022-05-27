@@ -25,7 +25,6 @@ import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
-import { Flex } from "components/flex";
 import { useTheme } from "utils/hooks/use-theme";
 import { absolutePath, joinPaths } from "utils/route-utils";
 import { EmptyState } from "components/empty-state";
@@ -36,8 +35,7 @@ interface FileSelectMenuProps
         "hasFilter" | "hasTitle" | "isMultiSelect" | "selected" | "title"
     > {
     /**
-     * List of samples that have been assigned to the current `TrackSectionRecord`, used for
-     * filtering
+     * List of samples that have been assigned to the current `TrackSectionRecord`, used for filtering
      */
     assigned?: List<FileRecord>;
     onDeselect?: (file: FileRecord) => void;
@@ -71,8 +69,8 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     const { colors } = useTheme();
     const {
         value: isFilterPopoverOpen,
-        setFalse: closeFilterPopover,
-        toggle: handleToggleFilterPopover,
+        setFalse: handleFilterPopoverClose,
+        setTrue: handleFilterPopoverOpen,
     } = useBoolean();
     const [filters, setFilters] =
         useState<FileSelectMenuFilters>(defaultFilters);
@@ -108,19 +106,11 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         [onSelect]
     );
 
-    const handleCloseFilterPopover = useCallback(() => {
-        // Intentionally schedule the popover close outside of standard React state queue
-        // so that the close event doesn't trigger for both popovers - we're conditionally setting
-        // shouldCloseOnExternalClick in the base popover
-        setTimeout(closeFilterPopover, 0);
-    }, [closeFilterPopover]);
-
     const handleConfirmFilter = useCallback(
         (updatedFilters: FileSelectMenuFilters) => {
             setFilters(updatedFilters);
-            handleCloseFilterPopover();
         },
-        [handleCloseFilterPopover]
+        []
     );
 
     const handleClearFilters = useCallback((event: React.MouseEvent) => {
@@ -153,10 +143,9 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
                 <SelectMenuTitle close={close} title={title}>
                     <FileSelectMenuFilterPopover
                         filters={filters}
-                        isShown={isFilterPopoverOpen}
-                        onClose={handleCloseFilterPopover}
+                        onOpen={handleFilterPopoverOpen}
+                        onClose={handleFilterPopoverClose}
                         onConfirm={handleConfirmFilter}
-                        onToggle={handleToggleFilterPopover}
                     />
                 </SelectMenuTitle>
             )}>

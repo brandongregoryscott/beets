@@ -22,23 +22,15 @@ import { isEqual } from "lodash";
 import React, { useCallback, useState } from "react";
 
 interface FileSelectMenuFilterPopoverProps
-    extends Pick<PopoverProps, "isShown"> {
+    extends Pick<PopoverProps, "onOpen" | "onClose"> {
     filters: FileSelectMenuFilters;
-    onClose: () => void;
     onConfirm: (updated: FileSelectMenuFilters) => void;
-    onToggle: () => void;
 }
 
 const FileSelectMenuFilterPopover: React.FC<
     FileSelectMenuFilterPopoverProps
 > = (props: FileSelectMenuFilterPopoverProps) => {
-    const {
-        filters: initialFilters,
-        onConfirm,
-        onClose,
-        isShown,
-        onToggle,
-    } = props;
+    const { filters: initialFilters, onConfirm, onOpen, onClose } = props;
     const [filters, setFilters] =
         useState<FileSelectMenuFilters>(initialFilters);
 
@@ -62,33 +54,21 @@ const FileSelectMenuFilterPopover: React.FC<
         []
     );
 
-    const resetStateFromProps = useCallback(
-        (delayInMs?: number) => {
-            if (delayInMs != null && delayInMs > 0) {
-                // Adding a slight delay to prevent local state change from rendering before popover closes
-                setTimeout(() => setFilters(initialFilters), delayInMs);
-                return;
-            }
-
-            setFilters(initialFilters);
-        },
-        [initialFilters]
-    );
-
-    const handleClose = useCallback(() => {
-        onClose();
-        resetStateFromProps(50);
-    }, [onClose, resetStateFromProps]);
+    const resetStateFromProps = useCallback(() => {
+        setFilters(initialFilters);
+    }, [initialFilters]);
 
     const handleToggle = useCallback(() => {
-        onToggle();
         resetStateFromProps();
-    }, [onToggle, resetStateFromProps]);
+    }, [resetStateFromProps]);
 
     const handleClear = useCallback(() => setFilters(defaultFilters), []);
 
     const handleConfirm = useCallback(
-        () => onConfirm(filters),
+        (close: () => void) => () => {
+            onConfirm(filters);
+            scheduleClose(close);
+        },
         [filters, onConfirm]
     );
 
@@ -98,10 +78,10 @@ const FileSelectMenuFilterPopover: React.FC<
 
     return (
         <Popover
-            content={
+            content={({ close }) => (
                 <Flex.Column>
                     <SelectMenuTitle
-                        close={handleClose}
+                        close={scheduleClose(close)}
                         title="Sort & Filter"
                     />
                     <Flex.Column padding={majorScale(1)}>
@@ -142,14 +122,15 @@ const FileSelectMenuFilterPopover: React.FC<
                         </Button>
                         <Button
                             appearance="primary"
-                            onClick={handleConfirm}
+                            onClick={handleConfirm(close)}
                             size="small">
                             Apply
                         </Button>
                     </Flex.Row>
                 </Flex.Column>
-            }
-            isShown={isShown}>
+            )}
+            onClose={onClose}
+            onOpen={onOpen}>
             {/* Pane is used to forward click events to underlying IconButton, since the Popover
                 replaces the target component/element's onClick function */}
             <Pane>
@@ -164,5 +145,11 @@ const FileSelectMenuFilterPopover: React.FC<
         </Popover>
     );
 };
+
+/**
+ * Utility function for scheduling the close function to prevent race conditions closing the parent
+ * Popover as well
+ */
+const scheduleClose = (close: () => void) => () => setTimeout(close, 0);
 
 export { FileSelectMenuFilterPopover };
