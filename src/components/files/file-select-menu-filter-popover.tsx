@@ -85,7 +85,7 @@ const FileSelectMenuFilterPopover: React.FC<
                 <Flex.Column>
                     <SelectMenuTitle
                         close={() => scheduleClose(close)}
-                        title="Sort & Filter"
+                        title="Filters"
                     />
                     <Flex.Column padding={majorScale(2)}>
                         <Flex.Row marginBottom={majorScale(2)}>
