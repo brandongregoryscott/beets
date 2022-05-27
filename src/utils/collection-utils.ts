@@ -4,7 +4,7 @@ import { OrderableEntity } from "interfaces/orderable-entity";
 import _ from "lodash";
 import { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
-import { isEqual, isNilOrEmpty, isNotNilOrEmpty } from "utils/core-utils";
+import { isEqual, isNilOrEmpty } from "utils/core-utils";
 
 const diffDeletedEntities = <T extends Auditable>(
     initialValues: List<T>,
@@ -28,16 +28,20 @@ const diffUpdatedEntities = <T extends Auditable>(
     initialValues: List<T>
 ): List<T> => {
     const createdOrUpdated = values.filter((value) => {
-        // Find initial value by strict equality check - if a matching initialValue is found,
+        if (!isPersisted(value)) {
+            return true;
+        }
+
+        // Find initial value by deep equality check - if a matching initialValue is found,
         // it means the entity is unchanged and shouldn't be returned
         const initialValue = initialValues.find((initialValue) =>
             isEqual(value, initialValue)
         );
 
-        return !isPersisted(value) || initialValue == null;
+        return initialValue == null;
     });
 
-    return createdOrUpdated.filter(isNotNilOrEmpty);
+    return createdOrUpdated;
 };
 
 /**

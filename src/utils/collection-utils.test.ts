@@ -3,7 +3,6 @@ import { random } from "lodash";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { getCurrentTime } from "utils/date-utils";
-
 import { diffUpdatedEntities, groupBy } from "./collection-utils";
 
 describe("CollectionUtils", () => {
