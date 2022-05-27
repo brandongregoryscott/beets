@@ -80,6 +80,7 @@ const FileSelectMenuFilterPopover: React.FC<
 
     return (
         <Popover
+            bringFocusInside={true}
             content={({ close }) => (
                 <Flex.Column>
                     <SelectMenuTitle
