@@ -2,7 +2,7 @@ import {
     SelectMenu,
     SelectMenuItem,
     SelectMenuProps,
-} from "components/select-menu";
+} from "components/select-menu/select-menu";
 import { MidiNotes } from "constants/midi-notes";
 import React from "react";
 import { PropsWithChildren, useCallback } from "react";

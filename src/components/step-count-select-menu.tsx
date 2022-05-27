@@ -1,4 +1,4 @@
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { Button, majorScale } from "evergreen-ui";
 import _ from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
