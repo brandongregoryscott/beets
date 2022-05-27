@@ -17,7 +17,7 @@ import {
 import { List } from "immutable";
 import { castArray, isEmpty } from "lodash";
 import { FileRecord } from "models/file-record";
-import React, { useState } from "react";
+import React from "react";
 import { PropsWithChildren, useCallback, useMemo } from "react";
 import { intersectionWith } from "utils/collection-utils";
 import { toSelectMenuItems } from "utils/file-utils";
@@ -28,6 +28,7 @@ import { Sitemap } from "sitemap";
 import { useTheme } from "utils/hooks/use-theme";
 import { absolutePath, joinPaths } from "utils/route-utils";
 import { EmptyState } from "components/empty-state";
+import { useLocalstorageState } from "rooks";
 
 interface FileSelectMenuProps
     extends Pick<
@@ -52,6 +53,8 @@ const defaultFilters: FileSelectMenuFilters = {
     showAssigned: false,
 };
 
+const localStorageKey = "fileSelectMenuFilterSelection";
+
 const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     props: PropsWithChildren<FileSelectMenuProps>
 ) => {
@@ -72,8 +75,10 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         setFalse: handleFilterPopoverClose,
         setTrue: handleFilterPopoverOpen,
     } = useBoolean();
-    const [filters, setFilters] =
-        useState<FileSelectMenuFilters>(defaultFilters);
+    const [filters, setFilters] = useLocalstorageState<FileSelectMenuFilters>(
+        localStorageKey,
+        defaultFilters
+    );
     const { resultObject: files, isLoading } = useListFiles();
     const { showSelected, showAssigned } = filters;
 
@@ -110,13 +115,16 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         (updatedFilters: FileSelectMenuFilters) => {
             setFilters(updatedFilters);
         },
-        []
+        [setFilters]
     );
 
-    const handleClearFilters = useCallback((event: React.MouseEvent) => {
-        event.stopPropagation();
-        setFilters(defaultFilters);
-    }, []);
+    const handleClearFilters = useCallback(
+        (event: React.MouseEvent) => {
+            event.stopPropagation();
+            setFilters(defaultFilters);
+        },
+        [setFilters]
+    );
 
     return (
         <SelectMenu
