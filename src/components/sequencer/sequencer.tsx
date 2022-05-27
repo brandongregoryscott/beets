@@ -16,7 +16,6 @@ import { toDataAttributes } from "utils/data-attribute-utils";
 import { useSampleSelection } from "utils/hooks/use-sample-selection";
 import { IconButton } from "components/icon-button";
 import { useMemo } from "react";
-import { isNotNilOrEmpty } from "utils/core-utils";
 import { intersectionWith } from "utils/collection-utils";
 
 interface SequencerProps {
