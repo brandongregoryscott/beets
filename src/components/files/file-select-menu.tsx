@@ -35,6 +35,11 @@ interface FileSelectMenuProps
         SelectMenuProps<FileRecord>,
         "hasFilter" | "hasTitle" | "isMultiSelect" | "selected" | "title"
     > {
+    /**
+     * List of samples that have been assigned to the current `TrackSectionRecord`, used for
+     * filtering
+     */
+    assigned?: List<FileRecord>;
     onDeselect?: (file: FileRecord) => void;
     onSelect?: (file: FileRecord) => void;
 }
@@ -53,6 +58,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     props: PropsWithChildren<FileSelectMenuProps>
 ) => {
     const {
+        assigned,
         children,
         hasFilter,
         hasTitle,
@@ -71,20 +77,26 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     const [filters, setFilters] =
         useState<FileSelectMenuFilters>(defaultFilters);
     const { resultObject: files, isLoading } = useListFiles();
-    const { showSelected } = filters;
+    const { showSelected, showAssigned } = filters;
 
     const options: Array<SelectMenuItem<FileRecord>> = useMemo(() => {
-        const filteredFiles = showSelected
-            ? intersectionWith(
-                  files ?? [],
-                  selected instanceof FileRecord
-                      ? castArray(selected)
-                      : selected ?? [],
-                  (left, right) => left.id === right.id
-              )
-            : files;
+        let filteredFiles: List<FileRecord> = files ?? List();
+        if (showAssigned) {
+            filteredFiles = assigned ?? List();
+        }
+
+        if (showSelected) {
+            filteredFiles = intersectionWith(
+                filteredFiles,
+                selected instanceof FileRecord
+                    ? castArray(selected)
+                    : selected ?? [],
+                (left, right) => left.id === right.id
+            );
+        }
+
         return toSelectMenuItems(filteredFiles);
-    }, [files, selected, showSelected]);
+    }, [assigned, files, selected, showAssigned, showSelected]);
 
     const handleDeselect = useCallback(
         (item: SelectMenuItem<FileRecord>) => onDeselect?.(item.value),
