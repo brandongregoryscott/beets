@@ -35,6 +35,9 @@ const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
     const handleClick = useCallback(
         (event: React.MouseEvent) => {
             const { target } = event;
+            // Stop event from propagating down - will cause the click to close the SelectMenu when
+            // the 'showSelected' filter is applied and there's only one option left
+            event.stopPropagation();
 
             if (!isSelectable) {
                 return;

@@ -20,6 +20,7 @@ import {
 } from "evergreen-ui";
 import { isEqual } from "lodash";
 import React, { useCallback, useState } from "react";
+import { useTheme } from "utils/hooks/use-theme";
 
 interface FileSelectMenuFilterPopoverProps
     extends Pick<PopoverProps, "onOpen" | "onClose"> {
@@ -31,6 +32,7 @@ const FileSelectMenuFilterPopover: React.FC<
     FileSelectMenuFilterPopoverProps
 > = (props: FileSelectMenuFilterPopoverProps) => {
     const { filters: initialFilters, onConfirm, onOpen, onClose } = props;
+    const { colors } = useTheme();
     const [filters, setFilters] =
         useState<FileSelectMenuFilters>(initialFilters);
 
@@ -81,11 +83,11 @@ const FileSelectMenuFilterPopover: React.FC<
             content={({ close }) => (
                 <Flex.Column>
                     <SelectMenuTitle
-                        close={scheduleClose(close)}
+                        close={() => scheduleClose(close)}
                         title="Sort & Filter"
                     />
-                    <Flex.Column padding={majorScale(1)}>
-                        <Flex.Row marginBottom={majorScale(1)}>
+                    <Flex.Column padding={majorScale(2)}>
+                        <Flex.Row marginBottom={majorScale(2)}>
                             <Switch
                                 checked={filters.showSelected}
                                 onChange={handleShowSelectedChange}
@@ -93,7 +95,14 @@ const FileSelectMenuFilterPopover: React.FC<
                             <Tooltip
                                 content="Filters the list to selected samples"
                                 showDelay={750}>
-                                <Label marginLeft={majorScale(1)} size={300}>
+                                <Label
+                                    color={
+                                        filters.showSelected
+                                            ? colors.blue500
+                                            : undefined
+                                    }
+                                    marginLeft={majorScale(1)}
+                                    size={300}>
                                     Show selected
                                 </Label>
                             </Tooltip>
@@ -106,7 +115,14 @@ const FileSelectMenuFilterPopover: React.FC<
                             <Tooltip
                                 content="Filters the list to samples that have been assigned to a step"
                                 showDelay={750}>
-                                <Label marginLeft={majorScale(1)} size={300}>
+                                <Label
+                                    color={
+                                        filters.showAssigned
+                                            ? colors.blue500
+                                            : undefined
+                                    }
+                                    marginLeft={majorScale(1)}
+                                    size={300}>
                                     Show assigned
                                 </Label>
                             </Tooltip>
@@ -150,6 +166,8 @@ const FileSelectMenuFilterPopover: React.FC<
  * Utility function for scheduling the close function to prevent race conditions closing the parent
  * Popover as well
  */
-const scheduleClose = (close: () => void) => () => setTimeout(close, 0);
+const scheduleClose = (close: () => void) => {
+    setTimeout(close, 0);
+};
 
 export { FileSelectMenuFilterPopover };

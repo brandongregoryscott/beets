@@ -143,9 +143,9 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
                 <SelectMenuTitle close={close} title={title}>
                     <FileSelectMenuFilterPopover
                         filters={filters}
-                        onOpen={handleFilterPopoverOpen}
                         onClose={handleFilterPopoverClose}
                         onConfirm={handleConfirmFilter}
+                        onOpen={handleFilterPopoverOpen}
                     />
                 </SelectMenuTitle>
             )}>
@@ -183,7 +183,7 @@ const getEmptyStateCta = (
 
     return (
         <Button appearance="primary" onClick={onClearFilters} size="small">
-            Reset Filters
+            Clear Filters
         </Button>
     );
 };
