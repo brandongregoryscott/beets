@@ -62,14 +62,22 @@ const FileSelectMenuFilterPopover: React.FC<
         []
     );
 
-    const resetStateFromProps = useCallback(() => {
-        // Adding a slight delay to prevent local state change from rendering before popover closes
-        setTimeout(() => setFilters(initialFilters), 50);
-    }, [initialFilters]);
+    const resetStateFromProps = useCallback(
+        (delayInMs?: number) => {
+            if (delayInMs != null && delayInMs > 0) {
+                // Adding a slight delay to prevent local state change from rendering before popover closes
+                setTimeout(() => setFilters(initialFilters), delayInMs);
+                return;
+            }
+
+            setFilters(initialFilters);
+        },
+        [initialFilters]
+    );
 
     const handleClose = useCallback(() => {
         onClose();
-        resetStateFromProps();
+        resetStateFromProps(50);
     }, [onClose, resetStateFromProps]);
 
     const handleToggle = useCallback(() => {

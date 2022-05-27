@@ -13,7 +13,6 @@ import {
     MusicIcon,
     Link,
     Button,
-    Paragraph,
 } from "evergreen-ui";
 import { List } from "immutable";
 import { castArray, isEmpty } from "lodash";
@@ -29,6 +28,7 @@ import { Sitemap } from "sitemap";
 import { Flex } from "components/flex";
 import { useTheme } from "utils/hooks/use-theme";
 import { absolutePath, joinPaths } from "utils/route-utils";
+import { EmptyState } from "components/empty-state";
 
 interface FileSelectMenuProps
     extends Pick<
@@ -119,26 +119,13 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
     return (
         <SelectMenu
             emptyView={
-                <Flex.Column
-                    alignItems="center"
-                    height="100%"
-                    justifyContent="center"
-                    padding={majorScale(2)}>
-                    <Flex.Column
-                        alignItems="center"
-                        background={colors.gray200}
-                        borderRadius="50%"
-                        height={majorScale(5)}
-                        justifyContent="center"
-                        marginBottom={majorScale(1)}
-                        width={majorScale(5)}>
-                        <MusicIcon color={colors.gray500} />
-                    </Flex.Column>
-                    <Paragraph marginBottom={majorScale(2)} size={500}>
-                        No samples found
-                    </Paragraph>
-                    {getEmptyStateCta(handleClearFilters, files)}
-                </Flex.Column>
+                <EmptyState
+                    icon={<MusicIcon />}
+                    iconBgColor={colors.white}
+                    orientation="vertical"
+                    primaryCta={getEmptyStateCta(handleClearFilters, files)}
+                    title="No samples found"
+                />
             }
             hasFilter={hasFilter}
             hasTitle={hasTitle}
