@@ -2,7 +2,8 @@ import { List, Range } from "immutable";
 import { random } from "lodash";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
-import { generateId } from "utils/id-utils";
+import { getCurrentTime } from "utils/date-utils";
+
 import { diffUpdatedEntities, groupBy } from "./collection-utils";
 
 describe("CollectionUtils", () => {
@@ -46,7 +47,7 @@ describe("CollectionUtils", () => {
         it("should not return record that is unmodified", () => {
             // Arrange
             const unexpected = new TrackRecord().merge({
-                created_on: generateId(),
+                created_on: getCurrentTime(),
             });
             const values = List.of(unexpected);
             const initialValues = List.of(unexpected);
@@ -61,7 +62,7 @@ describe("CollectionUtils", () => {
         it("should return record that is modified from initial collection", () => {
             // Arrange
             const initialRecord = new TrackRecord().merge({
-                created_on: generateId(),
+                created_on: getCurrentTime(),
                 name: "Initial",
             });
             const updatedRecord = initialRecord.merge({ name: "Updated" });
@@ -80,7 +81,7 @@ describe("CollectionUtils", () => {
         it("should return record that is modified from initial collection when order is different", () => {
             // Arrange
             const initialRecord = new TrackRecord().merge({
-                created_on: generateId(),
+                created_on: getCurrentTime(),
                 name: "Initial",
             });
             const unexpected = new TrackRecord();
