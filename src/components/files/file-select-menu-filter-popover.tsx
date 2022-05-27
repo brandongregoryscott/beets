@@ -62,6 +62,21 @@ const FileSelectMenuFilterPopover: React.FC<
         []
     );
 
+    const resetStateFromProps = useCallback(() => {
+        // Adding a slight delay to prevent local state change from rendering before popover closes
+        setTimeout(() => setFilters(initialFilters), 50);
+    }, [initialFilters]);
+
+    const handleClose = useCallback(() => {
+        onClose();
+        resetStateFromProps();
+    }, [onClose, resetStateFromProps]);
+
+    const handleToggle = useCallback(() => {
+        onToggle();
+        resetStateFromProps();
+    }, [onToggle, resetStateFromProps]);
+
     const handleClear = useCallback(() => setFilters(defaultFilters), []);
 
     const handleConfirm = useCallback(
@@ -77,7 +92,10 @@ const FileSelectMenuFilterPopover: React.FC<
         <Popover
             content={
                 <Flex.Column>
-                    <SelectMenuTitle close={onClose} title="Sort & Filter" />
+                    <SelectMenuTitle
+                        close={handleClose}
+                        title="Sort & Filter"
+                    />
                     <Flex.Column padding={majorScale(1)}>
                         <Flex.Row marginBottom={majorScale(1)}>
                             <Switch
@@ -132,7 +150,7 @@ const FileSelectMenuFilterPopover: React.FC<
                     height={majorScale(3)}
                     icon={icon}
                     marginRight={minorScale(1)}
-                    onClick={onToggle}
+                    onClick={handleToggle}
                 />
             </Pane>
         </Popover>

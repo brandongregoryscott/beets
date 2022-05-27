@@ -6,8 +6,17 @@ import {
     SelectMenuProps,
 } from "components/select-menu/select-menu";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
-import { Spinner, majorScale, Pane } from "evergreen-ui";
-import { castArray } from "lodash";
+import {
+    Spinner,
+    majorScale,
+    Pane,
+    MusicIcon,
+    Link,
+    Button,
+    Paragraph,
+} from "evergreen-ui";
+import { List } from "immutable";
+import { castArray, isEmpty } from "lodash";
 import { FileRecord } from "models/file-record";
 import React, { useState } from "react";
 import { PropsWithChildren, useCallback, useMemo } from "react";
@@ -15,6 +24,11 @@ import { intersectionWith } from "utils/collection-utils";
 import { toSelectMenuItems } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useBoolean } from "utils/hooks/use-boolean";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Sitemap } from "sitemap";
+import { Flex } from "components/flex";
+import { useTheme } from "utils/hooks/use-theme";
+import { absolutePath, joinPaths } from "utils/route-utils";
 
 interface FileSelectMenuProps
     extends Pick<
@@ -48,6 +62,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         selected,
         title,
     } = props;
+    const { colors } = useTheme();
     const {
         value: isFilterPopoverOpen,
         setFalse: closeFilterPopover,
@@ -96,8 +111,35 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         [handleCloseFilterPopover]
     );
 
+    const handleClearFilters = useCallback((event: React.MouseEvent) => {
+        event.stopPropagation();
+        setFilters(defaultFilters);
+    }, []);
+
     return (
         <SelectMenu
+            emptyView={
+                <Flex.Column
+                    alignItems="center"
+                    height="100%"
+                    justifyContent="center"
+                    padding={majorScale(2)}>
+                    <Flex.Column
+                        alignItems="center"
+                        background={colors.gray200}
+                        borderRadius="50%"
+                        height={majorScale(5)}
+                        justifyContent="center"
+                        marginBottom={majorScale(1)}
+                        width={majorScale(5)}>
+                        <MusicIcon color={colors.gray500} />
+                    </Flex.Column>
+                    <Paragraph marginBottom={majorScale(2)} size={500}>
+                        No samples found
+                    </Paragraph>
+                    {getEmptyStateCta(handleClearFilters, files)}
+                </Flex.Column>
+            }
             hasFilter={hasFilter}
             hasTitle={hasTitle}
             isMultiSelect={isMultiSelect}
@@ -132,6 +174,29 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
                 children
             )}
         </SelectMenu>
+    );
+};
+
+const getEmptyStateCta = (
+    onClearFilters: (event: React.MouseEvent) => void,
+    files?: List<FileRecord>
+): React.ReactNode => {
+    if (isEmpty(files)) {
+        return (
+            <Link
+                is={ReactRouterLink}
+                to={absolutePath(
+                    joinPaths(Sitemap.library.home, Sitemap.library.files)
+                )}>
+                Upload Samples
+            </Link>
+        );
+    }
+
+    return (
+        <Button appearance="primary" onClick={onClearFilters} size="small">
+            Reset Filters
+        </Button>
     );
 };
 
