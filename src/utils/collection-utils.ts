@@ -4,7 +4,7 @@ import { OrderableEntity } from "interfaces/orderable-entity";
 import _ from "lodash";
 import { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
-import { isNilOrEmpty } from "utils/core-utils";
+import { isEqual, isNilOrEmpty } from "utils/core-utils";
 
 const diffDeletedEntities = <T extends Auditable>(
     initialValues: List<T>,
@@ -19,21 +19,30 @@ const diffDeletedEntities = <T extends Auditable>(
         ).filter(isPersisted)
     );
 
+/**
+ * Returns a list of entities that either do not exist in the initial list, are not persisted,
+ * or have changed from their initial value
+ */
 const diffUpdatedEntities = <T extends Auditable>(
     values: List<T>,
     initialValues: List<T>
-): List<T> =>
-    List(
-        _.differenceWith(values.toArray(), initialValues.toArray(), (a, b) => {
-            const isDifferent =
-                Record.isRecord(a) && Record.isRecord(b) && !a.equals(b);
-            if (!isPersisted(a) || isDifferent) {
-                return false; // Returning 'false' marks it as different/updated
-            }
-
+): List<T> => {
+    const createdOrUpdated = values.filter((value) => {
+        if (!isPersisted(value)) {
             return true;
-        })
-    );
+        }
+
+        // Find initial value by deep equality check - if a matching initialValue is found,
+        // it means the entity is unchanged and shouldn't be returned
+        const initialValue = initialValues.find((initialValue) =>
+            isEqual(value, initialValue)
+        );
+
+        return initialValue == null;
+    });
+
+    return createdOrUpdated;
+};
 
 /**
  * Groups two collections of entities by the provided comparator. For sorting purposes, the left
