@@ -91,8 +91,8 @@ const initializeList = <T>(count: number, value: T): List<T> =>
     List(_.fill(new Array(count), value));
 
 const intersectionWith = <TLeft, TRight>(
-    leftValues: List<TLeft> | Array<TLeft>,
-    rightValues: List<TRight> | Array<TRight>,
+    leftValues: Array<TLeft> | List<TLeft>,
+    rightValues: Array<TRight> | List<TRight>,
     comparator: (left: TLeft, right: TRight) => boolean
 ): List<TLeft> => {
     if (List.isList(leftValues)) {

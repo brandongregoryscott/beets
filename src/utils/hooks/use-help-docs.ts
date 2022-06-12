@@ -31,9 +31,9 @@ const useHelpDocs = (options?: UseHelpDocsOptions): UseHelpDocsResult => {
 const resourceToModule = (
     resource: HelpResource
 ):
-    | typeof OverviewMarkdown
+    | typeof ContributingMarkdown
     | typeof HowToMarkdown
-    | typeof ContributingMarkdown => {
+    | typeof OverviewMarkdown => {
     switch (resource) {
         case HelpResource.Contributing:
             return ContributingMarkdown;

@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { isEmpty, get } from "lodash";
 
 const toDataAttributes = (
-    values?: Partial<Record<keyof typeof DataAttributes, string | number>>
+    values?: Partial<Record<keyof typeof DataAttributes, number | string>>
 ): Record<string, unknown> => {
     let props: Map<string, unknown> = Map();
 

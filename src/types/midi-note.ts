@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/sort-type-union-intersection-members */
 export type MidiNote =
     | "C-2"
     | "C#-2"

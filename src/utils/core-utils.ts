@@ -65,8 +65,8 @@ const isInstanceOf = <T, C extends Constructor[]>(
     ...construtors: C
 ): boolean => construtors.some((constructor) => value instanceof constructor);
 
-const isNilOrEmpty = <T = string | any[] | List<any>>(
-    value: T | any[] | List<any> | null | undefined
+const isNilOrEmpty = <T = any[] | List<any> | string>(
+    value: any[] | List<any> | T | null | undefined
 ): value is null | undefined => {
     if (typeof value === "string") {
         return value.trim().length === 0;
@@ -83,8 +83,8 @@ const isNilOrEmpty = <T = string | any[] | List<any>>(
     return value == null;
 };
 
-const isNotNilOrEmpty = <T = string | any[] | List<any>>(
-    value: T | any[] | List<any> | null | undefined
+const isNotNilOrEmpty = <T = any[] | List<any> | string>(
+    value: any[] | List<any> | T | null | undefined
 ): value is T => !isNilOrEmpty(value);
 
 const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>

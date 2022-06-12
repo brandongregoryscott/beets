@@ -168,7 +168,10 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     );
 
     const handleSubmit = useCallback(() => {
-        if (nameValidation?.isInvalid || releaseValidation.isInvalid) {
+        if (
+            nameValidation?.isInvalid === true ||
+            releaseValidation.isInvalid === true
+        ) {
             return;
         }
 
@@ -329,7 +332,9 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     selected={file}>
                     <Button
                         intent={
-                            fileValidation?.isInvalid ? "danger" : undefined
+                            fileValidation?.isInvalid === true
+                                ? "danger"
+                                : undefined
                         }
                         type="button"
                         width="100%">
@@ -348,7 +353,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
                     width="100%"
                 />
             </FormField>
-            {initialInstrument?.isPersisted() && (
+            {initialInstrument?.isPersisted() === true && (
                 <ConfirmButton
                     alertDescription="Click Delete Instrument again to confirm this action."
                     alertTitle="This will permanently delete your instrument and all of its tracks."

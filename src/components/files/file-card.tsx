@@ -20,7 +20,7 @@ import { Flex } from "components/flex";
 import { IconButton } from "components/icon-button";
 
 interface FileCardProps
-    extends Omit<EvergreenFileCardProps, "name" | "type" | "sizeInBytes"> {
+    extends Omit<EvergreenFileCardProps, "name" | "sizeInBytes" | "type"> {
     file: FileRecord;
     storageProviderFile: StorageProviderFileRecord;
 }

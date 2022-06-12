@@ -23,7 +23,7 @@ interface ContextualIconButtonProps
     tooltipText: string;
 }
 
-type VisibilityState = "visible" | "hidden";
+type VisibilityState = "hidden" | "visible";
 
 const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     props: ContextualIconButtonProps
