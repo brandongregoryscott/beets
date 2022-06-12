@@ -13,7 +13,11 @@ import React from "react";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useLatestRelease } from "utils/hooks/use-latest-release";
 import { Dialog, DialogProps } from "components/dialog";
-import { getCurrentEnvironment, EnvironmentName } from "utils/env";
+import {
+    getCurrentEnvironment,
+    EnvironmentName,
+    getTargetBranch,
+} from "utils/env";
 import { Markdown, MarkdownComponentMap } from "components/markdown";
 import { omitProps } from "utils/markdown-utils";
 import { isString } from "lodash";
@@ -101,8 +105,8 @@ const AboutDialog: React.FC<AboutDialogProps> = (props: AboutDialogProps) => {
                     {release?.hasNewCommits === true && (
                         <InlineAlert marginBottom={majorScale(1)}>
                             There may be more recent commits to{" "}
-                            <Code size={300}></Code> that are not reflected in
-                            these release notes.{" "}
+                            <Code size={300}>{getTargetBranch()}</Code> that are
+                            not reflected in these release notes.{" "}
                             <Link href={release.compareUrl} target="_blank">
                                 See diff
                             </Link>
