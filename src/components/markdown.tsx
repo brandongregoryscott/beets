@@ -26,12 +26,19 @@ import {
     transformImageUri,
     transformLinkUri,
 } from "utils/markdown-utils";
+import { PluggableList } from "react-markdown/lib/react-markdown";
 
 type MarkdownComponentMap = Partial<
     Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
 >;
 
 interface MarkdownProps {
+    /**
+     * Determines whether heading elements automatically receive an anchor tag based on their content
+     * via the rehypeAutolinkHeadings plugin.
+     * @default true
+     */
+    autolinkHeadings?: boolean;
     children: string;
     components?: MarkdownComponentMap;
     transformImageUri?: (src: string) => string;
@@ -120,16 +127,30 @@ const defaultComponents: MarkdownComponentMap = {
 };
 
 const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
-    const { children, components: componentsOverrides = {} } = props;
+    const {
+        autolinkHeadings = true,
+        children,
+        components: componentsOverrides = {},
+    } = props;
     const components = useMemo(
         () => mergeComponentMap(componentsOverrides),
         [componentsOverrides]
     );
 
+    const rehypePlugins = useMemo(() => {
+        const plugins: PluggableList = [rehypeSlug];
+
+        if (autolinkHeadings) {
+            plugins.push(rehypeAutolinkHeadings);
+        }
+
+        return plugins;
+    }, [autolinkHeadings]);
+
     return (
         <ReactMarkdown
             components={components}
-            rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings]}
+            rehypePlugins={rehypePlugins}
             remarkPlugins={[gfm]}
             transformImageUri={props.transformImageUri ?? transformImageUri}
             transformLinkUri={props.transformLinkUri ?? transformLinkUri}>
