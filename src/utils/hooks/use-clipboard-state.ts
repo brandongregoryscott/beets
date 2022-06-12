@@ -21,8 +21,8 @@ interface UseClipboardStateResult {
     onSelect: (
         item: ClipboardItem
     ) => (event: React.MouseEvent<HTMLDivElement>) => void;
-    selectItem: (item: ClipboardItem) => void;
     selectedState: List<ClipboardItem>;
+    selectItem: (item: ClipboardItem) => void;
     setSelectedState: (update: SetStateAction<List<ClipboardItem>>) => void;
 }
 

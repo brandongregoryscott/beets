@@ -13,7 +13,7 @@ import { useInput } from "utils/hooks/use-input";
 import { isEmpty } from "lodash";
 import { SortOptions } from "interfaces/sort-options";
 import { File } from "generated/interfaces/file";
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { formatSortOptionLabel, toSortOptions } from "utils/select-menu-utils";
 import { FormField } from "components/forms/form-field";
 

@@ -19,7 +19,7 @@ import { RouteProps } from "interfaces/route-props";
 import { useCurrentUser } from "utils/hooks/use-current-user";
 import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import React from "react";
-import { SelectMenu, SelectMenuItem } from "components/select-menu";
+import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { TrackRecord } from "models/track-record";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTracksState } from "utils/hooks/use-tracks-state";
@@ -111,7 +111,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             return;
         }
 
-        if (workstations?.isEmpty()) {
+        if (workstations?.isEmpty() === true) {
             setState(new WorkstationStateRecord());
             return;
         }

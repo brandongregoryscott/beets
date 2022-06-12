@@ -5,7 +5,7 @@ import { DialogFooter } from "components/dialog-footer";
 
 interface FormDialogProps
     extends Omit<DialogProps, "onConfirm">,
-        Omit<FormProps, "children" | "onSubmit" | "width" | "title"> {
+        Omit<FormProps, "children" | "onSubmit" | "title" | "width"> {
     onSubmit?: (close: () => void) => void;
 }
 

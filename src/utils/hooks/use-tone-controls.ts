@@ -38,13 +38,16 @@ const useToneControls = (): UseToneControlsResult => {
     const toggleIsPlaying = useCallback(
         () =>
             setState((prev) =>
-                mergeState(prev, { isPlaying: !prev.isPlaying })
+                mergeState(prev, { isPlaying: !(prev.isPlaying ?? false) })
             ),
         [setState]
     );
 
     const toggleMute = useCallback(
-        () => setState((prev) => mergeState(prev, { mute: !prev.mute })),
+        () =>
+            setState((prev) =>
+                mergeState(prev, { mute: !(prev.mute ?? false) })
+            ),
         [setState]
     );
 

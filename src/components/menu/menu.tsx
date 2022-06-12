@@ -6,9 +6,9 @@ import { useTheme } from "utils/hooks/use-theme";
 interface MenuProps {}
 
 const Menu: React.FC<PropsWithChildren<MenuProps>> & {
-    Item: typeof MenuItem;
-    Group: typeof EvergreenMenu.Group;
     Divider: typeof EvergreenMenu.Divider;
+    Group: typeof EvergreenMenu.Group;
+    Item: typeof MenuItem;
     Option: typeof EvergreenMenu.Option;
     OptionsGroup: typeof EvergreenMenu.OptionsGroup;
 } = (props: PropsWithChildren<MenuProps>) => {

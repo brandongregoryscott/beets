@@ -3,7 +3,7 @@ import * as Tone from "tone";
 
 const useTonePlayingEffect = (isPlaying?: boolean): void => {
     useEffect(() => {
-        if (isPlaying) {
+        if (isPlaying === true) {
             Tone.Transport.start();
             return;
         }

@@ -8,8 +8,8 @@ import { FileRecord } from "models/file-record";
 
 interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
     emptyState?: React.ReactNode;
-    files?: List<FileRecord> | FileRecord[];
-    instruments?: List<InstrumentRecord> | InstrumentRecord[];
+    files?: FileRecord[] | List<FileRecord>;
+    instruments?: InstrumentRecord[] | List<InstrumentRecord>;
     isLoading?: boolean;
     onDeselect?: (instrument: InstrumentRecord) => void;
     onSelect?: (instrument: InstrumentRecord) => void;
@@ -24,7 +24,7 @@ const InstrumentsTable: React.FC<InstrumentsTableProps> = (
         onDeselect,
         onSelect,
         selected,
-        isLoading,
+        isLoading = false,
         emptyState,
         instruments,
         files,

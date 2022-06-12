@@ -10,7 +10,7 @@ import { intersectionWith, isArray, pick } from "lodash";
 import { useCallback, useMemo } from "react";
 import { isEqual, isNotNilOrEmpty } from "utils/core-utils";
 
-type FirstParameter<TFunction extends undefined | ((...args: any[]) => any)> =
+type FirstParameter<TFunction extends ((...args: any[]) => any) | undefined> =
     Parameters<NonNullable<TFunction>>[0];
 
 type EvergreenSelectMenuItemRenderer = EvergreenSelectMenuProps["itemRenderer"];
@@ -18,7 +18,7 @@ type EvergreenSelectMenuItemRenderer = EvergreenSelectMenuProps["itemRenderer"];
 interface SelectMenuProps<T>
     extends Omit<
         EvergreenSelectMenuProps,
-        "onDeselect" | "onSelect" | "options" | "selected" | "itemRenderer"
+        "itemRenderer" | "onDeselect" | "onSelect" | "options" | "selected"
     > {
     /** Calculate height of menu based on # of items */
     calculateHeight?: boolean;
@@ -28,7 +28,7 @@ interface SelectMenuProps<T>
     onValueDeselect?: (value: T) => void;
     onValueSelect?: (value: T) => void;
     options?: Array<SelectMenuItem<T>>;
-    selected?: T | T[] | List<T>;
+    selected?: List<T> | T | T[];
 }
 
 interface SelectMenuItem<T> extends Omit<EvergreenSelectMenuItem, "value"> {

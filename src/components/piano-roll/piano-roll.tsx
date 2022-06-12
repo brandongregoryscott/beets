@@ -42,7 +42,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
     const {
         instrument,
         file,
-        centerControls,
+        centerControls = false,
         onChange,
         onStepCountChange,
         stepCount,

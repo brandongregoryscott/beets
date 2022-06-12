@@ -40,7 +40,7 @@ const SongControls: React.FC<SongControlsProps> = (
     const {
         toggleMute,
         toggleIsPlaying,
-        mute,
+        mute = false,
         isPlaying,
         startIndex,
         endIndex,

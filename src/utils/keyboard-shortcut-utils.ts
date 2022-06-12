@@ -60,7 +60,7 @@ const getDisplayLabel = (shortcut: string): string => {
     return isMacOs() ? displayLabel.replace("+", "") : displayLabel;
 };
 
-const hasKey = (shortcuts: string | string[], ...keys: string[]): boolean =>
+const hasKey = (shortcuts: string[] | string, ...keys: string[]): boolean =>
     hasValues(
         intersectionWith(castArray(shortcuts), keys, (shortcut, key) =>
             new RegExp(key, "i").test(shortcut)
@@ -71,7 +71,7 @@ const hasKey = (shortcuts: string | string[], ...keys: string[]): boolean =>
  * Backfills cross-platform keyboard shortcuts if not present
  * @example ["ctrl+a"] -> ["ctrl+a", "cmd+a"]
  */
-const remapShortcuts = (shortcut: string | string[]): string => {
+const remapShortcuts = (shortcut: string[] | string): string => {
     const shortcuts = sanitizeKeys(
         Array.isArray(shortcut) ? shortcut : shortcut.split(",")
     );
