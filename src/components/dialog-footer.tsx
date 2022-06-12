@@ -4,12 +4,12 @@ import React from "react";
 interface DialogFooterProps
     extends Pick<
         DialogProps,
-        | "intent"
-        | "hasCancel"
         | "cancelLabel"
-        | "isConfirmLoading"
-        | "isConfirmDisabled"
         | "confirmLabel"
+        | "hasCancel"
+        | "intent"
+        | "isConfirmDisabled"
+        | "isConfirmLoading"
     > {
     onCancel?: () => void;
     onConfirm?: () => void;

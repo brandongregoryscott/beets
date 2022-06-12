@@ -111,7 +111,7 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
             return;
         }
 
-        if (workstations?.isEmpty()) {
+        if (workstations?.isEmpty() === true) {
             setState(new WorkstationStateRecord());
             return;
         }

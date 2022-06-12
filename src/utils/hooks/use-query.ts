@@ -20,7 +20,7 @@ interface UseQueryOptions<
             TResultObject,
             TQueryKey
         >,
-        "enabled" | "onSuccess" | "onError" | "onSettled" | "staleTime"
+        "enabled" | "onError" | "onSettled" | "onSuccess" | "staleTime"
     > {
     fn: QueryFunction<TResultObject, TQueryKey>;
     key?: TQueryKey | undefined;

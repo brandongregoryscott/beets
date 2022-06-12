@@ -88,9 +88,9 @@ const useNumberInput = (
 
 const getValidationState = (
     value: number | undefined,
-    options: Pick<UseNumberInputOptions, "isRequired" | "min" | "max">
+    options: Pick<UseNumberInputOptions, "isRequired" | "max" | "min">
 ): ValidationState | undefined => {
-    const { isRequired, min, max } = options;
+    const { isRequired = false, min, max } = options;
     if (isRequired && value == null) {
         return ValueRequiredState;
     }

@@ -12,7 +12,12 @@ interface IconButtonProps extends EvergreenIconButtonProps {}
  */
 const IconButton: React.FC<IconButtonProps> = forwardRef(
     (props: IconButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
-        const { icon: iconProp, disabled, isLoading, ...rest } = props;
+        const {
+            icon: iconProp,
+            disabled = false,
+            isLoading = false,
+            ...rest
+        } = props;
 
         const icon = isLoading ? <Spinner /> : iconProp;
 

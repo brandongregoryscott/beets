@@ -12,8 +12,8 @@ interface EmptyStateProps
 }
 
 const EmptyState: React.FC<EmptyStateProps> & {
-    PrimaryButton: typeof EvergreenEmptyState.PrimaryButton;
     LinkButton: typeof EvergreenEmptyState.LinkButton;
+    PrimaryButton: typeof EvergreenEmptyState.PrimaryButton;
 } = (props: EmptyStateProps) => {
     const { colors } = useTheme();
     const {

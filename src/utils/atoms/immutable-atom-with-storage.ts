@@ -1,7 +1,7 @@
 import { Collection, Record } from "immutable";
 import { atomWithStorage } from "jotai/utils";
 
-const immutableAtomWithStorage = <T extends Record<any> | Collection<any, any>>(
+const immutableAtomWithStorage = <T extends Collection<any, any> | Record<any>>(
     key: string,
     initialValue: T,
     constructorOrFactory: (...args: any[]) => T

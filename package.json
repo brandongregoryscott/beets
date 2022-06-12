@@ -62,11 +62,15 @@
         "@types/react-dom": "18.0.1",
         "@types/react-router-dom": "5.3.3",
         "@types/uuid": "8.3.1",
+        "@typescript-eslint/eslint-plugin": "5.27.1",
+        "@typescript-eslint/parser": "5.27.1",
         "chalk": "4.1.2",
-        "collation": "0.9.0",
         "dotenv": "10.0.0",
+        "eslint-plugin-collation": "1.0.2",
+        "eslint-plugin-typescript-sort-keys": "2.1.0",
         "husky": "7.0.4",
         "jest-extended": "1.2.1",
+        "lint-staged": "13.0.1",
         "node-pg-migrate": "6.0.0",
         "openapi-typescript": "4.4.0",
         "pluralize": "8.0.0",
@@ -85,6 +89,10 @@
             "react-app/jest"
         ]
     },
+    "lint-staged": {
+        "*.{ts,tsx,json,md}": "prettier --ignore-unknown --write",
+        "*.{ts,tsx}": "eslint --fix"
+    },
     "name": "beets",
     "private": true,
     "scripts": {
@@ -94,8 +102,10 @@
         "clean:migrations": "rm -rf src/scripts/migrations/dist",
         "codegen": "ts-node src/scripts/codegen/main.ts",
         "eject": "react-scripts eject",
-        "lint": "prettier src --check && eslint src",
-        "format": "prettier src --write && eslint src --fix",
+        "format:check": "prettier src --ignore-unknown --check",
+        "format:fix": "prettier src --ignore-unknown --write",
+        "lint": "eslint 'src/**/*.{ts,tsx}'",
+        "lint:fix": "npm run lint -- --fix",
         "migrations:create": "node-pg-migrate --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts create",
         "migrations:down": "node-pg-migrate --migrations-dir src/scripts/migrations/dist down",
         "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist up",

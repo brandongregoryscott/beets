@@ -23,7 +23,7 @@ import React, { useCallback, useState } from "react";
 import { useTheme } from "utils/hooks/use-theme";
 
 interface FileSelectMenuFilterPopoverProps
-    extends Pick<PopoverProps, "onOpen" | "onClose"> {
+    extends Pick<PopoverProps, "onClose" | "onOpen"> {
     filters: FileSelectMenuFilters;
     onConfirm: (updated: FileSelectMenuFilters) => void;
 }
