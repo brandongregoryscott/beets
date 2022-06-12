@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "app";
-import reportWebVitals from "reportWebVitals";
+import { reportWebVitals } from "reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";

@@ -21,7 +21,7 @@ interface HelpDialogLinkProps
                 AnchorHTMLAttributes<HTMLAnchorElement>,
                 HTMLAnchorElement
             >,
-            "key" | keyof React.AnchorHTMLAttributes<any>
+            keyof React.AnchorHTMLAttributes<any> | "key"
         > &
             ReactMarkdownProps
     > {

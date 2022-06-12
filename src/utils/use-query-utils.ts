@@ -6,7 +6,7 @@ const mergeUseQueryProperties = (
     ...others: UseQueryResult<unknown, Error>[]
 ): Pick<
     UseQueryResult<unknown, Error>,
-    "isError" | "isIdle" | "isLoading" | "isSuccess" | "error"
+    "error" | "isError" | "isIdle" | "isLoading" | "isSuccess"
 > => ({
     isError: first.isError || others.some((result) => result.isError),
     isIdle: first.isIdle || others.some((result) => result.isIdle),

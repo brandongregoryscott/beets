@@ -3,6 +3,7 @@ import { BorderProps } from "interfaces/border-props";
 import { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
 import { isEqual as lodashIsEqual } from "lodash";
+import { Constructor } from "types/constructor";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;
@@ -59,8 +60,13 @@ const isEqual = <
     return lodashIsEqual(left, right);
 };
 
-const isNilOrEmpty = <T = string | any[] | List<any>>(
-    value: T | any[] | List<any> | null | undefined
+const isInstanceOf = <T, C extends Constructor[]>(
+    value: T,
+    ...construtors: C
+): boolean => construtors.some((constructor) => value instanceof constructor);
+
+const isNilOrEmpty = <T = any[] | List<any> | string>(
+    value: any[] | List<any> | T | null | undefined
 ): value is null | undefined => {
     if (typeof value === "string") {
         return value.trim().length === 0;
@@ -77,8 +83,8 @@ const isNilOrEmpty = <T = string | any[] | List<any>>(
     return value == null;
 };
 
-const isNotNilOrEmpty = <T = string | any[] | List<any>>(
-    value: T | any[] | List<any> | null | undefined
+const isNotNilOrEmpty = <T = any[] | List<any> | string>(
+    value: any[] | List<any> | T | null | undefined
 ): value is T => !isNilOrEmpty(value);
 
 const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>
@@ -97,6 +103,7 @@ export {
     getBorderYProps,
     getBorderXProps,
     isEqual,
+    isInstanceOf,
     isNilOrEmpty,
     isNotNilOrEmpty,
     makeDefaultValues,

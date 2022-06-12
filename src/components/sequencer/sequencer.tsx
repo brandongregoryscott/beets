@@ -15,6 +15,8 @@ import { TrackRecord } from "models/track-record";
 import { toDataAttributes } from "utils/data-attribute-utils";
 import { useSampleSelection } from "utils/hooks/use-sample-selection";
 import { IconButton } from "components/icon-button";
+import { useMemo } from "react";
+import { intersectionWith } from "utils/collection-utils";
 
 interface SequencerProps {
     files: List<FileRecord>;
@@ -39,6 +41,15 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
         trackSection,
     } = props;
 
+    const assignedFiles = useMemo(
+        () =>
+            intersectionWith(
+                files,
+                trackSectionSteps,
+                (file, trackSectionStep) => file.id === trackSectionStep.file_id
+            ),
+        [files, trackSectionSteps]
+    );
     const { selected, onSelect, onDeselect, onClear } = useSampleSelection({
         files,
         track,
@@ -65,6 +76,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                     toggleIsPlaying={toggleIsPlaying}
                 />
                 <FileSelectMenu
+                    assigned={assignedFiles}
                     isMultiSelect={true}
                     onDeselect={onDeselect}
                     onSelect={onSelect}

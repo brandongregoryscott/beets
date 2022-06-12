@@ -2,8 +2,8 @@ import { Alert, Button, ButtonProps, majorScale } from "evergreen-ui";
 import React, { PropsWithChildren, useCallback, useState } from "react";
 
 interface ConfirmButtonProps extends Omit<ButtonProps, "onClick"> {
-    alertDescription?: string | React.ReactNode;
-    alertTitle?: string | React.ReactNode;
+    alertDescription?: React.ReactNode | string;
+    alertTitle?: React.ReactNode | string;
     onClick?: () => void;
     onConfirm?: () => void;
 }

@@ -42,9 +42,9 @@ interface UseToneAudioOptions
     mimeType?: string;
     onRecordingComplete?: (recording: Blob) => void;
     startIndex?: number;
-    trackSectionSteps?: List<TrackSectionStepRecord>;
-    trackSections?: List<TrackSectionRecord>;
     tracks?: List<TrackRecord>;
+    trackSections?: List<TrackSectionRecord>;
+    trackSectionSteps?: List<TrackSectionStepRecord>;
 }
 
 interface UseToneAudioResult {
@@ -303,7 +303,7 @@ const cleanupTracks = (tracks: Map<string, ToneTrack>): void => {
 };
 
 const updateTracks = (
-    options: Pick<UseToneAudioOptions, "loop" | "isPlaying">,
+    options: Pick<UseToneAudioOptions, "isPlaying" | "loop">,
     tracks: Map<string, ToneTrack>
 ): void => {
     const { loop, isPlaying } = options;
@@ -312,7 +312,7 @@ const updateTracks = (
             toneTrack.sequence.loop = loop;
         }
 
-        if (isPlaying) {
+        if (isPlaying === true) {
             toneTrack.sequence.start(0);
             return;
         }

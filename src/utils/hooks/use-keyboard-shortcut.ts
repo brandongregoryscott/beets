@@ -19,7 +19,7 @@ interface UseKeyboardShortcutResult {
  * @param dependencies Optional dependencies that the callback function needs to run properly
  */
 const useKeyboardShortcut = (
-    shortcut: string | string[],
+    shortcut: string[] | string,
     callback: (event: KeyboardEvent) => void,
     dependencies?: any[]
 ): UseKeyboardShortcutResult => {

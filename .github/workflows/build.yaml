@@ -42,11 +42,14 @@ jobs:
             - name: npm install
               run: npm install
 
-            - name: npm run build
-              run: npm run build
+            - name: npm run format:check
+              run: npm run format:check
 
             - name: npm run lint
               run: npm run lint
+
+            - name: npm run build
+              run: npm run build
 
             - name: npm run test
               run: npm run test -- --verbose

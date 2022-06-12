@@ -28,7 +28,7 @@ const FileSettingsDialog: React.FC<FileSettingsDialogProps> = (
     });
 
     const handleSave = useCallback(() => {
-        if (nameValidation.isInvalid) {
+        if (nameValidation.isInvalid === true) {
             return;
         }
 

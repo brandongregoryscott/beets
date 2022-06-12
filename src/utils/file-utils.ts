@@ -1,4 +1,4 @@
-import { SelectMenuItem } from "components/select-menu";
+import { SelectMenuItem } from "components/select-menu/select-menu";
 import { List, Map } from "immutable";
 import { FileRecord } from "models/file-record";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
@@ -8,7 +8,7 @@ import { isNilOrEmpty } from "utils/core-utils";
 type AnyFile = FileRecord | StorageProviderFileRecord;
 
 const findFileByName = <T extends AnyFile>(
-    nameOrPattern: string | RegExp,
+    nameOrPattern: RegExp | string,
     files?: List<T>
 ): T | undefined =>
     files?.find((file) => getFileName(file).match(nameOrPattern) != null);
