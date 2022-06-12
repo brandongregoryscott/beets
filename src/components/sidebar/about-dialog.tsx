@@ -61,7 +61,6 @@ const AboutDialog: React.FC<AboutDialogProps> = (props: AboutDialogProps) => {
     const environment = getCurrentEnvironment();
     return (
         <Dialog
-            allowFullscreen={true}
             confirmLabel="Close"
             hasCancel={false}
             onCloseComplete={onCloseComplete}
