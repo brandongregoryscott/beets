@@ -68,6 +68,7 @@
         "chalk": "4.1.2",
         "dotenv": "10.0.0",
         "eslint-plugin-collation": "1.0.2",
+        "eslint-plugin-react": "^7.30.0",
         "eslint-plugin-typescript-sort-keys": "2.1.0",
         "husky": "7.0.4",
         "jest-extended": "1.2.1",
