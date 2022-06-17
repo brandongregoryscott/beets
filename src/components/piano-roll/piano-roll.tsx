@@ -21,6 +21,7 @@ import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
 import { toDataAttributes } from "utils/data-attribute-utils";
 import { Flex } from "components/flex";
+import { PianoRollRandomizer } from "components/piano-roll/piano-roll-randomizer";
 
 interface PianoRollProps {
     centerControls?: boolean;
@@ -98,8 +99,15 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     onClick={handleScaleUp}
                 />
                 <StepCountSelectMenu
+                    marginRight={buttonMarginRight}
                     onChange={onStepCountChange}
                     stepCount={stepCount}
+                />
+                <PianoRollRandomizer
+                    file={file}
+                    onChange={onChange}
+                    stepCount={stepCount}
+                    trackSection={trackSection}
                 />
             </Flex.Row>
             <Flex.Column flexGrow={1} width="100%">

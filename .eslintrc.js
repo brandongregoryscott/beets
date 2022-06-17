@@ -59,5 +59,6 @@ module.exports = {
         ],
         "typescript-sort-keys/string-enum": "error",
         "react/jsx-sort-props": "error",
+        "react/jsx-boolean-value": ["error", "always"],
     },
 };

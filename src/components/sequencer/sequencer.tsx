@@ -1,6 +1,6 @@
 import { SequencerStep } from "components/sequencer/sequencer-step";
 import { Button, CrossIcon, majorScale, Pane } from "evergreen-ui";
-import _ from "lodash";
+import { range } from "lodash";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import pluralize from "pluralize";
@@ -107,7 +107,7 @@ const Sequencer: React.FC<SequencerProps> = (props: SequencerProps) => {
                 flexWrap="wrap"
                 justifyContent="center"
                 marginX="auto">
-                {_.range(0, stepCount).map((index: number) => (
+                {range(0, stepCount).map((index: number) => (
                     <SequencerStep
                         files={files}
                         index={index}

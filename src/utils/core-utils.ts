@@ -96,6 +96,9 @@ const randomFloat = (min: number, max: number): number =>
 const randomInt = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
+const randomValue = <T>(collection: T[]): T =>
+    collection[randomInt(0, collection.length - 1)];
+
 const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
@@ -109,5 +112,6 @@ export {
     makeDefaultValues,
     randomFloat,
     randomInt,
+    randomValue,
     unixTime,
 };
