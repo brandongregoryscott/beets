@@ -62,7 +62,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         assigned,
         children,
         hasFilter,
-        hasTitle,
+        hasTitle = true,
         isMultiSelect = false,
         onDeselect,
         onSelect,
@@ -84,6 +84,12 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
 
     const options: Array<SelectMenuItem<FileRecord>> = useMemo(() => {
         let filteredFiles: List<FileRecord> = files ?? List();
+        // We can't show the filter popover without the title component being rendered, so don't
+        // apply the filters without the user understanding where they came from
+        if (!hasTitle) {
+            return toSelectMenuItems(filteredFiles);
+        }
+
         if (showAssigned) {
             filteredFiles = assigned ?? List();
         }
