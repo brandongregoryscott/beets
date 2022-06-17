@@ -26,3 +26,5 @@ yalc.lock
 
 # Generated OpenAPI types file - we don't use it after parsing it into individual interfaces/types/etc
 src/generated/supabase-types.ts
+
+.eslintcache
