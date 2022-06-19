@@ -20,8 +20,6 @@ interface RangeSliderProps
             | "value"
         > {}
 
-type Range = [min: number, max: number];
-
 const RangeSlider: React.FC<RangeSliderProps> = (props: RangeSliderProps) => {
     const {
         label,
@@ -57,5 +55,4 @@ const RangeSlider: React.FC<RangeSliderProps> = (props: RangeSliderProps) => {
     );
 };
 
-export type { Range };
 export { RangeSlider };

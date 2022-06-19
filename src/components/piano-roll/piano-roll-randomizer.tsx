@@ -1,16 +1,18 @@
 import { Flex } from "components/flex";
-import { RangeSlider, Range } from "components/mantine/range-slider";
+import { RangeSlider } from "components/mantine/range-slider";
 import { Slider } from "components/mantine/slider";
 import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
 import { Scale } from "enums/scale";
 import { Button, Label, majorScale } from "evergreen-ui";
 import { useCallback, useEffect, useState } from "react";
+import { defaultSettings } from "utils/hooks/use-piano-roll-randomizer-settings";
+import { Range } from "types/range";
 
 interface PianoRollRandomizerProps {
     close: () => void;
-    onChange?: (settings: PianoRollRandomizerSettings) => void;
-    settings?: PianoRollRandomizerSettings;
+    onSettingsChange: (value: PianoRollRandomizerSettings) => void;
+    settings: PianoRollRandomizerSettings;
     stepCount: number;
 }
 
@@ -33,18 +35,9 @@ interface PianoRollRandomizerSettings {
     stepChance: number;
     /**
      * First - last steps to generate notes for
-     *
      */
     stepRange: Range;
 }
-
-const defaultSettings: PianoRollRandomizerSettings = {
-    scale: Scale.C_MAJOR,
-    stepChance: 30,
-    noteCount: [1, 3],
-    octaveRange: [4, 4],
-    stepRange: [1, 8],
-};
 
 const options: Array<SelectMenuItem<Scale>> = Object.entries(Scale).map(
     ([label, value]): SelectMenuItem<Scale> => ({
@@ -57,27 +50,32 @@ const options: Array<SelectMenuItem<Scale>> = Object.entries(Scale).map(
 const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     props: PianoRollRandomizerProps
 ) => {
-    const { close, onChange, settings: initialSettings, stepCount } = props;
+    const {
+        close,
+        onSettingsChange,
+        settings: initialSettings,
+        stepCount,
+    } = props;
 
-    const [settings, setSettings] = useState<PianoRollRandomizerSettings>(
+    const [value, setValue] = useState<PianoRollRandomizerSettings>(
         initialSettings ?? defaultSettings
     );
 
-    const [localScale, setLocalScale] = useState<Scale>(settings.scale);
+    const [localScale, setLocalScale] = useState<Scale>(value.scale);
     const [localStepChance, setLocalStepChance] = useState<number>(
-        settings.stepChance
+        value.stepChance
     );
 
     const [localNoteCount, setLocalNoteCount] = useState<Range>(
-        settings.noteCount
+        value.noteCount
     );
 
     const [localOctaveRange, setLocalOctaveRange] = useState<Range>(
-        settings.octaveRange
+        value.octaveRange
     );
 
     const [localStepRange, setLocalStepRange] = useState<Range>(
-        settings.stepRange
+        value.stepRange
     );
 
     const handleSelect = useCallback((item: SelectMenuItem<Scale>) => {
@@ -89,13 +87,12 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleNoteCountChangeEnd = useCallback((value: Range) => {
-        const [minimumNoteCount, maximumNoteCount] = value;
-
-        setSettings((prev) => ({
-            ...prev,
-            minimumNoteCount,
-            maximumNoteCount,
-        }));
+        setValue(
+            (prev): PianoRollRandomizerSettings => ({
+                ...prev,
+                noteCount: value,
+            })
+        );
     }, []);
 
     const handleOctaveRangeChange = useCallback((value: Range) => {
@@ -103,58 +100,53 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleOctaveRangeChangeEnd = useCallback((value: Range) => {
-        const [minimumOctave, maximumOctave] = value;
-
-        setSettings((prev) => ({
-            ...prev,
-            minimumOctave,
-            maximumOctave,
-        }));
+        setValue(
+            (prev): PianoRollRandomizerSettings => ({
+                ...prev,
+                octaveRange: value,
+            })
+        );
     }, []);
 
     const handleStepRangeChange = useCallback((value: Range) => {
-        setLocalStepRange(value);
+        setLocalStepRange([...value]);
     }, []);
 
     const handleStepRangeChangeEnd = useCallback((value: Range) => {
-        const [stepStartRange, stepEndRange] = value;
-
-        setSettings((prev) => ({
-            ...prev,
-            stepStartRange,
-            stepEndRange,
-        }));
+        setValue(
+            (prev): PianoRollRandomizerSettings => ({
+                ...prev,
+                stepRange: value,
+            })
+        );
     }, []);
 
     const handleChanceToAddStepChange = useCallback((value: number) => {
-        setSettings((prev) => ({ ...prev, stepChance: value }));
+        setValue((prev) => ({ ...prev, stepChance: value }));
     }, []);
 
-    const handleClear = useCallback(() => {
-        setSettings(defaultSettings);
+    const handleReset = useCallback(() => {
+        setValue(defaultSettings);
     }, []);
 
     const handleConfirm = useCallback(() => {
-        onChange?.(settings);
+        onSettingsChange?.(value);
         close();
-    }, [close, onChange, settings]);
+    }, [close, onSettingsChange, value]);
 
-    useEffect(
-        () => setLocalStepChance(settings.stepChance),
-        [settings.stepChance]
-    );
+    useEffect(() => setLocalStepChance(value.stepChance), [value.stepChance]);
 
     useEffect(() => {
-        setLocalNoteCount(settings.noteCount);
-    }, [settings.noteCount]);
+        setLocalNoteCount(value.noteCount);
+    }, [value.noteCount]);
 
     useEffect(() => {
-        setLocalOctaveRange(settings.octaveRange);
-    }, [settings.octaveRange]);
+        setLocalOctaveRange(value.octaveRange);
+    }, [value.octaveRange]);
 
     useEffect(() => {
-        setLocalStepRange(settings.stepRange);
-    }, [settings.stepRange]);
+        setLocalStepRange(value.stepRange);
+    }, [value.stepRange]);
 
     return (
         <Flex.Column width={majorScale(30)}>
@@ -230,9 +222,9 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
                 <Button
                     marginLeft="auto"
                     marginRight={majorScale(1)}
-                    onClick={handleClear}
+                    onClick={handleReset}
                     size="small">
-                    Clear
+                    Reset
                 </Button>
                 <Button
                     appearance="primary"
@@ -245,5 +237,5 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     );
 };
 
-export type { PianoRollRandomizerSettings };
+export type { PianoRollRandomizerSettings, PianoRollRandomizerProps };
 export { PianoRollRandomizer };

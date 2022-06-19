@@ -4,6 +4,7 @@ import { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
 import { isEqual as lodashIsEqual } from "lodash";
 import { Constructor } from "types/constructor";
+import { Range } from "types/range";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;
@@ -93,11 +94,13 @@ const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>
 const randomFloat = (min: number, max: number): number =>
     Math.random() * (max - min) + min;
 
-const randomInt = (min: number, max: number): number =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
+const randomInt = (range: Range): number => {
+    const [min, max] = range;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 const randomValue = <T>(collection: T[]): T =>
-    collection[randomInt(0, collection.length - 1)];
+    collection[randomInt([0, collection.length - 1])];
 
 const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
