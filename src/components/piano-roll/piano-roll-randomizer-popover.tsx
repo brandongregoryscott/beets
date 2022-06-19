@@ -65,6 +65,7 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
                 <IconButton icon={CogIcon} />
             </Popover>
             <ConfirmButton
+                clearConfirmationAfterMs={5000}
                 iconBefore={RandomIcon}
                 onConfirm={handleRandomClick}>
                 Randomize
