@@ -91,16 +91,10 @@ const isNotNilOrEmpty = <T = any[] | List<any> | string>(
 const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>
     defaultValues as T;
 
-const randomFloat = (min: number, max: number): number =>
-    Math.random() * (max - min) + min;
-
 const randomInt = (range: Range): number => {
     const [min, max] = range;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
-const randomValue = <T>(collection: T[]): T =>
-    collection[randomInt([0, collection.length - 1])];
 
 const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
@@ -113,8 +107,6 @@ export {
     isNilOrEmpty,
     isNotNilOrEmpty,
     makeDefaultValues,
-    randomFloat,
     randomInt,
-    randomValue,
     unixTime,
 };

@@ -18,6 +18,7 @@ import { isNotNilOrEmpty } from "utils/core-utils";
 import { useCallback } from "react";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { getRandomSteps } from "utils/track-section-step-utils";
+import { ConfirmButton } from "components/confirm-button";
 
 interface PianoRollRandomizerPopoverProps
     extends Omit<BoxProps<"div">, "onChange" | "value">,
@@ -63,9 +64,11 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
                 )}>
                 <IconButton icon={CogIcon} />
             </Popover>
-            <Button iconBefore={RandomIcon} onClick={handleRandomClick}>
+            <ConfirmButton
+                iconBefore={RandomIcon}
+                onConfirm={handleRandomClick}>
                 Randomize
-            </Button>
+            </ConfirmButton>
         </Group>
     );
 };

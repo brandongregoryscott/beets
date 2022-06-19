@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import { flatMap, range, uniqBy } from "lodash";
+import { flatten, range, sampleSize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
@@ -11,7 +11,7 @@ import { ToneStep } from "interfaces/tone-step";
 import { ToneStepGroup } from "interfaces/tone-step-group";
 import { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
 import { getAllNotesByScale } from "utils/scale-utils";
-import { randomInt, randomValue } from "utils/core-utils";
+import { randomInt } from "utils/core-utils";
 
 interface ClampIndexToRangeOptions {
     endIndex: number;
@@ -22,7 +22,6 @@ interface ClampIndexToRangeOptions {
 /**
  * Remaps the current index between the given range of indexes
  */
-
 const clampIndexToRange = (options: ClampIndexToRangeOptions): number => {
     const { index, startIndex = 0, endIndex } = options;
     const result = index % (endIndex - startIndex + 1);
@@ -45,34 +44,31 @@ const getRandomSteps = (
 ): List<TrackSectionStepRecord> => {
     const { scale, octaveRange, stepChance, stepRange, noteCount } = settings;
     const [stepStart, stepEnd] = stepRange;
-    let notes = List(getAllNotesByScale(scale, octaveRange));
+    const notes = getAllNotesByScale(scale, octaveRange);
 
     const stepIndexes = range(stepStart - 1, stepEnd);
-    const steps = flatMap<number, TrackSectionStepRecord>(
-        stepIndexes,
-        (index: number) => {
-            const shouldGenerate = randomInt([0, 100]) < stepChance;
-            if (!shouldGenerate) {
-                return [];
-            }
+    const steps = stepIndexes.map((index: number) => {
+        const shouldGenerate = randomInt([0, 100]) < stepChance;
+        if (!shouldGenerate) {
+            return [];
+        }
 
-            const steps = range(0, randomInt(noteCount)).map(() => {
-                const note = randomValue(notes.toArray());
-                notes = notes.remove(notes.indexOf(note));
+        const randomNotes = sampleSize(notes, randomInt(noteCount));
 
-                return new TrackSectionStepRecord({
+        const steps = randomNotes.map(
+            (note: string) =>
+                new TrackSectionStepRecord({
                     index,
                     file_id: fileId,
                     track_section_id: trackSectionId,
                     note,
-                });
-            });
+                })
+        );
 
-            return steps;
-        }
-    );
+        return steps;
+    });
 
-    return List(steps);
+    return List(flatten(steps));
 };
 
 const isSelected = (
