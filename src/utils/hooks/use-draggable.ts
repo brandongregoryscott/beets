@@ -32,10 +32,6 @@ const useDraggable = <T extends OrderableEntity>(
                 return;
             }
 
-            if (destination.index === source.index) {
-                return;
-            }
-
             setState?.((prev) =>
                 rebaseIndexes(reorder(prev, source.index, destination.index))
             );
