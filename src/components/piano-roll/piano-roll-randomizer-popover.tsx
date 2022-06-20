@@ -7,7 +7,6 @@ import { BoxProps, CogIcon, Group, Popover, RandomIcon } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { List } from "immutable";
-import { isNotNilOrEmpty } from "utils/core-utils";
 import { useCallback } from "react";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { getRandomSteps } from "utils/track-section-step-utils";
@@ -42,7 +41,7 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
 
     const handleRandomClick = useCallback(() => {
         const steps = getRandomSteps(settings, trackSectionId, fileId);
-        onChange(steps.filter(isNotNilOrEmpty));
+        onChange(steps);
     }, [fileId, onChange, settings, trackSectionId]);
 
     return (

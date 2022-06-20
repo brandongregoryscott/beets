@@ -14,7 +14,7 @@ const options: Array<SelectMenuItem<number>> = _.range(
     1,
     TrackSectionRecord.maxStepCount + 1
 ).map((stepCount: number) => ({
-    label: `${stepCount} ${pluralize("steps", stepCount)}`,
+    label: pluralize("steps", stepCount, true),
     id: stepCount.toString(),
     value: stepCount,
 }));
@@ -37,9 +37,7 @@ const StepCountSelectMenu: React.FC<StepCountSelectMenuProps> = (
             options={options}
             selected={stepCount}
             width={majorScale(11)}>
-            <Button {...boxProps}>
-                {stepCount} {pluralize("Step", stepCount)}
-            </Button>
+            <Button {...boxProps}>{pluralize("Step", stepCount, true)}</Button>
         </SelectMenu>
     );
 };
