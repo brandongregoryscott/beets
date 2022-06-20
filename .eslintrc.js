@@ -62,7 +62,7 @@ module.exports = {
         "react/jsx-sort-props": "error",
         "react/jsx-boolean-value": ["error", "always"],
         "react/self-closing-comp": "error",
-        "react-hooks/rules-of-hooks":"error",
-        "react-hooks/exhaustive-deps":"error"
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
     },
 };

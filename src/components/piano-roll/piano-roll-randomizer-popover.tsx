@@ -54,7 +54,8 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
                         settings={settings}
                         stepCount={stepCount}
                     />
-                )}>
+                )}
+                shouldCloseOnExternalClick={false}>
                 <IconButton icon={CogIcon} />
             </Popover>
             <ConfirmButton

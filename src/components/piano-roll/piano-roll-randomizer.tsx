@@ -57,29 +57,33 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
         stepCount,
     } = props;
 
-    const [value, setValue] = useState<PianoRollRandomizerSettings>(
+    const [settings, setSettings] = useState<PianoRollRandomizerSettings>(
         initialSettings ?? defaultSettings
     );
 
-    const [localScale, setLocalScale] = useState<Scale>(value.scale);
     const [localStepChance, setLocalStepChance] = useState<number>(
-        value.stepChance
+        settings.stepChance
     );
 
     const [localNoteCount, setLocalNoteCount] = useState<Range>(
-        value.noteCount
+        settings.noteCount
     );
 
     const [localOctaveRange, setLocalOctaveRange] = useState<Range>(
-        value.octaveRange
+        settings.octaveRange
     );
 
     const [localStepRange, setLocalStepRange] = useState<Range>(
-        value.stepRange
+        settings.stepRange
     );
 
     const handleSelect = useCallback((item: SelectMenuItem<Scale>) => {
-        setLocalScale(item.value);
+        setSettings(
+            (prev): PianoRollRandomizerSettings => ({
+                ...prev,
+                scale: item.value,
+            })
+        );
     }, []);
 
     const handleNoteCountChange = useCallback((value: Range) => {
@@ -87,7 +91,7 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleNoteCountChangeEnd = useCallback((value: Range) => {
-        setValue(
+        setSettings(
             (prev): PianoRollRandomizerSettings => ({
                 ...prev,
                 noteCount: value,
@@ -100,7 +104,7 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleOctaveRangeChangeEnd = useCallback((value: Range) => {
-        setValue(
+        setSettings(
             (prev): PianoRollRandomizerSettings => ({
                 ...prev,
                 octaveRange: value,
@@ -113,7 +117,7 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleStepRangeChangeEnd = useCallback((value: Range) => {
-        setValue(
+        setSettings(
             (prev): PianoRollRandomizerSettings => ({
                 ...prev,
                 stepRange: value,
@@ -122,31 +126,34 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleChanceToAddStepChange = useCallback((value: number) => {
-        setValue((prev) => ({ ...prev, stepChance: value }));
+        setSettings((prev) => ({ ...prev, stepChance: value }));
     }, []);
 
     const handleReset = useCallback(() => {
-        setValue(defaultSettings);
+        setSettings(defaultSettings);
     }, []);
 
     const handleConfirm = useCallback(() => {
-        onSettingsChange?.(value);
+        onSettingsChange?.(settings);
         close();
-    }, [close, onSettingsChange, value]);
+    }, [close, onSettingsChange, settings]);
 
-    useEffect(() => setLocalStepChance(value.stepChance), [value.stepChance]);
-
-    useEffect(() => {
-        setLocalNoteCount(value.noteCount);
-    }, [value.noteCount]);
-
-    useEffect(() => {
-        setLocalOctaveRange(value.octaveRange);
-    }, [value.octaveRange]);
+    useEffect(
+        () => setLocalStepChance(settings.stepChance),
+        [settings.stepChance]
+    );
 
     useEffect(() => {
-        setLocalStepRange(value.stepRange);
-    }, [value.stepRange]);
+        setLocalNoteCount(settings.noteCount);
+    }, [settings.noteCount]);
+
+    useEffect(() => {
+        setLocalOctaveRange(settings.octaveRange);
+    }, [settings.octaveRange]);
+
+    useEffect(() => {
+        setLocalStepRange(settings.stepRange);
+    }, [settings.stepRange]);
 
     return (
         <Flex.Column width={majorScale(30)}>
@@ -166,8 +173,8 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
                         hasTitle={false}
                         onSelect={handleSelect}
                         options={options}
-                        selected={localScale}>
-                        <Button size="small">{localScale}</Button>
+                        selected={settings.scale}>
+                        <Button size="small">{settings.scale}</Button>
                     </SelectMenu>
                 </Flex.Row>
                 <Flex.Row marginBottom={majorScale(2)}>
