@@ -11,7 +11,7 @@ import { ToneStep } from "interfaces/tone-step";
 import { ToneStepGroup } from "interfaces/tone-step-group";
 import { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
 import { getAllNotesByScale } from "utils/scale-utils";
-import { randomInt } from "utils/core-utils";
+import { isNotNilOrEmpty, randomInt } from "utils/core-utils";
 
 interface ClampIndexToRangeOptions {
     endIndex: number;
@@ -36,6 +36,12 @@ const getByTrackSection = (
         (trackSectionStep) =>
             trackSectionStep.track_section_id === trackSection.id
     );
+
+const getNotes = (trackSectionSteps: List<TrackSectionStepRecord>): string[] =>
+    trackSectionSteps
+        .map((trackSectionStep) => trackSectionStep.note)
+        .filter(isNotNilOrEmpty)
+        .toArray();
 
 const getRandomSteps = (
     settings: PianoRollRandomizerSettings,
@@ -169,6 +175,7 @@ const toSequencerStepTypes = (
 export {
     clampIndexToRange,
     getByTrackSection,
+    getNotes,
     getRandomSteps,
     isSelected,
     toInstrumentStepTypes,

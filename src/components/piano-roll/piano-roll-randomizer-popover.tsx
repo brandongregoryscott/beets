@@ -17,7 +17,7 @@ interface PianoRollRandomizerPopoverProps
     extends Omit<BoxProps<"div">, "onChange" | "value">,
         Pick<
             PianoRollRandomizerProps,
-            "onSettingsChange" | "settings" | "stepCount"
+            "onSettingsChange" | "settings" | "stepCount" | "trackSectionSteps"
         > {
     file?: FileRecord;
     onChange: (value: List<TrackSectionStepRecord>) => void;
@@ -34,6 +34,7 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
         onChange,
         onSettingsChange,
         stepCount,
+        trackSectionSteps,
         ...boxProps
     } = props;
     const fileId = file?.id;
@@ -53,6 +54,7 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
                         onSettingsChange={onSettingsChange}
                         settings={settings}
                         stepCount={stepCount}
+                        trackSectionSteps={trackSectionSteps}
                     />
                 )}
                 shouldCloseOnExternalClick={false}>

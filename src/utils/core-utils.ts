@@ -96,6 +96,22 @@ const randomInt = (range: Range): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+const toList = <T>(value: List<T> | T | T[] | null | undefined): List<T> => {
+    if (value == null) {
+        return List<T>();
+    }
+
+    if (List.isList(value)) {
+        return value;
+    }
+
+    if (Array.isArray(value)) {
+        return List(value);
+    }
+
+    return List.of(value);
+};
+
 const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
@@ -109,4 +125,5 @@ export {
     makeDefaultValues,
     randomInt,
     unixTime,
+    toList,
 };

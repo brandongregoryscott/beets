@@ -24,6 +24,8 @@ import { toDataAttributes } from "utils/data-attribute-utils";
 import { Flex } from "components/flex";
 import { PianoRollRandomizerPopover } from "components/piano-roll/piano-roll-randomizer-popover";
 import { usePianoRollRandomizerSettings } from "utils/hooks/use-piano-roll-randomizer-settings";
+import { isNotNilOrEmpty } from "utils/core-utils";
+import { getScaleByNotes } from "utils/scale-utils";
 
 interface PianoRollProps {
     centerControls?: boolean;
@@ -114,6 +116,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     settings={settings}
                     stepCount={stepCount}
                     trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
                 />
             </Flex.Row>
             <Flex.Column flexGrow={1} width="100%">

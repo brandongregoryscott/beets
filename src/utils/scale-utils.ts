@@ -1,8 +1,9 @@
-import { SelectMenuItem } from "components/select-menu/select-menu";
 import { Scale } from "enums/scale";
-import { flatMap, range } from "lodash";
+import { List } from "immutable";
+import { flatMap, isEmpty, range } from "lodash";
 import { scale as getNotesByScale } from "scribbletune";
 import { Range } from "types/range";
+import { toList } from "utils/core-utils";
 
 const getAllNotesByScale = (scale: Scale, octaveRange: Range): string[] => {
     const [start, end] = octaveRange;
@@ -14,12 +15,20 @@ const getAllNotesByScale = (scale: Scale, octaveRange: Range): string[] => {
     return notes;
 };
 
-const options: Array<SelectMenuItem<Scale>> = Object.entries(Scale).map(
-    ([label, value]): SelectMenuItem<Scale> => ({
-        id: label,
-        label: value,
-        value,
-    })
-);
+/**
+ * Returns the matching `Scale` from the given notes, if it can be found.
+ */
+const getScaleByNotes = (notes: List<string> | string[]): Scale | undefined => {
+    if (isEmpty(notes)) {
+        return undefined;
+    }
 
-export { getAllNotesByScale, options };
+    const matchingScale = Object.values(Scale).find((scale) => {
+        const scaleNotes = List(getAllNotesByScale(scale, [1, 7]));
+        return toList(notes).isSubset(scaleNotes);
+    });
+
+    return matchingScale;
+};
+
+export { getAllNotesByScale, getScaleByNotes };

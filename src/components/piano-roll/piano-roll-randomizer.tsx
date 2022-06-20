@@ -5,15 +5,22 @@ import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
 import { Scale } from "enums/scale";
 import { Button, Label, majorScale } from "evergreen-ui";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultSettings } from "utils/hooks/use-piano-roll-randomizer-settings";
 import { Range } from "types/range";
+import { ScaleOptions } from "constants/scale-options";
+import { getScaleByNotes } from "utils/scale-utils";
+import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { isNotNilOrEmpty } from "utils/core-utils";
+import { List } from "immutable";
+import { getNotes } from "utils/track-section-step-utils";
 
 interface PianoRollRandomizerProps {
     close: () => void;
     onSettingsChange: (value: PianoRollRandomizerSettings) => void;
     settings: PianoRollRandomizerSettings;
     stepCount: number;
+    trackSectionSteps: List<TrackSectionStepRecord>;
 }
 
 interface PianoRollRandomizerSettings {
@@ -39,14 +46,6 @@ interface PianoRollRandomizerSettings {
     stepRange: Range;
 }
 
-const options: Array<SelectMenuItem<Scale>> = Object.entries(Scale).map(
-    ([label, value]): SelectMenuItem<Scale> => ({
-        id: label,
-        label: value,
-        value,
-    })
-);
-
 const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     props: PianoRollRandomizerProps
 ) => {
@@ -55,8 +54,13 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
         onSettingsChange,
         settings: initialSettings,
         stepCount,
+        trackSectionSteps,
     } = props;
 
+    const detectedScale = useMemo<Scale | undefined>(
+        () => getScaleByNotes(getNotes(trackSectionSteps)),
+        [trackSectionSteps]
+    );
     const [settings, setSettings] = useState<PianoRollRandomizerSettings>(
         initialSettings ?? defaultSettings
     );
@@ -85,6 +89,19 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
             })
         );
     }, []);
+
+    const handleSetDetectedScale = useCallback(() => {
+        if (detectedScale == null) {
+            return;
+        }
+
+        setSettings(
+            (prev): PianoRollRandomizerSettings => ({
+                ...prev,
+                scale: detectedScale,
+            })
+        );
+    }, [detectedScale]);
 
     const handleNoteCountChange = useCallback((value: Range) => {
         setLocalNoteCount(value);
@@ -130,8 +147,8 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     }, []);
 
     const handleReset = useCallback(() => {
-        setSettings(defaultSettings);
-    }, []);
+        setSettings(initialSettings);
+    }, [initialSettings]);
 
     const handleConfirm = useCallback(() => {
         onSettingsChange?.(settings);
@@ -172,10 +189,20 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
                         hasFilter={false}
                         hasTitle={false}
                         onSelect={handleSelect}
-                        options={options}
+                        options={ScaleOptions}
                         selected={settings.scale}>
-                        <Button size="small">{settings.scale}</Button>
+                        <Button marginRight={majorScale(1)} size="small">
+                            {settings.scale}
+                        </Button>
                     </SelectMenu>
+                    {detectedScale != null && settings.scale !== detectedScale && (
+                        <Button
+                            appearance="minimal"
+                            onClick={handleSetDetectedScale}
+                            size="small">
+                            Use Detected
+                        </Button>
+                    )}
                 </Flex.Row>
                 <Flex.Row marginBottom={majorScale(2)}>
                     <Slider
