@@ -91,10 +91,7 @@ const FileUploader: React.FC<FileUploaderProps> = (
     const fileCountOverLimit = files.length + fileRejections.length - maxFiles;
     const fileCountError = `${getMaxFilesMessage(
         maxFiles
-    )} Please remove ${fileCountOverLimit} ${pluralize(
-        "file",
-        fileCountOverLimit
-    )}.`;
+    )} Please remove ${pluralize("file", fileCountOverLimit, true)}.`;
 
     const description = [
         getMaxFilesMessage(maxFiles),

@@ -1,11 +1,11 @@
 import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
-import { Button, majorScale } from "evergreen-ui";
+import { BoxProps, Button, majorScale } from "evergreen-ui";
 import _ from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
 import pluralize from "pluralize";
 import { useCallback } from "react";
 
-interface StepCountSelectMenurops {
+interface StepCountSelectMenuProps extends Omit<BoxProps<"div">, "onChange"> {
     onChange: (stepCount: number) => void;
     stepCount: number;
 }
@@ -14,15 +14,15 @@ const options: Array<SelectMenuItem<number>> = _.range(
     1,
     TrackSectionRecord.maxStepCount + 1
 ).map((stepCount: number) => ({
-    label: `${stepCount} ${pluralize("steps", stepCount)}`,
+    label: pluralize("steps", stepCount, true),
     id: stepCount.toString(),
     value: stepCount,
 }));
 
-const StepCountSelectMenu: React.FC<StepCountSelectMenurops> = (
-    props: StepCountSelectMenurops
+const StepCountSelectMenu: React.FC<StepCountSelectMenuProps> = (
+    props: StepCountSelectMenuProps
 ) => {
-    const { onChange, stepCount } = props;
+    const { onChange, stepCount, ...boxProps } = props;
     const handleSelect = useCallback(
         (item: SelectMenuItem<number>) => onChange(item.value),
         [onChange]
@@ -37,9 +37,7 @@ const StepCountSelectMenu: React.FC<StepCountSelectMenurops> = (
             options={options}
             selected={stepCount}
             width={majorScale(11)}>
-            <Button>
-                {stepCount} {pluralize("Step", stepCount)}
-            </Button>
+            <Button {...boxProps}>{pluralize("Step", stepCount, true)}</Button>
         </SelectMenu>
     );
 };

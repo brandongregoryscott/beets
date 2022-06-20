@@ -7,7 +7,13 @@ module.exports = {
         },
         project: "./tsconfig.json",
     },
-    plugins: ["@typescript-eslint", "collation", "typescript-sort-keys"],
+    plugins: [
+        "@typescript-eslint",
+        "collation",
+        "react",
+        "react-hooks",
+        "typescript-sort-keys",
+    ],
     rules: {
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/consistent-type-exports": "off", // TODO: Set this to `error` when cra is updated
@@ -53,5 +59,10 @@ module.exports = {
             { caseSensitive: false },
         ],
         "typescript-sort-keys/string-enum": "error",
+        "react/jsx-sort-props": "error",
+        "react/jsx-boolean-value": ["error", "always"],
+        "react/self-closing-comp": "error",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
     },
 };

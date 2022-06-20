@@ -6,6 +6,7 @@ import {
     IconButton,
     majorScale,
     Pane,
+    RandomIcon,
 } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
@@ -21,6 +22,10 @@ import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { TrackRecord } from "models/track-record";
 import { toDataAttributes } from "utils/data-attribute-utils";
 import { Flex } from "components/flex";
+import { PianoRollRandomizerPopover } from "components/piano-roll/piano-roll-randomizer-popover";
+import { usePianoRollRandomizerSettings } from "utils/hooks/use-piano-roll-randomizer-settings";
+import { isNotNilOrEmpty } from "utils/core-utils";
+import { getScaleByNotes } from "utils/scale-utils";
 
 interface PianoRollProps {
     centerControls?: boolean;
@@ -65,6 +70,7 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
         trackSectionSteps,
     });
 
+    const { settings, setSettings } = usePianoRollRandomizerSettings({ track });
     const handleScaleDown = useCallback(
         () => setViewableIndex((prev) => prev - indexRange),
         [setViewableIndex]
@@ -98,8 +104,19 @@ const PianoRoll: React.FC<PianoRollProps> = (props: PianoRollProps) => {
                     onClick={handleScaleUp}
                 />
                 <StepCountSelectMenu
+                    marginRight={buttonMarginRight}
                     onChange={onStepCountChange}
                     stepCount={stepCount}
+                />
+                <PianoRollRandomizerPopover
+                    file={file}
+                    marginRight={buttonMarginRight}
+                    onChange={onChange}
+                    onSettingsChange={setSettings}
+                    settings={settings}
+                    stepCount={stepCount}
+                    trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
                 />
             </Flex.Row>
             <Flex.Column flexGrow={1} width="100%">
