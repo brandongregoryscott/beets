@@ -1,20 +1,26 @@
-import { Alert, Button, ButtonProps, majorScale } from "evergreen-ui";
+import { Alert, Button, majorScale, Pane, BoxProps } from "evergreen-ui";
 import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
 
-interface ConfirmButtonProps extends Omit<ButtonProps, "onClick"> {
-    alertDescription?: React.ReactNode | string;
-    alertTitle?: React.ReactNode | string;
-    /**
-     * When provided, resets the confirmation state after the specified amount of time to force the
-     * user to confirm again.
-     */
-    clearConfirmationAfterMs?: number;
-    onClick?: () => void;
-    onConfirm?: () => void;
-}
+type ConfirmButtonProps<T extends React.ElementType<any> = typeof Button> =
+    Omit<BoxProps<T>, "children"> & {
+        alertDescription?: React.ReactNode | string;
+        alertTitle?: React.ReactNode | string;
+        /**
+         * When provided, resets the confirmation state after the specified amount of time to force the
+         * user to confirm again.
+         */
+        clearConfirmationAfterMs?: number;
+        is?: T;
+        onClick?: () => void;
+        onConfirm?: () => void;
+    };
 
-const ConfirmButton: React.FC<PropsWithChildren<ConfirmButtonProps>> = (
-    props: PropsWithChildren<ConfirmButtonProps>
+const defaultProps: ConfirmButtonProps = {
+    is: Button,
+};
+
+const ConfirmButton = <T extends React.ElementType<any> = typeof Button>(
+    props: PropsWithChildren<ConfirmButtonProps<T>>
 ) => {
     const {
         alertDescription,
@@ -75,14 +81,14 @@ const ConfirmButton: React.FC<PropsWithChildren<ConfirmButtonProps>> = (
 
     return (
         <React.Fragment>
-            <Button
+            <Pane
                 {...restProps}
                 appearance={isConfirmed ? "primary" : undefined}
                 intent={intent}
                 onClick={handleClick}
                 type="button">
                 {children}
-            </Button>
+            </Pane>
             {(alertDescription != null || alertTitle != null) && isConfirmed && (
                 <Alert
                     appearance="default"
@@ -95,5 +101,7 @@ const ConfirmButton: React.FC<PropsWithChildren<ConfirmButtonProps>> = (
         </React.Fragment>
     );
 };
+
+ConfirmButton.defaultProps = defaultProps;
 
 export { ConfirmButton };

@@ -3,14 +3,7 @@ import {
     PianoRollRandomizer,
     PianoRollRandomizerProps,
 } from "components/piano-roll/piano-roll-randomizer";
-import {
-    BoxProps,
-    Button,
-    CogIcon,
-    Group,
-    Popover,
-    RandomIcon,
-} from "evergreen-ui";
+import { BoxProps, CogIcon, Group, Popover, RandomIcon } from "evergreen-ui";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { List } from "immutable";
@@ -66,10 +59,11 @@ const PianoRollRandomizerPopover: React.FC<PianoRollRandomizerPopoverProps> = (
             </Popover>
             <ConfirmButton
                 clearConfirmationAfterMs={5000}
-                iconBefore={RandomIcon}
-                onConfirm={handleRandomClick}>
-                Randomize
-            </ConfirmButton>
+                icon={RandomIcon}
+                intent="default"
+                is={IconButton}
+                onConfirm={handleRandomClick}
+            />
         </Group>
     );
 };

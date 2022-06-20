@@ -6,6 +6,7 @@ import {
     IconButton,
     majorScale,
     Pane,
+    RandomIcon,
 } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
