@@ -132,8 +132,15 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
                 );
             }
 
+            // Only map up samples that this specific Track uses to prevent collisions
+            const sequencerFiles = intersectionWith(
+                files,
+                trackSectionStepsForTrack,
+                (file, trackSectionStep) => file.id === trackSectionStep.file_id
+            );
+
             const sampleMap = track.isSequencer()
-                ? toSequencerMap(files)
+                ? toSequencerMap(sequencerFiles)
                 : toInstrumentMap(getFileById(instrument?.file_id, files));
 
             // If there's no samples to play yet, don't bother initializing a track etc.
