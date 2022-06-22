@@ -53,6 +53,10 @@ const isSnare = (file: AnyFile): boolean => {
     return pattern.test(getFileName(file));
 };
 
+/**
+ * Returns a map of public file url to a note for use with the PianoRoll component. For now,
+ * it only sets the root note at C4 and lets Tone pitch the sound up/down
+ */
 const toInstrumentMap = (file?: FileRecord): Record<MidiNote, string> => {
     if (file == null) {
         return {} as Record<MidiNote, string>;
@@ -79,6 +83,9 @@ const toSelectMenuItems = (
     );
 };
 
+/**
+ * Returns a mapping of public file urls to midi notes for use with the Sequencer component
+ */
 const toSequencerMap = (files?: List<FileRecord>): Record<MidiNote, string> => {
     if (isNilOrEmpty(files)) {
         return {} as Record<MidiNote, string>;
