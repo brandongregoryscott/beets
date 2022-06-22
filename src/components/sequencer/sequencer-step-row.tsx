@@ -1,15 +1,8 @@
-import {
-    Text,
-    TableRow,
-    minorScale,
-    TextTableCell,
-    Pane,
-    majorScale,
-} from "evergreen-ui";
+import { TableRow, minorScale, TextTableCell, majorScale } from "evergreen-ui";
 import { List } from "immutable";
 import { FileRecord } from "models/file-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { MouseEvent } from "react";
+import { MouseEvent, useCallback } from "react";
 import { getBorderYProps } from "utils/core-utils";
 
 interface SequencerStepRowProps {
@@ -37,10 +30,13 @@ const SequencerStepRow: React.FC<SequencerStepRowProps> = (
         borderRadius,
     });
 
-    const handleClick = (event: MouseEvent<HTMLDivElement>) => {
-        event.stopPropagation();
-        onClick(trackSectionStep);
-    };
+    const handleClick = useCallback(
+        (event: MouseEvent<HTMLDivElement>) => {
+            event.stopPropagation();
+            onClick(trackSectionStep);
+        },
+        [onClick, trackSectionStep]
+    );
 
     return (
         <TableRow
@@ -48,10 +44,11 @@ const SequencerStepRow: React.FC<SequencerStepRowProps> = (
             height={height}
             isSelectable={true}
             onClick={handleClick}>
-            <TextTableCell>
-                <Pane alignItems="center" display="flex">
-                    <Text fontSize="x-small">{file.name}</Text>
-                </Pane>
+            <TextTableCell
+                alignItems="center"
+                display="flex"
+                textProps={{ fontSize: "x-small" }}>
+                {file.name}
             </TextTableCell>
         </TableRow>
     );
