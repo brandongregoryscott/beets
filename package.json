@@ -78,6 +78,7 @@
         "pluralize": "8.0.0",
         "prettier": "2.5.1",
         "react-error-overlay": "6.0.9",
+        "semantic-release": "19.0.3",
         "ts-morph": "15.1.0",
         "ts-node": "10.8.1",
         "typescript": "4.7.4"
@@ -97,6 +98,10 @@
     },
     "name": "beets",
     "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/brandongregoryscott/beets.git"
+    },
     "scripts": {
         "build": "react-scripts build",
         "build:migrations": "echo Building src/scripts/migrations && echo Using TypeScript && tsc -v && tsc --project src/scripts/migrations",
@@ -118,9 +123,10 @@
         "premigrations:down": "npm run build:migrations",
         "premigrations:up": "npm run build:migrations",
         "prepare": "husky install",
+        "semantic-release": "semantic-release",
         "start": "react-scripts start",
         "test": "react-scripts test",
         "test:watch": "react-scripts test --watch"
     },
-    "version": "0.0.0"
+    "version": "0.0.0-development"
 }
