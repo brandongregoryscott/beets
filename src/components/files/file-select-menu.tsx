@@ -105,7 +105,7 @@ const FileSelectMenu: React.FC<PropsWithChildren<FileSelectMenuProps>> = (
         }
 
         return toSelectMenuItems(filteredFiles);
-    }, [assigned, files, selected, showAssigned, showSelected]);
+    }, [assigned, files, hasTitle, selected, showAssigned, showSelected]);
 
     const handleDeselect = useCallback(
         (item: SelectMenuItem<FileRecord>) => onDeselect?.(item.value),

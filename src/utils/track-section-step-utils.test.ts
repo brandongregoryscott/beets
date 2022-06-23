@@ -73,7 +73,7 @@ describe("TrackSectionStepUtils", () => {
                     (index: number) =>
                         new TrackSectionRecord({
                             index,
-                            step_count: randomInt(1, 8),
+                            step_count: randomInt([1, 8]),
                         })
                 )
             );

@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import _ from "lodash";
+import { flatten, range, sampleSize } from "lodash";
 import { FileRecord } from "models/file-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
@@ -9,6 +9,9 @@ import { getTotalStepCount } from "utils/track-section-utils";
 import { InstrumentRecord } from "models/instrument-record";
 import { ToneStep } from "interfaces/tone-step";
 import { ToneStepGroup } from "interfaces/tone-step-group";
+import { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
+import { getAllNotesByScale } from "utils/scale-utils";
+import { isNotNilOrEmpty, randomInt } from "utils/core-utils";
 
 interface ClampIndexToRangeOptions {
     endIndex: number;
@@ -19,7 +22,6 @@ interface ClampIndexToRangeOptions {
 /**
  * Remaps the current index between the given range of indexes
  */
-
 const clampIndexToRange = (options: ClampIndexToRangeOptions): number => {
     const { index, startIndex = 0, endIndex } = options;
     const result = index % (endIndex - startIndex + 1);
@@ -34,6 +36,46 @@ const getByTrackSection = (
         (trackSectionStep) =>
             trackSectionStep.track_section_id === trackSection.id
     );
+
+const getNotes = (trackSectionSteps: List<TrackSectionStepRecord>): string[] =>
+    trackSectionSteps
+        .map((trackSectionStep) => trackSectionStep.note)
+        .filter(isNotNilOrEmpty)
+        .toArray();
+
+const getRandomSteps = (
+    settings: PianoRollRandomizerSettings,
+    trackSectionId: string,
+    fileId?: string
+): List<TrackSectionStepRecord> => {
+    const { scale, octaveRange, stepChance, stepRange, noteCount } = settings;
+    const [stepStart, stepEnd] = stepRange;
+    const notes = getAllNotesByScale(scale, octaveRange);
+
+    const stepIndexes = range(stepStart - 1, stepEnd);
+    const steps = stepIndexes.map((index: number) => {
+        const shouldGenerate = randomInt([0, 100]) < stepChance;
+        if (!shouldGenerate) {
+            return [];
+        }
+
+        const randomNotes = sampleSize(notes, randomInt(noteCount));
+
+        const steps = randomNotes.map(
+            (note: string) =>
+                new TrackSectionStepRecord({
+                    index,
+                    file_id: fileId,
+                    track_section_id: trackSectionId,
+                    note,
+                })
+        );
+
+        return steps;
+    });
+
+    return List(flatten(steps));
+};
 
 const isSelected = (
     trackSectionSteps: List<TrackSectionStepRecord>,
@@ -60,7 +102,7 @@ const toInstrumentStepTypes = (
             trackSectionSteps
         );
 
-        _.range(0, trackSection.step_count).forEach((index) => {
+        range(0, trackSection.step_count).forEach((index) => {
             const stepsByIndex = trackSectionsStepsForTrackSection.filter(
                 (trackSectionStep) => trackSectionStep.index === index
             );
@@ -100,7 +142,7 @@ const toSequencerStepTypes = (
             trackSectionSteps
         );
 
-        _.range(0, trackSection.step_count).forEach((index) => {
+        range(0, trackSection.step_count).forEach((index) => {
             const stepsByIndex = trackSectionsStepsForTrackSection.filter(
                 (trackSectionStep) => trackSectionStep.index === index
             );
@@ -133,6 +175,8 @@ const toSequencerStepTypes = (
 export {
     clampIndexToRange,
     getByTrackSection,
+    getNotes,
+    getRandomSteps,
     isSelected,
     toInstrumentStepTypes,
     toSequencerStepTypes,
