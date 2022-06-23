@@ -66,6 +66,8 @@
         "@typescript-eslint/eslint-plugin": "5.27.1",
         "@typescript-eslint/parser": "5.27.1",
         "chalk": "4.1.2",
+        "commitizen": "4.2.4",
+        "cz-conventional-changelog": "3.3.0",
         "dotenv": "10.0.0",
         "eslint-plugin-collation": "1.0.2",
         "eslint-plugin-react": "7.30.0",
