@@ -14,6 +14,12 @@
     <a href="http://www.typescriptlang.org/">
         <img alt="TypeScript" src="https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg"/>
     </a>
+    <a href="http://commitizen.github.io/cz-cli/">
+        <img alt="Commitizen friendly" src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"/>
+    </a>
+    <a href="https://github.com/semantic-release/semantic-release">
+        <img alt="semantic-release: angular" src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release"/>
+    </a>
 </p>
 
 Web-based DAW (Digital Audio Workstation) written in React for making music.
