@@ -1,7 +1,8 @@
 import { Scale } from "enums/scale";
 import { List } from "immutable";
 import { flatMap, isEmpty, range } from "lodash";
-import { scale as getNotesByScale } from "scribbletune";
+/* @ts-ignore */
+import { scale as getNotesByScale } from "harmonics";
 import { Range } from "types/range";
 import { toList } from "utils/core-utils";
 
