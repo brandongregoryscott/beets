@@ -15,7 +15,7 @@
         "@mantine/core": "4.2.1",
         "@mantine/hooks": "4.2.1",
         "@octokit/rest": "18.12.0",
-        "@supabase/supabase-js": "1.35.3",
+        "@supabase/supabase-js": "1.35.4",
         "evergreen-ui": "6.10.1",
         "glamor": "2.20.40",
         "harmonics": "1.1.0",
