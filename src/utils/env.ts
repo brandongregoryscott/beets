@@ -1,7 +1,3 @@
-import dotenv from "dotenv";
-
-dotenv.config();
-
 enum EnvironmentName {
     Development = "Development",
     Local = "Local",

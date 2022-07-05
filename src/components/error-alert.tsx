@@ -1,5 +1,6 @@
 import { ApiError } from "@supabase/supabase-js";
 import { Alert, majorScale } from "evergreen-ui";
+import { errorToString } from "utils/error-utils";
 
 interface ErrorAlertProps {
     error?: ApiError | Error | null;
@@ -7,15 +8,12 @@ interface ErrorAlertProps {
 
 const ErrorAlert: React.FC<ErrorAlertProps> = (props: ErrorAlertProps) => {
     const { error } = props;
-    if (error == null) {
+    const message = errorToString(error);
+    if (message == null) {
         return null;
     }
 
-    return (
-        <Alert intent="danger" marginTop={majorScale(2)}>
-            {error?.message}
-        </Alert>
-    );
+    return <Alert intent="danger" marginTop={majorScale(2)} title={message} />;
 };
 
 export { ErrorAlert };

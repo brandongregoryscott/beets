@@ -2,7 +2,7 @@ import { BorderPropsOptions } from "interfaces/border-props-options";
 import { BorderProps } from "interfaces/border-props";
 import { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
-import { isEqual as lodashIsEqual } from "lodash";
+import { isEqual as lodashIsEqual, pick as lodashPick } from "lodash";
 import { Constructor } from "types/constructor";
 import { Range } from "types/range";
 
@@ -91,6 +91,11 @@ const isNotNilOrEmpty = <T = any[] | List<any> | string>(
 const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>
     defaultValues as T;
 
+const pick = <T extends object, K extends keyof T = keyof T>(
+    object: T,
+    ...values: Array<K>
+) => lodashPick<T, K>(object, ...values);
+
 const randomInt = (range: Range): number => {
     const [min, max] = range;
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -121,6 +126,7 @@ export {
     isEqual,
     isInstanceOf,
     isNilOrEmpty,
+    pick,
     isNotNilOrEmpty,
     makeDefaultValues,
     randomInt,
