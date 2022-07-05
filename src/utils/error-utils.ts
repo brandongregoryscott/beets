@@ -1,13 +1,22 @@
+import { ApiError } from "@supabase/supabase-js";
 import { ErrorMessages } from "constants/error-messages";
+import { isString } from "lodash";
 
-export const isNotFoundError = (error?: Error | string | null): boolean => {
+const isNotFoundError = (error?: Error | string | null): boolean =>
+    errorToString(error) === ErrorMessages.USER_NOT_FOUND;
+
+const errorToString = (
+    error?: ApiError | Error | string | null
+): string | null => {
     if (error == null) {
-        return false;
+        return null;
     }
 
-    if (error instanceof Error) {
-        return error.message === ErrorMessages.USER_NOT_FOUND;
+    if (isString(error)) {
+        return error;
     }
 
-    return error === ErrorMessages.USER_NOT_FOUND;
+    return error.message;
 };
+
+export { errorToString, isNotFoundError };

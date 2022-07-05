@@ -12,6 +12,7 @@ import { useMutation } from "utils/hooks/use-mutation";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { getWorkstationByProjectId } from "utils/queries/get-workstation-by-project-id";
 import { isNotNilOrEmpty } from "utils/core-utils";
+import { trackProjectCreated } from "utils/analytics-utils";
 
 interface UseSyncWorkstationState {
     onError?: (error: Error) => void;
@@ -44,6 +45,7 @@ const useSyncWorkstationState = (options?: UseSyncWorkstationState) => {
         let project: ProjectRecord | undefined;
 
         if (createdOrUpdatedProject != null) {
+            trackProjectCreated(createdOrUpdatedProject);
             project = await createOrUpdateProject(createdOrUpdatedProject);
         }
 

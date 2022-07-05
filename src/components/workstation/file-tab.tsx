@@ -16,6 +16,11 @@ import { isNotNilOrEmpty } from "utils/core-utils";
 import { ExportDialog } from "components/workstation/export-dialog";
 import { useKeyboardShortcut } from "utils/hooks/use-keyboard-shortcut";
 import { Key } from "enums/key";
+import {
+    trackProjectSavedFromFileMenu,
+    trackProjectSavedFromKeyboardShortcut,
+    trackProjectSyncFailed,
+} from "utils/analytics-utils";
 
 interface FileTabProps {}
 
@@ -59,19 +64,22 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
     const [confirmationAction, setConfirmationAction] =
         useState<ConfirmationAction>(ConfirmationAction.NewProject);
     const { resultObject: files } = useListFiles();
-    const alertDecription =
+    const alertDescription =
         confirmationAction === ConfirmationAction.NewProject
             ? "Opening a new project will wipe out any unsaved changes."
             : "Reverting the project to the last saved state will wipe out any unsaved changes.";
     const theme = useTheme();
 
     const handleSyncError = useCallback(
-        (error: Error) =>
+        (error: Error) => {
+            trackProjectSyncFailed(project, error);
             toaster.danger("There was an error syncing the project", {
                 description: error.message,
-            }),
-        []
+            });
+        },
+        [project]
     );
+
     const handleSyncSuccess = useCallback(
         (workstationState: WorkstationStateRecord) => {
             setState(workstationState);
@@ -131,8 +139,11 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
 
     const { label } = useKeyboardShortcut(
         `${Key.Control}+s`,
-        () => handleSave()(),
-        [handleSave]
+        () => {
+            trackProjectSavedFromKeyboardShortcut(project);
+            handleSave()();
+        },
+        [handleSave, project]
     );
 
     const handleRevertToSavedClick = useCallback(
@@ -190,6 +201,14 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         [handleOpenExportDialog]
     );
 
+    const handleSaveClick = useCallback(
+        (closePopover: () => void) => () => {
+            trackProjectSavedFromFileMenu(project);
+            handleSave(closePopover)();
+        },
+        [handleSave, project]
+    );
+
     return (
         <React.Fragment>
             <Popover
@@ -202,7 +221,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
                             Open
                         </Menu.Item>
                         <Menu.Item
-                            onClick={handleSave(closePopover)}
+                            onClick={handleSaveClick(closePopover)}
                             secondaryText={label}>
                             Save
                         </Menu.Item>
@@ -257,7 +276,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
             )}
             {isConfirmDialogOpen && (
                 <ConfirmationDialog
-                    alertDescription={alertDecription}
+                    alertDescription={alertDescription}
                     alertTitle="You currently have unsaved changes."
                     onCloseComplete={handleCloseConfirmDialog}
                     onConfirm={handleDirtyConfirm}
