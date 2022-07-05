@@ -1,4 +1,5 @@
 import { Sitemap } from "sitemap";
+import { trackPasswordResetRequested } from "utils/analytics-utils";
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
 import { joinPaths } from "utils/route-utils";
@@ -11,6 +12,8 @@ const useRequestPasswordReset = (): UseRequestPasswordResetResult => {
 
     const result = useMutation<void, Error, string>({
         fn: async (email: string) => {
+            trackPasswordResetRequested(email);
+
             const resetResult = await auth.api.resetPasswordForEmail(email, {
                 redirectTo: joinPaths(
                     window.location.origin,

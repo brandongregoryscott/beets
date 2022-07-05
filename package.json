@@ -46,6 +46,7 @@
         "web-vitals": "1.1.2"
     },
     "devDependencies": {
+        "@segment/analytics-next": "1.39.2",
         "@simbathesailor/use-what-changed": "2.0.0",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/react": "11.2.7",

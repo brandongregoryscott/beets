@@ -3,6 +3,7 @@ import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
 import { ErrorMessages } from "constants/error-messages";
 import { SupabaseUser } from "types/supabase-user";
+import { identifyUser } from "utils/analytics-utils";
 
 interface UseLoginOptions {
     onError?: (error: Error) => void;
@@ -21,12 +22,11 @@ const useLogin = (options?: UseLoginOptions) => {
                 { redirectTo }
             );
 
-            const { error } = loginResult;
-            const emailNotConfirmedError =
-                error != null &&
-                error.message === ErrorMessages.EMAIL_NOT_CONFIRMED;
+            const { error, user } = loginResult;
+            const emailIsNotConfirmed =
+                error?.message === ErrorMessages.EMAIL_NOT_CONFIRMED;
 
-            if (emailNotConfirmedError) {
+            if (emailIsNotConfirmed) {
                 throw new Error(ErrorMessages.EMAIL_NOT_CONFIRMED_CHECK_EMAIL);
             }
 
@@ -34,7 +34,8 @@ const useLogin = (options?: UseLoginOptions) => {
                 throw error;
             }
 
-            return loginResult.user!;
+            identifyUser(user!);
+            return user!;
         },
         onError,
         onSuccess,
