@@ -3,7 +3,7 @@ import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
 import { ErrorMessages } from "constants/error-messages";
 import { SupabaseUser } from "types/supabase-user";
-import { identifyUser } from "utils/analytics-utils";
+import { identifyUser, trackLoginFailed } from "utils/analytics-utils";
 
 interface UseLoginOptions {
     onError?: (error: Error) => void;
@@ -23,6 +23,10 @@ const useLogin = (options?: UseLoginOptions) => {
             );
 
             const { error, user } = loginResult;
+            if (error != null) {
+                trackLoginFailed(email, error);
+            }
+
             const emailIsNotConfirmed =
                 error?.message === ErrorMessages.EMAIL_NOT_CONFIRMED;
 
