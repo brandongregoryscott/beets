@@ -1,10 +1,11 @@
 import { TrackSectionCard } from "components/tracks/track-section-card/track-section-card";
-import { List } from "immutable";
-import { FileRecord } from "models/file-record";
-import { InstrumentRecord } from "models/instrument-record";
-import { TrackRecord } from "models/track-record";
-import { TrackSectionRecord } from "models/track-section-record";
-import React, { SetStateAction } from "react";
+import type { List } from "immutable";
+import type { FileRecord } from "models/file-record";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { TrackRecord } from "models/track-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import type { SetStateAction } from "react";
+import React from "react";
 import { getStepCountOffset } from "utils/track-section-utils";
 
 interface TrackSectionListProps {

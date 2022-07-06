@@ -1,7 +1,8 @@
 import { Record } from "immutable";
-import { atom, SetStateAction, WritableAtom } from "jotai";
+import type { SetStateAction, WritableAtom } from "jotai";
+import { atom } from "jotai";
 import { isFunction, merge } from "lodash";
-import { PickKeysOfType } from "types/pick-keys-by-type";
+import type { PickKeysOfType } from "types/pick-keys-by-type";
 
 const derivedAtomFactory = <TParent, TDerived>(
     parentAtom: WritableAtom<TParent, SetStateAction<TParent>>,

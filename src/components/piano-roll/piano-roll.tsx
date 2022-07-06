@@ -9,17 +9,17 @@ import {
     RandomIcon,
 } from "evergreen-ui";
 import { List } from "immutable";
-import { FileRecord } from "models/file-record";
-import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { FileRecord } from "models/file-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useState } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";
 import { defaultNote, MidiNotes } from "constants/midi-notes";
-import { InstrumentRecord } from "models/instrument-record";
-import { MidiNote } from "types/midi-note";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { MidiNote } from "types/midi-note";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
-import { TrackRecord } from "models/track-record";
+import type { TrackRecord } from "models/track-record";
 import { toDataAttributes } from "utils/data-attribute-utils";
 import { Flex } from "components/flex";
 import { PianoRollRandomizerPopover } from "components/piano-roll/piano-roll-randomizer-popover";

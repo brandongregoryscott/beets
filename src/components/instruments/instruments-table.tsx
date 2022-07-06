@@ -1,10 +1,11 @@
-import { Table, Spinner, TableRowProps } from "evergreen-ui";
-import { InstrumentRecord } from "models/instrument-record";
+import type { TableRowProps } from "evergreen-ui";
+import { Table, Spinner } from "evergreen-ui";
+import type { InstrumentRecord } from "models/instrument-record";
 import { hasValues } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
 import { getFileById } from "utils/file-utils";
-import { List } from "immutable";
-import { FileRecord } from "models/file-record";
+import type { List } from "immutable";
+import type { FileRecord } from "models/file-record";
 
 interface InstrumentsTableProps extends Pick<TableRowProps, "isSelectable"> {
     emptyState?: React.ReactNode;

@@ -7,10 +7,10 @@ import {
     CircleArrowUpIcon,
     Tooltip,
 } from "evergreen-ui";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback, useRef } from "react";
-import { HelpResource } from "enums/help-resource";
+import type { HelpResource } from "enums/help-resource";
 import { toPathCase } from "utils/route-utils";
 import { useTheme } from "utils/hooks/use-theme";
 import { HelpResourceTabs } from "constants/help-resource-tabs";

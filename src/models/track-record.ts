@@ -1,8 +1,8 @@
 import { Record } from "immutable";
 import { makeDefaultValues } from "utils/core-utils";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
-import { Track } from "generated/interfaces/track";
-import { RecordParams } from "types/record-params";
+import type { Track } from "generated/interfaces/track";
+import type { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { AuditableRecord } from "models/auditable-record";
 import { generateId } from "utils/id-utils";

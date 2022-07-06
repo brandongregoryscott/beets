@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import { ToneState } from "interfaces/tone-state";
+import type { ToneState } from "interfaces/tone-state";
 import { useAtom } from "jotai";
 import { merge, isNil } from "lodash";
 import { useCallback } from "react";

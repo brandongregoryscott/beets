@@ -1,5 +1,5 @@
-import { SelectMenuItemRendererProps } from "components/select-menu/select-menu";
-import { FileRecord } from "models/file-record";
+import type { SelectMenuItemRendererProps } from "components/select-menu/select-menu";
+import type { FileRecord } from "models/file-record";
 import { majorScale, minorScale, Option } from "evergreen-ui";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton } from "components/workstation/play-button";

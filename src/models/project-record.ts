@@ -1,9 +1,9 @@
 import { Record as ImmutableRecord } from "immutable";
 import { isNilOrEmpty, makeDefaultValues } from "utils/core-utils";
-import { Project } from "generated/interfaces/project";
+import type { Project } from "generated/interfaces/project";
 import { AuditableRecord } from "models/auditable-record";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
-import { RecordParams } from "types/record-params";
+import type { RecordParams } from "types/record-params";
 import { generateId } from "utils/id-utils";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { formatUpdatedOn } from "utils/date-utils";

@@ -1,5 +1,5 @@
 import { ValueRequiredState } from "constants/validation-states";
-import { ValidationState } from "interfaces/validation-state";
+import type { ValidationState } from "interfaces/validation-state";
 import { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/core-utils";
 

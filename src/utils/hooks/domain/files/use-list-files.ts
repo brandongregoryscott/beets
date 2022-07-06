@@ -1,12 +1,13 @@
 import { FileRecord } from "models/file-record";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
-import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import { useQuery } from "utils/hooks/use-query";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { mapToList } from "utils/collection-utils";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
 import { useCallback, useMemo } from "react";
-import { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { BucketName } from "enums/bucket-name";
 import { List } from "immutable";
 import _ from "lodash";

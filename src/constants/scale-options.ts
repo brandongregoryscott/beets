@@ -1,4 +1,4 @@
-import { SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
 import { Scale } from "enums/scale";
 
 const ScaleOptions: Array<SelectMenuItem<Scale>> = Object.entries(Scale).map(

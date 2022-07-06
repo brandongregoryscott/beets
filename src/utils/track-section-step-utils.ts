@@ -1,15 +1,15 @@
 import { List } from "immutable";
 import { flatten, range, sampleSize } from "lodash";
-import { FileRecord } from "models/file-record";
-import { TrackSectionRecord } from "models/track-section-record";
+import type { FileRecord } from "models/file-record";
+import type { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { MidiNote } from "types/midi-note";
+import type { MidiNote } from "types/midi-note";
 import { initializeList, intersectionWith } from "utils/collection-utils";
 import { getTotalStepCount } from "utils/track-section-utils";
-import { InstrumentRecord } from "models/instrument-record";
-import { ToneStep } from "interfaces/tone-step";
-import { ToneStepGroup } from "interfaces/tone-step-group";
-import { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { ToneStep } from "interfaces/tone-step";
+import type { ToneStepGroup } from "interfaces/tone-step-group";
+import type { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
 import { getAllNotesByScale } from "utils/scale-utils";
 import { isNotNilOrEmpty, randomInt } from "utils/core-utils";
 

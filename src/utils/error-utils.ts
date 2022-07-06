@@ -1,4 +1,4 @@
-import { ApiError } from "@supabase/supabase-js";
+import type { ApiError } from "@supabase/supabase-js";
 import { ErrorMessages } from "constants/error-messages";
 import { isString } from "lodash";
 

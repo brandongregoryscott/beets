@@ -1,4 +1,4 @@
-import { Auditable } from "interfaces/auditable";
+import type { Auditable } from "interfaces/auditable";
 
 interface TrackSectionStep extends Auditable {
     /**

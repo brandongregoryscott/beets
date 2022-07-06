@@ -1,6 +1,7 @@
-import { WorkstationStateRecord } from "models/workstation-state-record";
-import { List } from "immutable";
-import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import type { WorkstationStateRecord } from "models/workstation-state-record";
+import type { List } from "immutable";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import { useQuery } from "utils/hooks/use-query";
 import { Tables } from "generated/enums/tables";
 import { listWorkstations } from "utils/queries/list-workstations";
 

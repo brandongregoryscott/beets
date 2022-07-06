@@ -1,5 +1,5 @@
-import { TrackRecord } from "models/track-record";
-import { List } from "immutable";
+import type { TrackRecord } from "models/track-record";
+import type { List } from "immutable";
 import React from "react";
 import { useDraggable } from "utils/hooks/use-draggable";
 import { useTracksState } from "utils/hooks/use-tracks-state";

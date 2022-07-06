@@ -1,5 +1,7 @@
-import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
-import { BoxProps, Button, majorScale } from "evergreen-ui";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
+import type { BoxProps } from "evergreen-ui";
+import { Button, majorScale } from "evergreen-ui";
 import _ from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
 import pluralize from "pluralize";

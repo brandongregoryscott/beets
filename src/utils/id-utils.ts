@@ -1,9 +1,10 @@
-import { Entity } from "interfaces/entity";
+import type { Entity } from "interfaces/entity";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import * as uuid from "uuid";
 import { merge } from "lodash";
-import { List, Map, Record } from "immutable";
-import { PickKeysOfType } from "types/pick-keys-by-type";
+import type { List } from "immutable";
+import { Map, Record } from "immutable";
+import type { PickKeysOfType } from "types/pick-keys-by-type";
 
 interface RemapIdsOptions<T> {
     property?: PickKeysOfType<T, string>;

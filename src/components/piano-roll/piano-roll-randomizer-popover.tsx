@@ -1,14 +1,13 @@
 import { IconButton } from "components/icon-button";
-import {
-    PianoRollRandomizer,
-    PianoRollRandomizerProps,
-} from "components/piano-roll/piano-roll-randomizer";
-import { BoxProps, CogIcon, Group, Popover, RandomIcon } from "evergreen-ui";
-import { FileRecord } from "models/file-record";
-import { TrackSectionRecord } from "models/track-section-record";
-import { List } from "immutable";
+import type { PianoRollRandomizerProps } from "components/piano-roll/piano-roll-randomizer";
+import { PianoRollRandomizer } from "components/piano-roll/piano-roll-randomizer";
+import type { BoxProps } from "evergreen-ui";
+import { CogIcon, Group, Popover, RandomIcon } from "evergreen-ui";
+import type { FileRecord } from "models/file-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import type { List } from "immutable";
 import { useCallback } from "react";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { getRandomSteps } from "utils/track-section-step-utils";
 import { ConfirmButton } from "components/confirm-button";
 

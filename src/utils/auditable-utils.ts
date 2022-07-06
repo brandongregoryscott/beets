@@ -1,4 +1,4 @@
-import { Auditable } from "interfaces/auditable";
+import type { Auditable } from "interfaces/auditable";
 import { isNotNilOrEmpty } from "utils/core-utils";
 
 const isPersisted = (value: Auditable): boolean =>

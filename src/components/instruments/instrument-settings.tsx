@@ -1,7 +1,8 @@
 import { ConfirmButton } from "components/confirm-button";
 import { ErrorAlert } from "components/error-alert";
 import { FileSelectMenu } from "components/files/file-select-menu";
-import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { FormField } from "components/forms/form-field";
 import { NoteSelectMenu } from "components/note-select-menu";
 import { PlayButton } from "components/workstation/play-button";
@@ -15,10 +16,10 @@ import React, {
     useState,
 } from "react";
 import { InstrumentRecord } from "models/instrument-record";
-import { ValidationState } from "interfaces/validation-state";
+import type { ValidationState } from "interfaces/validation-state";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
-import { FileRecord } from "models/file-record";
+import type { FileRecord } from "models/file-record";
 import { getFileById } from "utils/file-utils";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { ValueRequiredState } from "constants/validation-states";
@@ -28,9 +29,10 @@ import { useDeleteInstrument } from "generated/hooks/domain/instruments/use-dele
 import { isNilOrEmpty } from "utils/core-utils";
 import { useNumberInput } from "utils/hooks/use-number-input";
 import { useInput } from "utils/hooks/use-input";
-import { Instrument } from "generated/interfaces/instrument";
-import { DialogFooter, DialogFooterProps } from "components/dialog-footer";
-import { MidiNote } from "types/midi-note";
+import type { Instrument } from "generated/interfaces/instrument";
+import type { DialogFooterProps } from "components/dialog-footer";
+import { DialogFooter } from "components/dialog-footer";
+import type { MidiNote } from "types/midi-note";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";

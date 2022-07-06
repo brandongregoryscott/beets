@@ -1,8 +1,8 @@
-import { BucketName } from "enums/bucket-name";
+import type { BucketName } from "enums/bucket-name";
+import type { FileRejection } from "evergreen-ui";
 import {
     MimeType,
     FileUploader as EvergreenFileUploader,
-    FileRejection,
     rebaseFiles,
     Alert,
     FileRejectionReason,

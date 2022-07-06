@@ -10,12 +10,13 @@ import {
     toaster,
 } from "evergreen-ui";
 import { isEmpty } from "lodash";
-import { ChangeEvent, useCallback, useRef } from "react";
+import type { ChangeEvent } from "react";
+import { useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 import { Sitemap } from "sitemap";
 import { useChangePassword } from "utils/hooks/supabase/use-change-password";
 import { useInput } from "utils/hooks/use-input";
-import { ResetPasswordQueryParams } from "utils/hooks/use-reset-password-route";
+import type { ResetPasswordQueryParams } from "utils/hooks/use-reset-password-route";
 
 interface ChangePasswordFormProps
     extends Pick<ResetPasswordQueryParams, "access_token"> {}

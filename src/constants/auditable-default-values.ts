@@ -1,5 +1,5 @@
-import { Auditable } from "interfaces/auditable";
-import { RequiredOr } from "types/required-or";
+import type { Auditable } from "interfaces/auditable";
+import type { RequiredOr } from "types/required-or";
 
 const AuditableDefaultValues: RequiredOr<Auditable, undefined> = {
     id: undefined,

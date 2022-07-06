@@ -1,5 +1,7 @@
-import { Alert, Button, majorScale, Pane, BoxProps } from "evergreen-ui";
-import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
+import type { BoxProps } from "evergreen-ui";
+import { Alert, Button, majorScale, Pane } from "evergreen-ui";
+import type { PropsWithChildren } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 type ConfirmButtonProps<T extends React.ElementType<any> = typeof Button> =
     Omit<BoxProps<T>, "children"> & {

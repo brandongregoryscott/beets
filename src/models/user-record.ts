@@ -1,9 +1,9 @@
-import { User } from "generated/interfaces/user";
+import type { User } from "generated/interfaces/user";
 import { Record } from "immutable";
-import { RecordParams } from "types/record-params";
+import type { RecordParams } from "types/record-params";
 import { makeDefaultValues } from "utils/core-utils";
 import { AuditableRecord } from "models/auditable-record";
-import { SupabaseUser } from "types/supabase-user";
+import type { SupabaseUser } from "types/supabase-user";
 
 const defaultValues = makeDefaultValues<User>({
     id: "",

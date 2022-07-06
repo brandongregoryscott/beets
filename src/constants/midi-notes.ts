@@ -1,4 +1,4 @@
-import { MidiNote } from "types/midi-note";
+import type { MidiNote } from "types/midi-note";
 
 const MidiNotes: MidiNote[] = [
     "C-2",

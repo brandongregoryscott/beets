@@ -1,10 +1,10 @@
 import { FileSelectMenuFilterPopover } from "components/files/file-select-menu-filter-popover";
 import { FileSelectMenuItem } from "components/files/file-select-menu-item";
-import {
-    SelectMenu,
+import type {
     SelectMenuItem,
     SelectMenuProps,
 } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
 import {
     Spinner,
@@ -18,7 +18,8 @@ import { List } from "immutable";
 import { castArray, isEmpty } from "lodash";
 import { FileRecord } from "models/file-record";
 import React from "react";
-import { PropsWithChildren, useCallback, useMemo } from "react";
+import type { PropsWithChildren } from "react";
+import { useCallback, useMemo } from "react";
 import { intersectionWith } from "utils/collection-utils";
 import { toSelectMenuItems } from "utils/file-utils";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";

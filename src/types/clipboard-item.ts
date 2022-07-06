@@ -1,4 +1,4 @@
-import { TrackSectionRecord } from "models/track-section-record";
+import type { TrackSectionRecord } from "models/track-section-record";
 
 type ClipboardItem = TrackSectionRecord;
 

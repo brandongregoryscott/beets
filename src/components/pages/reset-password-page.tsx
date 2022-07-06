@@ -2,7 +2,7 @@ import { ChangePasswordForm } from "components/change-password-form";
 import { Flex } from "components/flex";
 import { ResetPasswordForm } from "components/reset-password-form";
 import { EmptyState, ErrorIcon, majorScale } from "evergreen-ui";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { isEmpty } from "lodash";
 import { isNotFoundError } from "utils/error-utils";
 import { useResetPasswordRoute } from "utils/hooks/use-reset-password-route";

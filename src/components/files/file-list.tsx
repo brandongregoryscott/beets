@@ -1,4 +1,4 @@
-import { BucketName } from "enums/bucket-name";
+import type { BucketName } from "enums/bucket-name";
 import { SortOrder } from "enums/sort-order";
 import { useListStorageProviderFiles } from "utils/hooks/supabase/use-list-storage-provider-files";
 import { useGlobalState } from "utils/hooks/use-global-state";
@@ -11,9 +11,10 @@ import { Button, majorScale, Spinner, TextInputField } from "evergreen-ui";
 import React, { useCallback, useState } from "react";
 import { useInput } from "utils/hooks/use-input";
 import { isEmpty } from "lodash";
-import { SortOptions } from "interfaces/sort-options";
-import { File } from "generated/interfaces/file";
-import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
+import type { SortOptions } from "interfaces/sort-options";
+import type { File } from "generated/interfaces/file";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { formatSortOptionLabel, toSortOptions } from "utils/select-menu-utils";
 import { FormField } from "components/forms/form-field";
 

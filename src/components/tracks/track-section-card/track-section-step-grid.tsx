@@ -2,8 +2,8 @@ import { TrackSectionStepColumn } from "components/tracks/track-section-card/tra
 import { Pane } from "evergreen-ui";
 import { List } from "immutable";
 import { range } from "lodash";
-import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useMemo } from "react";
 
 interface TrackSectionStepGridProps {

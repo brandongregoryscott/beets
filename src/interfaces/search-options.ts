@@ -1,5 +1,5 @@
-import { PagingOptions } from "interfaces/paging-options";
-import { SortOptions } from "interfaces/sort-options";
+import type { PagingOptions } from "interfaces/paging-options";
+import type { SortOptions } from "interfaces/sort-options";
 
 interface SearchOptions<T = any> extends PagingOptions, SortOptions<T> {}
 

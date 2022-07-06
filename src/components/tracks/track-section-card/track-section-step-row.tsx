@@ -1,6 +1,6 @@
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
 import { majorScale, Pane } from "evergreen-ui";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { getStepColor } from "utils/theme-utils";
 
 interface TrackSectionStepRowProps {

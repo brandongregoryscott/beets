@@ -1,9 +1,9 @@
-import { SupabaseUser } from "types/supabase-user";
-import { Project } from "generated/interfaces/project";
+import type { SupabaseUser } from "types/supabase-user";
+import type { Project } from "generated/interfaces/project";
 import { pick } from "utils/core-utils";
 import { isPersisted } from "utils/auditable-utils";
 import { errorToString } from "utils/error-utils";
-import { ApiError } from "@supabase/supabase-js";
+import type { ApiError } from "@supabase/supabase-js";
 import { isError } from "lodash";
 
 const { analytics } = window;

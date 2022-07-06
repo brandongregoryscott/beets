@@ -1,4 +1,4 @@
-import { FileRecord } from "models/file-record";
+import type { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import { List } from "immutable";
 import { findFileByName } from "utils/file-utils";

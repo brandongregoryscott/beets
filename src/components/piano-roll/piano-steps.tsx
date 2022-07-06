@@ -3,13 +3,13 @@ import { PianoKey } from "components/piano-roll/piano-key";
 import { PianoRollRow } from "components/piano-roll/piano-roll-row";
 import { PianoStep } from "components/piano-roll/piano-step";
 import { MidiNotes } from "constants/midi-notes";
-import { List } from "immutable";
+import type { List } from "immutable";
 import { range } from "lodash";
-import { FileRecord } from "models/file-record";
-import { TrackSectionRecord } from "models/track-section-record";
+import type { FileRecord } from "models/file-record";
+import type { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import React, { useCallback, useMemo } from "react";
-import { MidiNote } from "types/midi-note";
+import type { MidiNote } from "types/midi-note";
 import { isSelected } from "utils/track-section-step-utils";
 
 interface PianoStepsProps {

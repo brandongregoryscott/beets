@@ -1,7 +1,8 @@
-import { List } from "immutable";
-import { SetStateAction, useCallback, useMemo } from "react";
+import type { List } from "immutable";
+import type { SetStateAction } from "react";
+import { useCallback, useMemo } from "react";
 import { isFunction } from "lodash";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useAtom } from "jotai";
 import {
     CurrentTrackSectionStepsAtom,

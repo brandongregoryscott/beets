@@ -1,5 +1,7 @@
-import { Alert, IntentTypes } from "evergreen-ui";
-import { Dialog, DialogProps } from "components/dialog";
+import type { IntentTypes } from "evergreen-ui";
+import { Alert } from "evergreen-ui";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 import React from "react";
 
 interface ConfirmationDialogProps extends Omit<DialogProps, "onCancel"> {

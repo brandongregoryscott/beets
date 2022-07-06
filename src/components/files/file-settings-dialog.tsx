@@ -1,9 +1,10 @@
 import { Link, TextInputField } from "evergreen-ui";
-import { FileRecord } from "models/file-record";
-import { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import type { FileRecord } from "models/file-record";
+import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useCallback } from "react";
 import { useUpdateFile } from "utils/hooks/domain/files/use-update-file";
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 import { useInput } from "utils/hooks/use-input";
 import humanize from "humanize-plus";
 

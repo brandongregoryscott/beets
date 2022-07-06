@@ -1,8 +1,8 @@
 import { List, Record } from "immutable";
-import { Auditable } from "interfaces/auditable";
-import { OrderableEntity } from "interfaces/orderable-entity";
+import type { Auditable } from "interfaces/auditable";
+import type { OrderableEntity } from "interfaces/orderable-entity";
 import _ from "lodash";
-import { Grouping } from "types/grouping";
+import type { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
 import { isEqual, isNilOrEmpty } from "utils/core-utils";
 

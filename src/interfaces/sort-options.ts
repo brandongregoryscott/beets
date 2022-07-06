@@ -1,4 +1,4 @@
-import { SortOrder } from "enums/sort-order";
+import type { SortOrder } from "enums/sort-order";
 
 interface SortOptions<T = any> {
     column: keyof T;

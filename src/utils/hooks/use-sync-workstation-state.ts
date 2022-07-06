@@ -5,8 +5,8 @@ import { useCreateOrUpdateTrackSection } from "generated/hooks/domain/track-sect
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useCreateOrUpdateTrack } from "generated/hooks/domain/tracks/use-create-or-update-track";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
-import { ProjectRecord } from "models/project-record";
-import { WorkstationStateRecord } from "models/workstation-state-record";
+import type { ProjectRecord } from "models/project-record";
+import type { WorkstationStateRecord } from "models/workstation-state-record";
 import { hasValues } from "utils/collection-utils";
 import { useMutation } from "utils/hooks/use-mutation";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";

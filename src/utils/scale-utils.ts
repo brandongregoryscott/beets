@@ -3,7 +3,7 @@ import { List } from "immutable";
 import { flatMap, isEmpty, range } from "lodash";
 /* @ts-ignore */
 import { scale as getNotesByScale } from "harmonics";
-import { Range } from "types/range";
+import type { Range } from "types/range";
 import { toList } from "utils/core-utils";
 
 const getAllNotesByScale = (scale: Scale, octaveRange: Range): string[] => {

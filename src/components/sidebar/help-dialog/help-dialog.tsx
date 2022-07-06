@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 import {
     Spinner,
     Tablist,
@@ -11,7 +12,8 @@ import {
     Tooltip,
     CircleArrowUpIcon,
 } from "evergreen-ui";
-import { Markdown, MarkdownComponentMap } from "components/markdown";
+import type { MarkdownComponentMap } from "components/markdown";
+import { Markdown } from "components/markdown";
 import { HelpResource } from "enums/help-resource";
 import { useHelpDocs } from "utils/hooks/use-help-docs";
 import { useBoolean } from "utils/hooks/use-boolean";

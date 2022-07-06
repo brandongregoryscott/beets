@@ -1,4 +1,4 @@
-import { Collection, Record } from "immutable";
+import type { Collection, Record } from "immutable";
 import { atomWithStorage } from "jotai/utils";
 
 const immutableAtomWithStorage = <T extends Collection<any, any> | Record<any>>(

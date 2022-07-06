@@ -1,10 +1,11 @@
 import { FileRecord } from "models/file-record";
-import { File } from "generated/interfaces/file";
+import type { File } from "generated/interfaces/file";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
-import { useQuery, UseQueryResult } from "utils/hooks/use-query";
-import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
-import { SortOptions } from "interfaces/sort-options";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import { useQuery } from "utils/hooks/use-query";
+import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import type { SortOptions } from "interfaces/sort-options";
 
 interface UseListFilesOptions {
     enabled?: boolean;

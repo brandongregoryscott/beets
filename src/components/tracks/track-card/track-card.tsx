@@ -15,7 +15,7 @@ import {
     VolumeUpIcon,
 } from "evergreen-ui";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { TrackRecord } from "models/track-record";
+import type { TrackRecord } from "models/track-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { useTracksState } from "utils/hooks/use-tracks-state";
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";

@@ -1,4 +1,5 @@
-import { Button, DialogProps, majorScale, Pane } from "evergreen-ui";
+import type { DialogProps } from "evergreen-ui";
+import { Button, majorScale, Pane } from "evergreen-ui";
 import React from "react";
 
 interface DialogFooterProps

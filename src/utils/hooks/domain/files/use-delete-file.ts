@@ -1,6 +1,7 @@
 import { FileRecord } from "models/file-record";
 import { storageProviderFilesKey } from "utils/query-key-utils";
-import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
+import type { UseMutationResult } from "utils/hooks/use-mutation";
+import { useMutation } from "utils/hooks/use-mutation";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { useQueryClient } from "react-query";
 import { SupabaseClient } from "generated/supabase-client";

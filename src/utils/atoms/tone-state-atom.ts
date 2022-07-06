@@ -1,4 +1,4 @@
-import { ToneState } from "interfaces/tone-state";
+import type { ToneState } from "interfaces/tone-state";
 import { atom } from "jotai";
 
 const ToneStateAtom = atom<ToneState>({

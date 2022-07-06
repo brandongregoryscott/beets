@@ -1,16 +1,16 @@
 import { defaultNote } from "constants/midi-notes";
 import { DemoInstrument } from "enums/demo-instrument";
 import { List, Record } from "immutable";
-import { WorkstationState } from "interfaces/workstation-state";
+import type { WorkstationState } from "interfaces/workstation-state";
 import _, { sumBy } from "lodash";
 import { BaseRecord } from "models/base-record";
-import { FileRecord } from "models/file-record";
+import type { FileRecord } from "models/file-record";
 import { ProjectRecord } from "models/project-record";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { Constructor } from "types/constructor";
-import { RecordParams } from "types/record-params";
+import type { Constructor } from "types/constructor";
+import type { RecordParams } from "types/record-params";
 import { buildDemoInstruments } from "utils/build-demo-instruments";
 import {
     diffDeletedEntities,

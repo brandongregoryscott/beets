@@ -1,7 +1,7 @@
 import { AuditableDefaultValues } from "constants/auditable-default-values";
-import { TrackSection } from "generated/interfaces/track-section";
+import type { TrackSection } from "generated/interfaces/track-section";
 import { Record } from "immutable";
-import { RecordParams } from "types/record-params";
+import type { RecordParams } from "types/record-params";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
 import { AuditableRecord } from "models/auditable-record";

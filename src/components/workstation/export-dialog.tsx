@@ -1,4 +1,5 @@
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 import {
     Button,
     ExportIcon,
@@ -17,11 +18,12 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import * as Tone from "tone";
-import { ProjectRecord } from "models/project-record";
+import type { ProjectRecord } from "models/project-record";
 import { useTheme } from "utils/hooks/use-theme";
 import { MimeType } from "enums/mime-type";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
-import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { getExtension } from "utils/mime-type-utils";
 import slugify from "slugify";
 import { unixTime } from "utils/core-utils";

@@ -1,10 +1,5 @@
-import {
-    IconButton,
-    IconButtonProps,
-    PauseIcon,
-    PlayIcon,
-    Spinner,
-} from "evergreen-ui";
+import type { IconButtonProps } from "evergreen-ui";
+import { IconButton, PauseIcon, PlayIcon, Spinner } from "evergreen-ui";
 import React, { useCallback, useMemo } from "react";
 import * as Tone from "tone";
 

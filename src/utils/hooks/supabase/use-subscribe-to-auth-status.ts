@@ -1,4 +1,4 @@
-import { AuthChangeEvent, Session } from "@supabase/gotrue-js";
+import type { AuthChangeEvent, Session } from "@supabase/gotrue-js";
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sitemap } from "sitemap";

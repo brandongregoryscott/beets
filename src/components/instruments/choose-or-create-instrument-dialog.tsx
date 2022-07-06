@@ -1,7 +1,7 @@
 import { FormDialog } from "components/forms/form-dialog";
 import { InstrumentsTable } from "components/instruments/instruments-table";
+import type { DialogProps } from "evergreen-ui";
 import {
-    DialogProps,
     EmptyState,
     majorScale,
     StepChartIcon,

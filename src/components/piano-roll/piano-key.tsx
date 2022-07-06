@@ -1,6 +1,6 @@
 import { majorScale, Text, Pane } from "evergreen-ui";
 import { isNumber } from "lodash";
-import { MidiNote } from "types/midi-note";
+import type { MidiNote } from "types/midi-note";
 import { isMidiNote, isSharp } from "utils/midi-note-utils";
 
 interface PianoKeyProps {

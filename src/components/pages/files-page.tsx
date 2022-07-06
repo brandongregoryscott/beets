@@ -10,7 +10,7 @@ import {
     Pane,
 } from "evergreen-ui";
 import { useTheme } from "utils/hooks/use-theme";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { FileUploader } from "components/files/file-uploader";
 import { Flex } from "components/flex";
 

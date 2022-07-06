@@ -2,12 +2,12 @@ import { HelpResource } from "enums/help-resource";
 import { Link } from "evergreen-ui";
 import { titleCase } from "humanize-plus";
 import { intersection, isEmpty } from "lodash";
-import {
+import type {
     AnchorHTMLAttributes,
     DetailedHTMLProps,
     PropsWithChildren,
 } from "react";
-import { ReactMarkdownProps } from "react-markdown/lib/complex-types";
+import type { ReactMarkdownProps } from "react-markdown/lib/complex-types";
 import { Sitemap } from "sitemap";
 import { hasValues } from "utils/collection-utils";
 import { omitProps } from "utils/markdown-utils";

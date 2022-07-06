@@ -12,7 +12,7 @@ import {
 } from "evergreen-ui";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";
 import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useMemo, useState } from "react";
 import { hasValues } from "utils/collection-utils";

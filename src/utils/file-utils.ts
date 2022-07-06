@@ -1,8 +1,8 @@
-import { SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
 import { List, Map } from "immutable";
 import { FileRecord } from "models/file-record";
-import { StorageProviderFileRecord } from "models/storage-provider-file-record";
-import { MidiNote } from "types/midi-note";
+import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import type { MidiNote } from "types/midi-note";
 import { isNilOrEmpty } from "utils/core-utils";
 
 type AnyFile = FileRecord | StorageProviderFileRecord;

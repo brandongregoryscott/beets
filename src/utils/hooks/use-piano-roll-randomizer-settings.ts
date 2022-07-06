@@ -1,9 +1,10 @@
-import { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
+import type { PianoRollRandomizerSettings } from "components/piano-roll/piano-roll-randomizer";
 import { Scale } from "enums/scale";
 import { useAtom } from "jotai";
 import { isFunction } from "lodash";
-import { TrackRecord } from "models/track-record";
-import { SetStateAction, useCallback, useMemo } from "react";
+import type { TrackRecord } from "models/track-record";
+import type { SetStateAction } from "react";
+import { useCallback, useMemo } from "react";
 import { PianoRollRandomizerSettingsAtom } from "utils/atoms/piano-roll-randomizer-settings-atom";
 
 interface UsePianoRollRandomizerSettingsOptions {

@@ -12,13 +12,15 @@ import {
 import React from "react";
 import { formatUpdatedOn } from "utils/date-utils";
 import { useLatestRelease } from "utils/hooks/use-latest-release";
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 import {
     getCurrentEnvironment,
     EnvironmentName,
     getTargetBranch,
 } from "utils/env";
-import { Markdown, MarkdownComponentMap } from "components/markdown";
+import type { MarkdownComponentMap } from "components/markdown";
+import { Markdown } from "components/markdown";
 import { omitProps } from "utils/markdown-utils";
 import { isString } from "lodash";
 import { REPO_URL } from "constants/repo-url";

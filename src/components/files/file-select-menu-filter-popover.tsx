@@ -1,9 +1,8 @@
-import {
-    defaultFilters,
-    FileSelectMenuFilters,
-} from "components/files/file-select-menu";
+import type { FileSelectMenuFilters } from "components/files/file-select-menu";
+import { defaultFilters } from "components/files/file-select-menu";
 import { Flex } from "components/flex";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
+import type { PopoverProps } from "evergreen-ui";
 import {
     FilterIcon,
     IconButton,
@@ -13,7 +12,6 @@ import {
     Button,
     Switch,
     Label,
-    PopoverProps,
     Pane,
     Tooltip,
     FilterListIcon,

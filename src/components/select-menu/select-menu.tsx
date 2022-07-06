@@ -1,9 +1,11 @@
+import type {
+    SelectMenuItem as EvergreenSelectMenuItem,
+    SelectMenuProps as EvergreenSelectMenuProps,
+} from "evergreen-ui";
 import {
     majorScale,
     minorScale,
     SelectMenu as EvergreenSelectMenu,
-    SelectMenuItem as EvergreenSelectMenuItem,
-    SelectMenuProps as EvergreenSelectMenuProps,
 } from "evergreen-ui";
 import { List } from "immutable";
 import { intersectionWith, isArray, pick } from "lodash";

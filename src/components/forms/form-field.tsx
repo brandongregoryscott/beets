@@ -1,9 +1,6 @@
-import {
-    majorScale,
-    FormField as EvergreenFormField,
-    FormFieldProps as EvergreenFormFieldProps,
-} from "evergreen-ui";
-import { PropsWithChildren } from "react";
+import type { FormFieldProps as EvergreenFormFieldProps } from "evergreen-ui";
+import { majorScale, FormField as EvergreenFormField } from "evergreen-ui";
+import type { PropsWithChildren } from "react";
 
 interface FormFieldProps extends EvergreenFormFieldProps {}
 

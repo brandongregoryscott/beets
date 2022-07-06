@@ -1,12 +1,12 @@
 import _ from "lodash";
-import {
-    useQuery as useReactQueryQuery,
+import type {
     UseQueryOptions as UseReactQueryQueryOptions,
     UseQueryResult as UseReactQueryQueryResult,
     QueryKey,
     QueryFunction,
 } from "react-query";
-import { ServiceResult } from "interfaces/service-result";
+import { useQuery as useReactQueryQuery } from "react-query";
+import type { ServiceResult } from "interfaces/service-result";
 
 interface UseQueryOptions<
     TQueryFnData = unknown,

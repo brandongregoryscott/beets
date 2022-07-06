@@ -1,9 +1,10 @@
 import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSection } from "generated/interfaces/track-section";
+import type { TrackSection } from "generated/interfaces/track-section";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
-import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
+import type { UseMutationResult } from "utils/hooks/use-mutation";
+import { useMutation } from "utils/hooks/use-mutation";
 
 interface UseCreateOrUpdateTrackSectionOptions {
     onConflict?: keyof TrackSection;

@@ -1,6 +1,7 @@
 import { Slider as MantineSlider } from "@mantine/core";
 import { Flex } from "components/flex";
-import { majorScale, PaneProps, Label } from "evergreen-ui";
+import type { PaneProps } from "evergreen-ui";
+import { majorScale, Label } from "evergreen-ui";
 import { isEmpty } from "lodash";
 
 interface SliderProps extends Omit<PaneProps, "onChange" | "value"> {

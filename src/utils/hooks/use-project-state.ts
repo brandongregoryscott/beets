@@ -1,7 +1,8 @@
 import _ from "lodash";
-import { ProjectRecord } from "models/project-record";
-import { WorkstationStateRecord } from "models/workstation-state-record";
-import { SetStateAction, useCallback } from "react";
+import type { ProjectRecord } from "models/project-record";
+import type { WorkstationStateRecord } from "models/workstation-state-record";
+import type { SetStateAction } from "react";
+import { useCallback } from "react";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 
 interface UseProjectStateResult {

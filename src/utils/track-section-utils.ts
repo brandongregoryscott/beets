@@ -1,7 +1,7 @@
-import { List } from "immutable";
+import type { List } from "immutable";
 import _ from "lodash";
-import { TrackRecord } from "models/track-record";
-import { TrackSectionRecord } from "models/track-section-record";
+import type { TrackRecord } from "models/track-record";
+import type { TrackSectionRecord } from "models/track-section-record";
 
 const getByTrack = (
     track: TrackRecord,

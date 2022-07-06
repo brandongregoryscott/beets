@@ -1,7 +1,8 @@
 import { ProjectRecord } from "models/project-record";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
-import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import { useQuery } from "utils/hooks/use-query";
 
 interface UseGetProjectOptions {
     enabled?: boolean;
