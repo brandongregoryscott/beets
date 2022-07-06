@@ -1,18 +1,19 @@
 import { Flex } from "components/flex";
 import { RangeSlider } from "components/mantine/range-slider";
 import { Slider } from "components/mantine/slider";
-import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { SelectMenuTitle } from "components/select-menu/select-menu-title";
-import { Scale } from "enums/scale";
+import type { Scale } from "enums/scale";
 import { Button, Label, majorScale } from "evergreen-ui";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultSettings } from "utils/hooks/use-piano-roll-randomizer-settings";
-import { Range } from "types/range";
+import type { Range } from "types/range";
 import { ScaleOptions } from "constants/scale-options";
 import { getScaleByNotes } from "utils/scale-utils";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { isNotNilOrEmpty } from "utils/core-utils";
-import { List } from "immutable";
+import type { List } from "immutable";
 import { getNotes } from "utils/track-section-step-utils";
 
 interface PianoRollRandomizerProps {

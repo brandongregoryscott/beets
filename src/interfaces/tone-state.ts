@@ -1,4 +1,4 @@
-import { Subdivision } from "tone/build/esm/core/type/Units";
+import type { Subdivision } from "tone/build/esm/core/type/Units";
 
 interface ToneState {
     endIndex?: number;

@@ -1,10 +1,10 @@
-import { BorderPropsOptions } from "interfaces/border-props-options";
-import { BorderProps } from "interfaces/border-props";
-import { RequiredOrNil } from "types/required-or-nil";
+import type { BorderPropsOptions } from "interfaces/border-props-options";
+import type { BorderProps } from "interfaces/border-props";
+import type { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
 import { isEqual as lodashIsEqual, pick as lodashPick } from "lodash";
-import { Constructor } from "types/constructor";
-import { Range } from "types/range";
+import type { Constructor } from "types/constructor";
+import type { Range } from "types/range";
 
 const getBorderYProps = (options: BorderPropsOptions): BorderProps => {
     const { isFirst = false, isLast = false, borderRadius } = options;

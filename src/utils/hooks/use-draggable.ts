@@ -1,8 +1,13 @@
-import { List } from "immutable";
-import { OrderableEntity } from "interfaces/orderable-entity";
-import { SetStateAction, useAtom } from "jotai";
+import type { List } from "immutable";
+import type { OrderableEntity } from "interfaces/orderable-entity";
+import type { SetStateAction } from "jotai";
+import { useAtom } from "jotai";
 import { useCallback } from "react";
-import { DragStart, DropResult, ResponderProvided } from "react-beautiful-dnd";
+import type {
+    DragStart,
+    DropResult,
+    ResponderProvided,
+} from "react-beautiful-dnd";
 import { DraggableAtom } from "utils/atoms/draggable-atom";
 import { rebaseIndexes, reorder } from "utils/collection-utils";
 

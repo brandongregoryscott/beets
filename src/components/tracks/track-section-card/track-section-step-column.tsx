@@ -1,8 +1,8 @@
 import { TrackSectionStepRow } from "components/tracks/track-section-card/track-section-step-row";
 import { majorScale, Pane } from "evergreen-ui";
-import { List } from "immutable";
+import type { List } from "immutable";
 import { range } from "lodash";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 
 interface TrackSectionStepColumnProps {
     index: number;

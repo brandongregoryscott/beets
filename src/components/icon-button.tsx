@@ -1,9 +1,7 @@
-import {
-    IconButton as EvergreenIconButton,
-    IconButtonProps as EvergreenIconButtonProps,
-    Spinner,
-} from "evergreen-ui";
-import { ForwardedRef, forwardRef } from "react";
+import type { IconButtonProps as EvergreenIconButtonProps } from "evergreen-ui";
+import { IconButton as EvergreenIconButton, Spinner } from "evergreen-ui";
+import type { ForwardedRef } from "react";
+import { forwardRef } from "react";
 
 interface IconButtonProps extends EvergreenIconButtonProps {}
 

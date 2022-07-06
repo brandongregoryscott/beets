@@ -1,12 +1,7 @@
-import {
-    IconButton,
-    IconButtonProps,
-    majorScale,
-    minorScale,
-    Tooltip,
-} from "evergreen-ui";
+import type { IconButtonProps } from "evergreen-ui";
+import { IconButton, majorScale, minorScale, Tooltip } from "evergreen-ui";
 import React, { useCallback } from "react";
-import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useDraggable } from "utils/hooks/use-draggable";
 import { useTheme } from "utils/hooks/use-theme";
 

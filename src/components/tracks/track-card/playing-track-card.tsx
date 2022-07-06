@@ -1,5 +1,5 @@
 import { EditableParagraph } from "components/editable-paragraph";
-import { TrackCardProps } from "components/tracks/track-card/track-card";
+import type { TrackCardProps } from "components/tracks/track-card/track-card";
 import { PlayingTrackSectionList } from "components/tracks/track-section-list/playing-track-section-list";
 import { TrackTime } from "components/tracks/track-time/track-time";
 import {

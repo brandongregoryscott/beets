@@ -1,7 +1,8 @@
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
 import { useQueryClient } from "react-query";
-import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
+import type { UseMutationResult } from "utils/hooks/use-mutation";
+import { useMutation } from "utils/hooks/use-mutation";
 
 interface UseDeleteProjectOptions {
     onError?: (error: Error) => void;

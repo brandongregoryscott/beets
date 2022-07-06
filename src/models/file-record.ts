@@ -1,13 +1,13 @@
 import { Record as ImmutableRecord } from "immutable";
-import { File } from "generated/interfaces/file";
+import type { File } from "generated/interfaces/file";
 import { isNilOrEmpty, makeDefaultValues } from "utils/core-utils";
 import { env } from "utils/env";
-import { MidiNote } from "types/midi-note";
+import type { MidiNote } from "types/midi-note";
 import { MidiNotes } from "constants/midi-notes";
 import { valueByHash } from "utils/hash-utils";
 import { AuditableRecord } from "models/auditable-record";
-import { BucketName } from "enums/bucket-name";
-import { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import type { BucketName } from "enums/bucket-name";
+import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
 
 const defaultValues = makeDefaultValues<File>({
     bucket_id: "",

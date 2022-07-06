@@ -1,5 +1,5 @@
 import { Markdown } from "components/markdown";
-import { HelpResource } from "enums/help-resource";
+import type { HelpResource } from "enums/help-resource";
 import { Spinner } from "evergreen-ui";
 import React from "react";
 import { useHelpDocs } from "utils/hooks/use-help-docs";

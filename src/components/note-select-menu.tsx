@@ -1,12 +1,13 @@
-import {
-    SelectMenu,
+import type {
     SelectMenuItem,
     SelectMenuProps,
 } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { MidiNotes } from "constants/midi-notes";
 import React from "react";
-import { PropsWithChildren, useCallback } from "react";
-import { MidiNote } from "types/midi-note";
+import type { PropsWithChildren } from "react";
+import { useCallback } from "react";
+import type { MidiNote } from "types/midi-note";
 
 interface NoteSelectMenuProps
     extends Pick<

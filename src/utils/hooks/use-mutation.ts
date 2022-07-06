@@ -1,13 +1,13 @@
 import _ from "lodash";
-import {
+import type {
     MutateOptions,
     MutationFunction,
     MutationKey,
-    useMutation as useReactQueryMutation,
     UseMutationOptions as UseReactQueryMutationOptions,
     UseMutationResult as UseReactQueryMutationResult,
 } from "react-query";
-import { ServiceResult } from "interfaces/service-result";
+import { useMutation as useReactQueryMutation } from "react-query";
+import type { ServiceResult } from "interfaces/service-result";
 import { useEffect, useState } from "react";
 import { unixTime } from "utils/core-utils";
 

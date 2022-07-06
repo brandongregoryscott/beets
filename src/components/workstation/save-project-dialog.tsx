@@ -9,7 +9,7 @@ import {
     toaster,
     majorScale,
 } from "evergreen-ui";
-import { WorkstationStateRecord } from "models/workstation-state-record";
+import type { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useState } from "react";
 import { useInput } from "rooks";
 import { isNilOrEmpty } from "utils/core-utils";
@@ -17,7 +17,8 @@ import { useGlobalState } from "utils/hooks/use-global-state";
 import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
 import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 
 interface SaveProjectDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 

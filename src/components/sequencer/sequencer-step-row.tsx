@@ -1,8 +1,9 @@
 import { TableRow, minorScale, TextTableCell, majorScale } from "evergreen-ui";
-import { List } from "immutable";
-import { FileRecord } from "models/file-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { MouseEvent, useCallback } from "react";
+import type { List } from "immutable";
+import type { FileRecord } from "models/file-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { MouseEvent } from "react";
+import { useCallback } from "react";
 import { getBorderYProps } from "utils/core-utils";
 
 interface SequencerStepRowProps {

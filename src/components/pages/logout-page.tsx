@@ -1,5 +1,5 @@
 import { Pane, Paragraph, Spinner } from "evergreen-ui";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { useEffect } from "react";
 import { useLogout } from "utils/hooks/supabase/use-logout";
 

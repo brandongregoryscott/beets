@@ -1,6 +1,6 @@
 import { WorkstationTabs } from "components/workstation/workstation-tabs";
 import { Pane } from "evergreen-ui";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { Outlet } from "react-router";
 
 interface WorkstationLayoutProps extends RouteProps {}

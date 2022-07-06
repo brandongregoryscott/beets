@@ -1,8 +1,8 @@
 import { Flex } from "components/flex";
+import type { DialogProps as EvergreenDialogProps } from "evergreen-ui";
 import {
     CrossIcon,
     Dialog as EvergreenDialog,
-    DialogProps as EvergreenDialogProps,
     Heading,
     IconButton,
     majorScale,

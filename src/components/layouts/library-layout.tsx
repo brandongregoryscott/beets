@@ -1,5 +1,5 @@
 import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { useNavigate, useLocation, Outlet } from "react-router";
 import { useCallback } from "react";
 

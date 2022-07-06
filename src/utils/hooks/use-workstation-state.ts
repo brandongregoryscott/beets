@@ -1,4 +1,5 @@
-import { SetStateAction, useAtom } from "jotai";
+import type { SetStateAction } from "jotai";
+import { useAtom } from "jotai";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCallback } from "react";
 import {

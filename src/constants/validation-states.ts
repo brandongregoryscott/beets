@@ -1,4 +1,4 @@
-import { ValidationState } from "interfaces/validation-state";
+import type { ValidationState } from "interfaces/validation-state";
 
 const ValueRequiredState: ValidationState = {
     validationMessage: "Value is required.",

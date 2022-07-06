@@ -1,5 +1,6 @@
-import { Pane, PaneOwnProps, PolymorphicBoxProps } from "evergreen-ui";
-import { PropsWithChildren } from "react";
+import type { PaneOwnProps, PolymorphicBoxProps } from "evergreen-ui";
+import { Pane } from "evergreen-ui";
+import type { PropsWithChildren } from "react";
 
 interface FormProps extends PolymorphicBoxProps<"form", PaneOwnProps> {}
 

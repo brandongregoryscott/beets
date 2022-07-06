@@ -1,4 +1,4 @@
-import { Entity } from "interfaces/entity";
+import type { Entity } from "interfaces/entity";
 
 interface Auditable extends Entity {
     created_by_id?: string;

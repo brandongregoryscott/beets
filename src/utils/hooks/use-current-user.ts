@@ -1,4 +1,4 @@
-import { UserRecord } from "models/user-record";
+import type { UserRecord } from "models/user-record";
 import { useGlobalState } from "utils/hooks/use-global-state";
 
 interface UseCurrentUserResult {

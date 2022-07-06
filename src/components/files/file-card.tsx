@@ -1,8 +1,8 @@
+import type { FileCardProps as EvergreenFileCardProps } from "evergreen-ui";
 import {
     majorScale,
     MusicIcon,
     Pane,
-    FileCardProps as EvergreenFileCardProps,
     Paragraph,
     TrashIcon,
     CogIcon,
@@ -11,8 +11,8 @@ import {
 import { useTheme } from "utils/hooks/use-theme";
 import humanize from "humanize-plus";
 import { useDeleteFile } from "utils/hooks/domain/files/use-delete-file";
-import { FileRecord } from "models/file-record";
-import { StorageProviderFileRecord } from "models/storage-provider-file-record";
+import type { FileRecord } from "models/file-record";
+import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { FileSettingsDialog } from "components/files/file-settings-dialog";

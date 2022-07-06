@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { flattenRoutes } from "utils/route-utils";
-import { RouteMap } from "interfaces/route-map";
+import type { RouteMap } from "interfaces/route-map";
 import { trackPage } from "utils/analytics-utils";
 
 interface NestedRoutesProps {

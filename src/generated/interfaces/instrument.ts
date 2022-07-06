@@ -1,5 +1,5 @@
-import { Auditable } from "interfaces/auditable";
-import { InstrumentCurve } from "generated/enums/instrument-curve";
+import type { Auditable } from "interfaces/auditable";
+import type { InstrumentCurve } from "generated/enums/instrument-curve";
 
 interface Instrument extends Auditable {
     curve: InstrumentCurve;

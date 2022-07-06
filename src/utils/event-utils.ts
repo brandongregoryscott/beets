@@ -1,5 +1,5 @@
-import { TraceableEvent } from "interfaces/traceable-event";
-import React from "react";
+import type { TraceableEvent } from "interfaces/traceable-event";
+import type React from "react";
 import { isNotNilOrEmpty } from "utils/core-utils";
 
 const attachEventSource =

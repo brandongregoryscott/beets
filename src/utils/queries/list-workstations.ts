@@ -1,9 +1,9 @@
-import { Project } from "generated/interfaces/project";
-import { Track } from "generated/interfaces/track";
-import { TrackSection } from "generated/interfaces/track-section";
-import { TrackSectionStep } from "generated/interfaces/track-section-step";
+import type { Project } from "generated/interfaces/project";
+import type { Track } from "generated/interfaces/track";
+import type { TrackSection } from "generated/interfaces/track-section";
+import type { TrackSectionStep } from "generated/interfaces/track-section-step";
 import { SupabaseClient } from "generated/supabase-client";
-import { List } from "immutable";
+import type { List } from "immutable";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { sortBy } from "utils/collection-utils";
 

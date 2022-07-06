@@ -1,6 +1,6 @@
-import { SearchOptions } from "interfaces/search-options";
-import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
-import { StorageProviderResult } from "types/storage-provider-result";
+import type { SearchOptions } from "interfaces/search-options";
+import type { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
+import type { StorageProviderResult } from "types/storage-provider-result";
 
 interface FetchParameters {
     signal?: AbortSignal;

@@ -1,7 +1,7 @@
-import { UserCredentials } from "interfaces/user-credentials";
+import type { UserCredentials } from "interfaces/user-credentials";
 import { useAuth } from "utils/hooks/supabase/use-auth";
 import { useMutation } from "utils/hooks/use-mutation";
-import { ApiError, Session, User } from "@supabase/supabase-js";
+import type { ApiError, Session, User } from "@supabase/supabase-js";
 import {
     identifyUser,
     trackUserCreated,

@@ -1,9 +1,9 @@
-import { InstrumentRecord } from "models/instrument-record";
-import { Instrument } from "generated/interfaces/instrument";
-import { UseQueryResult } from "utils/hooks/use-query";
-import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { Instrument } from "generated/interfaces/instrument";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import { List } from "immutable";
-import { FileRecord } from "models/file-record";
+import type { FileRecord } from "models/file-record";
 import { useListInstruments as useGeneratedListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { buildDemoInstruments } from "utils/build-demo-instruments";

@@ -1,7 +1,7 @@
-import { SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
 import { SortOrder } from "enums/sort-order";
 import { titleCase } from "humanize-plus";
-import { SortOptions } from "interfaces/sort-options";
+import type { SortOptions } from "interfaces/sort-options";
 import { flatMap, kebabCase } from "lodash";
 
 const enumToSelectMenuItems = <TValue, TEnum extends Record<string, TValue>>(

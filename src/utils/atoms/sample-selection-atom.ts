@@ -1,5 +1,6 @@
 import { immutableAtomWithStorage } from "utils/atoms/immutable-atom-with-storage";
-import { Map, List } from "immutable";
+import type { List } from "immutable";
+import { Map } from "immutable";
 
 const SampleSelectionAtom = immutableAtomWithStorage<Map<string, List<string>>>(
     "sampleSelection",

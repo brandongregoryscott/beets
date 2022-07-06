@@ -1,6 +1,7 @@
 import { TrackRecord } from "models/track-record";
-import { List } from "immutable";
-import { SetStateAction, useCallback } from "react";
+import type { List } from "immutable";
+import type { SetStateAction } from "react";
+import { useCallback } from "react";
 import { isFunction } from "lodash";
 import { intersectionWith } from "utils/collection-utils";
 import { useAtom } from "jotai";

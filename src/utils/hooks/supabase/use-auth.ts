@@ -1,4 +1,4 @@
-import { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient";
+import type { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient";
 import { SupabaseClient } from "generated/supabase-client";
 
 const useAuth = (): SupabaseAuthClient => {

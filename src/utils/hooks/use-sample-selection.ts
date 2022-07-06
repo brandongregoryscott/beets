@@ -1,9 +1,10 @@
 import { useAtom } from "jotai";
 import { SampleSelectionAtom } from "utils/atoms/sample-selection-atom";
-import { List, Map } from "immutable";
-import { FileRecord } from "models/file-record";
+import type { Map } from "immutable";
+import { List } from "immutable";
+import type { FileRecord } from "models/file-record";
 import { useCallback, useEffect, useState } from "react";
-import { TrackRecord } from "models/track-record";
+import type { TrackRecord } from "models/track-record";
 
 interface UseSampleSelectionOptions {
     /**

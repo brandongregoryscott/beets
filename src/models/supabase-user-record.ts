@@ -1,6 +1,6 @@
 import { Record } from "immutable";
 import { BaseRecord } from "models/base-record";
-import { SupabaseUser } from "types/supabase-user";
+import type { SupabaseUser } from "types/supabase-user";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<SupabaseUser>({

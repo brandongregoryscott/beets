@@ -1,5 +1,6 @@
 import { FileRecord } from "models/file-record";
-import { useMutation, UseMutationResult } from "utils/hooks/use-mutation";
+import type { UseMutationResult } from "utils/hooks/use-mutation";
+import { useMutation } from "utils/hooks/use-mutation";
 import { useQueryClient } from "react-query";
 import { SupabaseClient } from "generated/supabase-client";
 import { Tables } from "generated/enums/tables";

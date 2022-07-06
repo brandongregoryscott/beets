@@ -16,9 +16,8 @@ module.exports = {
     ],
     rules: {
         "@typescript-eslint/consistent-type-definitions": "error",
-        "@typescript-eslint/consistent-type-exports": "off", // TODO: Set this to `error` when cra is updated
-        "@typescript-eslint/consistent-type-imports": "off", // TODO: Set this to `error` when cra is updated
-        "collation/no-inline-export": "off", // TODO: Set this to `error` when cra is updated (used in conjunction with consistent-type-exports/imports)
+        "@typescript-eslint/consistent-type-exports": "error",
+        "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/sort-type-union-intersection-members": "error",
         "@typescript-eslint/strict-boolean-expressions": "warn",
         curly: "error",

@@ -1,4 +1,5 @@
-import { Pane, PaneProps } from "evergreen-ui";
+import type { PaneProps } from "evergreen-ui";
+import { Pane } from "evergreen-ui";
 import React, { forwardRef } from "react";
 
 interface FlexProps extends Omit<PaneProps, "display" | "flexDirection"> {}

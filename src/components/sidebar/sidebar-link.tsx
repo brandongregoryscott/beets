@@ -1,6 +1,6 @@
 import { Card, Icon, majorScale, minorScale } from "evergreen-ui";
-import { RouteDefinition } from "interfaces/route-definition";
-import { PropsWithChildren } from "react";
+import type { RouteDefinition } from "interfaces/route-definition";
+import type { PropsWithChildren } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { hasValues } from "utils/collection-utils";
 import { useTheme } from "utils/hooks/use-theme";

@@ -1,6 +1,6 @@
-import { RedirectDefinition } from "interfaces/redirect-definition";
-import { RouteMap } from "interfaces/route-map";
-import React from "react";
+import type { RedirectDefinition } from "interfaces/redirect-definition";
+import type { RouteMap } from "interfaces/route-map";
+import type React from "react";
 
 interface RouteDefinition {
     children?: RouteMap;

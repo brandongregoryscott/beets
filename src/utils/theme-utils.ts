@@ -1,4 +1,4 @@
-import { DefaultThemeColors } from "evergreen-ui";
+import type { DefaultThemeColors } from "evergreen-ui";
 import { theme } from "theme";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { valueByHash } from "utils/hash-utils";

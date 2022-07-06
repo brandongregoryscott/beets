@@ -15,15 +15,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useListFiles } from "utils/hooks/domain/files/use-list-files";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { useCurrentUser } from "utils/hooks/use-current-user";
 import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import React from "react";
-import { SelectMenu, SelectMenuItem } from "components/select-menu/select-menu";
+import type { SelectMenuItem } from "components/select-menu/select-menu";
+import { SelectMenu } from "components/select-menu/select-menu";
 import { TrackRecord } from "models/track-record";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useTracksState } from "utils/hooks/use-tracks-state";
-import { InstrumentRecord } from "models/instrument-record";
+import type { InstrumentRecord } from "models/instrument-record";
 import { useDialog } from "utils/hooks/use-dialog";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
@@ -33,7 +34,7 @@ import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
 import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
-import { Track } from "generated/interfaces/track";
+import type { Track } from "generated/interfaces/track";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 
 interface WorkstationPageProps extends RouteProps {}

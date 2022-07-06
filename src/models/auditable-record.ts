@@ -1,6 +1,6 @@
-import { Auditable } from "interfaces/auditable";
+import type { Auditable } from "interfaces/auditable";
 import { BaseRecord } from "models/base-record";
-import { Constructor } from "types/constructor";
+import type { Constructor } from "types/constructor";
 import { isPersisted } from "utils/auditable-utils";
 
 /**

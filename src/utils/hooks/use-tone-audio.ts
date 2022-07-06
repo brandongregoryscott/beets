@@ -1,14 +1,14 @@
-import { Project } from "generated/interfaces/project";
+import type { Project } from "generated/interfaces/project";
 import { List, Map } from "immutable";
-import { ToneState } from "interfaces/tone-state";
-import { ToneStepGroup } from "interfaces/tone-step-group";
-import { ToneTrack } from "interfaces/tone-track";
+import type { ToneState } from "interfaces/tone-state";
+import type { ToneStepGroup } from "interfaces/tone-step-group";
+import type { ToneTrack } from "interfaces/tone-track";
 import { isEmpty, pick } from "lodash";
-import { FileRecord } from "models/file-record";
-import { InstrumentRecord } from "models/instrument-record";
-import { TrackRecord } from "models/track-record";
-import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { FileRecord } from "models/file-record";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { TrackRecord } from "models/track-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
 import { intersectionWith } from "utils/collection-utils";
@@ -21,15 +21,14 @@ import {
     toInstrumentStepTypes,
     toSequencerStepTypes,
 } from "utils/track-section-step-utils";
-import MediaRecorder, {
-    OpusMediaRecorderWorkerOptions,
-} from "opus-media-recorder";
-import OpusMediaRecorder from "opus-media-recorder";
+import type { OpusMediaRecorderWorkerOptions } from "opus-media-recorder";
+import MediaRecorder from "opus-media-recorder";
+import type OpusMediaRecorder from "opus-media-recorder";
 import { toaster } from "evergreen-ui";
 import { env } from "utils/env";
 import { useWillUnmount } from "rooks";
 import { isEqual } from "utils/core-utils";
-import { MidiNote } from "types/midi-note";
+import type { MidiNote } from "types/midi-note";
 
 interface UseToneAudioOptions
     extends Pick<ToneState, "isPlaying" | "isRecording" | "subdivision">,

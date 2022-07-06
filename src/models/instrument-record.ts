@@ -1,7 +1,7 @@
 import { Record } from "immutable";
 import { makeDefaultValues } from "utils/core-utils";
-import { RecordParams } from "types/record-params";
-import { Instrument } from "generated/interfaces/instrument";
+import type { RecordParams } from "types/record-params";
+import type { Instrument } from "generated/interfaces/instrument";
 import { AuditableDefaultValues } from "constants/auditable-default-values";
 import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { AuditableRecord } from "models/auditable-record";

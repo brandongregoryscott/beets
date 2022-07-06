@@ -1,6 +1,8 @@
-import { Form, FormProps } from "components/forms/form";
+import type { FormProps } from "components/forms/form";
+import { Form } from "components/forms/form";
 import React, { useCallback } from "react";
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 import { DialogFooter } from "components/dialog-footer";
 
 interface FormDialogProps

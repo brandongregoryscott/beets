@@ -15,10 +15,11 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import gfm from "remark-gfm";
 import { flatMap, last } from "lodash";
-import { NormalComponents } from "react-markdown/lib/complex-types";
-import { SpecialComponents } from "react-markdown/lib/ast-to-react";
+import type { NormalComponents } from "react-markdown/lib/complex-types";
+import type { SpecialComponents } from "react-markdown/lib/ast-to-react";
 import ReactMarkdown from "react-markdown";
-import { ReactElement, useMemo } from "react";
+import type { ReactElement } from "react";
+import { useMemo } from "react";
 import { CopyableHeading } from "components/copyable-heading";
 import {
     mergeComponentMap,
@@ -26,7 +27,7 @@ import {
     transformImageUri,
     transformLinkUri,
 } from "utils/markdown-utils";
-import { PluggableList } from "react-markdown/lib/react-markdown";
+import type { PluggableList } from "react-markdown/lib/react-markdown";
 
 type MarkdownComponentMap = Partial<
     Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents

@@ -14,8 +14,8 @@ import {
     MusicIcon,
 } from "evergreen-ui";
 import { Sitemap } from "sitemap";
-import { RouteDefinition } from "interfaces/route-definition";
-import { RouteMap as GenericRouteMap } from "interfaces/route-map";
+import type { RouteDefinition } from "interfaces/route-definition";
+import type { RouteMap as GenericRouteMap } from "interfaces/route-map";
 import { InstrumentsPage } from "components/pages/instruments-page";
 import { HelpLayout } from "components/layouts/help-layout";
 import { HelpResource } from "enums/help-resource";
@@ -23,7 +23,7 @@ import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
 import { HelpPage } from "components/pages/help-page";
 
-export interface RouteMap extends GenericRouteMap {
+interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
         children: {
             help: RouteDefinition & {
@@ -150,4 +150,5 @@ const Routes: RouteMap = {
     },
 };
 
+export type { RouteMap };
 export { Routes };

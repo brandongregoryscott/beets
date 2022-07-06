@@ -1,5 +1,5 @@
-import { Constructor } from "types/constructor";
-import { Record } from "immutable";
+import type { Constructor } from "types/constructor";
+import type { Record } from "immutable";
 
 type TypeOf<TRecord> = TRecord extends Record.Factory<infer X> ? X : never;
 

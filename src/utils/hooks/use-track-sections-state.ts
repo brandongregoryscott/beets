@@ -1,5 +1,6 @@
-import { List } from "immutable";
-import { SetStateAction, useCallback, useMemo } from "react";
+import type { List } from "immutable";
+import type { SetStateAction } from "react";
+import { useCallback, useMemo } from "react";
 import { isFunction } from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
 import { rebaseIndexes } from "utils/collection-utils";

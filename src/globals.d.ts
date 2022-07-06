@@ -7,6 +7,7 @@ declare module "opus-media-recorder" {
         );
     }
 
+    // eslint-disable-next-line collation/no-inline-export
     export interface OpusMediaRecorderWorkerOptions {
         encoderWorkerFactory: () => Worker;
         OggOpusEncoderWasmPath: string;

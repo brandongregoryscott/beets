@@ -2,7 +2,7 @@ import { useDeleteProject } from "generated/hooks/domain/projects/use-delete-pro
 import { useDeleteTrackSectionStep } from "generated/hooks/domain/track-section-steps/use-delete-track-section-step";
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
-import { WorkstationStateRecord } from "models/workstation-state-record";
+import type { WorkstationStateRecord } from "models/workstation-state-record";
 import { useMutation } from "utils/hooks/use-mutation";
 
 interface UseDeleteWorkstationStateOptions {

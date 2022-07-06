@@ -10,10 +10,10 @@ import {
     Pane,
     StepChartIcon,
 } from "evergreen-ui";
-import { SetStateAction } from "jotai";
-import { FileRecord } from "models/file-record";
-import { TrackRecord } from "models/track-record";
-import { TrackSectionRecord } from "models/track-section-record";
+import type { SetStateAction } from "jotai";
+import type { FileRecord } from "models/file-record";
+import type { TrackRecord } from "models/track-record";
+import type { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { getBorderXProps } from "utils/core-utils";
@@ -24,7 +24,7 @@ import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-s
 import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
 import { css, hover, select } from "glamor";
 import { useClipboardState } from "utils/hooks/use-clipboard-state";
-import { InstrumentRecord } from "models/instrument-record";
+import type { InstrumentRecord } from "models/instrument-record";
 import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";

@@ -1,5 +1,5 @@
 import { useTheme as useEvergreenTheme } from "evergreen-ui";
-import { theme } from "theme";
+import type { theme } from "theme";
 
 const useTheme = () => useEvergreenTheme<typeof theme>();
 

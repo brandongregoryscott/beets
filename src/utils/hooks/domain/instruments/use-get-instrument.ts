@@ -1,8 +1,8 @@
-import { InstrumentRecord } from "models/instrument-record";
-import { UseQueryResult } from "utils/hooks/use-query";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { UseQueryResult } from "utils/hooks/use-query";
 import { useGetInstrument as useGeneratedGetInstrument } from "generated/hooks/domain/instruments/use-get-instrument";
-import { FileRecord } from "models/file-record";
-import { List } from "immutable";
+import type { FileRecord } from "models/file-record";
+import type { List } from "immutable";
 import { isUuid } from "utils/id-utils";
 import { stubUseQueryResult } from "utils/use-query-utils";
 import { buildDemoInstruments } from "utils/build-demo-instruments";

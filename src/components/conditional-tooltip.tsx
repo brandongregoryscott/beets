@@ -1,8 +1,7 @@
-import {
-    Tooltip as EvergreenTooltip,
-    TooltipProps as EvergreenTooltipProps,
-} from "evergreen-ui";
-import { Fragment, PropsWithChildren } from "react";
+import type { TooltipProps as EvergreenTooltipProps } from "evergreen-ui";
+import { Tooltip as EvergreenTooltip } from "evergreen-ui";
+import type { PropsWithChildren } from "react";
+import { Fragment } from "react";
 
 interface TooltipProps extends EvergreenTooltipProps {
     shouldRender?: boolean;

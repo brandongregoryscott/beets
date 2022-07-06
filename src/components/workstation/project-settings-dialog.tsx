@@ -8,7 +8,8 @@ import { isNilOrEmpty } from "utils/core-utils";
 import { useDeleteWorkstationState } from "utils/hooks/use-delete-workstation-state";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { Dialog, DialogProps } from "components/dialog";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
 
 interface ProjectSettingsDialogProps
     extends Pick<DialogProps, "onCloseComplete"> {}

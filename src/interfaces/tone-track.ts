@@ -1,5 +1,5 @@
-import Tone from "tone";
-import { MidiNote } from "types/midi-note";
+import type Tone from "tone";
+import type { MidiNote } from "types/midi-note";
 
 interface ToneTrack {
     channel: Tone.Channel;

@@ -1,4 +1,4 @@
-import { ExcludeImmutable } from "types/exclude-immutable";
+import type { ExcludeImmutable } from "types/exclude-immutable";
 
 type RecordParams<T> = T extends Immutable.Record<infer X>
     ? ExcludeImmutable<RecordParams<X>>

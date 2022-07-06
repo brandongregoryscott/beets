@@ -1,5 +1,5 @@
 import { Record } from "immutable";
-import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
+import type { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 import { BaseRecord } from "models/base-record";
 import { makeDefaultValues } from "utils/core-utils";
 

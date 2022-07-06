@@ -1,5 +1,6 @@
-import { Menu, MenuItemProps as EvergreenMenuItemProps } from "evergreen-ui";
-import { PropsWithChildren } from "react";
+import type { MenuItemProps as EvergreenMenuItemProps } from "evergreen-ui";
+import { Menu } from "evergreen-ui";
+import type { PropsWithChildren } from "react";
 
 interface MenuItemProps extends EvergreenMenuItemProps {}
 

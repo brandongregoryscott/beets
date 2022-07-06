@@ -1,6 +1,10 @@
-import { defaultComponents, MarkdownComponentMap } from "components/markdown";
+import type { MarkdownComponentMap } from "components/markdown";
+import { defaultComponents } from "components/markdown";
 import { merge, omit } from "lodash";
-import { TransformImage, TransformLink } from "react-markdown/lib/ast-to-react";
+import type {
+    TransformImage,
+    TransformLink,
+} from "react-markdown/lib/ast-to-react";
 
 const mergeComponentMap = (
     componentMap: MarkdownComponentMap

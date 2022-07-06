@@ -1,4 +1,4 @@
-import { ToneStep } from "interfaces/tone-step";
+import type { ToneStep } from "interfaces/tone-step";
 
 interface ToneStepGroup {
     index: number;

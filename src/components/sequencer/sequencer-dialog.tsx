@@ -1,11 +1,12 @@
 import { Sequencer } from "components/sequencer/sequencer";
-import { Dialog, DialogProps } from "components/dialog";
-import { List } from "immutable";
-import { FileRecord } from "models/file-record";
-import { TrackSectionRecord } from "models/track-section-record";
-import { TrackSectionStepRecord } from "models/track-section-step-record";
+import type { DialogProps } from "components/dialog";
+import { Dialog } from "components/dialog";
+import type { List } from "immutable";
+import type { FileRecord } from "models/file-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
-import { TrackRecord } from "models/track-record";
+import type { TrackRecord } from "models/track-record";
 
 interface SequencerDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     files: List<FileRecord>;

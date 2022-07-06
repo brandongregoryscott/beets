@@ -1,7 +1,8 @@
 import { UserRecord } from "models/user-record";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
-import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import { useQuery } from "utils/hooks/use-query";
 
 interface UseGetUserOptions {
     enabled?: boolean;

@@ -1,10 +1,10 @@
 import { SequencerStepRow } from "components/sequencer/sequencer-step-row";
 import { ConditionalTooltip } from "components/conditional-tooltip";
 import { Card, majorScale } from "evergreen-ui";
-import { List } from "immutable";
-import { FileRecord } from "models/file-record";
+import type { List } from "immutable";
+import type { FileRecord } from "models/file-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
-import { TrackSectionRecord } from "models/track-section-record";
+import type { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 
 interface SequencerStepProps {

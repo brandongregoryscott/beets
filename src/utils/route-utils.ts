@@ -1,10 +1,7 @@
-import { RouteMap } from "interfaces/route-map";
-import { RouteDefinition } from "interfaces/route-definition";
-import {
-    RouteMatch,
-    RouteObject,
-    matchRoutes as reactRouterMatchRoutes,
-} from "react-router";
+import type { RouteMap } from "interfaces/route-map";
+import type { RouteDefinition } from "interfaces/route-definition";
+import type { RouteMatch, RouteObject } from "react-router";
+import { matchRoutes as reactRouterMatchRoutes } from "react-router";
 import { flatMap, isEmpty } from "lodash";
 
 const absolutePath = (path?: string) => (isEmpty(path) ? "/" : `/${path}`);

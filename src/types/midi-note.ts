@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/sort-type-union-intersection-members */
-export type MidiNote =
+type MidiNote =
     | "C-2"
     | "C#-2"
     | "D-2"
@@ -128,3 +128,5 @@ export type MidiNote =
     | "F8"
     | "F#8"
     | "G8";
+
+export type { MidiNote };

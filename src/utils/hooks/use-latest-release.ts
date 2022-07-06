@@ -2,7 +2,8 @@ import { OctokitDefaults } from "constants/octokit-defaults";
 import { REPO_URL } from "constants/repo-url";
 import { getTargetBranch } from "utils/env";
 import { useOctokit } from "utils/hooks/use-octokit";
-import { useQuery, UseQueryResult } from "utils/hooks/use-query";
+import type { UseQueryResult } from "utils/hooks/use-query";
+import { useQuery } from "utils/hooks/use-query";
 import { joinPaths } from "utils/route-utils";
 
 interface Release extends ReleaseMetadata {

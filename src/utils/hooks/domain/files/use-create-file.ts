@@ -1,11 +1,11 @@
-import { BucketName } from "enums/bucket-name";
-import { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
+import type { BucketName } from "enums/bucket-name";
+import type { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
 import _ from "lodash";
 import { useQueryClient } from "react-query";
 import slugify from "slugify";
 import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
 import { storageProviderFilesKey } from "utils/query-key-utils";
-import { File as FileEntity } from "generated/interfaces/file";
+import type { File as FileEntity } from "generated/interfaces/file";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { useMutation } from "utils/hooks/use-mutation";
 import { SupabaseClient } from "generated/supabase-client";

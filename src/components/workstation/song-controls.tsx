@@ -10,16 +10,17 @@ import {
     Heading,
     Tooltip,
 } from "evergreen-ui";
-import React, { ChangeEvent, useCallback } from "react";
+import type { ChangeEvent } from "react";
+import React, { useCallback } from "react";
 import { useProjectState } from "utils/hooks/use-project-state";
 import { isNilOrEmpty } from "utils/core-utils";
 import { PlayButton } from "components/workstation/play-button";
 import { useToneControls } from "utils/hooks/use-tone-controls";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import { useToneAudio } from "utils/hooks/use-tone-audio";
-import { List } from "immutable";
-import { InstrumentRecord } from "models/instrument-record";
-import { FileRecord } from "models/file-record";
+import type { List } from "immutable";
+import type { InstrumentRecord } from "models/instrument-record";
+import type { FileRecord } from "models/file-record";
 import { Slider } from "components/mantine/slider";
 
 interface SongControlsProps {

@@ -1,6 +1,6 @@
 import { SidebarNavigation } from "components/sidebar/sidebar-navigation";
 import { Pane } from "evergreen-ui";
-import { RouteProps } from "interfaces/route-props";
+import type { RouteProps } from "interfaces/route-props";
 import { Outlet } from "react-router";
 import { useSubscribeToAuthStatus } from "utils/hooks/supabase/use-subscribe-to-auth-status";
 import { useScrollToHash } from "utils/hooks/use-scroll-to-hash";

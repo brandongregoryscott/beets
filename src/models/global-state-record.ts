@@ -1,9 +1,9 @@
 import { Record } from "immutable";
-import { GlobalState } from "interfaces/global-state";
+import type { GlobalState } from "interfaces/global-state";
 import { BaseRecord } from "models/base-record";
 import { SupabaseUserRecord } from "models/supabase-user-record";
 import { UserRecord } from "models/user-record";
-import { SupabaseUser } from "types/supabase-user";
+import type { SupabaseUser } from "types/supabase-user";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<GlobalState>({

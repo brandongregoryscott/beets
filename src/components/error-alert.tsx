@@ -1,4 +1,4 @@
-import { ApiError } from "@supabase/supabase-js";
+import type { ApiError } from "@supabase/supabase-js";
 import { Alert, majorScale } from "evergreen-ui";
 import { errorToString } from "utils/error-utils";
 

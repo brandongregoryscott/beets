@@ -1,6 +1,6 @@
-import { List } from "immutable";
-import { TrackRecord } from "models/track-record";
-import { WorkstationStateRecord } from "models/workstation-state-record";
+import type { List } from "immutable";
+import type { TrackRecord } from "models/track-record";
+import type { WorkstationStateRecord } from "models/workstation-state-record";
 import { derivedAtomFactory } from "utils/atoms/derived-atom-factory";
 import {
     CurrentWorkstationStateAtom,
