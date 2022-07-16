@@ -24,7 +24,7 @@
         "jotai": "1.7.3",
         "keymirror": "0.1.1",
         "lodash": "4.17.21",
-        "luxon": "2.4.0",
+        "luxon": "3.0.1",
         "opus-media-recorder": "0.8.0",
         "react": "18.1.0",
         "react-beautiful-dnd": "13.1.0",
