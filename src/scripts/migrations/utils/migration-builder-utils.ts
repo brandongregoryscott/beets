@@ -122,7 +122,8 @@ const softDeleteTrigger =
                 pgm.dropFunction(triggerName, []);
             },
             policyOrRuleName: triggerName,
-            up: () =>
+            up: () => {
+                pgm.dropTrigger(tableName, triggerName, { ifExists: true });
                 pgm.createTrigger(
                     tableName,
                     triggerName,
@@ -134,7 +135,8 @@ const softDeleteTrigger =
                         replace: true,
                     },
                     deleteTriggerSql
-                ),
+                );
+            },
         };
     };
 
@@ -147,7 +149,8 @@ const updateTrigger =
                 pgm.dropFunction(triggerName, []);
             },
             policyOrRuleName: triggerName,
-            up: () =>
+            up: () => {
+                pgm.dropTrigger(tableName, triggerName, { ifExists: true });
                 pgm.createTrigger(
                     tableName,
                     triggerName,
@@ -159,7 +162,8 @@ const updateTrigger =
                         replace: true,
                     },
                     updateTriggerSql
-                ),
+                );
+            },
         };
     };
 
