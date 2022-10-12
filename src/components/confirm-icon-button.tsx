@@ -1,7 +1,8 @@
 import { ConfirmationDialog } from "components/confirmation-dialog";
 import { IconButton } from "components/icon-button";
-import { IconButtonProps as EvergreenIconButtonProps } from "evergreen-ui";
-import React, { ForwardedRef, forwardRef, useCallback, useState } from "react";
+import type { IconButtonProps as EvergreenIconButtonProps } from "evergreen-ui";
+import type { ForwardedRef } from "react";
+import React, { forwardRef, useCallback, useState } from "react";
 
 interface ConfirmIconButtonProps extends EvergreenIconButtonProps {
     confirmationDescription?: string;
