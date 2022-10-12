@@ -1,23 +1,21 @@
-import type { TooltipProps as EvergreenTooltipProps } from "evergreen-ui";
+import type { TooltipProps } from "evergreen-ui";
 import { Tooltip as EvergreenTooltip } from "evergreen-ui";
 import type { PropsWithChildren } from "react";
-import { Fragment } from "react";
 
-interface TooltipProps extends EvergreenTooltipProps {
-    shouldRender?: boolean;
+interface ConditionalTooltipProps extends Omit<TooltipProps, "isShown"> {
+    isShown: boolean;
 }
 
-const ConditionalTooltip: React.FC<PropsWithChildren<TooltipProps>> = (
-    props: PropsWithChildren<TooltipProps>
-) => {
-    const { shouldRender = true, showDelay = 500, ...tooltipProps } = props;
-
-    if (!shouldRender) {
-        return <Fragment>{props.children}</Fragment>;
-    }
+const ConditionalTooltip: React.FC<
+    PropsWithChildren<ConditionalTooltipProps>
+> = (props: PropsWithChildren<ConditionalTooltipProps>) => {
+    const { showDelay = 500, isShown, ...tooltipProps } = props;
 
     return (
-        <EvergreenTooltip {...tooltipProps} showDelay={showDelay}>
+        <EvergreenTooltip
+            {...tooltipProps}
+            isShown={isShown ? undefined : false}
+            showDelay={showDelay}>
             {props.children}
         </EvergreenTooltip>
     );

@@ -61,10 +61,12 @@ const SequencerStep: React.FC<SequencerStepProps> = (
         [index, onChange, value]
     );
 
+    const isContentEmpty = !hasSamples && value.isEmpty();
+
     return (
         <ConditionalTooltip
             content="Select one or more samples to drop in"
-            shouldRender={!hasSamples && value.isEmpty()}>
+            isShown={isContentEmpty}>
             <Card
                 border={true}
                 cursor={hasSamples ? "pointer" : "not-allowed"}
