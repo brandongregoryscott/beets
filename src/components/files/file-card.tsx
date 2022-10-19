@@ -19,6 +19,7 @@ import { FileSettingsDialog } from "components/files/file-settings-dialog";
 import { Flex } from "components/flex";
 import { IconButton } from "components/icon-button";
 import { PlayPreviewButton } from "components/workstation/play-preview-button";
+import { ConfirmIconButton } from "components/confirm-icon-button";
 
 interface FileCardProps
     extends Omit<EvergreenFileCardProps, "name" | "sizeInBytes" | "type"> {
@@ -95,9 +96,11 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                     onClick={handleOpenDialog}
                     type="button"
                 />
-                <IconButton
+                <ConfirmIconButton
                     appearance="minimal"
                     color={colors.gray600}
+                    confirmationDescription="After deleting this file, it will not be available for future and current projects."
+                    confirmationTitle="Are you sure?"
                     icon={TrashIcon}
                     isLoading={isLoading}
                     marginLeft="auto"
