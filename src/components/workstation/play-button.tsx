@@ -46,4 +46,4 @@ const PlayButton: React.FC<PlayButtonProps> = (props: PlayButtonProps) => {
     );
 };
 
-export { PlayButton };
+export { PlayButton, type PlayButtonProps };

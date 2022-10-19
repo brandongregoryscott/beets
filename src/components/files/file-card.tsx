@@ -13,12 +13,12 @@ import humanize from "humanize-plus";
 import { useDeleteFile } from "utils/hooks/domain/files/use-delete-file";
 import type { FileRecord } from "models/file-record";
 import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { FileSettingsDialog } from "components/files/file-settings-dialog";
 import { Flex } from "components/flex";
 import { IconButton } from "components/icon-button";
-import { PlayButton } from "components/workstation/play-button";
+import { PlayPreviewButton } from "components/workstation/play-preview-button";
 
 interface FileCardProps
     extends Omit<EvergreenFileCardProps, "name" | "sizeInBytes" | "type"> {
@@ -28,26 +28,11 @@ interface FileCardProps
 
 const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
     const { file, storageProviderFile } = props;
-    const audioRef = useRef<HTMLAudioElement>(null);
-
     const {
         value: isOpen,
         setTrue: handleOpenDialog,
         setFalse: handleCloseDialog,
     } = useBoolean(false);
-    const {
-        value: isPlaying,
-        toggle: toggleIsPlaying,
-        setFalse: setIsPlayingFalse,
-    } = useBoolean();
-    const handlePlayClick = useCallback((isPlaying: boolean) => {
-        if (isPlaying) {
-            audioRef.current?.pause();
-            return;
-        }
-
-        audioRef.current?.play();
-    }, []);
     const { mutate, isLoading } = useDeleteFile();
     const handleDelete = useCallback(() => mutate(file.id), [file.id, mutate]);
     const { colors } = useTheme();
@@ -100,22 +85,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                 </Flex.Column>
             </Flex.Row>
             <Flex.Row justifyContent="flex-end">
-                <PlayButton
-                    appearance="minimal"
-                    isPlaying={isPlaying}
-                    marginLeft={minorScale(1)}
-                    marginRight={majorScale(1)}
-                    marginY={minorScale(1)}
-                    onClick={handlePlayClick}
-                    size="small"
-                    toggleIsPlaying={toggleIsPlaying}
-                />
-                <audio
-                    onEnded={setIsPlayingFalse}
-                    preload="none"
-                    ref={audioRef}
-                    src={file.getPublicUrl()}
-                />
+                <PlayPreviewButton fileUrl={file.getPublicUrl()} />
                 <IconButton
                     appearance="minimal"
                     color={colors.gray600}
