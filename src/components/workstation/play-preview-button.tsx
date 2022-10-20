@@ -1,4 +1,3 @@
-import { majorScale, minorScale } from "evergreen-ui";
 import { useCallback, useRef } from "react";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { PlayButton, type PlayButtonProps } from "./play-button";
@@ -11,7 +10,7 @@ interface PlayPreviewButtonProps
 const PlayPreviewButton: React.FC<PlayPreviewButtonProps> = (
     props: PlayPreviewButtonProps
 ) => {
-    const { disabled, fileUrl, isLoading, type, width, size } = props;
+    const { fileUrl, ...iconButtonProps } = props;
     const audioRef = useRef<HTMLAudioElement>(null);
     const {
         value: isPlaying,
@@ -30,15 +29,10 @@ const PlayPreviewButton: React.FC<PlayPreviewButtonProps> = (
         <>
             <PlayButton
                 appearance="minimal"
-                disabled={disabled}
-                isLoading={isLoading}
                 isPlaying={isPlaying}
                 onClick={handlePlayClick}
-                size={size}
                 toggleIsPlaying={toggleIsPlaying}
-                type={type}
-                width={width}
-                {...props}
+                {...iconButtonProps}
             />
             {fileUrl != null && (
                 <audio
