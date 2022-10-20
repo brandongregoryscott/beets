@@ -1,10 +1,9 @@
 import type { SelectMenuItemRendererProps } from "components/select-menu/select-menu";
 import type { FileRecord } from "models/file-record";
 import { majorScale, minorScale, Option } from "evergreen-ui";
-import { useBoolean } from "utils/hooks/use-boolean";
-import { PlayButton } from "components/workstation/play-button";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import { isInstanceOf } from "utils/core-utils";
+import { PlayPreviewButton } from "components/workstation/play-preview-button";
 
 interface FileSelectMenuItemProps
     extends SelectMenuItemRendererProps<FileRecord> {}
@@ -17,20 +16,6 @@ const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
 ) => {
     const { item, isSelectable, isSelected, onSelect, onDeselect, ...rest } =
         props;
-    const {
-        value: isPlaying,
-        toggle: toggleIsPlaying,
-        setFalse: setIsPlayingFalse,
-    } = useBoolean();
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const handlePlayClick = useCallback((isPlaying: boolean) => {
-        if (isPlaying) {
-            audioRef.current?.pause();
-            return;
-        }
-
-        audioRef.current?.play();
-    }, []);
 
     const handleClick = useCallback(
         (event: React.MouseEvent) => {
@@ -66,21 +51,12 @@ const FileSelectMenuItem: React.FC<FileSelectMenuItemProps> = (
             maxHeight={itemHeight}
             minHeight={itemHeight}
             onClick={handleClick}>
-            <PlayButton
-                appearance="minimal"
-                isPlaying={isPlaying}
+            <PlayPreviewButton
+                fileUrl={item.value.getPublicUrl()}
                 marginLeft={minorScale(1)}
                 marginRight={majorScale(1)}
                 marginY={minorScale(1)}
-                onClick={handlePlayClick}
                 size="small"
-                toggleIsPlaying={toggleIsPlaying}
-            />
-            <audio
-                onEnded={setIsPlayingFalse}
-                preload="none"
-                ref={audioRef}
-                src={item.value.getPublicUrl()}
             />
             {item.value.name}
         </Option>

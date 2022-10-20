@@ -18,6 +18,7 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { FileSettingsDialog } from "components/files/file-settings-dialog";
 import { Flex } from "components/flex";
 import { IconButton } from "components/icon-button";
+import { PlayPreviewButton } from "components/workstation/play-preview-button";
 import { ConfirmIconButton } from "components/confirm-icon-button";
 
 interface FileCardProps
@@ -37,6 +38,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
     const handleDelete = useCallback(() => mutate(file.id), [file.id, mutate]);
     const { colors } = useTheme();
     const { name, size } = file;
+
     return (
         <Flex.Row
             alignItems="center"
@@ -84,6 +86,7 @@ const FileCard: React.FC<FileCardProps> = (props: FileCardProps) => {
                 </Flex.Column>
             </Flex.Row>
             <Flex.Row justifyContent="flex-end">
+                <PlayPreviewButton fileUrl={file.getPublicUrl()} />
                 <IconButton
                     appearance="minimal"
                     color={colors.gray600}
