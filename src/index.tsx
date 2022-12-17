@@ -7,10 +7,8 @@ import { ThemeProvider } from "evergreen-ui";
 import { theme } from "theme";
 import "./index.css";
 import { registerIndexStyleMutation } from "utils/register-index-style-mutation";
-import { registerConsoleErrorToasts } from "utils/register-console-error-toasts";
 
 registerIndexStyleMutation();
-registerConsoleErrorToasts();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
