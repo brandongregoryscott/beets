@@ -10,6 +10,7 @@ const Column: React.FC<FlexProps> = forwardRef(
     )
 );
 
+// eslint-disable-next-line react/no-multi-comp
 const Row: React.FC<FlexProps> = forwardRef(
     (props: FlexProps, ref: React.ForwardedRef<HTMLDivElement>) => (
         <Pane display="flex" flexDirection="row" ref={ref} {...props} />

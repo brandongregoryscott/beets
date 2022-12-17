@@ -14,6 +14,11 @@ module.exports = {
         "react-hooks",
         "typescript-sort-keys",
     ],
+    settings: {
+        react: {
+            version: "detect",
+        },
+    },
     rules: {
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/consistent-type-exports": "error",
@@ -58,6 +63,10 @@ module.exports = {
             { caseSensitive: false },
         ],
         "typescript-sort-keys/string-enum": "error",
+        "react/hook-use-state": "error",
+        "react/jsx-handler-names": "error",
+        "react/jsx-no-constructed-context-values": "error",
+        "react/no-multi-comp": "error",
         "react/jsx-sort-props": "error",
         "react/jsx-boolean-value": ["error", "always"],
         "react/self-closing-comp": "error",
