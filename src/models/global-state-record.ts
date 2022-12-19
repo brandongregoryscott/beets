@@ -7,6 +7,7 @@ import type { SupabaseUser } from "types/supabase-user";
 import { makeDefaultValues } from "utils/core-utils";
 
 const defaultValues = makeDefaultValues<GlobalState>({
+    enableHolidayMode: true,
     supabaseUser: undefined,
     user: undefined,
 });
@@ -32,6 +33,10 @@ class GlobalStateRecord
             user: UserRecord.fromSupabaseUser(supabaseUser),
             supabaseUser: new SupabaseUserRecord(supabaseUser),
         });
+    }
+
+    public toggleHolidayMode(): GlobalStateRecord {
+        return this.merge({ enableHolidayMode: !this.enableHolidayMode });
     }
 }
 

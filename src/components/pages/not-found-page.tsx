@@ -1,10 +1,11 @@
 import { EmptyState } from "components/empty-state";
 import { Flex } from "components/flex";
 import { GeosearchIcon, majorScale, Text, Strong } from "evergreen-ui";
-import { useLocation } from "react-router";
+import { useRouter } from "hooks/use-router";
 
 const NotFoundPage: React.FC = () => {
-    const { pathname } = useLocation();
+    const { location } = useRouter();
+    const { pathname } = location;
     return (
         <Flex.Row
             alignItems="center"

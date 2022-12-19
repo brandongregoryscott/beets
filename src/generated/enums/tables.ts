@@ -6,7 +6,7 @@ enum Tables {
     TrackSectionSteps = "track_section_steps",
     TrackSections = "track_sections",
     Tracks = "tracks",
-    Users = "users"
+    Users = "users",
 }
 
 export { Tables };

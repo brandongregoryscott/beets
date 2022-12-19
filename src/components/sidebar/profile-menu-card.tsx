@@ -5,25 +5,25 @@ import {
     Card,
     majorScale,
     minorScale,
-    PersonIcon,
     Popover,
     Position,
+    Image,
+    PersonIcon,
 } from "evergreen-ui";
 import React from "react";
-import { useLocation } from "react-router";
 import { Routes } from "routes";
 import { hasValues } from "utils/collection-utils";
 import { useBoolean } from "hooks/use-boolean";
 import { useDialog } from "hooks/use-dialog";
 import { useTheme } from "hooks/use-theme";
 import { matchRoutes } from "utils/route-utils";
+import { useGlobalState } from "hooks/use-global-state";
+import SantaHat from "assets/santa-hat.png";
+import { useRouter } from "hooks/use-router";
 
-interface ProfileMenuCardProps {}
-
-const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
-    props: ProfileMenuCardProps
-) => {
-    const theme = useTheme();
+const ProfileMenuCard: React.FC = () => {
+    const { colors } = useTheme();
+    const { globalState } = useGlobalState();
     const {
         value: isOpen,
         setTrue: handleOpen,
@@ -34,7 +34,7 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     const [isHelpDialogOpen, handleOpenHelpDialog, handleCloseHelpDialog] =
         useDialog();
 
-    const location = useLocation();
+    const { location } = useRouter();
     const isProfileRoute = hasValues(
         matchRoutes(
             [
@@ -48,7 +48,7 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
     );
 
     const background =
-        isOpen || isProfileRoute ? theme.colors.gray300 : theme.colors.gray100;
+        isOpen || isProfileRoute ? colors.gray300 : colors.gray100;
 
     return (
         <React.Fragment>
@@ -68,6 +68,16 @@ const ProfileMenuCard: React.FC<ProfileMenuCardProps> = (
                     borderRadius={minorScale(2)}
                     cursor="pointer"
                     padding={majorScale(2)}>
+                    {globalState.enableHolidayMode && (
+                        <Image
+                            bottom={28}
+                            height={14}
+                            left={19}
+                            position="absolute"
+                            src={SantaHat}
+                            width={14}
+                        />
+                    )}
                     <PersonIcon />
                 </Card>
             </Popover>

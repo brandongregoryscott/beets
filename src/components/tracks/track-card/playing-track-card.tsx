@@ -4,7 +4,6 @@ import { PlayingTrackSectionList } from "components/tracks/track-section-list/pl
 import { TrackTime } from "components/tracks/track-time/track-time";
 import {
     Card,
-    IconButton,
     majorScale,
     minorScale,
     Pane,
@@ -23,6 +22,7 @@ import { useTheme } from "hooks/use-theme";
 import { useTrackSectionsState } from "hooks/use-track-sections-state";
 import { useTracksState } from "hooks/use-tracks-state";
 import { useWorkstationState } from "hooks/use-workstation-state";
+import { IconButton } from "components/icon-button";
 
 interface PlayingTrackCardProps extends TrackCardProps {}
 
