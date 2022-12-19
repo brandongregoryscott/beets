@@ -1,13 +1,6 @@
 import { PianoSteps } from "components/piano-roll/piano-steps";
 import { StepCountSelectMenu } from "components/step-count-select-menu";
-import {
-    CaretDownIcon,
-    CaretUpIcon,
-    IconButton,
-    majorScale,
-    Pane,
-    RandomIcon,
-} from "evergreen-ui";
+import { CaretDownIcon, CaretUpIcon, majorScale, Pane } from "evergreen-ui";
 import { List } from "immutable";
 import type { FileRecord } from "models/file-record";
 import type { TrackSectionRecord } from "models/track-section-record";
@@ -24,8 +17,7 @@ import { toDataAttributes } from "utils/data-attribute-utils";
 import { Flex } from "components/flex";
 import { PianoRollRandomizerPopover } from "components/piano-roll/piano-roll-randomizer-popover";
 import { usePianoRollRandomizerSettings } from "hooks/use-piano-roll-randomizer-settings";
-import { isNotNilOrEmpty } from "utils/core-utils";
-import { getScaleByNotes } from "utils/scale-utils";
+import { IconButton } from "components/icon-button";
 
 interface PianoRollProps {
     centerControls?: boolean;

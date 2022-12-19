@@ -1,4 +1,5 @@
 import type { EmptyStateOwnProps as EvergreenEmptyStateProps } from "evergreen-ui";
+// eslint-disable-next-line no-restricted-imports
 import { EmptyState as EvergreenEmptyState } from "evergreen-ui";
 import React from "react";
 import { useTheme } from "hooks/use-theme";

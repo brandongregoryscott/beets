@@ -1,5 +1,4 @@
 import {
-    IconButton,
     minorScale,
     Pane,
     VolumeOffIcon,
@@ -22,6 +21,7 @@ import type { List } from "immutable";
 import type { InstrumentRecord } from "models/instrument-record";
 import type { FileRecord } from "models/file-record";
 import { Slider } from "components/mantine/slider";
+import { IconButton } from "components/icon-button";
 
 interface SongControlsProps {
     files?: List<FileRecord>;

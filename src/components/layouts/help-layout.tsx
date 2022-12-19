@@ -1,5 +1,4 @@
 import {
-    IconButton,
     majorScale,
     Pane,
     Tab,
@@ -10,13 +9,13 @@ import {
 import { Outlet } from "react-router";
 import { useCallback, useRef } from "react";
 import type { HelpResource } from "enums/help-resource";
-import { generateHelpPath, generatePath } from "utils/route-utils";
+import { generateHelpPath } from "utils/route-utils";
 import { useTheme } from "hooks/use-theme";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
 import { first, isEmpty } from "lodash";
 import { useRouter } from "hooks/use-router";
 import { matchPath } from "react-router";
-import { Sitemap } from "sitemap";
+import { IconButton } from "components/icon-button";
 
 const HelpLayout: React.FC = () => {
     const { navigate, location } = useRouter();

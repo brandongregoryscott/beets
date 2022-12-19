@@ -4,7 +4,6 @@ import {
 } from "components/workstation/song-controls";
 import {
     AddIcon,
-    IconButton,
     majorScale,
     Pane,
     Spinner,
@@ -43,6 +42,7 @@ import { useRouter } from "hooks/use-router";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCurrentUser } from "hooks/use-current-user";
 import { useTimeoutRender } from "hooks/use-timeout-render";
+import { IconButton } from "components/icon-button";
 
 const options: Array<SelectMenuItem<boolean>> = [
     {

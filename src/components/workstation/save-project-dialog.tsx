@@ -2,8 +2,6 @@ import { ErrorMessages } from "constants/error-messages";
 import {
     Alert,
     BanCircleIcon,
-    EmptyState,
-    Icon,
     Pane,
     TextInputField,
     toaster,
@@ -19,6 +17,7 @@ import { useTheme } from "hooks/use-theme";
 import { useWorkstationState } from "hooks/use-workstation-state";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
+import { EmptyState } from "components/empty-state";
 
 interface SaveProjectDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
@@ -28,7 +27,7 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
     const { isAuthenticated } = useGlobalState();
     const { onCloseComplete } = props;
     const { state, setState } = useWorkstationState();
-    const theme = useTheme();
+    const { intents } = useTheme();
     const title = "New Project";
     const { value: name, onChange } = useInput();
     const [validationMessage, setValidationMessage] = useState<
@@ -97,14 +96,9 @@ const SaveProjectDialog: React.FC<SaveProjectDialogProps> = (
             {!isAuthenticated && (
                 <Pane maxWidth={majorScale(60)}>
                     <EmptyState
-                        background="dark"
-                        icon={
-                            <Icon
-                                color={theme.intents.danger.icon}
-                                icon={BanCircleIcon}
-                            />
-                        }
-                        iconBgColor={theme.intents.danger.background}
+                        icon={<BanCircleIcon />}
+                        iconBgColor={intents.danger.background}
+                        iconColor={intents.danger.icon}
                         title="Please register to save projects."
                     />
                 </Pane>

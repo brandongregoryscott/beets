@@ -4,7 +4,6 @@ import {
     Card,
     DeleteIcon,
     DragHandleHorizontalIcon,
-    IconButton,
     majorScale,
     minorScale,
     Pane,
@@ -32,6 +31,7 @@ import { TrackTime } from "components/tracks/track-time/track-time";
 import { useWorkstationState } from "hooks/use-workstation-state";
 import { Flex } from "components/flex";
 import { Slider } from "components/mantine/slider";
+import { IconButton } from "components/icon-button";
 
 interface TrackCardProps {
     track: TrackRecord;

@@ -1,9 +1,9 @@
 import { Flex } from "components/flex";
+import { IconButton } from "components/icon-button";
 import type { HelpResource } from "enums/help-resource";
 import type { HeadingProps } from "evergreen-ui";
 import {
     Heading,
-    IconButton,
     LinkIcon,
     majorScale,
     TickIcon,

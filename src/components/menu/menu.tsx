@@ -1,4 +1,5 @@
 import { MenuItem } from "components/menu/menu-item";
+// eslint-disable-next-line no-restricted-imports
 import { Menu as EvergreenMenu, Pane } from "evergreen-ui";
 import type { PropsWithChildren } from "react";
 import { useTheme } from "hooks/use-theme";

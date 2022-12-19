@@ -5,7 +5,6 @@ import {
     Spinner,
     Tablist,
     Tab,
-    IconButton,
     majorScale,
     ShareIcon,
     Pane,
@@ -30,6 +29,7 @@ import { omitProps } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
 import { useTheme } from "hooks/use-theme";
+import { IconButton } from "components/icon-button";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
@@ -76,6 +76,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
                     <IconButton
                         appearance="minimal"
                         icon={ShareIcon}
+                        /* @ts-ignore Something is up with the typing here, but this should be valid */
                         is={ReactRouterLink}
                         marginLeft="auto"
                         target="_blank"

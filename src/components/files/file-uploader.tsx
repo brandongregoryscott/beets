@@ -2,6 +2,7 @@ import type { BucketName } from "enums/bucket-name";
 import type { FileRejection } from "evergreen-ui";
 import {
     MimeType,
+    // eslint-disable-next-line no-restricted-imports
     FileUploader as EvergreenFileUploader,
     rebaseFiles,
     Alert,

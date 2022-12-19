@@ -1,11 +1,12 @@
 import { ChangePasswordForm } from "components/change-password-form";
 import { Flex } from "components/flex";
 import { ResetPasswordForm } from "components/reset-password-form";
-import { EmptyState, ErrorIcon, majorScale } from "evergreen-ui";
+import { ErrorIcon, majorScale } from "evergreen-ui";
 import { isEmpty } from "lodash";
 import { isUserNotFoundError } from "utils/error-utils";
 import { useResetPasswordRoute } from "hooks/use-reset-password-route";
 import { useTheme } from "hooks/use-theme";
+import { EmptyState } from "components/empty-state";
 
 const RECOVERY_TYPE = "recovery";
 
@@ -26,10 +27,10 @@ const ResetPasswordPage: React.FC = () => {
             {showExpiredToken && (
                 <Flex.Column alignItems="center" padding={majorScale(4)}>
                     <EmptyState
-                        background="dark"
                         description="The token is invalid or has expired. Request a new token to finish resetting your password."
-                        icon={<ErrorIcon color={intents.danger.icon} />}
+                        icon={<ErrorIcon />}
                         iconBgColor={intents.danger.background}
+                        iconColor={intents.danger.icon}
                         primaryCta={
                             <EmptyState.PrimaryButton onClick={clear}>
                                 Reset Password
