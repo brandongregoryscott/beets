@@ -10,7 +10,7 @@ import type { WorkstationStateRecord } from "models/workstation-state-record";
 import { hasValues } from "utils/collection-utils";
 import { useMutation } from "hooks/use-mutation";
 import { useWorkstationState } from "hooks/use-workstation-state";
-import { getWorkstationByProjectId } from "utils/queries/get-workstation-by-project-id";
+import { getWorkstationByProjectId } from "queries/get-workstation-by-project-id";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { trackProjectCreated } from "utils/analytics-utils";
 

@@ -2,7 +2,7 @@ import type { WorkstationStateRecord } from "models/workstation-state-record";
 import type { UseQueryOptions, UseQueryResult } from "hooks/use-query";
 import { useQuery } from "hooks/use-query";
 import { Tables } from "generated/enums/tables";
-import { getWorkstationByProjectId } from "utils/queries/get-workstation-by-project-id";
+import { getWorkstationByProjectId } from "queries/get-workstation-by-project-id";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { isUuid } from "utils/id-utils";
 
