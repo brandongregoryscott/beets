@@ -7,7 +7,7 @@ import { SelectMenuTitle } from "components/select-menu/select-menu-title";
 import type { Scale } from "enums/scale";
 import { Button, Label, majorScale } from "evergreen-ui";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { defaultSettings } from "utils/hooks/use-piano-roll-randomizer-settings";
+import { defaultSettings } from "hooks/use-piano-roll-randomizer-settings";
 import type { Range } from "types/range";
 import { ScaleOptions } from "constants/scale-options";
 import { getScaleByNotes } from "utils/scale-utils";

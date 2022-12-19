@@ -4,9 +4,9 @@ import type { StorageProviderFile } from "interfaces/supabase/storage-provider-f
 import _ from "lodash";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { isNilOrEmpty, mapTo } from "utils/collection-utils";
-import type { UseQueryResult } from "utils/hooks/use-query";
-import { useQuery } from "utils/hooks/use-query";
-import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
+import type { UseQueryResult } from "hooks/use-query";
+import { useQuery } from "hooks/use-query";
+import { useStorageProvider } from "hooks/supabase/use-storage-provider";
 import { storageProviderFilesKey } from "utils/query-key-utils";
 
 interface UseListStorageProviderFilesOptions {

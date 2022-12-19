@@ -1,4 +1,4 @@
-import { useQuery } from "utils/hooks/use-query";
+import { useQuery } from "hooks/use-query";
 import OverviewMarkdown from "docs/overview.md";
 import ContributingMarkdown from "docs/contributing.md";
 import HowToMarkdown from "docs/how-to.md";

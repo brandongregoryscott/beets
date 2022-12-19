@@ -1,11 +1,11 @@
 import type { TrackRecord } from "models/track-record";
 import type { List } from "immutable";
 import React from "react";
-import { useDraggable } from "utils/hooks/use-draggable";
-import { useTracksState } from "utils/hooks/use-tracks-state";
+import { useDraggable } from "hooks/use-draggable";
+import { useTracksState } from "hooks/use-tracks-state";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useProjectState } from "utils/hooks/use-project-state";
-import { useTheme } from "utils/hooks/use-theme";
+import { useProjectState } from "hooks/use-project-state";
+import { useTheme } from "hooks/use-theme";
 import { minorScale, Pane } from "evergreen-ui";
 import { TrackList } from "components/tracks/track-list/track-list";
 

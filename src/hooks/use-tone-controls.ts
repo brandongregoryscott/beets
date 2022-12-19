@@ -5,8 +5,8 @@ import { merge, isNil } from "lodash";
 import { useCallback } from "react";
 import { isHotkeyPressed } from "react-hotkeys-hook";
 import { ToneStateAtom } from "utils/atoms/tone-state-atom";
-import { useToneMuteEffect } from "utils/hooks/use-tone-mute-effect";
-import { useTonePlayingEffect } from "utils/hooks/use-tone-playing-effect";
+import { useToneMuteEffect } from "hooks/use-tone-mute-effect";
+import { useTonePlayingEffect } from "hooks/use-tone-playing-effect";
 
 interface UseToneControlsResult extends ToneState {
     isSelected: (index: number) => boolean;

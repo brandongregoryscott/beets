@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
 import { PlayButton, type PlayButtonProps } from "./play-button";
 
 interface PlayPreviewButtonProps

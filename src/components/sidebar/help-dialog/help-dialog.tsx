@@ -15,8 +15,8 @@ import {
 import type { MarkdownComponentMap } from "components/markdown";
 import { Markdown } from "components/markdown";
 import { HelpResource } from "enums/help-resource";
-import { useHelpDocs } from "utils/hooks/use-help-docs";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useHelpDocs } from "hooks/use-help-docs";
+import { useBoolean } from "hooks/use-boolean";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import {
@@ -29,7 +29,7 @@ import { HelpDialogLink } from "components/sidebar/help-dialog/help-dialog-link"
 import { omitProps } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 

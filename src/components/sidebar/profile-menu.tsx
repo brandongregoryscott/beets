@@ -7,10 +7,10 @@ import {
     NewPersonIcon,
 } from "evergreen-ui";
 import React, { Fragment, useCallback } from "react";
-import { useRouter } from "utils/hooks/use-router";
+import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
-import { useLogout } from "utils/hooks/supabase/use-logout";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { useLogout } from "hooks/supabase/use-logout";
+import { useGlobalState } from "hooks/use-global-state";
 
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;

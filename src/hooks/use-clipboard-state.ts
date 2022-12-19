@@ -12,7 +12,7 @@ import {
     sortBy,
 } from "utils/collection-utils";
 import { isEventFromDialog } from "utils/event-utils";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import { generateIdMap, remapIds } from "utils/id-utils";
 
 interface UseClipboardStateResult {

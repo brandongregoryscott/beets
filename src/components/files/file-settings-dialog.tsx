@@ -2,10 +2,10 @@ import { Link, TextInputField } from "evergreen-ui";
 import type { FileRecord } from "models/file-record";
 import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useCallback } from "react";
-import { useUpdateFile } from "utils/hooks/domain/files/use-update-file";
+import { useUpdateFile } from "hooks/domain/files/use-update-file";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
-import { useInput } from "utils/hooks/use-input";
+import { useInput } from "hooks/use-input";
 import humanize from "humanize-plus";
 
 interface FileSettingsDialogProps extends Pick<DialogProps, "onCloseComplete"> {

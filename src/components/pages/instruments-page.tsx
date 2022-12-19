@@ -9,10 +9,10 @@ import { useListInstruments } from "generated/hooks/domain/instruments/use-list-
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useMemo, useState } from "react";
 import { hasValues } from "utils/collection-utils";
-import { useDialog } from "utils/hooks/use-dialog";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useTheme } from "utils/hooks/use-theme";
-import { useTimeoutRender } from "utils/hooks/use-timeout-render";
+import { useDialog } from "hooks/use-dialog";
+import { useGlobalState } from "hooks/use-global-state";
+import { useTheme } from "hooks/use-theme";
+import { useTimeoutRender } from "hooks/use-timeout-render";
 import { generateId } from "utils/id-utils";
 
 const InstrumentsPage: React.FC = () => {

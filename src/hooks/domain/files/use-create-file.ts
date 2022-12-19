@@ -3,11 +3,11 @@ import type { StorageProviderFile } from "interfaces/supabase/storage-provider-f
 import _ from "lodash";
 import { useQueryClient } from "react-query";
 import slugify from "slugify";
-import { useStorageProvider } from "utils/hooks/supabase/use-storage-provider";
+import { useStorageProvider } from "hooks/supabase/use-storage-provider";
 import { storageProviderFilesKey } from "utils/query-key-utils";
 import type { File as FileEntity } from "generated/interfaces/file";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useMutation } from "utils/hooks/use-mutation";
+import { useGlobalState } from "hooks/use-global-state";
+import { useMutation } from "hooks/use-mutation";
 import { SupabaseClient } from "generated/supabase-client";
 import { Tables } from "generated/enums/tables";
 

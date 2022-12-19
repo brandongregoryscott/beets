@@ -3,7 +3,7 @@ import type { RouteDefinition } from "interfaces/route-definition";
 import type { PropsWithChildren } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { hasValues } from "utils/collection-utils";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 import { matchRoutes } from "utils/route-utils";
 
 interface SidebarLinkProps {

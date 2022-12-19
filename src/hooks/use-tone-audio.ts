@@ -13,10 +13,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
 import { intersectionWith } from "utils/collection-utils";
 import { getFileById, toInstrumentMap, toSequencerMap } from "utils/file-utils";
-import { useToneBpmEffect } from "utils/hooks/use-tone-bpm-effect";
-import { useTonePlayingEffect } from "utils/hooks/use-tone-playing-effect";
-import { useToneSwingEffect } from "utils/hooks/use-tone-swing-effect";
-import { useToneVolumeEffect } from "utils/hooks/use-tone-volume-effect";
+import { useToneBpmEffect } from "hooks/use-tone-bpm-effect";
+import { useTonePlayingEffect } from "hooks/use-tone-playing-effect";
+import { useToneSwingEffect } from "hooks/use-tone-swing-effect";
+import { useToneVolumeEffect } from "hooks/use-tone-volume-effect";
 import {
     toInstrumentStepTypes,
     toSequencerStepTypes,

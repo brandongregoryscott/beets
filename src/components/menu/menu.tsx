@@ -1,7 +1,7 @@
 import { MenuItem } from "components/menu/menu-item";
 import { Menu as EvergreenMenu, Pane } from "evergreen-ui";
 import type { PropsWithChildren } from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface MenuProps {}
 

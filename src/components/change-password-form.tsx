@@ -12,11 +12,11 @@ import {
 import { isEmpty } from "lodash";
 import type { ChangeEvent } from "react";
 import { useCallback, useRef } from "react";
-import { useRouter } from "utils/hooks/use-router";
+import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
-import { useChangePassword } from "utils/hooks/supabase/use-change-password";
-import { useInput } from "utils/hooks/use-input";
-import type { ResetPasswordQueryParams } from "utils/hooks/use-reset-password-route";
+import { useChangePassword } from "hooks/supabase/use-change-password";
+import { useInput } from "hooks/use-input";
+import type { ResetPasswordQueryParams } from "hooks/use-reset-password-route";
 
 interface ChangePasswordFormProps
     extends Pick<ResetPasswordQueryParams, "access_token"> {}

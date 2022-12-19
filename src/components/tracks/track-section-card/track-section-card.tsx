@@ -17,17 +17,17 @@ import type { TrackSectionRecord } from "models/track-section-record";
 import { useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { getBorderXProps } from "utils/core-utils";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useDialog } from "utils/hooks/use-dialog";
-import { useTheme } from "utils/hooks/use-theme";
-import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
-import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useDialog } from "hooks/use-dialog";
+import { useTheme } from "hooks/use-theme";
+import { useTrackSectionStepsState } from "hooks/use-track-section-steps-state";
+import { useTrackSectionsState } from "hooks/use-track-sections-state";
 import { css, hover, select } from "glamor";
-import { useClipboardState } from "utils/hooks/use-clipboard-state";
+import { useClipboardState } from "hooks/use-clipboard-state";
 import type { InstrumentRecord } from "models/instrument-record";
 import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import { unsoloAll } from "utils/track-utils";
 
 interface TrackSectionCardProps {

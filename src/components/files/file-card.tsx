@@ -8,13 +8,13 @@ import {
     CogIcon,
     minorScale,
 } from "evergreen-ui";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 import humanize from "humanize-plus";
-import { useDeleteFile } from "utils/hooks/domain/files/use-delete-file";
+import { useDeleteFile } from "hooks/domain/files/use-delete-file";
 import type { FileRecord } from "models/file-record";
 import type { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { useCallback } from "react";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
 import { FileSettingsDialog } from "components/files/file-settings-dialog";
 import { Flex } from "components/flex";
 import { IconButton } from "components/icon-button";

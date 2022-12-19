@@ -3,7 +3,7 @@ import type { ProjectRecord } from "models/project-record";
 import type { WorkstationStateRecord } from "models/workstation-state-record";
 import type { SetStateAction } from "react";
 import { useCallback } from "react";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useWorkstationState } from "hooks/use-workstation-state";
 
 interface UseProjectStateResult {
     /**

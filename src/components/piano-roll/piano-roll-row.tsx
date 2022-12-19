@@ -1,6 +1,6 @@
 import { Flex } from "components/flex";
 import type { PropsWithChildren } from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface PianoRollRowProps {}
 

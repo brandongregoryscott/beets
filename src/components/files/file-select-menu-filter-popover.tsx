@@ -18,7 +18,7 @@ import {
 } from "evergreen-ui";
 import { isEqual } from "lodash";
 import React, { useCallback, useState } from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface FileSelectMenuFilterPopoverProps
     extends Pick<PopoverProps, "onClose" | "onOpen"> {

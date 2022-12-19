@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { Routes } from "routes";
-import { useCurrentUser } from "utils/hooks/use-current-user";
+import { useCurrentUser } from "hooks/use-current-user";
 
 const App: React.FC = () => {
     const queryClient = useQueryClient();

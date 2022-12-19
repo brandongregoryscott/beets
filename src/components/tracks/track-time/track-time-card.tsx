@@ -1,8 +1,8 @@
 import { majorScale, Pane, Text } from "evergreen-ui";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 import { css, hover } from "glamor";
 import { useCallback } from "react";
-import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useToneControls } from "hooks/use-tone-controls";
 
 interface TrackTimeCardProps {
     index: number;

@@ -2,7 +2,7 @@ import { TrackTimeCard } from "components/tracks/track-time/track-time-card";
 import { Pane } from "evergreen-ui";
 import { range } from "lodash";
 import { toDataAttributes } from "utils/data-attribute-utils";
-import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useToneControls } from "hooks/use-tone-controls";
 
 interface TrackTimeProps {
     stepCount: number;

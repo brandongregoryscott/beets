@@ -1,11 +1,11 @@
 import type { AuthChangeEvent, Session } from "@supabase/gotrue-js";
 import { useCallback, useEffect } from "react";
 import { Sitemap } from "sitemap";
-import { useAuth } from "utils/hooks/supabase/use-auth";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { useAuth } from "hooks/supabase/use-auth";
+import { useGlobalState } from "hooks/use-global-state";
 import { toaster } from "evergreen-ui";
 import { identifyUser } from "utils/analytics-utils";
-import { useRouter } from "utils/hooks/use-router";
+import { useRouter } from "hooks/use-router";
 
 const useSubscribeToAuthStatus = () => {
     const auth = useAuth();

@@ -2,10 +2,10 @@ import { Markdown } from "components/markdown";
 import type { HelpResource } from "enums/help-resource";
 import { Spinner } from "evergreen-ui";
 import React from "react";
-import { useHelpDocs } from "utils/hooks/use-help-docs";
-import { useRouter } from "utils/hooks/use-router";
-import { useScrollToHash } from "utils/hooks/use-scroll-to-hash";
-import { useTimeoutRender } from "utils/hooks/use-timeout-render";
+import { useHelpDocs } from "hooks/use-help-docs";
+import { useRouter } from "hooks/use-router";
+import { useScrollToHash } from "hooks/use-scroll-to-hash";
+import { useTimeoutRender } from "hooks/use-timeout-render";
 
 const HelpPage: React.FC = () => {
     const { params } = useRouter();

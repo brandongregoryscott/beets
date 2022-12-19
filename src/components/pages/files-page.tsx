@@ -1,9 +1,9 @@
 import React from "react";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { useGlobalState } from "hooks/use-global-state";
 import { FileList } from "components/files/file-list";
 import { BucketName } from "enums/bucket-name";
 import { BanCircleIcon, majorScale, Pane } from "evergreen-ui";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 import { FileUploader } from "components/files/file-uploader";
 import { Flex } from "components/flex";
 import { EmptyState } from "components/empty-state";

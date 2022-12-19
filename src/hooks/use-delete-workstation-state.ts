@@ -3,7 +3,7 @@ import { useDeleteTrackSectionStep } from "generated/hooks/domain/track-section-
 import { useDeleteTrackSection } from "generated/hooks/domain/track-sections/use-delete-track-section";
 import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
 import type { WorkstationStateRecord } from "models/workstation-state-record";
-import { useMutation } from "utils/hooks/use-mutation";
+import { useMutation } from "hooks/use-mutation";
 
 interface UseDeleteWorkstationStateOptions {
     onError?: (error: Error) => void;

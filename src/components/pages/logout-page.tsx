@@ -1,6 +1,6 @@
 import { Pane, Paragraph, Spinner } from "evergreen-ui";
 import { useEffect } from "react";
-import { useLogout } from "utils/hooks/supabase/use-logout";
+import { useLogout } from "hooks/supabase/use-logout";
 
 const LogoutPage: React.FC = () => {
     const { mutate: logout } = useLogout();

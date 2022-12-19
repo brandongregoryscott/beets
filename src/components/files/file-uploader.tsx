@@ -17,7 +17,7 @@ import {
 import { isEmpty } from "lodash";
 import pluralize from "pluralize";
 import React, { useCallback, useMemo, useState } from "react";
-import { useCreateFile } from "utils/hooks/domain/files/use-create-file";
+import { useCreateFile } from "hooks/domain/files/use-create-file";
 
 interface FileUploaderProps {
     bucketName: BucketName;

@@ -1,5 +1,5 @@
-import { useAuth } from "utils/hooks/supabase/use-auth";
-import { useMutation } from "utils/hooks/use-mutation";
+import { useAuth } from "hooks/supabase/use-auth";
+import { useMutation } from "hooks/use-mutation";
 
 interface UseLogoutOptions {
     onError?: (error: Error) => void;

@@ -1,5 +1,5 @@
 import type { InstrumentRecord } from "models/instrument-record";
-import type { UseQueryResult } from "utils/hooks/use-query";
+import type { UseQueryResult } from "hooks/use-query";
 import { useGetInstrument as useGeneratedGetInstrument } from "generated/hooks/domain/instruments/use-get-instrument";
 import type { FileRecord } from "models/file-record";
 import type { List } from "immutable";

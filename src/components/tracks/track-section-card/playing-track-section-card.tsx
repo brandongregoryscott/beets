@@ -4,12 +4,12 @@ import type { FileRecord } from "models/file-record";
 import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
 import { getBorderXProps } from "utils/core-utils";
-import { useTheme } from "utils/hooks/use-theme";
-import { useTrackSectionStepsState } from "utils/hooks/use-track-section-steps-state";
-import { useClipboardState } from "utils/hooks/use-clipboard-state";
+import { useTheme } from "hooks/use-theme";
+import { useTrackSectionStepsState } from "hooks/use-track-section-steps-state";
+import { useClipboardState } from "hooks/use-clipboard-state";
 import type { InstrumentRecord } from "models/instrument-record";
 import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useWorkstationState } from "hooks/use-workstation-state";
 
 interface PlayingTrackSectionCardProps {
     file?: FileRecord;

@@ -8,7 +8,7 @@ import type { TrackSectionStepRecord } from "models/track-section-step-record";
 import { useCallback, useState } from "react";
 import type { InstrumentRecord } from "models/instrument-record";
 import type { TrackRecord } from "models/track-record";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
 
 interface PianoRollDialogProps extends Pick<DialogProps, "onCloseComplete"> {
     file?: FileRecord;

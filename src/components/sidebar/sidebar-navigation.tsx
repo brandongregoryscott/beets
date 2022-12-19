@@ -1,5 +1,5 @@
 import { majorScale, Pane } from "evergreen-ui";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 import { SidebarLink } from "components/sidebar/sidebar-link";
 import { ProfileMenuCard } from "components/sidebar/profile-menu-card";
 import { Routes } from "routes";

@@ -1,7 +1,7 @@
 import type { EmptyStateOwnProps as EvergreenEmptyStateProps } from "evergreen-ui";
 import { EmptyState as EvergreenEmptyState } from "evergreen-ui";
 import React from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface EmptyStateProps
     extends Omit<EvergreenEmptyStateProps, "iconBgColor"> {

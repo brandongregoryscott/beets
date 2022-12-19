@@ -12,7 +12,7 @@ import {
 import { isFunction } from "lodash";
 import React, { useCallback } from "react";
 import { attachEventSource } from "utils/event-utils";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
 
 interface DialogProps extends Omit<EvergreenDialogProps, "isShown"> {
     allowFullscreen?: boolean;

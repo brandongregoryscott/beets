@@ -21,14 +21,14 @@ import { InstrumentCurve } from "generated/enums/instrument-curve";
 import { enumToSelectMenuItems } from "utils/select-menu-utils";
 import type { FileRecord } from "models/file-record";
 import { getFileById } from "utils/file-utils";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
 import { ValueRequiredState } from "constants/validation-states";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";
 import { useCreateOrUpdateInstrument } from "generated/hooks/domain/instruments/use-create-or-update-instrument";
 import { useDeleteInstrument } from "generated/hooks/domain/instruments/use-delete-instrument";
 import { isNilOrEmpty } from "utils/core-utils";
-import { useNumberInput } from "utils/hooks/use-number-input";
-import { useInput } from "utils/hooks/use-input";
+import { useNumberInput } from "hooks/use-number-input";
+import { useInput } from "hooks/use-input";
 import type { Instrument } from "generated/interfaces/instrument";
 import type { DialogFooterProps } from "components/dialog-footer";
 import { DialogFooter } from "components/dialog-footer";
@@ -37,7 +37,7 @@ import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { List } from "immutable";
-import { useToneAudio } from "utils/hooks/use-tone-audio";
+import { useToneAudio } from "hooks/use-tone-audio";
 import { defaultNote } from "constants/midi-notes";
 
 interface InstrumentSettingsProps

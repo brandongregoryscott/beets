@@ -2,8 +2,8 @@ import type { IconButtonProps } from "evergreen-ui";
 import { IconButton, majorScale, minorScale, Tooltip } from "evergreen-ui";
 import React, { useCallback } from "react";
 import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
-import { useDraggable } from "utils/hooks/use-draggable";
-import { useTheme } from "utils/hooks/use-theme";
+import { useDraggable } from "hooks/use-draggable";
+import { useTheme } from "hooks/use-theme";
 
 interface ContextualIconButtonProps
     extends Omit<IconButtonProps, "icon">,

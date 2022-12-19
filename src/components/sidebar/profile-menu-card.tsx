@@ -13,9 +13,9 @@ import React from "react";
 import { useLocation } from "react-router";
 import { Routes } from "routes";
 import { hasValues } from "utils/collection-utils";
-import { useBoolean } from "utils/hooks/use-boolean";
-import { useDialog } from "utils/hooks/use-dialog";
-import { useTheme } from "utils/hooks/use-theme";
+import { useBoolean } from "hooks/use-boolean";
+import { useDialog } from "hooks/use-dialog";
+import { useTheme } from "hooks/use-theme";
 import { matchRoutes } from "utils/route-utils";
 
 interface ProfileMenuCardProps {}

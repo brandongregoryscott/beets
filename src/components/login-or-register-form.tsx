@@ -6,9 +6,9 @@ import {
     Link,
     Heading,
 } from "evergreen-ui";
-import { useBoolean } from "utils/hooks/use-boolean";
-import { useLogin } from "utils/hooks/supabase/use-login";
-import { useRegister } from "utils/hooks/supabase/use-register";
+import { useBoolean } from "hooks/use-boolean";
+import { useLogin } from "hooks/supabase/use-login";
+import { useRegister } from "hooks/supabase/use-register";
 import { Form } from "components/forms/form";
 import type { FormEvent, MouseEvent } from "react";
 import { useCallback, useMemo } from "react";
@@ -17,13 +17,13 @@ import { Flex } from "components/flex";
 import type { SupabaseUser } from "types/supabase-user";
 import { UserRecord } from "models/user-record";
 import { useCreateOrUpdateUser } from "generated/hooks/domain/users/use-create-or-update-user";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useRouter } from "utils/hooks/use-router";
+import { useGlobalState } from "hooks/use-global-state";
+import { useRouter } from "hooks/use-router";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { ErrorAlert } from "components/error-alert";
 import { absolutePath } from "utils/route-utils";
-import { useInput } from "utils/hooks/use-input";
+import { useInput } from "hooks/use-input";
 
 interface LoginOrRegisterFormProps {
     initialShowRegister: boolean;

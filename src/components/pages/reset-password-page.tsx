@@ -4,8 +4,8 @@ import { ResetPasswordForm } from "components/reset-password-form";
 import { EmptyState, ErrorIcon, majorScale } from "evergreen-ui";
 import { isEmpty } from "lodash";
 import { isUserNotFoundError } from "utils/error-utils";
-import { useResetPasswordRoute } from "utils/hooks/use-reset-password-route";
-import { useTheme } from "utils/hooks/use-theme";
+import { useResetPasswordRoute } from "hooks/use-reset-password-route";
+import { useTheme } from "hooks/use-theme";
 
 const RECOVERY_TYPE = "recovery";
 

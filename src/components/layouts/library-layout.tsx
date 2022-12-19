@@ -1,7 +1,7 @@
 import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
 import { Outlet } from "react-router";
 import { useCallback } from "react";
-import { useRouter } from "utils/hooks/use-router";
+import { useRouter } from "hooks/use-router";
 
 enum PageTab {
     Files = "Files",

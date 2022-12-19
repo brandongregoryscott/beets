@@ -2,7 +2,7 @@ import { Flex } from "components/flex";
 import { majorScale } from "evergreen-ui";
 import { useCallback } from "react";
 import type { MidiNote } from "types/midi-note";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface PianoStepProps {
     index: number;

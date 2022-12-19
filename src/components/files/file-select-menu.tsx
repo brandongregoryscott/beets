@@ -22,11 +22,11 @@ import type { PropsWithChildren } from "react";
 import { useCallback, useMemo } from "react";
 import { intersectionWith } from "utils/collection-utils";
 import { toSelectMenuItems } from "utils/file-utils";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useBoolean } from "hooks/use-boolean";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 import { EmptyState } from "components/empty-state";
 import { useLocalstorageState } from "rooks";
 

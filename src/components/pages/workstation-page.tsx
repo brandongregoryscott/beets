@@ -14,20 +14,20 @@ import {
     ProjectsIcon,
 } from "evergreen-ui";
 import { useCallback, useEffect, useState } from "react";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import React from "react";
 import type { SelectMenuItem } from "components/select-menu/select-menu";
 import { SelectMenu } from "components/select-menu/select-menu";
 import { TrackRecord } from "models/track-record";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useTracksState } from "utils/hooks/use-tracks-state";
+import { useGlobalState } from "hooks/use-global-state";
+import { useTracksState } from "hooks/use-tracks-state";
 import type { InstrumentRecord } from "models/instrument-record";
-import { useDialog } from "utils/hooks/use-dialog";
-import { useProjectState } from "utils/hooks/use-project-state";
+import { useDialog } from "hooks/use-dialog";
+import { useProjectState } from "hooks/use-project-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
-import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { useListInstruments } from "hooks/domain/instruments/use-list-instruments";
 import { List } from "immutable";
 import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
 import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
@@ -35,14 +35,14 @@ import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import type { Track } from "generated/interfaces/track";
 import { matchPath } from "react-router";
-import { useGetWorkstationByProjectId } from "utils/hooks/use-get-workstation-by-project-id";
+import { useGetWorkstationByProjectId } from "hooks/use-get-workstation-by-project-id";
 import { EmptyState } from "components/empty-state";
 import { isInvalidUuidError, isNotFoundError } from "utils/error-utils";
 import { Sitemap } from "sitemap";
-import { useRouter } from "utils/hooks/use-router";
+import { useRouter } from "hooks/use-router";
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import { useCurrentUser } from "utils/hooks/use-current-user";
-import { useTimeoutRender } from "utils/hooks/use-timeout-render";
+import { useCurrentUser } from "hooks/use-current-user";
+import { useTimeoutRender } from "hooks/use-timeout-render";
 
 const options: Array<SelectMenuItem<boolean>> = [
     {

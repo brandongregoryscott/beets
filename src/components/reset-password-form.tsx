@@ -11,8 +11,8 @@ import {
 import { isEmpty } from "lodash";
 import { useCallback } from "react";
 import { isUserNotFoundError } from "utils/error-utils";
-import { useRequestPasswordReset } from "utils/hooks/supabase/use-request-password-reset";
-import { useInput } from "utils/hooks/use-input";
+import { useRequestPasswordReset } from "hooks/supabase/use-request-password-reset";
+import { useInput } from "hooks/use-input";
 
 interface ResetPasswordFormProps {}
 

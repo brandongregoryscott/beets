@@ -13,10 +13,10 @@ import type { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useState } from "react";
 import { useInput } from "rooks";
 import { isNilOrEmpty } from "utils/core-utils";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
-import { useTheme } from "utils/hooks/use-theme";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useGlobalState } from "hooks/use-global-state";
+import { useSyncWorkstationState } from "hooks/use-sync-workstation-state";
+import { useTheme } from "hooks/use-theme";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
 

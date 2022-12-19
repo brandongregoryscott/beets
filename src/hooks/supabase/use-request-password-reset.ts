@@ -1,8 +1,8 @@
 import { Sitemap } from "sitemap";
 import { trackPasswordResetRequested } from "utils/analytics-utils";
-import { useAuth } from "utils/hooks/supabase/use-auth";
-import type { UseMutationResult } from "utils/hooks/use-mutation";
-import { useMutation } from "utils/hooks/use-mutation";
+import { useAuth } from "hooks/supabase/use-auth";
+import type { UseMutationResult } from "hooks/use-mutation";
+import { useMutation } from "hooks/use-mutation";
 import { joinPaths } from "utils/route-utils";
 
 interface UseRequestPasswordResetResult

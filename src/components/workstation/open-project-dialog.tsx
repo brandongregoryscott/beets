@@ -4,13 +4,13 @@ import type { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
-import { useListWorkstations } from "utils/hooks/use-list-workstations";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useListWorkstations } from "hooks/use-list-workstations";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
 import { EmptyState } from "components/empty-state";
-import { useDialog } from "utils/hooks/use-dialog";
-import { useRouter } from "utils/hooks/use-router";
+import { useDialog } from "hooks/use-dialog";
+import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
 import { generatePath } from "react-router";
 

@@ -17,12 +17,12 @@ import {
 import { useCallback, useMemo } from "react";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { getFileById } from "utils/file-utils";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
-import { useTheme } from "utils/hooks/use-theme";
-import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import { useTracksState } from "utils/hooks/use-tracks-state";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useGetInstrument } from "hooks/domain/instruments/use-get-instrument";
+import { useTheme } from "hooks/use-theme";
+import { useTrackSectionsState } from "hooks/use-track-sections-state";
+import { useTracksState } from "hooks/use-tracks-state";
+import { useWorkstationState } from "hooks/use-workstation-state";
 
 interface PlayingTrackCardProps extends TrackCardProps {}
 

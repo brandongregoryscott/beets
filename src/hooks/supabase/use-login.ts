@@ -1,6 +1,6 @@
 import type { UserCredentials } from "interfaces/user-credentials";
-import { useAuth } from "utils/hooks/supabase/use-auth";
-import { useMutation } from "utils/hooks/use-mutation";
+import { useAuth } from "hooks/supabase/use-auth";
+import { useMutation } from "hooks/use-mutation";
 import { ErrorMessages } from "constants/error-messages";
 import type { SupabaseUser } from "types/supabase-user";
 import { identifyUser, trackLoginFailed } from "utils/analytics-utils";
