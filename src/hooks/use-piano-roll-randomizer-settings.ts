@@ -5,7 +5,7 @@ import { isFunction } from "lodash";
 import type { TrackRecord } from "models/track-record";
 import type { SetStateAction } from "react";
 import { useCallback, useMemo } from "react";
-import { PianoRollRandomizerSettingsAtom } from "utils/atoms/piano-roll-randomizer-settings-atom";
+import { PianoRollRandomizerSettingsAtom } from "atoms/piano-roll-randomizer-settings-atom";
 
 interface UsePianoRollRandomizerSettingsOptions {
     track: TrackRecord;

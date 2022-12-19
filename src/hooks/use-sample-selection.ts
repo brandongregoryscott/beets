@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { SampleSelectionAtom } from "utils/atoms/sample-selection-atom";
+import { SampleSelectionAtom } from "atoms/sample-selection-atom";
 import type { Map } from "immutable";
 import { List } from "immutable";
 import type { FileRecord } from "models/file-record";

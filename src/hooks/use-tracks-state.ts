@@ -5,11 +5,11 @@ import { useCallback } from "react";
 import { isFunction } from "lodash";
 import { intersectionWith } from "utils/collection-utils";
 import { useAtom } from "jotai";
-import { CurrentTracksAtom, InitialTracksAtom } from "utils/atoms/tracks-atom";
+import { CurrentTracksAtom, InitialTracksAtom } from "atoms/tracks-atom";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
-import { CurrentWorkstationStateAtom } from "utils/atoms/workstation-atom";
-import { CurrentTrackSectionsAtom } from "utils/atoms/track-sections-atom";
-import { CurrentTrackSectionStepsAtom } from "utils/atoms/track-section-steps-atom";
+import { CurrentWorkstationStateAtom } from "atoms/workstation-atom";
+import { CurrentTrackSectionsAtom } from "atoms/track-sections-atom";
+import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
 
 interface UseTracksStateResult {
     add: (track?: TrackRecord) => void;

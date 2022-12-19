@@ -5,7 +5,7 @@ import type { SetStateAction } from "react";
 import type React from "react";
 import { useCallback } from "react";
 import type { ClipboardItem } from "types/clipboard-item";
-import { SelectedClipboardStateAtom } from "utils/atoms/clipboard-state-atom";
+import { SelectedClipboardStateAtom } from "atoms/clipboard-state-atom";
 import {
     intersectionWith,
     rebaseIndexes,

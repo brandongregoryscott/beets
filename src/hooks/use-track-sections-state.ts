@@ -8,9 +8,9 @@ import { useAtom } from "jotai";
 import {
     CurrentTrackSectionsAtom,
     InitialTrackSectionsAtom,
-} from "utils/atoms/track-sections-atom";
+} from "atoms/track-sections-atom";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
-import { CurrentTrackSectionStepsAtom } from "utils/atoms/track-section-steps-atom";
+import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
 
 interface UseTrackSectionsStateOptions {
     trackId: string;

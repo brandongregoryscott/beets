@@ -7,7 +7,7 @@ import { useAtom } from "jotai";
 import {
     CurrentTrackSectionStepsAtom,
     InitialTrackSectionStepsAtom,
-} from "utils/atoms/track-section-steps-atom";
+} from "atoms/track-section-steps-atom";
 import { useAtomValue } from "jotai/utils";
 
 interface UseTrackSectionStepsStateOptions {

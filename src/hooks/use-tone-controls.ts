@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import { merge, isNil } from "lodash";
 import { useCallback } from "react";
 import { isHotkeyPressed } from "react-hotkeys-hook";
-import { ToneStateAtom } from "utils/atoms/tone-state-atom";
+import { ToneStateAtom } from "atoms/tone-state-atom";
 import { useToneMuteEffect } from "hooks/use-tone-mute-effect";
 import { useTonePlayingEffect } from "hooks/use-tone-playing-effect";
 

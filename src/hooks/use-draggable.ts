@@ -8,7 +8,7 @@ import type {
     DropResult,
     ResponderProvided,
 } from "react-beautiful-dnd";
-import { DraggableAtom } from "utils/atoms/draggable-atom";
+import { DraggableAtom } from "atoms/draggable-atom";
 import { rebaseIndexes, reorder } from "utils/collection-utils";
 
 interface UseDraggableOptions<T extends OrderableEntity> {
