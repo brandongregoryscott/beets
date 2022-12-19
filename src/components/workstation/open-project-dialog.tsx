@@ -12,7 +12,7 @@ import { EmptyState } from "components/empty-state";
 import { useDialog } from "hooks/use-dialog";
 import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
-import { generatePath } from "react-router";
+import { generatePath } from "utils/route-utils";
 
 interface OpenProjectDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 

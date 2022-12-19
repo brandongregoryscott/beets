@@ -1,6 +1,7 @@
 import type { RouteMap } from "interfaces/route-map";
 import type { RouteDefinition } from "interfaces/route-definition";
 import type { RouteMatch, RouteObject } from "react-router";
+// eslint-disable-next-line no-restricted-imports
 import { generatePath as reactRouterGeneratePath } from "react-router";
 import { matchRoutes as reactRouterMatchRoutes } from "react-router";
 import { flatMap, isEmpty, toPath } from "lodash";

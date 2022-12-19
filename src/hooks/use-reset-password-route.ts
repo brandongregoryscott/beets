@@ -1,6 +1,6 @@
+import { useRouter } from "hooks/use-router";
 import { isEmpty, zip } from "lodash";
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router";
 import { useSearchParams } from "react-router-dom";
 
 interface ResetPasswordQueryParams {
@@ -28,7 +28,8 @@ const keys: Array<keyof ResetPasswordQueryParams> = [
 ];
 
 const useResetPasswordRoute = () => {
-    const { hash } = useLocation();
+    const { location } = useRouter();
+    const { hash } = location;
     const [, setSearchParams] = useSearchParams();
     const [result, setResult] = useState<ResetPasswordQueryParams>({});
     const clear = useCallback(() => setResult({}), []);

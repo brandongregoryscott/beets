@@ -65,21 +65,12 @@ module.exports = {
                             "useLocation",
                             "useParams",
                             "useNavigate",
+                            "generatePath",
                         ],
                         message:
-                            "Please import 'useRouter' from 'hooks/use-router' instead.",
+                            "Please import routing hooks from 'hooks/use-router' or utils from 'utils/route-utils' instead.",
                         name: "react-router",
                     },
-                ],
-                paths: [
-                    {
-                        importNames: ["generatePath"],
-                        message:
-                            "Please import 'generatePath' from 'utils/route-utils' instead.",
-                        name: "react-router",
-                    },
-                ],
-                paths: [
                     {
                         importNames: [
                             "Dialog",

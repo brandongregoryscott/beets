@@ -5,12 +5,14 @@ import {
     LogInIcon,
     LogOutIcon,
     NewPersonIcon,
+    SnowflakeIcon,
 } from "evergreen-ui";
 import React, { Fragment, useCallback } from "react";
 import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
 import { useLogout } from "hooks/supabase/use-logout";
 import { useGlobalState } from "hooks/use-global-state";
+import { useTheme } from "hooks/use-theme";
 
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;
@@ -20,8 +22,8 @@ interface ProfileMenuProps {
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
     const { onAboutDialogClick, onHelpDialogClick, onClose } = props;
-    const { isAuthenticated, setGlobalState } = useGlobalState();
-
+    const { isAuthenticated, globalState, setGlobalState } = useGlobalState();
+    const { colors } = useTheme();
     const handleLogoutsettled = useCallback(
         () =>
             setGlobalState((prev) =>
@@ -60,8 +62,27 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         navigate(Sitemap.register);
     }, [navigate, onClose]);
 
+    const handleToggleHolidayMode = useCallback(() => {
+        // Slight delay to allow popover to close
+        setTimeout(
+            () => setGlobalState((prev) => prev.toggleHolidayMode()),
+            50
+        );
+
+        onClose();
+    }, [onClose, setGlobalState]);
+
+    const snowflakeIconColor = globalState.enableHolidayMode
+        ? colors.blue300
+        : colors.gray400;
+
     return (
         <Menu>
+            <Menu.Item
+                icon={<SnowflakeIcon color={snowflakeIconColor} />}
+                onSelect={handleToggleHolidayMode}>
+                Holiday Mode
+            </Menu.Item>
             <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>

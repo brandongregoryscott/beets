@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 import type { Location, NavigateFunction, Params } from "react-router";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
