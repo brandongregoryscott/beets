@@ -12,8 +12,7 @@ import {
 } from "evergreen-ui";
 import { isEmpty, isString, omit } from "lodash";
 import { useCallback, useMemo, useState } from "react";
-import { Sitemap } from "sitemap";
-import { joinPaths, toPathCase } from "utils/route-utils";
+import { generateHelpPath, joinPaths, toPathCase } from "utils/route-utils";
 
 interface CopyableHeadingProps extends HeadingProps {
     selectedTab?: HelpResource;
@@ -46,7 +45,7 @@ const CopyableHeading: React.FC<CopyableHeadingProps> = (
         const { hash: existingHash, origin } = window.location;
         const currentPath =
             selectedTab != null
-                ? joinPaths(origin, Sitemap.help.home, selectedTab)
+                ? joinPaths(origin, generateHelpPath(selectedTab))
                 : window.location.toString().replace(existingHash, "");
 
         const link = `${currentPath}#${hash}`;

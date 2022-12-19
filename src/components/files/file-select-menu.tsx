@@ -27,7 +27,6 @@ import { useBoolean } from "utils/hooks/use-boolean";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { useTheme } from "utils/hooks/use-theme";
-import { absolutePath, joinPaths } from "utils/route-utils";
 import { EmptyState } from "components/empty-state";
 import { useLocalstorageState } from "rooks";
 
@@ -186,11 +185,7 @@ const getEmptyStateCta = (
 ): React.ReactNode => {
     if (isEmpty(files)) {
         return (
-            <Link
-                is={ReactRouterLink}
-                to={absolutePath(
-                    joinPaths(Sitemap.library.home, Sitemap.library.files)
-                )}>
+            <Link is={ReactRouterLink} to={Sitemap.library.files}>
                 Upload Samples
             </Link>
         );

@@ -76,7 +76,7 @@ const toHelpResource = (path?: string): HelpResource | undefined => {
     }
 
     return titleCase(
-        path.replace(absolutePath(Sitemap.help.home), "").replace("-", " ")
+        path.replace(absolutePath(Sitemap.help.root), "").replace("-", " ")
     ) as HelpResource;
 };
 

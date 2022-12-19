@@ -1,15 +1,17 @@
 const Sitemap = {
     help: {
-        home: "help",
-        contributing: "contributing",
-        overview: "overview",
-        howTo: "how-to",
+        root: "help",
+        resource: "/help/:resource",
     },
-    home: "/",
+    root: {
+        root: "/",
+        newProject: "/project/new",
+        project: "/project/:projectId",
+    },
     library: {
-        home: "library",
-        files: "files",
-        instruments: "instruments",
+        root: "library",
+        files: "/library/files",
+        instruments: "/library/instruments",
     },
     login: "login",
     logout: "logout",

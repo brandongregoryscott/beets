@@ -7,30 +7,30 @@ import {
     CircleArrowUpIcon,
     Tooltip,
 } from "evergreen-ui";
-import type { RouteProps } from "interfaces/route-props";
-import { useNavigate, useLocation, Outlet } from "react-router";
+import { Outlet } from "react-router";
 import { useCallback, useRef } from "react";
 import type { HelpResource } from "enums/help-resource";
-import { toPathCase } from "utils/route-utils";
+import { generateHelpPath, generatePath } from "utils/route-utils";
 import { useTheme } from "utils/hooks/use-theme";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
 import { first, isEmpty } from "lodash";
+import { useRouter } from "utils/hooks/use-router";
+import { matchPath } from "react-router";
+import { Sitemap } from "sitemap";
 
-interface HelpLayoutProps extends RouteProps {}
-
-const HelpLayout: React.FC<HelpLayoutProps> = (props: HelpLayoutProps) => {
-    const location = useLocation();
-    const navigate = useNavigate();
+const HelpLayout: React.FC = () => {
+    const { navigate, location } = useRouter();
     const { colors } = useTheme();
     const pageRef = useRef<HTMLDivElement | null>(null);
+
     const isTabSelected = useCallback(
         (tab: HelpResource): boolean =>
-            location.pathname.endsWith(toPathCase(tab)),
+            matchPath(generateHelpPath(tab), location.pathname) != null,
         [location]
     );
     const handleClick = useCallback(
         (tab: HelpResource) => () => {
-            navigate(toPathCase(tab));
+            navigate(generateHelpPath(tab));
         },
         [navigate]
     );

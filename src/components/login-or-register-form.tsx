@@ -18,7 +18,7 @@ import type { SupabaseUser } from "types/supabase-user";
 import { UserRecord } from "models/user-record";
 import { useCreateOrUpdateUser } from "generated/hooks/domain/users/use-create-or-update-user";
 import { useGlobalState } from "utils/hooks/use-global-state";
-import { useNavigate } from "react-router";
+import { useRouter } from "utils/hooks/use-router";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
 import { ErrorAlert } from "components/error-alert";
@@ -36,7 +36,7 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
 ) => {
     const { initialShowRegister } = props;
     const { setGlobalState } = useGlobalState();
-    const navigate = useNavigate();
+    const { navigate } = useRouter();
     const { value: showRegister, toggle: toggleShowRegister } =
         useBoolean(initialShowRegister);
     const {
@@ -73,7 +73,7 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
             const user = UserRecord.fromSupabaseUser(supabaseUser);
             createOrUpdateUser(user);
             setGlobalState((prev) => prev.setUser(supabaseUser));
-            navigate(Sitemap.home);
+            navigate(Sitemap.root.root);
         },
     });
 

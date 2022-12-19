@@ -1,18 +1,11 @@
 import { ConfirmationDialog } from "components/confirmation-dialog";
+import { EmptyState } from "components/empty-state";
 import { Flex } from "components/flex";
 import { InstrumentSettings } from "components/instruments/instrument-settings";
 import { InstrumentsTable } from "components/instruments/instruments-table";
-import {
-    Pane,
-    majorScale,
-    EmptyState,
-    Icon,
-    BanCircleIcon,
-    StepChartIcon,
-} from "evergreen-ui";
+import { Pane, majorScale, BanCircleIcon, StepChartIcon } from "evergreen-ui";
 import { useListFiles } from "generated/hooks/domain/files/use-list-files";
 import { useListInstruments } from "generated/hooks/domain/instruments/use-list-instruments";
-import type { RouteProps } from "interfaces/route-props";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useMemo, useState } from "react";
 import { hasValues } from "utils/collection-utils";
@@ -22,13 +15,9 @@ import { useTheme } from "utils/hooks/use-theme";
 import { useTimeoutRender } from "utils/hooks/use-timeout-render";
 import { generateId } from "utils/id-utils";
 
-interface InstrumentsPageProps extends RouteProps {}
-
-const InstrumentsPage: React.FC<InstrumentsPageProps> = (
-    props: InstrumentsPageProps
-) => {
+const InstrumentsPage: React.FC = () => {
     const { globalState } = useGlobalState();
-    const { colors, intents } = useTheme();
+    const { intents } = useTheme();
     const { resultObject: files, isLoading: isLoadingFiles } = useListFiles();
     const { resultObject: instruments, isLoading: isLoadingInstruments } =
         useListInstruments();
@@ -130,10 +119,7 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                             emptyState={
                                 <EmptyState
                                     description="Create a new Instrument to begin"
-                                    icon={
-                                        <StepChartIcon color={colors.gray500} />
-                                    }
-                                    iconBgColor={colors.gray200}
+                                    icon={<StepChartIcon />}
                                     primaryCta={
                                         <EmptyState.PrimaryButton
                                             onClick={handleCreate}>
@@ -169,15 +155,8 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
                         {instrument == null && hasInstruments && (
                             <Pane marginRight={majorScale(2)}>
                                 <EmptyState
-                                    background="dark"
                                     description="Select an Instrument to edit or create a new one."
-                                    icon={
-                                        <Icon
-                                            color={colors.gray500}
-                                            icon={StepChartIcon}
-                                        />
-                                    }
-                                    iconBgColor={colors.gray200}
+                                    icon={<StepChartIcon />}
                                     primaryCta={
                                         <EmptyState.PrimaryButton
                                             onClick={handleCreate}>
@@ -202,14 +181,9 @@ const InstrumentsPage: React.FC<InstrumentsPageProps> = (
             {!globalState.isAuthenticated() && (
                 <Pane maxWidth={majorScale(60)}>
                     <EmptyState
-                        background="dark"
-                        icon={
-                            <Icon
-                                color={intents.danger.icon}
-                                icon={BanCircleIcon}
-                            />
-                        }
+                        icon={<BanCircleIcon />}
                         iconBgColor={intents.danger.background}
+                        iconColor={intents.danger.icon}
                         title="Please register to create instruments."
                     />
                 </Pane>

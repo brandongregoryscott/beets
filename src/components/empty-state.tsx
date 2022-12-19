@@ -15,6 +15,7 @@ const EmptyState: React.FC<EmptyStateProps> & {
 } = (props: EmptyStateProps) => {
     const { colors } = useTheme();
     const {
+        background = "dark",
         icon,
         iconColor = colors.gray500,
         iconBgColor = colors.gray200,
@@ -22,9 +23,12 @@ const EmptyState: React.FC<EmptyStateProps> & {
     } = props;
     return (
         <EvergreenEmptyState
+            background={background}
             icon={
                 React.isValidElement(icon)
-                    ? React.cloneElement(icon, { color: iconColor })
+                    ? React.cloneElement(icon, {
+                          color: iconColor,
+                      })
                     : icon
             }
             iconBgColor={iconBgColor}

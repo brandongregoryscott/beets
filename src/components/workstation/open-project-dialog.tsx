@@ -1,15 +1,18 @@
 import { ConfirmationDialog } from "components/confirmation-dialog";
-import { EmptyState, ProjectsIcon, Spinner, Table } from "evergreen-ui";
+import { ProjectsIcon, Spinner, Table } from "evergreen-ui";
 import type { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
 import { isNilOrEmpty } from "utils/collection-utils";
 import { formatUpdatedOn } from "utils/date-utils";
-import { useBoolean } from "utils/hooks/use-boolean";
 import { useListWorkstations } from "utils/hooks/use-list-workstations";
-import { useTheme } from "utils/hooks/use-theme";
 import { useWorkstationState } from "utils/hooks/use-workstation-state";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
+import { EmptyState } from "components/empty-state";
+import { useDialog } from "utils/hooks/use-dialog";
+import { useRouter } from "utils/hooks/use-router";
+import { Sitemap } from "sitemap";
+import { generatePath } from "react-router";
 
 interface OpenProjectDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
 
@@ -17,14 +20,14 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
     props: OpenProjectDialogProps
 ) => {
     const { onCloseComplete } = props;
-    const theme = useTheme();
-    const { isDirty, state, setState } = useWorkstationState();
+    const { navigate } = useRouter();
+    const { isDirty, state } = useWorkstationState();
     const { resultObject: workstations, isLoading } = useListWorkstations({});
-    const {
-        value: isConfirmDialogOpen,
-        setTrue: handleOpenConfirmDialog,
-        setFalse: handleCloseConfirmDialog,
-    } = useBoolean();
+    const [
+        isConfirmDialogOpen,
+        handleOpenConfirmDialog,
+        handleCloseConfirmDialog,
+    ] = useDialog();
     const [selected, setSelected] = useState<
         WorkstationStateRecord | undefined
     >();
@@ -35,15 +38,34 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
             return;
         }
 
-        setState(selected!);
+        navigate(
+            generatePath(Sitemap.root.project, {
+                projectId: selected?.project.id,
+            })
+        );
         onCloseComplete?.();
-    }, [handleOpenConfirmDialog, isDirty, onCloseComplete, selected, setState]);
+    }, [
+        handleOpenConfirmDialog,
+        isDirty,
+        navigate,
+        onCloseComplete,
+        selected?.project.id,
+    ]);
 
     const handleDirtyConfirm = useCallback(() => {
-        setState(selected!);
         handleCloseConfirmDialog();
+        navigate(
+            generatePath(Sitemap.root.project, {
+                projectId: selected?.project.id,
+            })
+        );
         onCloseComplete?.();
-    }, [handleCloseConfirmDialog, onCloseComplete, selected, setState]);
+    }, [
+        handleCloseConfirmDialog,
+        navigate,
+        onCloseComplete,
+        selected?.project.id,
+    ]);
 
     const handleDeselect = useCallback(
         () => setSelected(undefined),
@@ -105,12 +127,7 @@ const OpenProjectDialog: React.FC<OpenProjectDialogProps> = (
                             {!hasProjects && (
                                 <EmptyState
                                     description="Save a new project to begin"
-                                    icon={
-                                        <ProjectsIcon
-                                            color={theme.colors.gray800}
-                                        />
-                                    }
-                                    iconBgColor={theme.colors.gray100}
+                                    icon={<ProjectsIcon />}
                                     title="No Projects Found"
                                 />
                             )}

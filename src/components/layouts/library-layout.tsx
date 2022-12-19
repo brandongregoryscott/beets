@@ -1,9 +1,7 @@
 import { majorScale, Pane, Tab, TabNavigation } from "evergreen-ui";
-import type { RouteProps } from "interfaces/route-props";
-import { useNavigate, useLocation, Outlet } from "react-router";
+import { Outlet } from "react-router";
 import { useCallback } from "react";
-
-interface LibraryLayoutProps extends RouteProps {}
+import { useRouter } from "utils/hooks/use-router";
 
 enum PageTab {
     Files = "Files",
@@ -12,11 +10,8 @@ enum PageTab {
 
 const tabs = Object.values(PageTab);
 
-const LibraryLayout: React.FC<LibraryLayoutProps> = (
-    props: LibraryLayoutProps
-) => {
-    const location = useLocation();
-    const navigate = useNavigate();
+const LibraryLayout: React.FC = () => {
+    const { navigate, location } = useRouter();
     const isTabSelected = useCallback(
         (tab: PageTab): boolean =>
             location.pathname.endsWith(tab.toLowerCase()),

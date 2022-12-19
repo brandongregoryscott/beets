@@ -19,7 +19,12 @@ import { useHelpDocs } from "utils/hooks/use-help-docs";
 import { useBoolean } from "utils/hooks/use-boolean";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Sitemap } from "sitemap";
-import { absolutePath, joinPaths, toPathCase } from "utils/route-utils";
+import {
+    absolutePath,
+    generateHelpPath,
+    joinPaths,
+    toPathCase,
+} from "utils/route-utils";
 import { HelpDialogLink } from "components/sidebar/help-dialog/help-dialog-link";
 import { omitProps } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
@@ -37,7 +42,7 @@ const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
     );
     const { value: isFullscreen, toggle: handleFullscreenClick } = useBoolean();
     const { isLoading, content } = useHelpDocs({ resource: selectedTab });
-    const sharePath = joinPaths(Sitemap.help.home, selectedTab);
+    const sharePath = generateHelpPath(selectedTab);
 
     const handleReturnToTop = useCallback(() => {
         contentContainerRef.current?.scrollTo({ top: 0 });
@@ -151,7 +156,7 @@ const transformLinkUri = (selectedTab: HelpResource) => (href: string) => {
     href = href.replace("./", "");
     const path = isHashLink ? `${toPathCase(selectedTab)}${href}` : href;
 
-    return joinPaths(absolutePath(Sitemap.help.home), path);
+    return joinPaths(absolutePath(Sitemap.help.root), path);
 };
 
 export { HelpDialog };

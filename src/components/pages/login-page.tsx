@@ -1,10 +1,7 @@
 import { LoginOrRegisterForm } from "components/login-or-register-form";
 import { Pane } from "evergreen-ui";
-import type { RouteProps } from "interfaces/route-props";
 
-interface LoginPageProps extends RouteProps {}
-
-const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
+const LoginPage: React.FC = () => {
     return (
         <Pane
             alignItems="center"

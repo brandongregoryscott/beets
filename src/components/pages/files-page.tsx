@@ -2,23 +2,15 @@ import React from "react";
 import { useGlobalState } from "utils/hooks/use-global-state";
 import { FileList } from "components/files/file-list";
 import { BucketName } from "enums/bucket-name";
-import {
-    BanCircleIcon,
-    EmptyState,
-    Icon,
-    majorScale,
-    Pane,
-} from "evergreen-ui";
+import { BanCircleIcon, majorScale, Pane } from "evergreen-ui";
 import { useTheme } from "utils/hooks/use-theme";
-import type { RouteProps } from "interfaces/route-props";
 import { FileUploader } from "components/files/file-uploader";
 import { Flex } from "components/flex";
+import { EmptyState } from "components/empty-state";
 
-interface FilesPageProps extends RouteProps {}
-
-const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
+const FilesPage: React.FC = () => {
     const { globalState } = useGlobalState();
-    const theme = useTheme();
+    const { intents } = useTheme();
     return (
         <React.Fragment>
             {globalState.isAuthenticated() && (
@@ -35,14 +27,9 @@ const FilesPage: React.FC<FilesPageProps> = (props: FilesPageProps) => {
                 {!globalState.isAuthenticated() && (
                     <Pane maxWidth={majorScale(60)}>
                         <EmptyState
-                            background="dark"
-                            icon={
-                                <Icon
-                                    color={theme.intents.danger.icon}
-                                    icon={BanCircleIcon}
-                                />
-                            }
-                            iconBgColor={theme.intents.danger.background}
+                            icon={<BanCircleIcon />}
+                            iconBgColor={intents.danger.background}
+                            iconColor={intents.danger.icon}
                             title="Please register to upload files."
                         />
                     </Pane>

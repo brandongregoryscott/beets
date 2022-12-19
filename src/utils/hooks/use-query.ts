@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { pick } from "lodash";
 import type {
     UseQueryOptions as UseReactQueryQueryOptions,
     UseQueryResult as UseReactQueryQueryResult,
@@ -45,7 +45,7 @@ const useQuery = <
     options: UseQueryOptions<TQueryFnData, TError, TResultObject, TQueryKey>
 ): UseQueryResult<TQueryFnData, TError, TResultObject> => {
     const result = useReactQueryQuery({
-        ..._.pick<
+        ...pick<
             UseQueryOptions<TQueryFnData, TError, TResultObject, TQueryKey>,
             keyof UseQueryOptions<
                 TQueryFnData,
@@ -59,7 +59,7 @@ const useQuery = <
     });
 
     return {
-        ..._.pick<
+        ...pick<
             UseReactQueryQueryResult<TResultObject, TError>,
             keyof UseReactQueryQueryResult
         >(

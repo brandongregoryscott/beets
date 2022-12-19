@@ -7,7 +7,7 @@ import {
     NewPersonIcon,
 } from "evergreen-ui";
 import React, { Fragment, useCallback } from "react";
-import { useNavigate } from "react-router";
+import { useRouter } from "utils/hooks/use-router";
 import { Sitemap } from "sitemap";
 import { useLogout } from "utils/hooks/supabase/use-logout";
 import { useGlobalState } from "utils/hooks/use-global-state";
@@ -33,7 +33,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         [setGlobalState]
     );
     const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
-    const navigate = useNavigate();
+    const { navigate } = useRouter();
 
     const handleAboutDialogClick = useCallback(() => {
         onClose();

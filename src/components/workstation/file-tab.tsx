@@ -21,8 +21,8 @@ import {
     trackProjectSavedFromKeyboardShortcut,
     trackProjectSyncFailed,
 } from "utils/analytics-utils";
-
-interface FileTabProps {}
+import { useRouter } from "utils/hooks/use-router";
+import { Sitemap } from "sitemap";
 
 enum ConfirmationAction {
     NewProject,
@@ -30,7 +30,8 @@ enum ConfirmationAction {
     RevertToSaved,
 }
 
-const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
+const FileTab: React.FC = () => {
+    const { navigate } = useRouter();
     const { initialState, isDirty, state, setCurrentState, setState } =
         useWorkstationState();
     const { isAuthenticated } = useGlobalState();
@@ -102,9 +103,10 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
             }
 
             setState(new WorkstationStateRecord());
+            navigate(Sitemap.root.newProject);
             closePopover();
         },
-        [handleOpenConfirmDialog, isDirty, setConfirmationAction, setState]
+        [handleOpenConfirmDialog, isDirty, navigate, setState]
     );
 
     const handleOpenClick = useCallback(
@@ -119,7 +121,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         (closePopover?: () => void) => () => {
             const newProjectHasName =
                 !state.isDemo() && isNotNilOrEmpty(project.name);
-            if (projectIsPersisted || newProjectHasName) {
+            if (isAuthenticated && (projectIsPersisted || newProjectHasName)) {
                 sync(state);
                 closePopover?.();
                 return;
@@ -130,6 +132,7 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         },
         [
             handleOpenSaveProjectDialog,
+            isAuthenticated,
             project.name,
             projectIsPersisted,
             state,
@@ -165,22 +168,27 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
     );
 
     const handleDirtyConfirm = useCallback(() => {
-        let update = () => setState(new WorkstationStateRecord());
         if (confirmationAction === ConfirmationAction.RevertToSaved) {
-            update = () => setCurrentState(initialState);
+            setCurrentState(initialState);
+            handleCloseConfirmDialog();
+            return;
         }
 
         if (confirmationAction === ConfirmationAction.RevertToDemo) {
-            update = () => setCurrentState(WorkstationStateRecord.demo(files));
+            setState(WorkstationStateRecord.demo(files));
+            handleCloseConfirmDialog();
+            return;
         }
 
-        update();
+        setState(new WorkstationStateRecord());
+        navigate(Sitemap.root.newProject);
         handleCloseConfirmDialog();
     }, [
         confirmationAction,
         files,
         handleCloseConfirmDialog,
         initialState,
+        navigate,
         setCurrentState,
         setState,
     ]);

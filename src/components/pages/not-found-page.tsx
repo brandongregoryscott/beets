@@ -1,20 +1,9 @@
+import { EmptyState } from "components/empty-state";
 import { Flex } from "components/flex";
-import {
-    EmptyState,
-    GeosearchIcon,
-    majorScale,
-    Text,
-    Strong,
-} from "evergreen-ui";
+import { GeosearchIcon, majorScale, Text, Strong } from "evergreen-ui";
 import { useLocation } from "react-router";
-import { useTheme } from "utils/hooks/use-theme";
 
-interface NotFoundPageProps {}
-
-const NotFoundPage: React.FC<NotFoundPageProps> = (
-    props: NotFoundPageProps
-) => {
-    const { colors } = useTheme();
+const NotFoundPage: React.FC = () => {
     const { pathname } = useLocation();
     return (
         <Flex.Row
@@ -24,7 +13,6 @@ const NotFoundPage: React.FC<NotFoundPageProps> = (
             width="100%">
             <Flex.Column maxHeight={majorScale(26)} maxWidth={majorScale(100)}>
                 <EmptyState
-                    background="dark"
                     description={
                         (
                             <Text>
@@ -34,8 +22,7 @@ const NotFoundPage: React.FC<NotFoundPageProps> = (
                             </Text>
                         ) as any
                     }
-                    icon={<GeosearchIcon color={colors.gray600} />}
-                    iconBgColor={colors.gray400}
+                    icon={<GeosearchIcon />}
                     title="Page Not Found"
                 />
             </Flex.Column>
