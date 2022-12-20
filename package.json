@@ -44,6 +44,7 @@
         "scribbletune": "5.0.0-alpha.2",
         "slugify": "1.6.0",
         "tone": "14.7.77",
+        "ui-box": "5.4.0",
         "uuid": "8.3.2",
         "web-vitals": "1.1.2"
     },
