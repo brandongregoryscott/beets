@@ -20,7 +20,9 @@ const DraggableTrackList: React.FC<DraggableTrackListProps> = (
     const { colors } = useTheme();
     const { state: project } = useProjectState();
     const { setState: setTracks } = useTracksState();
-    const { onDragEnd, onDragStart } = useDraggable({ setState: setTracks });
+    const { onDragEnd, onDragStart } = useDraggable({
+        setState: setTracks,
+    });
 
     return (
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>

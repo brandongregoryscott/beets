@@ -89,6 +89,7 @@ module.exports = {
             },
         ],
         "padding-line-between-statements": "off",
+        "react/display-name": "error",
         "react-hooks/exhaustive-deps": "error",
         "react-hooks/rules-of-hooks": "error",
         "react/hook-use-state": "error",
@@ -96,7 +97,6 @@ module.exports = {
         "react/jsx-handler-names": "error",
         "react/jsx-no-constructed-context-values": "error",
         "react/jsx-sort-props": "error",
-        "react/no-multi-comp": "error",
         "react/self-closing-comp": "error",
         "typescript-sort-keys/interface": [
             "error",

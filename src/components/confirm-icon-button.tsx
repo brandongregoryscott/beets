@@ -47,4 +47,6 @@ const ConfirmIconButton: React.FC<ConfirmIconButtonProps> = forwardRef(
     }
 );
 
+ConfirmIconButton.displayName = "ConfirmIconButton";
+
 export { ConfirmIconButton };

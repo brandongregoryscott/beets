@@ -1,6 +1,6 @@
 import type { IconButtonProps } from "evergreen-ui";
 import { majorScale, minorScale, Tooltip } from "evergreen-ui";
-import React, { useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useDraggable } from "hooks/use-draggable";
 import { useTheme } from "hooks/use-theme";
@@ -21,7 +21,7 @@ interface ContextualIconButtonProps
 
 type VisibilityState = "hidden" | "visible";
 
-const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
+const _ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     props: ContextualIconButtonProps
 ) => {
     const {
@@ -75,5 +75,8 @@ const ContextualIconButton: React.FC<ContextualIconButtonProps> = (
         </Tooltip>
     );
 };
+
+const ContextualIconButton = memo(_ContextualIconButton);
+ContextualIconButton.displayName = "ContextualIconButton";
 
 export { ContextualIconButton };

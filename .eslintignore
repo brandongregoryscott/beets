@@ -1,3 +1,4 @@
 src/scripts/**/*
 *.js
 node_modules/**/*
+src/generated/supabase-types.ts

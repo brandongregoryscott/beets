@@ -1,28 +1,31 @@
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
-import { majorScale, Pane } from "evergreen-ui";
-import type { TrackSectionStepRecord } from "models/track-section-step-record";
-import { getStepColor } from "utils/theme-utils";
+import { majorScale } from "evergreen-ui";
+import { memo } from "react";
 
 interface TrackSectionStepRowProps {
-    index: number;
-    trackSectionStep?: TrackSectionStepRecord;
+    backgroundColor: string | undefined;
 }
 
 const height = majorScale(2);
 
-const TrackSectionStepRow: React.FC<TrackSectionStepRowProps> = (
+const _TrackSectionStepRow: React.FC<TrackSectionStepRowProps> = (
     props: TrackSectionStepRowProps
 ) => {
-    const { trackSectionStep } = props;
+    const { backgroundColor } = props;
     return (
-        <Pane
-            backgroundColor={getStepColor(trackSectionStep?.file_id)}
-            height={height}
-            minHeight={height}
-            minWidth={TrackSectionStepColumnWidth}
-            width={TrackSectionStepColumnWidth}
+        <div
+            style={{
+                backgroundColor,
+                height,
+                minHeight: height,
+                minWidth: TrackSectionStepColumnWidth,
+                width: TrackSectionStepColumnWidth,
+            }}
         />
     );
 };
+
+const TrackSectionStepRow = memo(_TrackSectionStepRow);
+TrackSectionStepRow.displayName = "TrackSectionStepRow";
 
 export { TrackSectionStepRow };

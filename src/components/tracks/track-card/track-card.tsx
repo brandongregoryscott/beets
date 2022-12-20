@@ -13,7 +13,7 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import type { TrackRecord } from "models/track-record";
 import { useTheme } from "hooks/use-theme";
 import { useTracksState } from "hooks/use-tracks-state";
@@ -40,7 +40,7 @@ interface TrackCardProps {
 const iconMarginRight = minorScale(2);
 const width = majorScale(21);
 
-const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
+const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { track } = props;
     const { id, name, mute, solo, instrument_id, index, volume } = track;
     const { state: workstationState } = useWorkstationState();
@@ -237,6 +237,9 @@ const TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         </Pane>
     );
 };
+
+const TrackCard = memo(_TrackCard);
+TrackCard.displayName = "TrackCard";
 
 export type { TrackCardProps };
 export { TrackCard };
