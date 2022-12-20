@@ -1,6 +1,5 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import {
-    AddIcon,
     Card,
     DeleteIcon,
     DragHandleHorizontalIcon,
@@ -13,22 +12,13 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import type { TrackRecord } from "models/track-record";
 import { useTheme } from "hooks/use-theme";
 import { useTracksState } from "hooks/use-tracks-state";
-import { useTrackSectionsState } from "hooks/use-track-sections-state";
-import { useListFiles } from "hooks/domain/files/use-list-files";
-import { getFileById } from "utils/file-utils";
-import { isNotNilOrEmpty } from "utils/core-utils";
-import { useGetInstrument } from "hooks/domain/instruments/use-get-instrument";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { TrackSectionList } from "components/tracks/track-section-list/track-section-list";
-import { useDraggable } from "hooks/use-draggable";
+import { Draggable } from "react-beautiful-dnd";
 import { ContextualIconButton } from "components/contextual-icon-button";
 import { css, select } from "glamor";
-import { TrackTime } from "components/tracks/track-time/track-time";
-import { useWorkstationState } from "hooks/use-workstation-state";
 import { Flex } from "components/flex";
 import { Slider } from "components/mantine/slider";
 import { IconButton } from "components/icon-button";
@@ -42,28 +32,8 @@ const width = majorScale(21);
 
 const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const { track } = props;
-    const { id, name, mute, solo, instrument_id, index, volume } = track;
-    const { state: workstationState } = useWorkstationState();
-    const { update, remove, state: tracks } = useTracksState();
-    const {
-        add: addTrackSection,
-        setState: setTrackSections,
-        state: trackSections,
-        update: updateTrackSection,
-    } = useTrackSectionsState({ trackId: id });
-    const { onDragEnd, onDragStart } = useDraggable({
-        setState: setTrackSections,
-    });
-    const { resultObject: files } = useListFiles();
-    const { resultObject: instrument } = useGetInstrument({
-        id: instrument_id!,
-        enabled: isNotNilOrEmpty(instrument_id),
-        files,
-    });
-    const instrumentFile = useMemo(
-        () => getFileById(instrument?.file_id, files),
-        [files, instrument]
-    );
+    const { id, name, mute, solo, volume } = track;
+    const { update, remove } = useTracksState();
 
     const [localVolume, setLocalVolume] = useState<number>(volume);
     useEffect(() => setLocalVolume(volume), [volume]);
@@ -91,11 +61,6 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
         [id, update]
     );
 
-    const handleAddTrackSection = useCallback(
-        () => addTrackSection(),
-        [addTrackSection]
-    );
-
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
     const contextualButtonClass = css({ visibility: "hidden" }).toString();
@@ -104,130 +69,77 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     ).toString();
 
     return (
-        <Pane
-            marginBottom={
-                index === tracks.count() - 1 ? -majorScale(1) : undefined
-            }
-            marginTop={index === 0 ? -majorScale(1) : undefined}>
-            {index === 0 && (
-                <Pane
-                    marginLeft={width + majorScale(3)}
-                    marginTop={majorScale(2)}>
-                    <TrackTime stepCount={workstationState.getStepCount()} />
-                </Pane>
-            )}
-            <Draggable draggableId={track.id} index={track.index}>
-                {(provided) => (
-                    <Flex.Row
-                        alignItems="center"
-                        marginY={majorScale(1)}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}>
-                        <Card
-                            alignItems="flex-start"
-                            background={colors.gray200}
-                            className={cardClass}
-                            display="flex"
-                            flexDirection="column"
-                            marginRight={majorScale(2)}
+        <Draggable draggableId={track.id} index={track.index}>
+            {(provided) => (
+                <Flex.Row
+                    alignItems="center"
+                    height={majorScale(10)}
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}>
+                    <Pane
+                        alignItems="flex-start"
+                        background={colors.gray200}
+                        className={cardClass}
+                        display="flex"
+                        flexDirection="column"
+                        marginRight={majorScale(2)}
+                        minWidth={width}
+                        padding={majorScale(1)}
+                        position="relative"
+                        width={width}>
+                        <Flex.Row
+                            justifyContent="flex-end"
+                            marginTop={-majorScale(1)}
                             minWidth={width}
-                            padding={majorScale(1)}
-                            position="relative"
+                            position="absolute"
                             width={width}>
-                            <Flex.Row
-                                justifyContent="flex-end"
-                                marginTop={-majorScale(1)}
-                                minWidth={width}
-                                position="absolute"
-                                width={width}>
-                                <ContextualIconButton
-                                    className={contextualButtonClass}
-                                    icon={DeleteIcon}
-                                    id={track.id}
-                                    intent="danger"
-                                    isLastCard={true}
-                                    onClick={handleRemove}
-                                    tooltipText="Remove track"
-                                />
-                                <ContextualIconButton
-                                    className={contextualButtonClass}
-                                    dragHandleProps={provided.dragHandleProps}
-                                    icon={DragHandleHorizontalIcon}
-                                    id={track.id}
-                                    isCornerButton={true}
-                                    isLastCard={true}
-                                    marginRight={majorScale(1)}
-                                    tooltipText="Move track"
-                                />
-                            </Flex.Row>
-                            <EditableParagraph
-                                onChange={setName}
-                                value={name}
+                            <ContextualIconButton
+                                className={contextualButtonClass}
+                                icon={DeleteIcon}
+                                id={track.id}
+                                intent="danger"
+                                isLastCard={true}
+                                onClick={handleRemove}
+                                tooltipText="Remove track"
                             />
-                            <Flex.Row alignItems="center">
-                                <Tooltip content="Mute Track">
-                                    <IconButton
-                                        icon={
-                                            mute ? VolumeOffIcon : VolumeUpIcon
-                                        }
-                                        marginRight={iconMarginRight}
-                                        onClick={toggleMute}
-                                    />
-                                </Tooltip>
-                                <Tooltip content="Solo Track">
-                                    <IconButton
-                                        icon={
-                                            solo ? PropertyIcon : PropertiesIcon
-                                        }
-                                        marginRight={iconMarginRight}
-                                        onClick={toggleSolo}
-                                    />
-                                </Tooltip>
-                                <Slider
-                                    label="Vol"
-                                    onChange={setLocalVolume}
-                                    onChangeEnd={handleVolumeChangeEnd}
-                                    value={localVolume}
-                                />
-                            </Flex.Row>
-                        </Card>
-                        <DragDropContext
-                            onDragEnd={onDragEnd}
-                            onDragStart={onDragStart}>
-                            <Droppable
-                                direction="horizontal"
-                                droppableId={track.id}>
-                                {(provided) => (
-                                    <Flex.Row
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}>
-                                        <TrackSectionList
-                                            instrument={instrument}
-                                            instrumentFile={instrumentFile}
-                                            onChange={updateTrackSection}
-                                            track={track}
-                                            trackSections={trackSections}
-                                        />
-                                        {provided.placeholder}
-                                    </Flex.Row>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
-                        <Tooltip content="Add Section">
-                            <IconButton
-                                icon={AddIcon}
-                                marginLeft={
-                                    trackSections.isEmpty()
-                                        ? undefined
-                                        : majorScale(2)
-                                }
-                                onClick={handleAddTrackSection}
+                            <ContextualIconButton
+                                className={contextualButtonClass}
+                                dragHandleProps={provided.dragHandleProps}
+                                icon={DragHandleHorizontalIcon}
+                                id={track.id}
+                                isCornerButton={true}
+                                isLastCard={true}
+                                marginRight={majorScale(1)}
+                                tooltipText="Move track"
                             />
-                        </Tooltip>
-                    </Flex.Row>
-                )}
-            </Draggable>
-        </Pane>
+                        </Flex.Row>
+                        <EditableParagraph onChange={setName} value={name} />
+                        <Flex.Row alignItems="center">
+                            <Tooltip content="Mute Track">
+                                <IconButton
+                                    icon={mute ? VolumeOffIcon : VolumeUpIcon}
+                                    marginRight={iconMarginRight}
+                                    onClick={toggleMute}
+                                />
+                            </Tooltip>
+                            <Tooltip content="Solo Track">
+                                <IconButton
+                                    icon={solo ? PropertyIcon : PropertiesIcon}
+                                    marginRight={iconMarginRight}
+                                    onClick={toggleSolo}
+                                />
+                            </Tooltip>
+                            <Slider
+                                label="Vol"
+                                onChange={setLocalVolume}
+                                onChangeEnd={handleVolumeChangeEnd}
+                                value={localVolume}
+                            />
+                        </Flex.Row>
+                    </Pane>
+                </Flex.Row>
+            )}
+        </Draggable>
     );
 };
 
