@@ -197,15 +197,8 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             <Droppable
                                 direction="horizontal"
                                 droppableId={track.id}>
-                                {(provided, snapshot) => (
+                                {(provided) => (
                                     <Flex.Row
-                                        border={`2px dashed ${
-                                            snapshot.isDraggingOver
-                                                ? colors.blue300
-                                                : "transparent"
-                                        }`}
-                                        borderRadius={minorScale(1)}
-                                        margin={-2}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}>
                                         <TrackSectionList

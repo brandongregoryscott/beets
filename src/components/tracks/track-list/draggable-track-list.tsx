@@ -6,7 +6,7 @@ import { useTracksState } from "hooks/use-tracks-state";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useProjectState } from "hooks/use-project-state";
 import { useTheme } from "hooks/use-theme";
-import { minorScale, Pane } from "evergreen-ui";
+import { Pane } from "evergreen-ui";
 import { TrackList } from "components/tracks/track-list/track-list";
 
 interface DraggableTrackListProps {
@@ -17,7 +17,6 @@ const DraggableTrackList: React.FC<DraggableTrackListProps> = (
     props: DraggableTrackListProps
 ) => {
     const { tracks } = props;
-    const { colors } = useTheme();
     const { state: project } = useProjectState();
     const { setState: setTracks } = useTracksState();
     const { onDragEnd, onDragStart } = useDraggable({
@@ -27,14 +26,8 @@ const DraggableTrackList: React.FC<DraggableTrackListProps> = (
     return (
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
             <Droppable direction="vertical" droppableId={project.id}>
-                {(provided, snapshot) => (
+                {(provided) => (
                     <Pane
-                        border={`2px dashed ${
-                            snapshot.isDraggingOver
-                                ? colors.blue300
-                                : "transparent"
-                        }`}
-                        borderRadius={minorScale(1)}
                         display="flex"
                         flexDirection="column"
                         ref={provided.innerRef}
