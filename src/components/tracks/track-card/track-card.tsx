@@ -17,17 +17,25 @@ import type { TrackRecord } from "models/track-record";
 import { useTheme } from "hooks/use-theme";
 import { useTracksState } from "hooks/use-tracks-state";
 import { Draggable } from "react-beautiful-dnd";
-import { ContextualIconButton } from "components/contextual-icon-button";
-import { css, select } from "glamor";
+import {
+    ContextualIconButton,
+    ContextualIconButtonClassName,
+} from "components/contextual-icon-button";
 import { Flex } from "components/flex";
 import { Slider } from "components/mantine/slider";
 import { IconButton } from "components/icon-button";
+import type { SelectorMap } from "ui-box";
 
 interface TrackCardProps {
     track: TrackRecord;
 }
 
 const iconMarginRight = minorScale(2);
+const selectors: SelectorMap = {
+    [`&:hover .${ContextualIconButtonClassName}`]: {
+        visibility: "visible",
+    },
+};
 const width = majorScale(21);
 
 const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
@@ -63,11 +71,6 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
-    const contextualButtonClass = css({ visibility: "hidden" }).toString();
-    const cardClass = css(
-        select(`&:hover .${contextualButtonClass}`, { visibility: "visible" })
-    ).toString();
-
     return (
         <Draggable draggableId={track.id} index={track.index}>
             {(provided) => (
@@ -79,13 +82,13 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                     <Pane
                         alignItems="flex-start"
                         background={colors.gray200}
-                        className={cardClass}
                         display="flex"
                         flexDirection="column"
                         marginRight={majorScale(2)}
                         minWidth={width}
                         padding={majorScale(1)}
                         position="relative"
+                        selectors={selectors}
                         width={width}>
                         <Flex.Row
                             justifyContent="flex-end"
@@ -94,7 +97,6 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             position="absolute"
                             width={width}>
                             <ContextualIconButton
-                                className={contextualButtonClass}
                                 icon={DeleteIcon}
                                 id={track.id}
                                 intent="danger"
@@ -103,11 +105,9 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                                 tooltipText="Remove track"
                             />
                             <ContextualIconButton
-                                className={contextualButtonClass}
                                 dragHandleProps={provided.dragHandleProps}
                                 icon={DragHandleHorizontalIcon}
                                 id={track.id}
-                                isCornerButton={true}
                                 isLastCard={true}
                                 marginRight={majorScale(1)}
                                 tooltipText="Move track"

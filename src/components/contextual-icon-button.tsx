@@ -21,11 +21,12 @@ interface ContextualIconButtonProps
 
 type VisibilityState = "hidden" | "visible";
 
+const ContextualIconButtonClassName = "contextual-icon-button";
+
 const _ContextualIconButton: React.FC<ContextualIconButtonProps> = (
     props: ContextualIconButtonProps
 ) => {
     const {
-        className,
         dragHandleProps,
         icon,
         intent,
@@ -36,7 +37,7 @@ const _ContextualIconButton: React.FC<ContextualIconButtonProps> = (
         tooltipText,
         ...rest
     } = props;
-    const theme = useTheme();
+    const { colors } = useTheme();
     const { draggableId } = useDraggable();
     const isCurrentElementDragging = draggableId != null && draggableId === id;
     const isOtherElementDragging = draggableId != null && draggableId !== id;
@@ -57,13 +58,17 @@ const _ContextualIconButton: React.FC<ContextualIconButtonProps> = (
             <IconButton
                 {...dragHandleProps}
                 appearance="default"
-                backgroundColor={theme.colors.gray200}
+                backgroundColor={colors.gray200}
                 borderRadius={null}
                 borderTopRightRadius={
                     isLastCard && isCornerButton ? minorScale(1) : null
                 }
                 // Don't apply className with hover style if another element is being dragged
-                className={isOtherElementDragging ? undefined : props.className}
+                className={
+                    isOtherElementDragging
+                        ? undefined
+                        : ContextualIconButtonClassName
+                }
                 icon={icon}
                 iconSize={majorScale(2)}
                 intent={intent}
@@ -79,4 +84,4 @@ const _ContextualIconButton: React.FC<ContextualIconButtonProps> = (
 const ContextualIconButton = memo(_ContextualIconButton);
 ContextualIconButton.displayName = "ContextualIconButton";
 
-export { ContextualIconButton };
+export { ContextualIconButtonClassName, ContextualIconButton };
