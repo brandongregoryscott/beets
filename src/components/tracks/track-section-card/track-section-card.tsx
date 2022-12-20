@@ -1,4 +1,7 @@
-import { ContextualIconButton } from "components/contextual-icon-button";
+import {
+    ContextualIconButton,
+    ContextualIconButtonClassName,
+} from "components/contextual-icon-button";
 import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
@@ -6,7 +9,6 @@ import {
     DragHandleHorizontalIcon,
     HeatGridIcon,
     majorScale,
-    minorScale,
     Pane,
     StepChartIcon,
 } from "evergreen-ui";
@@ -16,19 +18,18 @@ import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
 import { memo, useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { getBorderXProps } from "utils/core-utils";
 import { useListFiles } from "hooks/domain/files/use-list-files";
 import { useDialog } from "hooks/use-dialog";
 import { useTheme } from "hooks/use-theme";
 import { useTrackSectionStepsState } from "hooks/use-track-section-steps-state";
 import { useTrackSectionsState } from "hooks/use-track-sections-state";
-import { css, hover, select } from "glamor";
 import { useClipboardState } from "hooks/use-clipboard-state";
 import type { InstrumentRecord } from "models/instrument-record";
 import { TrackSectionStepGrid } from "components/tracks/track-section-card/track-section-step-grid";
 import { TrackSectionStepColumnWidth } from "components/tracks/track-section-card/track-section-step-column";
 import { useWorkstationState } from "hooks/use-workstation-state";
 import { unsoloAll } from "utils/track-utils";
+import type { SelectorMap } from "ui-box";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -40,6 +41,15 @@ interface TrackSectionCardProps {
     track: TrackRecord;
     trackSection: TrackSectionRecord;
 }
+
+const selectors: SelectorMap = {
+    "&:hover": {
+        cursor: "pointer",
+    },
+    [`&:hover .${ContextualIconButtonClassName}`]: {
+        visibility: "visible",
+    },
+};
 
 const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
     (props: TrackSectionCardProps) => {
@@ -66,11 +76,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             trackSection,
         } = props;
 
-        const borderProps = getBorderXProps({
-            isFirst,
-            isLast,
-            borderRadius: minorScale(1),
-        });
         const { remove } = useTrackSectionsState({
             trackId: trackSection.track_id,
         });
@@ -126,22 +131,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             ? theme.colors.gray400
             : theme.colors.gray200;
 
-        const contextualButtonClass = css({ visibility: "hidden" }).toString();
-        const cardClass = css(
-            hover({ cursor: "pointer" }),
-            select(`&:hover .${contextualButtonClass}`, {
-                visibility: "visible",
-            })
-        ).toString();
-
         return (
             <Draggable draggableId={trackSection.id} index={trackSection.index}>
                 {(provided) => (
                     <Pane
-                        {...borderProps}
                         {...provided.draggableProps}
                         backgroundColor={backgroundColor}
-                        className={cardClass}
                         display="flex"
                         flexDirection="row"
                         height={majorScale(10)}
@@ -158,10 +153,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                             marginTop={-majorScale(1)}
                             minWidth={width}
                             position="absolute"
+                            selectors={selectors}
                             width={width}>
                             <ContextualIconButton
                                 backgroundColor={backgroundColor}
-                                className={contextualButtonClass}
                                 icon={DeleteIcon}
                                 id={trackSection.id}
                                 intent="danger"
@@ -172,7 +167,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                             {track.isSequencer() && (
                                 <ContextualIconButton
                                     backgroundColor={backgroundColor}
-                                    className={contextualButtonClass}
                                     icon={HeatGridIcon}
                                     id={trackSection.id}
                                     isLastCard={isLast}
@@ -183,7 +177,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                             {!track.isSequencer() && (
                                 <ContextualIconButton
                                     backgroundColor={backgroundColor}
-                                    className={contextualButtonClass}
                                     icon={StepChartIcon}
                                     id={trackSection.id}
                                     isLastCard={isLast}
@@ -193,11 +186,9 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                             )}
                             <ContextualIconButton
                                 backgroundColor={backgroundColor}
-                                className={contextualButtonClass}
                                 dragHandleProps={provided.dragHandleProps}
                                 icon={DragHandleHorizontalIcon}
                                 id={trackSection.id}
-                                isCornerButton={true}
                                 isLastCard={isLast}
                                 marginRight={
                                     isLast ? -majorScale(1) : undefined
