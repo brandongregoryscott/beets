@@ -1,6 +1,5 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import {
-    Card,
     DeleteIcon,
     DragHandleHorizontalIcon,
     majorScale,
@@ -16,7 +15,6 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import type { TrackRecord } from "models/track-record";
 import { useTheme } from "hooks/use-theme";
 import { useTracksState } from "hooks/use-tracks-state";
-import { Draggable } from "react-beautiful-dnd";
 import {
     ContextualIconButton,
     ContextualIconButtonClassName,
@@ -72,74 +70,64 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     const handleRemove = useCallback(() => remove(track), [remove, track]);
 
     return (
-        <Draggable draggableId={track.id} index={track.index}>
-            {(provided) => (
+        <Flex.Row alignItems="center" height={majorScale(10)}>
+            <Pane
+                alignItems="flex-start"
+                background={colors.gray200}
+                display="flex"
+                flexDirection="column"
+                minWidth={width}
+                padding={majorScale(1)}
+                position="relative"
+                selectors={selectors}
+                width={width}>
                 <Flex.Row
-                    alignItems="center"
-                    height={majorScale(10)}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}>
-                    <Pane
-                        alignItems="flex-start"
-                        background={colors.gray200}
-                        display="flex"
-                        flexDirection="column"
-                        marginRight={majorScale(2)}
-                        minWidth={width}
-                        padding={majorScale(1)}
-                        position="relative"
-                        selectors={selectors}
-                        width={width}>
-                        <Flex.Row
-                            justifyContent="flex-end"
-                            marginTop={-majorScale(1)}
-                            minWidth={width}
-                            position="absolute"
-                            width={width}>
-                            <ContextualIconButton
-                                icon={DeleteIcon}
-                                id={track.id}
-                                intent="danger"
-                                isLastCard={true}
-                                onClick={handleRemove}
-                                tooltipText="Remove track"
-                            />
-                            <ContextualIconButton
-                                dragHandleProps={provided.dragHandleProps}
-                                icon={DragHandleHorizontalIcon}
-                                id={track.id}
-                                isLastCard={true}
-                                marginRight={majorScale(1)}
-                                tooltipText="Move track"
-                            />
-                        </Flex.Row>
-                        <EditableParagraph onChange={setName} value={name} />
-                        <Flex.Row alignItems="center">
-                            <Tooltip content="Mute Track">
-                                <IconButton
-                                    icon={mute ? VolumeOffIcon : VolumeUpIcon}
-                                    marginRight={iconMarginRight}
-                                    onClick={toggleMute}
-                                />
-                            </Tooltip>
-                            <Tooltip content="Solo Track">
-                                <IconButton
-                                    icon={solo ? PropertyIcon : PropertiesIcon}
-                                    marginRight={iconMarginRight}
-                                    onClick={toggleSolo}
-                                />
-                            </Tooltip>
-                            <Slider
-                                label="Vol"
-                                onChange={setLocalVolume}
-                                onChangeEnd={handleVolumeChangeEnd}
-                                value={localVolume}
-                            />
-                        </Flex.Row>
-                    </Pane>
+                    justifyContent="flex-end"
+                    marginTop={-majorScale(1)}
+                    minWidth={width}
+                    position="absolute"
+                    width={width}>
+                    <ContextualIconButton
+                        icon={DeleteIcon}
+                        id={track.id}
+                        intent="danger"
+                        isLastCard={true}
+                        onClick={handleRemove}
+                        tooltipText="Remove track"
+                    />
+                    <ContextualIconButton
+                        icon={DragHandleHorizontalIcon}
+                        id={track.id}
+                        isLastCard={true}
+                        marginRight={majorScale(1)}
+                        tooltipText="Move track"
+                    />
                 </Flex.Row>
-            )}
-        </Draggable>
+                <EditableParagraph onChange={setName} value={name} />
+                <Flex.Row alignItems="center">
+                    <Tooltip content="Mute Track">
+                        <IconButton
+                            icon={mute ? VolumeOffIcon : VolumeUpIcon}
+                            marginRight={iconMarginRight}
+                            onClick={toggleMute}
+                        />
+                    </Tooltip>
+                    <Tooltip content="Solo Track">
+                        <IconButton
+                            icon={solo ? PropertyIcon : PropertiesIcon}
+                            marginRight={iconMarginRight}
+                            onClick={toggleSolo}
+                        />
+                    </Tooltip>
+                    <Slider
+                        label="Vol"
+                        onChange={setLocalVolume}
+                        onChangeEnd={handleVolumeChangeEnd}
+                        value={localVolume}
+                    />
+                </Flex.Row>
+            </Pane>
+        </Flex.Row>
     );
 };
 

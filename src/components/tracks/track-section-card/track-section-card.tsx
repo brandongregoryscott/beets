@@ -17,7 +17,6 @@ import type { FileRecord } from "models/file-record";
 import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
 import { memo, useCallback } from "react";
-import { Draggable } from "react-beautiful-dnd";
 import { useListFiles } from "hooks/domain/files/use-list-files";
 import { useDialog } from "hooks/use-dialog";
 import { useTheme } from "hooks/use-theme";
@@ -132,102 +131,93 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             : theme.colors.gray200;
 
         return (
-            <Draggable draggableId={trackSection.id} index={trackSection.index}>
-                {(provided) => (
-                    <Pane
-                        {...provided.draggableProps}
+            <Pane
+                backgroundColor={backgroundColor}
+                display="flex"
+                flexDirection="row"
+                height={majorScale(10)}
+                onClick={onSelect(trackSection)}
+                paddingLeft={isFirst ? majorScale(1) : undefined}
+                paddingRight={isLast ? majorScale(1) : undefined}
+                paddingY={majorScale(1)}
+                position="relative">
+                <Pane
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="flex-end"
+                    marginTop={-majorScale(1)}
+                    minWidth={width}
+                    position="absolute"
+                    selectors={selectors}
+                    width={width}>
+                    <ContextualIconButton
                         backgroundColor={backgroundColor}
-                        display="flex"
-                        flexDirection="row"
-                        height={majorScale(10)}
-                        onClick={onSelect(trackSection)}
-                        paddingLeft={isFirst ? majorScale(1) : undefined}
-                        paddingRight={isLast ? majorScale(1) : undefined}
-                        paddingY={majorScale(1)}
-                        position="relative"
-                        ref={provided.innerRef}>
-                        <Pane
-                            display="flex"
-                            flexDirection="row"
-                            justifyContent="flex-end"
-                            marginTop={-majorScale(1)}
-                            minWidth={width}
-                            position="absolute"
-                            selectors={selectors}
-                            width={width}>
-                            <ContextualIconButton
-                                backgroundColor={backgroundColor}
-                                icon={DeleteIcon}
-                                id={trackSection.id}
-                                intent="danger"
-                                isLastCard={isLast}
-                                onClick={handleRemove}
-                                tooltipText="Remove section"
-                            />
-                            {track.isSequencer() && (
-                                <ContextualIconButton
-                                    backgroundColor={backgroundColor}
-                                    icon={HeatGridIcon}
-                                    id={trackSection.id}
-                                    isLastCard={isLast}
-                                    onClick={handleOpenSequencerDialog}
-                                    tooltipText="Sequencer"
-                                />
-                            )}
-                            {!track.isSequencer() && (
-                                <ContextualIconButton
-                                    backgroundColor={backgroundColor}
-                                    icon={StepChartIcon}
-                                    id={trackSection.id}
-                                    isLastCard={isLast}
-                                    onClick={handleOpenPianoRollDialog}
-                                    tooltipText="Piano Roll"
-                                />
-                            )}
-                            <ContextualIconButton
-                                backgroundColor={backgroundColor}
-                                dragHandleProps={provided.dragHandleProps}
-                                icon={DragHandleHorizontalIcon}
-                                id={trackSection.id}
-                                isLastCard={isLast}
-                                marginRight={
-                                    isLast ? -majorScale(1) : undefined
-                                }
-                                tooltipText="Move section"
-                            />
-                        </Pane>
-                        <TrackSectionStepGrid
-                            stepCount={stepCount}
-                            stepCountOffset={stepCountOffset}
-                            trackSection={trackSection}
-                            trackSectionSteps={trackSectionSteps}
+                        icon={DeleteIcon}
+                        id={trackSection.id}
+                        intent="danger"
+                        isLastCard={isLast}
+                        onClick={handleRemove}
+                        tooltipText="Remove section"
+                    />
+                    {track.isSequencer() && (
+                        <ContextualIconButton
+                            backgroundColor={backgroundColor}
+                            icon={HeatGridIcon}
+                            id={trackSection.id}
+                            isLastCard={isLast}
+                            onClick={handleOpenSequencerDialog}
+                            tooltipText="Sequencer"
                         />
-                        {sequencerDialogOpen && files != null && (
-                            <SequencerDialog
-                                files={files}
-                                onCloseComplete={handleCloseSequencerDialog}
-                                onStepChange={handleTrackSectionStepsChange}
-                                onStepCountChange={handleStepCountChange}
-                                track={track}
-                                trackSection={trackSection}
-                                trackSectionSteps={trackSectionSteps}
-                            />
-                        )}
-                        {pianoRollDialogOpen && (
-                            <PianoRollDialog
-                                file={file}
-                                instrument={instrument}
-                                onChange={handleTrackSectionStepsChange}
-                                onCloseComplete={handleClosePianoRollDialog}
-                                onStepCountChange={handleStepCountChange}
-                                track={track}
-                                trackSection={trackSection}
-                                trackSectionSteps={trackSectionSteps}
-                            />
-                        )}
-                    </Pane>
+                    )}
+                    {!track.isSequencer() && (
+                        <ContextualIconButton
+                            backgroundColor={backgroundColor}
+                            icon={StepChartIcon}
+                            id={trackSection.id}
+                            isLastCard={isLast}
+                            onClick={handleOpenPianoRollDialog}
+                            tooltipText="Piano Roll"
+                        />
+                    )}
+                    <ContextualIconButton
+                        backgroundColor={backgroundColor}
+                        icon={DragHandleHorizontalIcon}
+                        id={trackSection.id}
+                        isLastCard={isLast}
+                        marginRight={isLast ? -majorScale(1) : undefined}
+                        tooltipText="Move section"
+                    />
+                </Pane>
+                <TrackSectionStepGrid
+                    stepCount={stepCount}
+                    stepCountOffset={stepCountOffset}
+                    trackSection={trackSection}
+                    trackSectionSteps={trackSectionSteps}
+                />
+                {sequencerDialogOpen && files != null && (
+                    <SequencerDialog
+                        files={files}
+                        onCloseComplete={handleCloseSequencerDialog}
+                        onStepChange={handleTrackSectionStepsChange}
+                        onStepCountChange={handleStepCountChange}
+                        track={track}
+                        trackSection={trackSection}
+                        trackSectionSteps={trackSectionSteps}
+                    />
                 )}
-            </Draggable>
+                {pianoRollDialogOpen && (
+                    <PianoRollDialog
+                        file={file}
+                        instrument={instrument}
+                        onChange={handleTrackSectionStepsChange}
+                        onCloseComplete={handleClosePianoRollDialog}
+                        onStepCountChange={handleStepCountChange}
+                        track={track}
+                        trackSection={trackSection}
+                        trackSectionSteps={trackSectionSteps}
+                    />
+                )}
+            </Pane>
         );
     }
 );
