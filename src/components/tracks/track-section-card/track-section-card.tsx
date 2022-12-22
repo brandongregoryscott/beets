@@ -140,7 +140,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                 paddingLeft={isFirst ? majorScale(1) : undefined}
                 paddingRight={isLast ? majorScale(1) : undefined}
                 paddingY={majorScale(1)}
-                position="relative">
+                position="relative"
+                selectors={selectors}>
                 <Pane
                     display="flex"
                     flexDirection="row"
@@ -148,7 +149,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                     marginTop={-majorScale(1)}
                     minWidth={width}
                     position="absolute"
-                    selectors={selectors}
                     width={width}>
                     <ContextualIconButton
                         backgroundColor={backgroundColor}
