@@ -6,7 +6,6 @@ import type { SelectorMap } from "ui-box";
 
 interface TrackTimeCardProps {
     index: number;
-    stepCount: number;
 }
 
 const selectors: SelectorMap = {
