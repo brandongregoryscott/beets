@@ -12,6 +12,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import type { ListOnScrollProps } from "react-window";
 import { VariableSizeList } from "react-window";
 import type { SelectorMap } from "ui-box";
+import { getTrackListWidth } from "utils/window-utils";
 
 interface VirtualizedTrackRowProps {
     onScroll: (props: ListOnScrollProps) => void;
@@ -95,7 +96,7 @@ const VirtualizedTrackRow = forwardRef(
                                 outerRef={provided.innerRef}
                                 ref={ref}
                                 style={getStyle(showScrollbar)}
-                                width={1000}>
+                                width={getTrackListWidth()}>
                                 {VirtualizedTrackSectionCard}
                             </VariableSizeList>
                         )}

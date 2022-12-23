@@ -7,6 +7,7 @@ import type { ListOnScrollProps } from "react-window";
 import { FixedSizeList } from "react-window";
 import type { SelectorMap } from "ui-box";
 import Box from "ui-box";
+import { getTrackListWidth } from "utils/window-utils";
 
 interface VirtualizedTrackTimeProps {
     onScroll: (props: ListOnScrollProps) => void;
@@ -19,7 +20,6 @@ const selectors: SelectorMap = {
 };
 
 const style: React.CSSProperties = {
-    // overflowY: "hidden",
     // Hide scrollbars on Edge/IE
     msOverflowStyle: "none",
     // Hide scrollbars on Firefox
@@ -41,7 +41,7 @@ const VirtualizedTrackTime = forwardRef(
                     onScroll={onScroll}
                     ref={ref}
                     style={style}
-                    width={1000}>
+                    width={getTrackListWidth()}>
                     {VirtualizedTrackTimeCard}
                 </FixedSizeList>
             </Box>

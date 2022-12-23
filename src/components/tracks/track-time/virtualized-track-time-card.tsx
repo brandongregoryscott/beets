@@ -1,7 +1,8 @@
 import { TrackTimeCard } from "components/tracks/track-time/track-time-card";
 import { useToneControls } from "hooks/use-tone-controls";
 import { useWorkstationState } from "hooks/use-workstation-state";
-import React from "react";
+import React, { memo } from "react";
+import { areEqual } from "react-window";
 import { toDataAttributes } from "utils/data-attribute-utils";
 
 interface VirtualizedTrackTimeCardProps {
@@ -9,7 +10,7 @@ interface VirtualizedTrackTimeCardProps {
     style: React.CSSProperties;
 }
 
-const VirtualizedTrackTimeCard: React.FC<VirtualizedTrackTimeCardProps> = (
+const _VirtualizedTrackTimeCard: React.FC<VirtualizedTrackTimeCardProps> = (
     props: VirtualizedTrackTimeCardProps
 ) => {
     const { style, index } = props;
@@ -28,5 +29,8 @@ const VirtualizedTrackTimeCard: React.FC<VirtualizedTrackTimeCardProps> = (
         </div>
     );
 };
+
+const VirtualizedTrackTimeCard = memo(_VirtualizedTrackTimeCard, areEqual);
+VirtualizedTrackTimeCard.displayName = "VirtualizedTrackTimeCard";
 
 export { VirtualizedTrackTimeCard };
