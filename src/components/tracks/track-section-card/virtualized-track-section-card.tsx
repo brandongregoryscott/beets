@@ -67,13 +67,10 @@ const _VirtualizedTrackSectionCardContent: React.FC<
     );
 
     return (
-        <div
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-            style={style}>
+        <div {...provided.draggableProps} ref={provided.innerRef} style={style}>
             {trackSection != null && track != null && (
                 <TrackSectionCard
+                    dragHandleProps={provided.dragHandleProps}
                     onChange={updateTrackSection}
                     stepCountOffset={getStepCountOffset(
                         trackSections,

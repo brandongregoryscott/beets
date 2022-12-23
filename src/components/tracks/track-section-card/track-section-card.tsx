@@ -29,8 +29,10 @@ import { TrackSectionStepColumnWidth } from "components/tracks/track-section-car
 import { useWorkstationState } from "hooks/use-workstation-state";
 import { unsoloAll } from "utils/track-utils";
 import type { SelectorMap } from "ui-box";
+import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 interface TrackSectionCardProps {
+    dragHandleProps: DraggableProvidedDragHandleProps | undefined;
     file?: FileRecord;
     instrument?: InstrumentRecord;
     isFirst?: boolean;
@@ -65,6 +67,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
         ] = useDialog();
 
         const {
+            dragHandleProps,
             instrument,
             file,
             isFirst = false,
@@ -181,6 +184,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                     )}
                     <ContextualIconButton
                         backgroundColor={backgroundColor}
+                        dragHandleProps={dragHandleProps}
                         icon={DragHandleHorizontalIcon}
                         id={trackSection.id}
                         isLastCard={isLast}

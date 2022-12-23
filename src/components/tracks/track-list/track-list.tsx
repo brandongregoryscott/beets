@@ -1,12 +1,12 @@
 import type { TrackRecord } from "models/track-record";
 import type { List } from "immutable";
 import type { RefObject } from "react";
-import { useCallback } from "react";
 import React, { createRef, useMemo } from "react";
 import { VirtualizedTrackRow } from "components/tracks/track-list/virtualized-track-row";
 import { range, zipObject } from "lodash";
 import type { ListOnScrollProps, VariableSizeList } from "react-window";
 import type { TrackSectionRecord } from "models/track-section-record";
+import { useDebounce } from "rooks";
 
 interface TrackListProps {
     tracks?: List<TrackRecord>;
@@ -31,22 +31,18 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
         Record<string, RefObject<VariableSizeList<TrackSectionRecord[]>>>
     >(() => zipObject(trackIds, refs), [refs, trackIds]);
 
-    const handleScroll = useCallback(
-        (props: ListOnScrollProps) => {
-            // See https://github.com/bvaughn/react-window/issues/627#issuecomment-1070347334
-            const { scrollUpdateWasRequested, scrollOffset } = props;
-            if (scrollUpdateWasRequested) {
-                return;
-            }
+    /**
+     * @see https://github.com/bvaughn/react-window/issues/627#issuecomment-1070347334
+     */
+    const handleScroll = useDebounce((props: ListOnScrollProps) => {
+        const { scrollOffset } = props;
 
+        window.requestAnimationFrame(() => {
             refs.forEach((ref) => {
-                window.requestAnimationFrame(() => {
-                    ref.current?.scrollTo(scrollOffset);
-                });
+                ref.current?.scrollTo(scrollOffset);
             });
-        },
-        [refs]
-    );
+        });
+    }, 1);
 
     return (
         <React.Fragment>
