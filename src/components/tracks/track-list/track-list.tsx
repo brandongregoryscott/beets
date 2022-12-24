@@ -18,11 +18,12 @@ import { majorScale, Pane } from "evergreen-ui";
 import { VirtualizedTrackTime } from "components/tracks/track-time/virtualized-track-time";
 
 interface TrackListProps {
+    isDragging?: boolean;
     tracks?: List<TrackRecord>;
 }
 
 const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
-    const { tracks } = props;
+    const { isDragging = false, tracks } = props;
     const { state: workstationState } = useWorkstationState();
 
     const trackTimeRef = useRef<FixedSizeList>(null);
@@ -64,7 +65,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                     key={track.id}
                     onScroll={handleScroll}
                     ref={trackRowRefs.current[index]}
-                    showScrollbar={index === tracks?.count() - 1}
+                    showScrollbar={!isDragging && index === tracks?.count() - 1}
                     track={track}
                 />
             ))}

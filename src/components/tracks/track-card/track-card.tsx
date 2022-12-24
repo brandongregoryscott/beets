@@ -23,8 +23,10 @@ import { Flex } from "components/flex";
 import { Slider } from "components/mantine/slider";
 import { IconButton } from "components/icon-button";
 import type { SelectorMap } from "ui-box";
+import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 interface TrackCardProps {
+    dragHandleProps: DraggableProvidedDragHandleProps | undefined;
     track: TrackRecord;
 }
 
@@ -37,7 +39,7 @@ const selectors: SelectorMap = {
 const width = majorScale(21);
 
 const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
-    const { track } = props;
+    const { dragHandleProps, track } = props;
     const { id, name, mute, solo, volume } = track;
     const { update, remove } = useTracksState();
 
@@ -96,6 +98,7 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                         tooltipText="Remove track"
                     />
                     <ContextualIconButton
+                        dragHandleProps={dragHandleProps}
                         icon={DragHandleHorizontalIcon}
                         id={track.id}
                         isLastCard={true}

@@ -8,7 +8,7 @@ import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
 import type { ForwardedRef } from "react";
 import { forwardRef, useCallback, useMemo } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import type { ListOnScrollProps } from "react-window";
 import { VariableSizeList } from "react-window";
 import type { SelectorMap } from "ui-box";
@@ -19,10 +19,6 @@ interface VirtualizedTrackRowProps {
     showScrollbar?: boolean;
     track: TrackRecord;
 }
-
-const hiddenVerticalScrollbarStyle: React.CSSProperties = {
-    overflowY: "hidden",
-};
 
 const hiddenScrollbarStyle: React.CSSProperties = {
     // Hide scrollbars on Edge/IE
@@ -63,52 +59,68 @@ const VirtualizedTrackRow = forwardRef(
             [trackSections]
         );
 
+        const variableListHeight = showScrollbar
+            ? majorScale(12)
+            : majorScale(10);
+        const variableListStyle = showScrollbar
+            ? undefined
+            : hiddenScrollbarStyle;
+        const outerSelectors = showScrollbar ? undefined : selectors;
+
         return (
-            <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-                <Flex.Row selectors={!showScrollbar ? selectors : undefined}>
-                    <TrackCard track={track} />
-                    <Droppable
-                        direction="horizontal"
-                        droppableId={track.id}
-                        mode="virtual"
-                        renderClone={(provided, _snapshot, rubric) => (
-                            <VirtualizedTrackSectionCard.Content
-                                provided={provided}
-                                trackSection={
-                                    trackSections[rubric.source.index]
-                                }
+            <Draggable draggableId={track.id} index={track.index}>
+                {(provided) => (
+                    <Flex.Row
+                        {...provided.draggableProps}
+                        ref={provided.innerRef}
+                        selectors={outerSelectors}>
+                        <DragDropContext
+                            onDragEnd={onDragEnd}
+                            onDragStart={onDragStart}>
+                            <TrackCard
+                                dragHandleProps={provided.dragHandleProps}
+                                track={track}
                             />
-                        )}>
-                        {(provided) => (
-                            <VariableSizeList
-                                {...provided.droppableProps}
-                                estimatedItemSize={majorScale(19)}
-                                height={
-                                    !showScrollbar
-                                        ? majorScale(10)
-                                        : majorScale(12)
-                                }
-                                itemCount={trackSections.length}
-                                itemData={trackSections}
-                                itemSize={getItemSize}
-                                layout="horizontal"
-                                onScroll={onScroll}
-                                outerRef={provided.innerRef}
-                                ref={ref}
-                                style={getStyle(showScrollbar)}
-                                width={getTrackListWidth()}>
-                                {VirtualizedTrackSectionCard}
-                            </VariableSizeList>
-                        )}
-                    </Droppable>
-                </Flex.Row>
-            </DragDropContext>
+                            <Droppable
+                                direction="horizontal"
+                                droppableId={track.id}
+                                mode="virtual"
+                                renderClone={(provided, _snapshot, rubric) => (
+                                    <VirtualizedTrackSectionCard.Content
+                                        provided={provided}
+                                        trackSection={
+                                            trackSections[rubric.source.index]
+                                        }
+                                    />
+                                )}>
+                                {(provided) => (
+                                    <VariableSizeList
+                                        {...provided.droppableProps}
+                                        estimatedItemSize={majorScale(19)}
+                                        height={variableListHeight}
+                                        itemCount={trackSections.length}
+                                        itemData={trackSections}
+                                        itemSize={getItemSize}
+                                        layout="horizontal"
+                                        onScroll={onScroll}
+                                        outerRef={provided.innerRef}
+                                        ref={ref}
+                                        style={variableListStyle}
+                                        width={getTrackListWidth()}>
+                                        {VirtualizedTrackSectionCard}
+                                    </VariableSizeList>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    </Flex.Row>
+                )}
+            </Draggable>
         );
     }
 );
 
-const getStyle = (showScrollbar: boolean): React.CSSProperties =>
-    showScrollbar ? hiddenVerticalScrollbarStyle : hiddenScrollbarStyle;
+const getStyle = (showScrollbar: boolean): React.CSSProperties | undefined =>
+    showScrollbar ? undefined : hiddenScrollbarStyle;
 
 VirtualizedTrackRow.displayName = "VirtualizedTrackRow";
 
