@@ -1,10 +1,10 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import {
+    Card,
     DeleteIcon,
     DragHandleHorizontalIcon,
     majorScale,
     minorScale,
-    Pane,
     PropertiesIcon,
     PropertyIcon,
     Tooltip,
@@ -73,7 +73,7 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     return (
         <Flex.Row alignItems="center" height={majorScale(10)}>
-            <Pane
+            <Card
                 alignItems="flex-start"
                 background={colors.gray200}
                 display="flex"
@@ -129,7 +129,7 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                         value={localVolume}
                     />
                 </Flex.Row>
-            </Pane>
+            </Card>
         </Flex.Row>
     );
 };

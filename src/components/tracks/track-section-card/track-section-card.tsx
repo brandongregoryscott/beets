@@ -9,6 +9,7 @@ import {
     DragHandleHorizontalIcon,
     HeatGridIcon,
     majorScale,
+    minorScale,
     Pane,
     StepChartIcon,
 } from "evergreen-ui";
@@ -30,6 +31,7 @@ import { useWorkstationState } from "hooks/use-workstation-state";
 import { unsoloAll } from "utils/track-utils";
 import type { SelectorMap } from "ui-box";
 import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { getBorderXProps } from "utils/core-utils";
 
 interface TrackSectionCardProps {
     dragHandleProps: DraggableProvidedDragHandleProps | undefined;
@@ -77,6 +79,12 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             track,
             trackSection,
         } = props;
+
+        const borderProps = getBorderXProps({
+            isFirst,
+            isLast,
+            borderRadius: minorScale(1),
+        });
 
         const { remove } = useTrackSectionsState({
             trackId: trackSection.track_id,
@@ -135,6 +143,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
 
         return (
             <Pane
+                {...borderProps}
                 backgroundColor={backgroundColor}
                 display="flex"
                 flexDirection="row"

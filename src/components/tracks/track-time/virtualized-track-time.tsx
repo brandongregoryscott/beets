@@ -7,7 +7,7 @@ import type { ListOnScrollProps } from "react-window";
 import { FixedSizeList } from "react-window";
 import type { SelectorMap } from "ui-box";
 import Box from "ui-box";
-import { getTrackListWidth } from "utils/window-utils";
+import { getTrackTimeWidth } from "utils/window-utils";
 
 interface VirtualizedTrackTimeProps {
     onScroll: (props: ListOnScrollProps) => void;
@@ -41,7 +41,7 @@ const VirtualizedTrackTime = forwardRef(
                     onScroll={onScroll}
                     ref={ref}
                     style={style}
-                    width={getTrackListWidth()}>
+                    width={getTrackTimeWidth()}>
                     {VirtualizedTrackTimeCard}
                 </FixedSizeList>
             </Box>

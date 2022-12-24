@@ -1,7 +1,7 @@
 import { majorScale } from "evergreen-ui";
 
-const getTrackListWidth = (): number => {
-    return window.innerWidth - majorScale(25);
-};
+const getTrackListWidth = (): number => window.innerWidth - majorScale(27);
 
-export { getTrackListWidth };
+const getTrackTimeWidth = (): number => getTrackListWidth() - majorScale(7);
+
+export { getTrackListWidth, getTrackTimeWidth };

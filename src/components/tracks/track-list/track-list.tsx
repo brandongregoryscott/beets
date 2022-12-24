@@ -53,7 +53,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
 
     return (
         <React.Fragment>
-            <Pane marginLeft={majorScale(21)}>
+            <Pane marginLeft={majorScale(24)}>
                 <VirtualizedTrackTime
                     onScroll={handleScroll}
                     ref={trackTimeRef}

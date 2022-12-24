@@ -1,4 +1,6 @@
 import { TrackSectionCard } from "components/tracks/track-section-card/track-section-card";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useGetInstrument } from "hooks/domain/instruments/use-get-instrument";
 import { useTrackSectionsState } from "hooks/use-track-sections-state";
 import { useTracksState } from "hooks/use-tracks-state";
 import { merge } from "lodash";
@@ -7,6 +9,8 @@ import React, { memo, useMemo } from "react";
 import type { DraggableProvided } from "react-beautiful-dnd";
 import { Draggable } from "react-beautiful-dnd";
 import { areEqual } from "react-window";
+import { isNotNilOrEmpty } from "utils/core-utils";
+import { getFileById } from "utils/file-utils";
 import { getStepCountOffset } from "utils/track-section-utils";
 
 interface VirtualizedTrackSectionCardProps {
@@ -51,31 +55,46 @@ const _VirtualizedTrackSectionCardContent: React.FC<
     VirtualizedTrackSectionCardContentProps
 > = (props) => {
     const { provided, trackSection, style: styleProp } = props;
+    const { index } = trackSection;
+    const { draggableProps, innerRef } = provided;
+    const { style: draggableStyle } = draggableProps;
     const { state: tracks } = useTracksState();
     const track = useMemo(
         () => tracks.find((track) => track.id === trackSection.track_id),
         [trackSection.track_id, tracks]
+    );
+    const instrumentId = track?.instrument_id;
+    const { resultObject: files } = useListFiles();
+    const { resultObject: instrument } = useGetInstrument({
+        id: instrumentId!,
+        enabled: isNotNilOrEmpty(instrumentId),
+        files,
+    });
+    const instrumentFile = useMemo(
+        () => getFileById(instrument?.file_id, files),
+        [files, instrument]
     );
     const { state: trackSections, update: updateTrackSection } =
         useTrackSectionsState({
             trackId: track?.id ?? "",
         });
 
-    const style = useMemo(
-        () => merge({}, styleProp, provided.draggableProps.style),
-        [provided.draggableProps.style, styleProp]
+    const style: React.CSSProperties = useMemo(
+        () => merge({}, styleProp, draggableStyle),
+        [draggableStyle, styleProp]
     );
 
     return (
-        <div {...provided.draggableProps} ref={provided.innerRef} style={style}>
+        <div {...draggableProps} ref={innerRef} style={style}>
             {trackSection != null && track != null && (
                 <TrackSectionCard
                     dragHandleProps={provided.dragHandleProps}
+                    file={instrumentFile}
+                    instrument={instrument}
+                    isFirst={index === 0}
+                    isLast={index === trackSections.count() - 1}
                     onChange={updateTrackSection}
-                    stepCountOffset={getStepCountOffset(
-                        trackSections,
-                        trackSection.index
-                    )}
+                    stepCountOffset={getStepCountOffset(trackSections, index)}
                     track={track}
                     trackSection={trackSection}
                 />
