@@ -1,7 +1,4 @@
-import {
-    ContextualIconButton,
-    ContextualIconButtonClassName,
-} from "components/contextual-icon-button";
+import { ContextualIconButton } from "components/contextual-icon-button";
 import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
@@ -32,6 +29,8 @@ import { unsoloAll } from "utils/track-utils";
 import type { SelectorMap } from "ui-box";
 import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { getBorderXProps } from "utils/core-utils";
+import { useBoolean } from "hooks/use-boolean";
+import { useDebounce } from "rooks";
 
 interface TrackSectionCardProps {
     dragHandleProps: DraggableProvidedDragHandleProps | undefined;
@@ -49,9 +48,6 @@ const selectors: SelectorMap = {
     "&:hover": {
         cursor: "pointer",
     },
-    [`&:hover .${ContextualIconButtonClassName}`]: {
-        visibility: "visible",
-    },
 };
 
 const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
@@ -67,6 +63,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             openPianoRollDialog,
             handleClosePianoRollDialog,
         ] = useDialog();
+
+        const { value: isHovered, setValue: setIsHovered } = useBoolean();
+        const handleMouseOver = useDebounce(() => setIsHovered(true), 25);
+        const handleMouseLeave = useDebounce(() => setIsHovered(false), 25);
 
         const {
             dragHandleProps,
@@ -149,58 +149,61 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                 flexDirection="row"
                 height={majorScale(10)}
                 onClick={onSelect(trackSection)}
+                onMouseLeave={handleMouseLeave}
+                onMouseOver={handleMouseOver}
                 paddingLeft={isFirst ? majorScale(1) : undefined}
                 paddingRight={isLast ? majorScale(1) : undefined}
                 paddingY={majorScale(1)}
                 position="relative"
                 selectors={selectors}>
-                <Pane
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="flex-end"
-                    marginTop={-majorScale(1)}
-                    minWidth={width}
-                    position="absolute"
-                    width={width}>
-                    <ContextualIconButton
-                        backgroundColor={backgroundColor}
-                        icon={DeleteIcon}
-                        id={trackSection.id}
-                        intent="danger"
-                        isLastCard={isLast}
-                        onClick={handleRemove}
-                        tooltipText="Remove section"
-                    />
-                    {track.isSequencer() && (
+                {isHovered && (
+                    <Pane
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="flex-end"
+                        marginTop={-majorScale(1)}
+                        minWidth={width}
+                        position="absolute"
+                        width={width}>
                         <ContextualIconButton
                             backgroundColor={backgroundColor}
-                            icon={HeatGridIcon}
+                            icon={DeleteIcon}
                             id={trackSection.id}
+                            intent="danger"
                             isLastCard={isLast}
-                            onClick={handleOpenSequencerDialog}
-                            tooltipText="Sequencer"
+                            onClick={handleRemove}
+                            tooltipText="Remove section"
                         />
-                    )}
-                    {!track.isSequencer() && (
+                        {track.isSequencer() && (
+                            <ContextualIconButton
+                                backgroundColor={backgroundColor}
+                                icon={HeatGridIcon}
+                                id={trackSection.id}
+                                isLastCard={isLast}
+                                onClick={handleOpenSequencerDialog}
+                                tooltipText="Sequencer"
+                            />
+                        )}
+                        {!track.isSequencer() && (
+                            <ContextualIconButton
+                                backgroundColor={backgroundColor}
+                                icon={StepChartIcon}
+                                id={trackSection.id}
+                                isLastCard={isLast}
+                                onClick={handleOpenPianoRollDialog}
+                                tooltipText="Piano Roll"
+                            />
+                        )}
                         <ContextualIconButton
                             backgroundColor={backgroundColor}
-                            icon={StepChartIcon}
+                            dragHandleProps={dragHandleProps}
+                            icon={DragHandleHorizontalIcon}
                             id={trackSection.id}
                             isLastCard={isLast}
-                            onClick={handleOpenPianoRollDialog}
-                            tooltipText="Piano Roll"
+                            tooltipText="Move section"
                         />
-                    )}
-                    <ContextualIconButton
-                        backgroundColor={backgroundColor}
-                        dragHandleProps={dragHandleProps}
-                        icon={DragHandleHorizontalIcon}
-                        id={trackSection.id}
-                        isLastCard={isLast}
-                        marginRight={isLast ? -majorScale(1) : undefined}
-                        tooltipText="Move section"
-                    />
-                </Pane>
+                    </Pane>
+                )}
                 <TrackSectionStepGrid
                     stepCount={stepCount}
                     stepCountOffset={stepCountOffset}
