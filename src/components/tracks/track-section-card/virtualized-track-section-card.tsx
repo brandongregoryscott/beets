@@ -3,8 +3,11 @@ import { useListFiles } from "hooks/domain/files/use-list-files";
 import { useGetInstrument } from "hooks/domain/instruments/use-get-instrument";
 import { useTrackSectionsState } from "hooks/use-track-sections-state";
 import { useTracksState } from "hooks/use-tracks-state";
+import type { SetStateAction } from "jotai";
 import { merge } from "lodash";
 import type { TrackSectionRecord } from "models/track-section-record";
+import type { Dispatch } from "react";
+import { useState } from "react";
 import React, { memo, useMemo } from "react";
 import type { DraggableProvided } from "react-beautiful-dnd";
 import { Draggable } from "react-beautiful-dnd";
@@ -21,6 +24,7 @@ interface VirtualizedTrackSectionCardProps {
 
 interface VirtualizedTrackSectionCardContentProps {
     provided: DraggableProvided;
+    setIsDragDisabled?: Dispatch<SetStateAction<boolean>>;
     style?: React.CSSProperties;
     trackSection: TrackSectionRecord;
 }
@@ -38,11 +42,17 @@ const _VirtualizedTrackSectionCard: VirtualizedTrackSectionCardComponent = ((
         () => trackSections[index],
         [index, trackSections]
     );
+    const [isDragDisabled, setIsDragDisabled] = useState<boolean>(true);
+
     return (
-        <Draggable draggableId={trackSection.id} index={trackSection.index}>
+        <Draggable
+            draggableId={trackSection.id}
+            index={trackSection.index}
+            isDragDisabled={isDragDisabled}>
             {(provided) => (
                 <VirtualizedTrackSectionCardContent
                     provided={provided}
+                    setIsDragDisabled={setIsDragDisabled}
                     style={style}
                     trackSection={trackSection}
                 />
@@ -54,7 +64,12 @@ const _VirtualizedTrackSectionCard: VirtualizedTrackSectionCardComponent = ((
 const _VirtualizedTrackSectionCardContent: React.FC<
     VirtualizedTrackSectionCardContentProps
 > = (props) => {
-    const { provided, trackSection, style: styleProp } = props;
+    const {
+        setIsDragDisabled,
+        provided,
+        trackSection,
+        style: styleProp,
+    } = props;
     const { index } = trackSection;
     const { draggableProps, innerRef } = provided;
     const { style: draggableStyle } = draggableProps;
@@ -94,6 +109,7 @@ const _VirtualizedTrackSectionCardContent: React.FC<
                     isFirst={index === 0}
                     isLast={index === trackSections.count() - 1}
                     onChange={updateTrackSection}
+                    setIsDragDisabled={setIsDragDisabled}
                     stepCountOffset={getStepCountOffset(trackSections, index)}
                     track={track}
                     trackSection={trackSection}

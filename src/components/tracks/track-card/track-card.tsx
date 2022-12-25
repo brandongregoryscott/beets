@@ -11,6 +11,7 @@ import {
     VolumeOffIcon,
     VolumeUpIcon,
 } from "evergreen-ui";
+import type { Dispatch, SetStateAction } from "react";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import type { TrackRecord } from "models/track-record";
 import { useTheme } from "hooks/use-theme";
@@ -25,6 +26,7 @@ import { useDebounce } from "rooks";
 
 interface TrackCardProps {
     dragHandleProps: DraggableProvidedDragHandleProps | undefined;
+    setIsDragDisabled?: Dispatch<SetStateAction<boolean>>;
     track: TrackRecord;
 }
 
@@ -32,14 +34,14 @@ const iconMarginRight = minorScale(2);
 const width = majorScale(21);
 
 const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
-    const { dragHandleProps, track } = props;
+    const { setIsDragDisabled, dragHandleProps, track } = props;
     const { id, name, mute, solo, volume } = track;
     const { colors } = useTheme();
     const { update, remove } = useTracksState();
 
     const { value: isHovered, setValue: setIsHovered } = useBoolean();
     const handleMouseOver = useDebounce(() => setIsHovered(true), 25);
-    const handleMouseLeave = useDebounce(() => setIsHovered(false), 25);
+    const handleMouseOut = useDebounce(() => setIsHovered(false), 25);
 
     const [localVolume, setLocalVolume] = useState<number>(volume);
     useEffect(() => setLocalVolume(volume), [volume]);
@@ -70,12 +72,13 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
     return (
         <Flex.Row alignItems="center" height={majorScale(10)}>
             <Card
+                {...dragHandleProps}
                 alignItems="flex-start"
                 background={colors.gray200}
                 display="flex"
                 flexDirection="column"
                 minWidth={width}
-                onMouseLeave={handleMouseLeave}
+                onMouseOut={handleMouseOut}
                 onMouseOver={handleMouseOver}
                 padding={majorScale(1)}
                 position="relative"
@@ -96,12 +99,12 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                             tooltipText="Remove track"
                         />
                         <ContextualIconButton
-                            dragHandleProps={dragHandleProps}
                             icon={DragHandleHorizontalIcon}
                             id={track.id}
                             isCornerButton={true}
                             isLastCard={true}
                             marginRight={majorScale(1)}
+                            setIsDragDisabled={setIsDragDisabled}
                             tooltipText="Move track"
                         />
                     </Flex.Row>

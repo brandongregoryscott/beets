@@ -14,6 +14,7 @@ import type { SetStateAction } from "jotai";
 import type { FileRecord } from "models/file-record";
 import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
+import type { Dispatch } from "react";
 import { memo, useCallback } from "react";
 import { useListFiles } from "hooks/domain/files/use-list-files";
 import { useDialog } from "hooks/use-dialog";
@@ -31,6 +32,7 @@ import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { getBorderXProps } from "utils/core-utils";
 import { useBoolean } from "hooks/use-boolean";
 import { useDebounce } from "rooks";
+import { Flex } from "components/flex";
 
 interface TrackSectionCardProps {
     dragHandleProps: DraggableProvidedDragHandleProps | undefined;
@@ -39,6 +41,7 @@ interface TrackSectionCardProps {
     isFirst?: boolean;
     isLast?: boolean;
     onChange: (id: string, update: SetStateAction<TrackSectionRecord>) => void;
+    setIsDragDisabled?: Dispatch<SetStateAction<boolean>>;
     stepCountOffset: number;
     track: TrackRecord;
     trackSection: TrackSectionRecord;
@@ -52,6 +55,19 @@ const selectors: SelectorMap = {
 
 const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
     (props: TrackSectionCardProps) => {
+        const {
+            dragHandleProps,
+            instrument,
+            file,
+            isFirst = false,
+            isLast = false,
+            onChange,
+            setIsDragDisabled,
+            stepCountOffset,
+            track,
+            trackSection,
+        } = props;
+
         const [
             sequencerDialogOpen,
             openSequencerDialog,
@@ -66,19 +82,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
 
         const { value: isHovered, setValue: setIsHovered } = useBoolean();
         const handleMouseOver = useDebounce(() => setIsHovered(true), 25);
-        const handleMouseLeave = useDebounce(() => setIsHovered(false), 25);
-
-        const {
-            dragHandleProps,
-            instrument,
-            file,
-            isFirst = false,
-            isLast = false,
-            onChange,
-            stepCountOffset,
-            track,
-            trackSection,
-        } = props;
+        const handleMouseOut = useDebounce(() => setIsHovered(false), 25);
 
         const borderProps = getBorderXProps({
             isFirst,
@@ -144,12 +148,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
         return (
             <Pane
                 {...borderProps}
+                {...dragHandleProps}
                 backgroundColor={backgroundColor}
                 display="flex"
                 flexDirection="row"
                 height={majorScale(10)}
                 onClick={onSelect(trackSection)}
-                onMouseLeave={handleMouseLeave}
+                onMouseOut={handleMouseOut}
                 onMouseOver={handleMouseOver}
                 paddingLeft={isFirst ? majorScale(1) : undefined}
                 paddingRight={isLast ? majorScale(1) : undefined}
@@ -157,9 +162,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                 position="relative"
                 selectors={selectors}>
                 {isHovered && (
-                    <Pane
-                        display="flex"
-                        flexDirection="row"
+                    <Flex.Row
                         justifyContent="flex-end"
                         marginTop={-majorScale(1)}
                         minWidth={width}
@@ -196,13 +199,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                         )}
                         <ContextualIconButton
                             backgroundColor={backgroundColor}
-                            dragHandleProps={dragHandleProps}
                             icon={DragHandleHorizontalIcon}
                             id={trackSection.id}
                             isLastCard={isLast}
+                            setIsDragDisabled={setIsDragDisabled}
                             tooltipText="Move section"
                         />
-                    </Pane>
+                    </Flex.Row>
                 )}
                 <TrackSectionStepGrid
                     stepCount={stepCount}

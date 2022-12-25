@@ -5,9 +5,9 @@ import type { ForwardedRef } from "react";
 import React, { forwardRef, useMemo } from "react";
 import type { ListOnScrollProps } from "react-window";
 import { FixedSizeList } from "react-window";
+import { useDebouncedValue, useWindowSize } from "rooks";
 import type { SelectorMap } from "ui-box";
 import Box from "ui-box";
-import { getTrackTimeWidth } from "utils/window-utils";
 
 interface VirtualizedTrackTimeProps {
     onScroll: (props: ListOnScrollProps) => void;
@@ -30,6 +30,13 @@ const VirtualizedTrackTime = forwardRef(
     (props: VirtualizedTrackTimeProps, ref: ForwardedRef<FixedSizeList>) => {
         const { onScroll, stepCount } = props;
         const items = useMemo(() => range(0, stepCount), [stepCount]);
+        const { innerWidth } = useWindowSize();
+        const [fixedListWidth] = useDebouncedValue(
+            innerWidth! - majorScale(34),
+            25,
+            { initializeWithNull: false }
+        );
+
         return (
             <Box selectors={selectors}>
                 <FixedSizeList
@@ -41,7 +48,7 @@ const VirtualizedTrackTime = forwardRef(
                     onScroll={onScroll}
                     ref={ref}
                     style={style}
-                    width={getTrackTimeWidth()}>
+                    width={fixedListWidth!}>
                     {VirtualizedTrackTimeCard}
                 </FixedSizeList>
             </Box>
