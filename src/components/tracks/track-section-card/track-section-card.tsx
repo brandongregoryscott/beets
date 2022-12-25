@@ -202,6 +202,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                             icon={DragHandleHorizontalIcon}
                             id={trackSection.id}
                             isLastCard={isLast}
+                            marginRight={majorScale(1)}
                             setIsDragDisabled={setIsDragDisabled}
                             tooltipText="Move section"
                         />
