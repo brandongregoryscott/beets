@@ -6,11 +6,9 @@ import {
     DeleteIcon,
     DragHandleHorizontalIcon,
     HeatGridIcon,
-    InsertIcon,
     majorScale,
     minorScale,
     Pane,
-    PlusIcon,
     StepChartIcon,
 } from "evergreen-ui";
 import type { SetStateAction } from "jotai";
@@ -36,6 +34,7 @@ import { getBorderXProps } from "utils/core-utils";
 import { useBoolean } from "hooks/use-boolean";
 import { useDebounce } from "rooks";
 import { Flex } from "components/flex";
+import { TrackSectionHoverMenu } from "components/tracks/track-section-card/track-section-hover-menu";
 
 interface TrackSectionCardProps {
     dragHandleProps: DraggableProvidedDragHandleProps | undefined;
@@ -142,7 +141,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             [onChange, trackSection.id]
         );
 
-        const handleAdd = useCallback(() => {
+        const handleInsert = useCallback(() => {
             insert(trackSection.index + 1);
         }, [insert, trackSection.index]);
 
@@ -169,59 +168,19 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                 position="relative"
                 selectors={selectors}>
                 {isHovered && (
-                    <Flex.Row
-                        justifyContent="flex-end"
-                        marginTop={-majorScale(1)}
-                        minWidth={width}
-                        position="absolute"
-                        width={width}>
-                        <ContextualIconButton
-                            backgroundColor={backgroundColor}
-                            icon={DeleteIcon}
-                            id={trackSection.id}
-                            intent="danger"
-                            isLastCard={isLast}
-                            onClick={handleRemove}
-                            tooltipText="Remove section"
-                        />
-                        {track.isSequencer() && (
-                            <ContextualIconButton
-                                backgroundColor={backgroundColor}
-                                icon={HeatGridIcon}
-                                id={trackSection.id}
-                                isLastCard={isLast}
-                                onClick={handleOpenSequencerDialog}
-                                tooltipText="Sequencer"
-                            />
-                        )}
-                        {!track.isSequencer() && (
-                            <ContextualIconButton
-                                backgroundColor={backgroundColor}
-                                icon={StepChartIcon}
-                                id={trackSection.id}
-                                isLastCard={isLast}
-                                onClick={handleOpenPianoRollDialog}
-                                tooltipText="Piano Roll"
-                            />
-                        )}
-                        <ContextualIconButton
-                            backgroundColor={backgroundColor}
-                            icon={AddIcon}
-                            id={trackSection.id}
-                            isLastCard={isLast}
-                            onClick={handleAdd}
-                            tooltipText="Add section"
-                        />
-                        <ContextualIconButton
-                            backgroundColor={backgroundColor}
-                            icon={DragHandleHorizontalIcon}
-                            id={trackSection.id}
-                            isLastCard={isLast}
-                            marginRight={isFirst ? majorScale(1) : undefined}
-                            setIsDragDisabled={setIsDragDisabled}
-                            tooltipText="Move section"
-                        />
-                    </Flex.Row>
+                    <TrackSectionHoverMenu
+                        backgroundColor={backgroundColor}
+                        isFirst={isFirst}
+                        isLast={isLast}
+                        onInsert={handleInsert}
+                        onOpenPianoRollDialog={handleOpenPianoRollDialog}
+                        onOpenSequencerDialog={handleOpenSequencerDialog}
+                        onRemove={handleRemove}
+                        setIsDragDisabled={setIsDragDisabled}
+                        track={track}
+                        trackSection={trackSection}
+                        width={width}
+                    />
                 )}
                 <TrackSectionStepGrid
                     stepCount={stepCount}
