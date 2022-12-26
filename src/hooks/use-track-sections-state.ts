@@ -1,4 +1,4 @@
-import type { List } from "immutable";
+import { List } from "immutable";
 import type { SetStateAction } from "react";
 import { useCallback, useMemo } from "react";
 import { isFunction } from "lodash";
@@ -85,12 +85,21 @@ const useTrackSectionsState = (
 
     const remove = useCallback(
         (trackSection: TrackSectionRecord) => {
-            setState((prev) =>
-                prev.filter(
+            setState((prev) => {
+                const updated = prev.filter(
                     (existingTrackSection) =>
                         existingTrackSection.id !== trackSection.id
-                )
-            );
+                );
+
+                // Ensure there's always one TrackSection
+                if (updated.isEmpty()) {
+                    return List.of<TrackSectionRecord>(
+                        new TrackSectionRecord({ track_id: trackId })
+                    );
+                }
+
+                return updated;
+            });
 
             // Additionally remove any TrackSectionSteps
             setTrackSectionSteps((prevTrackSectionSteps) =>
@@ -100,7 +109,7 @@ const useTrackSectionsState = (
                 )
             );
         },
-        [setState, setTrackSectionSteps]
+        [setState, setTrackSectionSteps, trackId]
     );
 
     const update = useCallback(
