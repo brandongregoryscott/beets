@@ -20,6 +20,7 @@ interface UseTrackSectionsStateResult {
     add: (trackSection?: TrackSectionRecord) => void;
     get: (id: string) => TrackSectionRecord | undefined;
     initialState: List<TrackSectionRecord>;
+    insert: (index: number) => void;
     remove: (trackSection: TrackSectionRecord) => void;
     setState: (update: SetStateAction<List<TrackSectionRecord>>) => void;
     state: List<TrackSectionRecord>;
@@ -33,68 +34,6 @@ const useTrackSectionsState = (
     const setTrackSectionSteps = useUpdateAtom(CurrentTrackSectionStepsAtom);
     const _initialState = useAtomValue(InitialTrackSectionsAtom);
     const [_state, _setState] = useAtom(CurrentTrackSectionsAtom);
-
-    const add = useCallback(
-        (trackSection?: TrackSectionRecord) =>
-            _setState((prev) => {
-                const updatedTrackSections = prev.push(
-                    trackSection?.merge({ track_id: trackId }) ??
-                        new TrackSectionRecord({ track_id: trackId })
-                );
-
-                return rebaseIndexes(
-                    updatedTrackSections,
-                    filterByTrackId(trackId)
-                );
-            }),
-        [_setState, trackId]
-    );
-
-    const get = useCallback(
-        (id: string) => _state.find(filterById(id)),
-        [_state]
-    );
-
-    const remove = useCallback(
-        (trackSection: TrackSectionRecord) => {
-            _setState((prev) =>
-                rebaseIndexes(
-                    prev.filter(
-                        (existingTrackSection) =>
-                            existingTrackSection.id !== trackSection.id
-                    ),
-                    filterByTrackId(trackId)
-                )
-            );
-
-            // Additionally remove any TrackSectionSteps
-            setTrackSectionSteps((prevTrackSectionSteps) =>
-                prevTrackSectionSteps.filter(
-                    (trackSectionStep) =>
-                        trackSectionStep.track_section_id !== trackSection.id
-                )
-            );
-        },
-        [_setState, setTrackSectionSteps, trackId]
-    );
-
-    const update = useCallback(
-        (id: string, update: SetStateAction<TrackSectionRecord>) =>
-            _setState((prev) => {
-                const index = prev.findIndex(filterById(id));
-
-                if (index < 0) {
-                    return prev;
-                }
-
-                const value = isFunction(update)
-                    ? update(prev.get(index)!)
-                    : update;
-
-                return prev.set(index, value);
-            }),
-        [_setState]
-    );
 
     const setState = useCallback(
         (update: SetStateAction<List<TrackSectionRecord>>) => {
@@ -111,10 +50,75 @@ const useTrackSectionsState = (
                     .filterNot(filterByTrackId(trackId))
                     .concat(value);
 
-                return mergedTrackSections;
+                return rebaseIndexes(mergedTrackSections);
             });
         },
         [_setState, trackId]
+    );
+
+    const add = useCallback(
+        (trackSection?: TrackSectionRecord) =>
+            setState((prev) =>
+                prev.push(
+                    trackSection?.merge({ track_id: trackId }) ??
+                        new TrackSectionRecord({ track_id: trackId })
+                )
+            ),
+        [setState, trackId]
+    );
+
+    const insert = useCallback(
+        (index: number) =>
+            setState((prev) =>
+                prev.insert(
+                    index,
+                    new TrackSectionRecord({ track_id: trackId })
+                )
+            ),
+        [setState, trackId]
+    );
+
+    const get = useCallback(
+        (id: string) => _state.find(filterById(id)),
+        [_state]
+    );
+
+    const remove = useCallback(
+        (trackSection: TrackSectionRecord) => {
+            setState((prev) =>
+                prev.filter(
+                    (existingTrackSection) =>
+                        existingTrackSection.id !== trackSection.id
+                )
+            );
+
+            // Additionally remove any TrackSectionSteps
+            setTrackSectionSteps((prevTrackSectionSteps) =>
+                prevTrackSectionSteps.filter(
+                    (trackSectionStep) =>
+                        trackSectionStep.track_section_id !== trackSection.id
+                )
+            );
+        },
+        [setState, setTrackSectionSteps]
+    );
+
+    const update = useCallback(
+        (id: string, update: SetStateAction<TrackSectionRecord>) =>
+            setState((prev) => {
+                const index = prev.findIndex(filterById(id));
+
+                if (index < 0) {
+                    return prev;
+                }
+
+                const value = isFunction(update)
+                    ? update(prev.get(index)!)
+                    : update;
+
+                return prev.set(index, value);
+            }),
+        [setState]
     );
 
     const initialState = useMemo(
@@ -130,6 +134,7 @@ const useTrackSectionsState = (
     return {
         add,
         get,
+        insert,
         initialState,
         remove,
         setState,

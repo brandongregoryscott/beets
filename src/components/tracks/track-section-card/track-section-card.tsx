@@ -2,12 +2,15 @@ import { ContextualIconButton } from "components/contextual-icon-button";
 import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
 import {
+    AddIcon,
     DeleteIcon,
     DragHandleHorizontalIcon,
     HeatGridIcon,
+    InsertIcon,
     majorScale,
     minorScale,
     Pane,
+    PlusIcon,
     StepChartIcon,
 } from "evergreen-ui";
 import type { SetStateAction } from "jotai";
@@ -90,7 +93,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             borderRadius: minorScale(1),
         });
 
-        const { remove } = useTrackSectionsState({
+        const { remove, insert } = useTrackSectionsState({
             trackId: trackSection.track_id,
         });
 
@@ -138,6 +141,10 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             },
             [onChange, trackSection.id]
         );
+
+        const handleAdd = useCallback(() => {
+            insert(trackSection.index + 1);
+        }, [insert, trackSection.index]);
 
         const width = trackSection.step_count * TrackSectionStepColumnWidth;
 
@@ -199,10 +206,18 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                         )}
                         <ContextualIconButton
                             backgroundColor={backgroundColor}
+                            icon={AddIcon}
+                            id={trackSection.id}
+                            isLastCard={isLast}
+                            onClick={handleAdd}
+                            tooltipText="Add section"
+                        />
+                        <ContextualIconButton
+                            backgroundColor={backgroundColor}
                             icon={DragHandleHorizontalIcon}
                             id={trackSection.id}
                             isLastCard={isLast}
-                            marginRight={majorScale(1)}
+                            marginRight={isFirst ? majorScale(1) : undefined}
                             setIsDragDisabled={setIsDragDisabled}
                             tooltipText="Move section"
                         />
