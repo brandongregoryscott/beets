@@ -71,7 +71,7 @@ const _VirtualizedTrackSectionCardContent: React.FC<
         style: styleProp,
     } = props;
     const { index } = trackSection;
-    const { draggableProps, innerRef } = provided;
+    const { dragHandleProps, draggableProps, innerRef } = provided;
     const { style: draggableStyle } = draggableProps;
     const { state: tracks } = useTracksState();
     const track = useMemo(
@@ -100,10 +100,13 @@ const _VirtualizedTrackSectionCardContent: React.FC<
     );
 
     return (
-        <div {...draggableProps} ref={innerRef} style={style}>
+        <div
+            {...draggableProps}
+            {...dragHandleProps}
+            ref={innerRef}
+            style={style}>
             {trackSection != null && track != null && (
                 <TrackSectionCard
-                    dragHandleProps={provided.dragHandleProps}
                     file={instrumentFile}
                     instrument={instrument}
                     isFirst={index === 0}

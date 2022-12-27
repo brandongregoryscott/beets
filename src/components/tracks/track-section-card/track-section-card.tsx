@@ -1,16 +1,6 @@
-import { ContextualIconButton } from "components/contextual-icon-button";
 import { PianoRollDialog } from "components/piano-roll/piano-roll-dialog";
 import { SequencerDialog } from "components/sequencer/sequencer-dialog";
-import {
-    AddIcon,
-    DeleteIcon,
-    DragHandleHorizontalIcon,
-    HeatGridIcon,
-    majorScale,
-    minorScale,
-    Pane,
-    StepChartIcon,
-} from "evergreen-ui";
+import { majorScale, minorScale, Pane } from "evergreen-ui";
 import type { SetStateAction } from "jotai";
 import type { FileRecord } from "models/file-record";
 import type { TrackRecord } from "models/track-record";
@@ -29,15 +19,12 @@ import { TrackSectionStepColumnWidth } from "components/tracks/track-section-car
 import { useWorkstationState } from "hooks/use-workstation-state";
 import { unsoloAll } from "utils/track-utils";
 import type { SelectorMap } from "ui-box";
-import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { getBorderXProps } from "utils/core-utils";
 import { useBoolean } from "hooks/use-boolean";
 import { useDebounce } from "rooks";
-import { Flex } from "components/flex";
 import { TrackSectionHoverMenu } from "components/tracks/track-section-card/track-section-hover-menu";
 
 interface TrackSectionCardProps {
-    dragHandleProps: DraggableProvidedDragHandleProps | undefined;
     file?: FileRecord;
     instrument?: InstrumentRecord;
     isFirst?: boolean;
@@ -58,7 +45,6 @@ const selectors: SelectorMap = {
 const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
     (props: TrackSectionCardProps) => {
         const {
-            dragHandleProps,
             instrument,
             file,
             isFirst = false,
@@ -154,7 +140,6 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
         return (
             <Pane
                 {...borderProps}
-                {...dragHandleProps}
                 backgroundColor={backgroundColor}
                 display="flex"
                 flexDirection="row"
