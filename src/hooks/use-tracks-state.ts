@@ -4,9 +4,8 @@ import type { SetStateAction } from "react";
 import { useCallback } from "react";
 import { isFunction } from "lodash";
 import { intersectionWith } from "utils/collection-utils";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { CurrentTracksAtom, InitialTracksAtom } from "atoms/tracks-atom";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { CurrentWorkstationStateAtom } from "atoms/workstation-atom";
 import { CurrentTrackSectionsAtom } from "atoms/track-sections-atom";
 import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
@@ -24,8 +23,8 @@ interface UseTracksStateResult {
 
 const useTracksState = (): UseTracksStateResult => {
     const workstationState = useAtomValue(CurrentWorkstationStateAtom);
-    const setTrackSections = useUpdateAtom(CurrentTrackSectionsAtom);
-    const setTrackSectionSteps = useUpdateAtom(CurrentTrackSectionStepsAtom);
+    const setTrackSections = useSetAtom(CurrentTrackSectionsAtom);
+    const setTrackSectionSteps = useSetAtom(CurrentTrackSectionStepsAtom);
     const initialState = useAtomValue(InitialTracksAtom);
     const [state, setState] = useAtom(CurrentTracksAtom);
 

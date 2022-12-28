@@ -3,14 +3,13 @@ import type { SetStateAction } from "react";
 import { useCallback, useMemo } from "react";
 import { isFunction } from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
-import { rebaseIndexes } from "utils/collection-utils";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
     CurrentTrackSectionsAtom,
     InitialTrackSectionsAtom,
 } from "atoms/track-sections-atom";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
+import { rebaseIndexes } from "utils/collection-utils";
 
 interface UseTrackSectionsStateOptions {
     trackId: string;
@@ -31,7 +30,7 @@ const useTrackSectionsState = (
     options: UseTrackSectionsStateOptions
 ): UseTrackSectionsStateResult => {
     const { trackId } = options;
-    const setTrackSectionSteps = useUpdateAtom(CurrentTrackSectionStepsAtom);
+    const setTrackSectionSteps = useSetAtom(CurrentTrackSectionStepsAtom);
     const _initialState = useAtomValue(InitialTrackSectionsAtom);
     const [_state, _setState] = useAtom(CurrentTrackSectionsAtom);
 
@@ -42,15 +41,15 @@ const useTrackSectionsState = (
                     filterByTrackId(trackId)
                 );
 
-                const value = isFunction(update)
-                    ? update(trackSectionsByTrack)
-                    : update;
+                const value = rebaseIndexes(
+                    isFunction(update) ? update(trackSectionsByTrack) : update
+                );
 
                 const mergedTrackSections = prev
                     .filterNot(filterByTrackId(trackId))
                     .concat(value);
 
-                return rebaseIndexes(mergedTrackSections);
+                return mergedTrackSections;
             });
         },
         [_setState, trackId]
