@@ -4,7 +4,7 @@ import type { RefObject } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import React, { createRef } from "react";
-import { VirtualizedTrackRow } from "components/tracks/track-list/virtualized-track-row";
+import { TrackRow } from "components/tracks/track-list/track-row";
 import { range } from "lodash";
 import type {
     FixedSizeList,
@@ -61,7 +61,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                 />
             </Pane>
             {tracks?.map((track, index) => (
-                <VirtualizedTrackRow
+                <TrackRow
                     key={track.id}
                     onScroll={handleScroll}
                     ref={trackRowRefs.current[index]}

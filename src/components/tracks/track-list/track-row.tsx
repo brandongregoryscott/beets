@@ -15,7 +15,7 @@ import { VariableSizeList } from "react-window";
 import { useDebouncedValue, useWindowSize } from "rooks";
 import type { SelectorMap } from "ui-box";
 
-interface VirtualizedTrackRowProps {
+interface TrackRowProps {
     onScroll: (props: ListOnScrollProps) => void;
     showScrollbar?: boolean;
     track: TrackRecord;
@@ -33,11 +33,11 @@ const selectors: SelectorMap = {
     "> div::-webkit-scrollbar": { display: "none" },
 };
 
-const _VirtualizedTrackRow: ForwardRefRenderFunction<
+const _TrackRow: ForwardRefRenderFunction<
     VariableSizeList<TrackSectionRecord[]>,
-    VirtualizedTrackRowProps
+    TrackRowProps
 > = (
-    props: VirtualizedTrackRowProps,
+    props: TrackRowProps,
     ref: ForwardedRef<VariableSizeList<TrackSectionRecord[]>>
 ) => {
     const { showScrollbar = false, track, onScroll } = props;
@@ -134,7 +134,7 @@ const _VirtualizedTrackRow: ForwardRefRenderFunction<
     );
 };
 
-const VirtualizedTrackRow = forwardRef(_VirtualizedTrackRow);
-VirtualizedTrackRow.displayName = "VirtualizedTrackRow";
+const TrackRow = forwardRef(_TrackRow);
+TrackRow.displayName = "TrackRow";
 
-export { VirtualizedTrackRow };
+export { TrackRow };
