@@ -48,7 +48,8 @@ const _VirtualizedTrackSectionCard: VirtualizedTrackSectionCardComponent = ((
         <Draggable
             draggableId={trackSection.id}
             index={trackSection.index}
-            isDragDisabled={isDragDisabled}>
+            isDragDisabled={isDragDisabled}
+            key={trackSection.id}>
             {(provided) => (
                 <VirtualizedTrackSectionCardContent
                     provided={provided}
