@@ -213,7 +213,7 @@ const WorkstationPage: React.FC = () => {
                                 <Tooltip content="Add Track">
                                     <IconButton
                                         icon={AddIcon}
-                                        marginTop={majorScale(2)}
+                                        marginTop={-majorScale(2)}
                                     />
                                 </Tooltip>
                             </SelectMenu>
