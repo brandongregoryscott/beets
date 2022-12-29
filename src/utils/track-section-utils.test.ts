@@ -1,8 +1,30 @@
 import { List } from "immutable";
+import { uniqueId } from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
-import { getStepCountOffset } from "utils/track-section-utils";
+import {
+    getMaxCountByTrackId,
+    getStepCountOffset,
+} from "utils/track-section-utils";
 
 describe("TrackSectionUtils", () => {
+    describe("getMaxCountByTrackId", () => {
+        it("should return count for maximum count by trackId", () => {
+            const track1Id = uniqueId();
+            const track2Id = uniqueId();
+
+            const result = getMaxCountByTrackId(
+                List.of(
+                    new TrackSectionRecord({ track_id: track1Id }),
+                    new TrackSectionRecord({ track_id: track1Id }),
+                    new TrackSectionRecord({ track_id: track1Id }),
+                    new TrackSectionRecord({ track_id: track2Id })
+                )
+            );
+
+            expect(result).toBe(3);
+        });
+    });
+
     describe("getStepCountOffset", () => {
         test("given index, returns step_count sum of TrackSections prior", () => {
             // Arrange
