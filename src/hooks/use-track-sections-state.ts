@@ -16,7 +16,7 @@ interface UseTrackSectionsStateOptions {
 }
 
 interface UseTrackSectionsStateResult {
-    add: (trackSection?: TrackSectionRecord) => void;
+    add: () => void;
     get: (id: string) => TrackSectionRecord | undefined;
     initialState: List<TrackSectionRecord>;
     insert: (index: number) => void;
@@ -56,12 +56,9 @@ const useTrackSectionsState = (
     );
 
     const add = useCallback(
-        (trackSection?: TrackSectionRecord) =>
+        () =>
             setState((prev) =>
-                prev.push(
-                    trackSection?.merge({ track_id: trackId }) ??
-                        new TrackSectionRecord({ track_id: trackId })
-                )
+                prev.push(new TrackSectionRecord({ track_id: trackId }))
             ),
         [setState, trackId]
     );

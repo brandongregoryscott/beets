@@ -32,7 +32,7 @@ const VirtualizedTrackTime = forwardRef(
         const items = useMemo(() => range(0, stepCount), [stepCount]);
         const { innerWidth } = useWindowSize();
         const [fixedListWidth] = useDebouncedValue(
-            innerWidth! - majorScale(34),
+            innerWidth! - majorScale(40),
             25,
             { initializeWithNull: false }
         );
