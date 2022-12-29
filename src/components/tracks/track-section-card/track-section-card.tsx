@@ -23,6 +23,7 @@ import { getBorderXProps } from "utils/core-utils";
 import { useBoolean } from "hooks/use-boolean";
 import { useDebounce } from "rooks";
 import { TrackSectionHoverMenu } from "components/tracks/track-section-card/track-section-hover-menu";
+import { Flex } from "components/flex";
 
 interface TrackSectionCardProps {
     file?: FileRecord;
@@ -144,11 +145,9 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
         const isDialogOpen = isPianoRollDialogOpen || isSequencerDialogOpen;
 
         return (
-            <Pane
+            <Flex.Row
                 {...borderProps}
                 backgroundColor={backgroundColor}
-                display="flex"
-                flexDirection="row"
                 height={majorScale(10)}
                 onClick={onSelect(trackSection)}
                 onMouseLeave={handleMouseLeave}
@@ -204,7 +203,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                         trackSectionSteps={trackSectionSteps}
                     />
                 )}
-            </Pane>
+            </Flex.Row>
         );
     }
 );
