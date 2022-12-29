@@ -57,13 +57,13 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
         } = props;
 
         const [
-            sequencerDialogOpen,
+            isSequencerDialogOpen,
             openSequencerDialog,
             handleCloseSequencerDialog,
         ] = useDialog();
 
         const [
-            pianoRollDialogOpen,
+            isPianoRollDialogOpen,
             openPianoRollDialog,
             handleClosePianoRollDialog,
         ] = useDialog();
@@ -106,12 +106,16 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
         const handleOpenSequencerDialog = useCallback(() => {
             unsoloTracks();
             openSequencerDialog();
-        }, [openSequencerDialog, unsoloTracks]);
+            // Unless we explicitly close the hover menu, it'll stay up after opening a dialog
+            setIsHovered(false);
+        }, [openSequencerDialog, setIsHovered, unsoloTracks]);
 
         const handleOpenPianoRollDialog = useCallback(() => {
             unsoloTracks();
             openPianoRollDialog();
-        }, [openPianoRollDialog, unsoloTracks]);
+            // Unless we explicitly close the hover menu, it'll stay up after opening a dialog
+            setIsHovered(false);
+        }, [openPianoRollDialog, setIsHovered, unsoloTracks]);
 
         const handleRemove = useCallback(
             () => remove(trackSection),
@@ -137,6 +141,8 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             ? theme.colors.gray400
             : theme.colors.gray200;
 
+        const isDialogOpen = isPianoRollDialogOpen || isSequencerDialogOpen;
+
         return (
             <Pane
                 {...borderProps}
@@ -146,7 +152,9 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                 height={majorScale(10)}
                 onClick={onSelect(trackSection)}
                 onMouseLeave={handleMouseLeave}
-                onMouseOver={handleMouseOver}
+                // If the mouseOver event handler is still attached, the hover menu will be re-rendered
+                // immediately on click
+                onMouseOver={isDialogOpen ? undefined : handleMouseOver}
                 paddingLeft={isFirst ? majorScale(1) : undefined}
                 paddingRight={isLast ? majorScale(1) : undefined}
                 paddingY={majorScale(1)}
@@ -173,7 +181,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                     trackSection={trackSection}
                     trackSectionSteps={trackSectionSteps}
                 />
-                {sequencerDialogOpen && files != null && (
+                {isSequencerDialogOpen && files != null && (
                     <SequencerDialog
                         files={files}
                         onCloseComplete={handleCloseSequencerDialog}
@@ -184,7 +192,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                         trackSectionSteps={trackSectionSteps}
                     />
                 )}
-                {pianoRollDialogOpen && (
+                {isPianoRollDialogOpen && (
                     <PianoRollDialog
                         file={file}
                         instrument={instrument}
