@@ -70,7 +70,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
 
         const { value: isHovered, setValue: setIsHovered } = useBoolean();
         const handleMouseOver = useDebounce(() => setIsHovered(true), 25);
-        const handleMouseOut = useDebounce(() => setIsHovered(false), 25);
+        const handleMouseLeave = useDebounce(() => setIsHovered(false), 25);
 
         const borderProps = getBorderXProps({
             isFirst,
@@ -145,7 +145,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
                 flexDirection="row"
                 height={majorScale(10)}
                 onClick={onSelect(trackSection)}
-                onMouseOut={handleMouseOut}
+                onMouseLeave={handleMouseLeave}
                 onMouseOver={handleMouseOver}
                 paddingLeft={isFirst ? majorScale(1) : undefined}
                 paddingRight={isLast ? majorScale(1) : undefined}
