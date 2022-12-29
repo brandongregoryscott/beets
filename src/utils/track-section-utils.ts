@@ -9,6 +9,15 @@ const getByTrack = (
 ): List<TrackSectionRecord> =>
     trackSections.filter((trackSection) => trackSection.track_id === track.id);
 
+const getCountByTrackId = (
+    trackSections: List<TrackSectionRecord>,
+    trackId: string
+): number =>
+    trackSections
+        .groupBy((trackSection) => trackSection.track_id)
+        .get(trackId)
+        ?.count() ?? 0;
+
 const getMaxCountByTrackId = (
     trackSections: List<TrackSectionRecord>
 ): number =>
@@ -25,6 +34,7 @@ const getTotalStepCount = (trackSections: List<TrackSectionRecord>): number =>
 export {
     getByTrack,
     getStepCountOffset,
+    getCountByTrackId,
     getMaxCountByTrackId,
     getTotalStepCount,
 };
