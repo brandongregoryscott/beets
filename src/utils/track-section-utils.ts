@@ -1,13 +1,64 @@
-import type { List } from "immutable";
+import { List } from "immutable";
 import { sumBy } from "lodash";
-import type { TrackRecord } from "models/track-record";
-import type { TrackSectionRecord } from "models/track-section-record";
+import { TrackSectionRecord } from "models/track-section-record";
+import { findMissingIndices } from "utils/collection-utils";
 
-const getByTrack = (
-    track: TrackRecord,
+const fillWithPlaceholders = (
+    trackSections: Array<TrackSectionRecord> | List<TrackSectionRecord>
+): List<TrackSectionRecord> => {
+    trackSections = List.isList(trackSections)
+        ? trackSections
+        : List(trackSections);
+
+    const trackIds = trackSections
+        .groupBy((trackSection) => trackSection.track_id)
+        .keySeq();
+
+    return trackIds
+        .map((trackId) => fillWithPlaceholdersByTrackId(trackSections, trackId))
+        .flatten()
+        .toList() as List<TrackSectionRecord>;
+};
+
+const fillWithPlaceholdersByTrackId = (
+    trackSections: Array<TrackSectionRecord> | List<TrackSectionRecord>,
+    trackId: string
+): List<TrackSectionRecord> => {
+    trackSections = List.isList(trackSections)
+        ? trackSections
+        : List(trackSections);
+
+    const trackSectionsByTrackId = getByTrackId(trackId, trackSections);
+    const maxTrackSectionCount = getMaxCountByTrackId(trackSections);
+    // Determine if there is a Track with a higher TrackSection count, and fill in missing entries
+    // with placeholder TrackSections
+    const missingTrackSectionCount =
+        maxTrackSectionCount - getCountByTrackId(trackSections, trackId);
+
+    if (missingTrackSectionCount === 0) {
+        return trackSectionsByTrackId;
+    }
+
+    const placeholderTrackSections = findMissingIndices(
+        trackSectionsByTrackId.map((trackSection) => trackSection.index),
+        maxTrackSectionCount
+    ).map((index) =>
+        new TrackSectionRecord({
+            index,
+            track_id: trackId,
+        }).setIsPlaceholder()
+    );
+
+    return trackSectionsByTrackId
+        .concat(placeholderTrackSections)
+        .sortBy((trackSection) => trackSection.index);
+};
+
+const getByTrackId = (
+    trackId: string,
     trackSections: List<TrackSectionRecord>
 ): List<TrackSectionRecord> =>
-    trackSections.filter((trackSection) => trackSection.track_id === track.id);
+    trackSections.filter((trackSection) => trackSection.track_id === trackId);
 
 const getCountByTrackId = (
     trackSections: List<TrackSectionRecord>,
@@ -32,7 +83,9 @@ const getTotalStepCount = (trackSections: List<TrackSectionRecord>): number =>
     sumBy(trackSections.toArray(), (trackSection) => trackSection.step_count);
 
 export {
-    getByTrack,
+    fillWithPlaceholders,
+    fillWithPlaceholdersByTrackId,
+    getByTrackId,
     getStepCountOffset,
     getCountByTrackId,
     getMaxCountByTrackId,
