@@ -1,45 +1,31 @@
 import { List } from "immutable";
-import { uniqueId } from "lodash";
-import { TrackSectionRecord } from "models/track-section-record";
+import { TrackRecordFactory } from "test/factories/track-record-factory";
+import { TrackSectionRecordFactory } from "test/factories/track-section-record-factory";
 import {
     getCountByTrackId,
-    getMaxCountByTrackId,
     getStepCountOffset,
 } from "utils/track-section-utils";
 
 describe("TrackSectionUtils", () => {
     describe("getMaxCountByTrackId", () => {
         it("should return count by trackId", () => {
-            const track1Id = uniqueId();
-            const track2Id = uniqueId();
-
-            const trackSections = List.of(
-                new TrackSectionRecord({ track_id: track1Id }),
-                new TrackSectionRecord({ track_id: track1Id }),
-                new TrackSectionRecord({ track_id: track1Id }),
-                new TrackSectionRecord({ track_id: track2Id })
-            );
-
-            expect(getCountByTrackId(trackSections, track1Id)).toBe(3);
-            expect(getCountByTrackId(trackSections, track2Id)).toBe(1);
-        });
-    });
-
-    describe("getMaxCountByTrackId", () => {
-        it("should return count for maximum count by trackId", () => {
-            const track1Id = uniqueId();
-            const track2Id = uniqueId();
-
-            const result = getMaxCountByTrackId(
-                List.of(
-                    new TrackSectionRecord({ track_id: track1Id }),
-                    new TrackSectionRecord({ track_id: track1Id }),
-                    new TrackSectionRecord({ track_id: track1Id }),
-                    new TrackSectionRecord({ track_id: track2Id })
+            const tracks = TrackRecordFactory.buildList(2);
+            const trackSections = List(
+                tracks.flatMap((track, index) =>
+                    TrackSectionRecordFactory.buildList(
+                        index % 2 === 0 ? 3 : 1,
+                        undefined,
+                        { associations: { track_id: track.id } }
+                    )
                 )
             );
 
-            expect(result).toBe(3);
+            const results = tracks.map((track) =>
+                getCountByTrackId(trackSections, track.id)
+            );
+
+            expect(results[0]).toBe(3);
+            expect(results[0]).toBe(1);
         });
     });
 
@@ -47,15 +33,15 @@ describe("TrackSectionUtils", () => {
         test("given index, returns step_count sum of TrackSections prior", () => {
             // Arrange
             const trackSections = List.of(
-                new TrackSectionRecord({
+                TrackSectionRecordFactory.build({
                     index: 0,
                     step_count: 8,
                 }),
-                new TrackSectionRecord({
+                TrackSectionRecordFactory.build({
                     index: 1,
                     step_count: 4,
                 }),
-                new TrackSectionRecord({
+                TrackSectionRecordFactory.build({
                     index: 2,
                     step_count: 8,
                 })
