@@ -7,11 +7,7 @@ import { useDraggable } from "hooks/use-draggable";
 import { useTrackSectionsState } from "hooks/use-track-sections-state";
 import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
-import type {
-    ForwardedRef,
-    ForwardRefRenderFunction,
-    MutableRefObject,
-} from "react";
+import type { ForwardedRef, ForwardRefRenderFunction } from "react";
 import { useState } from "react";
 import { forwardRef, useCallback, useMemo } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";

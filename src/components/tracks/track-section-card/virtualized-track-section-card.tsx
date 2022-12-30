@@ -15,6 +15,7 @@ import { areEqual } from "react-window";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { getFileById } from "utils/file-utils";
 import { getStepCountOffset } from "utils/track-section-utils";
+import { PlaceholderTrackSectionCard } from "components/tracks/track-section-card/placeholder-track-section-card";
 
 interface VirtualizedTrackSectionCardProps {
     data: TrackSectionRecord[];
@@ -100,13 +101,19 @@ const _VirtualizedTrackSectionCardContent: React.FC<
         [draggableStyle, styleProp]
     );
 
+    if (trackSection == null || track == null) {
+        return null;
+    }
+
     return (
         <div
             {...draggableProps}
             {...dragHandleProps}
             ref={innerRef}
             style={style}>
-            {trackSection != null && track != null && (
+            {trackSection.isPlaceholder() ? (
+                <PlaceholderTrackSectionCard trackSection={trackSection} />
+            ) : (
                 <TrackSectionCard
                     file={instrumentFile}
                     instrument={instrument}

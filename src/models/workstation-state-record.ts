@@ -20,7 +20,8 @@ import {
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
-import { getByTrack } from "utils/track-section-utils";
+import { isUuid } from "utils/id-utils";
+import { fillWithPlaceholders, getByTrackId } from "utils/track-section-utils";
 
 interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;
@@ -181,8 +182,10 @@ class WorkstationStateRecord
 
         if (values.trackSections != null) {
             values.trackSections = sortBy(
-                values.trackSections.map(
-                    (trackSection) => new TrackSectionRecord(trackSection)
+                fillWithPlaceholders(
+                    values.trackSections.map(
+                        (trackSection) => new TrackSectionRecord(trackSection)
+                    )
                 ),
                 ["track_id", "index"]
             );
@@ -221,7 +224,7 @@ class WorkstationStateRecord
         diff.createdOrUpdatedTrackSections = diffUpdatedEntities(
             right.trackSections,
             this.trackSections
-        );
+        ).filter((trackSection) => isUuid(trackSection.id));
 
         diff.deletedTrackSections = diffDeletedEntities(
             this.trackSections,
@@ -251,7 +254,7 @@ class WorkstationStateRecord
     public getStepCount(): number {
         // Calculate sum of steps by track
         const stepSums = this.tracks.map((track) => {
-            const trackSections = getByTrack(track, this.trackSections);
+            const trackSections = getByTrackId(track.id, this.trackSections);
             return sumBy(
                 trackSections.toArray(),
                 (trackSection) => trackSection.step_count
