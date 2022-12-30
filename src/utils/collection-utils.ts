@@ -1,7 +1,7 @@
-import { List, Record } from "immutable";
+import { List, Range, Record } from "immutable";
 import type { Auditable } from "interfaces/auditable";
 import type { OrderableEntity } from "interfaces/orderable-entity";
-import _ from "lodash";
+import _, { compact } from "lodash";
 import type { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
 import { isEqual, isNilOrEmpty } from "utils/core-utils";
@@ -43,6 +43,16 @@ const diffUpdatedEntities = <T extends Auditable>(
 
     return createdOrUpdated;
 };
+
+const findMissingIndices = (
+    indices: Array<number> | List<number>,
+    expectedSize: number
+): number[] =>
+    compact(
+        Range(0, expectedSize)
+            .map((index) => (indices.includes(index) ? undefined : index))
+            .toArray()
+    );
 
 /**
  * Groups two collections of entities by the provided comparator. For sorting purposes, the left
@@ -178,6 +188,7 @@ const sortBy = <T>(
 export {
     diffDeletedEntities,
     diffUpdatedEntities,
+    findMissingIndices,
     groupBy,
     hasValues,
     initializeList,
