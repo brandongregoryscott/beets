@@ -1,8 +1,6 @@
 import { EditableParagraph } from "components/editable-paragraph";
 import {
     Card,
-    DeleteIcon,
-    DragHandleHorizontalIcon,
     majorScale,
     minorScale,
     PropertiesIcon,
@@ -16,13 +14,13 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import type { TrackRecord } from "models/track-record";
 import { useTheme } from "hooks/use-theme";
 import { useTracksState } from "hooks/use-tracks-state";
-import { ContextualIconButton } from "components/contextual-icon-button";
 import { Flex } from "components/flex";
 import { Slider } from "components/mantine/slider";
 import { IconButton } from "components/icon-button";
 import type { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useBoolean } from "hooks/use-boolean";
 import { useDebounce } from "rooks";
+import { TrackCardHoverMenu } from "components/tracks/track-card/track-card-hover-menu";
 
 interface TrackCardProps {
     dragHandleProps: DraggableProvidedDragHandleProps | undefined;
@@ -41,7 +39,7 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
 
     const { value: isHovered, setValue: setIsHovered } = useBoolean();
     const handleMouseOver = useDebounce(() => setIsHovered(true), 25);
-    const handleMouseOut = useDebounce(() => setIsHovered(false), 25);
+    const handleMouseLeave = useDebounce(() => setIsHovered(false), 25);
 
     const [localVolume, setLocalVolume] = useState<number>(volume);
     useEffect(() => setLocalVolume(volume), [volume]);
@@ -78,36 +76,18 @@ const _TrackCard: React.FC<TrackCardProps> = (props: TrackCardProps) => {
                 display="flex"
                 flexDirection="column"
                 minWidth={width}
-                onMouseOut={handleMouseOut}
+                onMouseLeave={handleMouseLeave}
                 onMouseOver={handleMouseOver}
                 padding={majorScale(1)}
                 position="relative"
                 width={width}>
                 {isHovered && (
-                    <Flex.Row
-                        justifyContent="flex-end"
-                        marginTop={-majorScale(1)}
-                        minWidth={width}
-                        position="absolute"
-                        width={width}>
-                        <ContextualIconButton
-                            icon={DeleteIcon}
-                            id={track.id}
-                            intent="danger"
-                            isLastCard={true}
-                            onClick={handleRemove}
-                            tooltipText="Remove track"
-                        />
-                        <ContextualIconButton
-                            icon={DragHandleHorizontalIcon}
-                            id={track.id}
-                            isCornerButton={true}
-                            isLastCard={true}
-                            marginRight={majorScale(1)}
-                            setIsDragDisabled={setIsDragDisabled}
-                            tooltipText="Move track"
-                        />
-                    </Flex.Row>
+                    <TrackCardHoverMenu
+                        onRemove={handleRemove}
+                        setIsDragDisabled={setIsDragDisabled}
+                        track={track}
+                        width={width}
+                    />
                 )}
                 <EditableParagraph onChange={setName} value={name} />
                 <Flex.Row alignItems="center">
