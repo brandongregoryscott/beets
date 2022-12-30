@@ -2,7 +2,7 @@ import { defaultNote } from "constants/midi-notes";
 import { DemoInstrument } from "enums/demo-instrument";
 import { List, Record } from "immutable";
 import type { WorkstationState } from "interfaces/workstation-state";
-import _, { sumBy } from "lodash";
+import _, { sum, sumBy } from "lodash";
 import { BaseRecord } from "models/base-record";
 import type { FileRecord } from "models/file-record";
 import { ProjectRecord } from "models/project-record";
@@ -252,16 +252,11 @@ class WorkstationStateRecord
     }
 
     public getStepCount(): number {
-        // Calculate sum of steps by track
-        const stepSums = this.tracks.map((track) => {
-            const trackSections = getByTrackId(track.id, this.trackSections);
-            return sumBy(
-                trackSections.toArray(),
-                (trackSection) => trackSection.step_count
-            );
-        });
+        const stepCounts = this.trackSections
+            .map((trackSection) => trackSection.step_count)
+            .toArray();
 
-        return stepSums.max()!;
+        return sum(stepCounts);
     }
 
     public isDemo(): boolean {
