@@ -57,7 +57,7 @@ const TrackList: React.FC<TrackListProps> = (props: TrackListProps) => {
                 <VirtualizedTrackTime
                     onScroll={handleScroll}
                     ref={trackTimeRef}
-                    stepCount={workstationState.getStepCount()}
+                    stepCount={workstationState.getMaxStepCount()}
                 />
             </Pane>
             {tracks?.map((track, index) => (

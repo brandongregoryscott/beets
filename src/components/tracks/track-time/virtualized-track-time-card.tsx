@@ -22,7 +22,7 @@ const _VirtualizedTrackTimeCard: React.FC<VirtualizedTrackTimeCardProps> = (
             {...toDataAttributes({
                 endIndex,
                 startIndex,
-                stepCount: workstationState.getStepCount(),
+                stepCount: workstationState.getMaxStepCount(),
             })}
             style={style}>
             <TrackTimeCard index={index} />

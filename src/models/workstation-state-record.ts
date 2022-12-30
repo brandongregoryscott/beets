@@ -245,18 +245,26 @@ class WorkstationStateRecord
     }
 
     public getLengthInMs(): number {
-        const stepCount = this.getStepCount();
+        const stepCount = this.getMaxStepCount();
         const { bpm } = this.project;
         // Increment the step count to account for tail audio
         return 1000 * ((60 / bpm) * ((stepCount + 4) / 2));
     }
 
-    public getStepCount(): number {
-        const stepCounts = this.trackSections
-            .map((trackSection) => trackSection.step_count)
-            .toArray();
+    /**
+     * Returns the maximum step count for a Track
+     */
+    public getMaxStepCount(): number {
+        // Calculate sum of steps by track
+        const stepSums = this.tracks.map((track) => {
+            const trackSections = getByTrackId(track.id, this.trackSections);
+            return sumBy(
+                trackSections.toArray(),
+                (trackSection) => trackSection.step_count
+            );
+        });
 
-        return sum(stepCounts);
+        return stepSums.max() ?? 0;
     }
 
     public isDemo(): boolean {

@@ -87,7 +87,7 @@ const TrackSectionCard: React.FC<TrackSectionCardProps> = memo(
             state: workstationState,
             setCurrentState: setWorkstationState,
         } = useWorkstationState();
-        const stepCount = workstationState.getStepCount();
+        const stepCount = workstationState.getMaxStepCount();
         const { isSelected, onSelect } = useClipboardState();
 
         const {

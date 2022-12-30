@@ -6,29 +6,32 @@ import { TrackSectionRecordFactory } from "test/factories/track-section-record-f
 import { WorkstationStateRecordFactory } from "test/factories/workstation-state-record-factory";
 
 describe(WorkstationStateRecord.name, () => {
-    describe("getStepCount", () => {
-        it("should return sum of all TrackSection stepCount values", () => {
-            const stepCount = faker.datatype.number({ min: 1, max: 8 });
-            const tracks = TrackRecordFactory.buildList(2);
-            const trackSections = tracks.flatMap((track) =>
-                TrackSectionRecordFactory.buildList(
-                    5,
-                    { step_count: stepCount },
-                    {
-                        associations: { track_id: track.id },
-                    }
-                )
+    describe("getMaxStepCount", () => {
+        it("should return max sum of TrackSection stepCount values by Track", () => {
+            const expectedTrack = TrackRecordFactory.build();
+            const stepCount = faker.datatype.number({ min: 1, max: 16 });
+            const expectedTrackSections = TrackSectionRecordFactory.buildList(
+                faker.datatype.number({ min: 2, max: 4 }),
+                { step_count: stepCount },
+                { associations: { track_id: expectedTrack.id } }
             );
-
+            const unexpectedTrack = TrackRecordFactory.build();
+            const unexpectedTrackSections = TrackSectionRecordFactory.buildList(
+                expectedTrackSections.length - 1,
+                { step_count: stepCount },
+                { associations: { track_id: unexpectedTrack.id } }
+            );
             const workstation = WorkstationStateRecordFactory.build({
-                tracks: List(tracks),
-                trackSections: List(trackSections),
+                tracks: List.of(expectedTrack, unexpectedTrack),
+                trackSections: List.of(
+                    ...expectedTrackSections,
+                    ...unexpectedTrackSections
+                ),
             });
-            const expected = trackSections.length * stepCount;
 
-            const result = workstation.getStepCount();
+            const result = workstation.getMaxStepCount();
 
-            expect(result).toBe(expected);
+            expect(result).toBe(expectedTrackSections.length * stepCount);
         });
 
         it("should return 0 when no TrackSections exist", () => {
@@ -36,7 +39,7 @@ describe(WorkstationStateRecord.name, () => {
                 trackSections: List(),
             });
 
-            const result = workstation.getStepCount();
+            const result = workstation.getMaxStepCount();
 
             expect(result).toBe(0);
         });
