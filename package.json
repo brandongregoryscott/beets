@@ -48,6 +48,7 @@
         "web-vitals": "1.1.2"
     },
     "devDependencies": {
+        "@faker-js/faker": "7.6.0",
         "@segment/analytics-next": "1.39.2",
         "@simbathesailor/use-what-changed": "2.0.0",
         "@testing-library/jest-dom": "5.14.1",
@@ -75,6 +76,7 @@
         "eslint-plugin-collation": "1.0.2",
         "eslint-plugin-react": "7.30.0",
         "eslint-plugin-typescript-sort-keys": "2.1.0",
+        "fishery": "2.2.2",
         "husky": "7.0.4",
         "jest-extended": "1.2.1",
         "lint-staged": "13.0.1",
