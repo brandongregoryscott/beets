@@ -38,11 +38,11 @@ class TrackSectionRecord
     }
 
     public isPlaceholder(): boolean {
-        return this.id === PLACEHOLDER_ID;
+        return this.id.startsWith(PLACEHOLDER_ID);
     }
 
     public setIsPlaceholder(): TrackSectionRecord {
-        return this.merge({ id: PLACEHOLDER_ID });
+        return this.merge({ id: `${PLACEHOLDER_ID}-${generateId()}` });
     }
 }
 

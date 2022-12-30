@@ -23,6 +23,7 @@ const PlaceholderTrackSectionCard: React.FC<
         <Flex.Row
             alignItems="center"
             borderRadius={minorScale(1)}
+            cursor="grab"
             height={majorScale(10)}
             hoverElevation={2}
             justifyContent="center">

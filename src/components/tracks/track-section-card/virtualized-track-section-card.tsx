@@ -43,7 +43,10 @@ const _VirtualizedTrackSectionCard: VirtualizedTrackSectionCardComponent = ((
         () => trackSections[index],
         [index, trackSections]
     );
-    const [isDragDisabled, setIsDragDisabled] = useState<boolean>(true);
+    const [isDragDisabled, setIsDragDisabled] = useState<boolean>(
+        // Placeholder TrackSections should always be draggable
+        !trackSection.isPlaceholder()
+    );
 
     return (
         <Draggable
