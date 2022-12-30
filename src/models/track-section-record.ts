@@ -14,6 +14,8 @@ const defaultValues = makeDefaultValues<TrackSection>({
     track_id: undefined,
 });
 
+const PLACEHOLDER_ID = "placeholder";
+
 class TrackSectionRecord
     extends AuditableRecord(Record(defaultValues))
     implements TrackSection
@@ -33,6 +35,14 @@ class TrackSectionRecord
         }
 
         super(values);
+    }
+
+    public isPlaceholder(): boolean {
+        return this.id === PLACEHOLDER_ID;
+    }
+
+    public setIsPlaceholder(): TrackSectionRecord {
+        return this.merge({ id: PLACEHOLDER_ID });
     }
 }
 
