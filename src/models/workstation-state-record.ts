@@ -21,7 +21,8 @@ import {
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
 import { isUuid } from "utils/id-utils";
-import { fillWithPlaceholders, getByTrackId } from "utils/track-section-utils";
+import { fillWithPlaceholders } from "utils/track-section-utils";
+import { getMaxStepCount } from "utils/track-utils";
 
 interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;
@@ -255,16 +256,7 @@ class WorkstationStateRecord
      * Returns the maximum step count for a Track
      */
     public getMaxStepCount(): number {
-        // Calculate sum of steps by track
-        const stepSums = this.tracks.map((track) => {
-            const trackSections = getByTrackId(track.id, this.trackSections);
-            return sumBy(
-                trackSections.toArray(),
-                (trackSection) => trackSection.step_count
-            );
-        });
-
-        return stepSums.max() ?? 0;
+        return getMaxStepCount(this.tracks, this.trackSections);
     }
 
     public isDemo(): boolean {
