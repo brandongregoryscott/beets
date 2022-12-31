@@ -9,7 +9,7 @@ const TrackRecordFactory = Factory.define<TrackRecord>(
         afterBuild((trackSection) => trackSection.asImmutable());
 
         return new TrackRecord({
-            index: sequence,
+            index: sequence - 1,
             name: `Track ${sequence + 1}`,
             project_id: faker.datatype.uuid(),
             id: faker.datatype.uuid(),

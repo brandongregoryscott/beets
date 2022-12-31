@@ -2,11 +2,51 @@ import { List } from "immutable";
 import { TrackRecordFactory } from "test/factories/track-record-factory";
 import { TrackSectionRecordFactory } from "test/factories/track-section-record-factory";
 import {
+    fillWithPlaceholders,
     getCountByTrackId,
     getStepCountOffset,
 } from "utils/track-section-utils";
 
 describe("TrackSectionUtils", () => {
+    describe("fillWithPlaceholders", () => {
+        it("backfills smaller lists to match size of longest Track", () => {
+            const longestTrack = TrackRecordFactory.build();
+            const longestTrackSections = TrackSectionRecordFactory.buildList(
+                5,
+                undefined,
+                { associations: { track_id: longestTrack.id } }
+            );
+            TrackSectionRecordFactory.rewindSequence();
+            const shorterTracks = TrackRecordFactory.buildList(2);
+            const shorterTrackSections = shorterTracks.flatMap((track) => {
+                TrackSectionRecordFactory.rewindSequence();
+                return TrackSectionRecordFactory.buildList(4, undefined, {
+                    associations: { track_id: track.id },
+                });
+            });
+
+            const result = fillWithPlaceholders(
+                List.of(...longestTrackSections, ...shorterTrackSections)
+            );
+
+            // TODO: Write custom jest matchers for immutable methods
+            expect(
+                result.count(
+                    (trackSection) => trackSection.track_id === longestTrack.id
+                )
+            ).toBe(longestTrackSections.length);
+            expect(
+                result.count(
+                    (trackSection) =>
+                        trackSection.track_id === shorterTracks[0].id
+                )
+            ).toBe(longestTrackSections.length);
+            expect(
+                result.count((trackSection) => trackSection.isPlaceholder())
+            ).toBe(2);
+        });
+    });
+
     describe("getMaxCountByTrackId", () => {
         it("should return count by trackId", () => {
             const tracks = TrackRecordFactory.buildList(2);
@@ -25,7 +65,7 @@ describe("TrackSectionUtils", () => {
             );
 
             expect(results[0]).toBe(3);
-            expect(results[0]).toBe(1);
+            expect(results[1]).toBe(1);
         });
     });
 

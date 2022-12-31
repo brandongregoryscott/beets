@@ -9,7 +9,7 @@ const TrackSectionRecordFactory = Factory.define<TrackSectionRecord>(
         afterBuild((trackSection) => trackSection.asImmutable());
 
         return new TrackSectionRecord({
-            index: sequence,
+            index: sequence - 1,
             id: faker.datatype.uuid(),
             track_id: faker.datatype.uuid(),
             step_count: faker.datatype.number({ min: 1, max: 8 }),

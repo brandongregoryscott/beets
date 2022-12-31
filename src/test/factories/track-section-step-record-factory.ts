@@ -9,7 +9,7 @@ const TrackSectionStepRecordFactory = Factory.define<TrackSectionStepRecord>(
         afterBuild((trackSection) => trackSection.asImmutable());
 
         return new TrackSectionStepRecord({
-            index: sequence,
+            index: sequence - 1,
             id: faker.datatype.uuid(),
             track_section_id: faker.datatype.uuid(),
             // Factory-created Records need to be mutable for params/overrides to be set
