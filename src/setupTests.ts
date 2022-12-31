@@ -5,5 +5,7 @@
 import "@testing-library/jest-dom";
 /* @ts-ignore */
 import * as matchers from "jest-extended";
+import { toHaveCount } from "test/matchers";
 
 expect.extend(matchers);
+expect.extend({ toHaveCount });

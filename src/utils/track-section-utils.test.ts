@@ -29,21 +29,18 @@ describe("TrackSectionUtils", () => {
                 List.of(...longestTrackSections, ...shorterTrackSections)
             );
 
-            // TODO: Write custom jest matchers for immutable methods
-            expect(
-                result.count(
-                    (trackSection) => trackSection.track_id === longestTrack.id
-                )
-            ).toBe(longestTrackSections.length);
-            expect(
-                result.count(
-                    (trackSection) =>
-                        trackSection.track_id === shorterTracks[0].id
-                )
-            ).toBe(longestTrackSections.length);
-            expect(
-                result.count((trackSection) => trackSection.isPlaceholder())
-            ).toBe(2);
+            expect(result).toHaveCount(
+                (trackSection) => trackSection.track_id === longestTrack.id,
+                longestTrackSections.length
+            );
+            expect(result).toHaveCount(
+                (trackSection) => trackSection.track_id === shorterTracks[0].id,
+                longestTrackSections.length
+            );
+            expect(result).toHaveCount(
+                (trackSection) => trackSection.isPlaceholder(),
+                2
+            );
         });
     });
 

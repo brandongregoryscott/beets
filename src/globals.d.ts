@@ -17,4 +17,18 @@ declare module "opus-media-recorder" {
     export = OpusMediaRecorder;
 }
 
+namespace jest {
+    type MatcherNotCompatibleWithType =
+        "Matcher is not implemented for the given type.";
+
+    interface Matchers<R, T> {
+        toHaveCount: T extends Immutable.Collection<infer K, infer V>
+            ? (filter: (value: V, key: K) => boolean, expected: number) => R
+            : MatcherNotCompatibleWithType;
+        toHaveCount: T extends Immutable.Collection<K, V>
+            ? (expected: number) => R
+            : MatcherNotCompatibleWithType;
+    }
+}
+
 declare module "*.md";
