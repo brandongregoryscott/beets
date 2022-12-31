@@ -5,7 +5,14 @@
 import "@testing-library/jest-dom";
 /* @ts-ignore */
 import * as matchers from "jest-extended";
-import { toHaveCount } from "test/matchers";
+import { factories } from "test/factories";
+import { toBeOrderedByIndex, toHaveCount } from "test/matchers";
 
 expect.extend(matchers);
-expect.extend({ toHaveCount });
+expect.extend({ toBeOrderedByIndex, toHaveCount });
+
+beforeEach(() => {
+    Object.values(factories).forEach((factory) => {
+        factory.rewindSequence();
+    });
+});

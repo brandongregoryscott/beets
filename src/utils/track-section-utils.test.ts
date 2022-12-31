@@ -42,6 +42,35 @@ describe("TrackSectionUtils", () => {
                 2
             );
         });
+
+        it("maintains index order", () => {
+            const longestTrack = TrackRecordFactory.build();
+            const longestTrackSections = TrackSectionRecordFactory.buildList(
+                5,
+                undefined,
+                { associations: { track_id: longestTrack.id } }
+            );
+            TrackSectionRecordFactory.rewindSequence();
+            const shorterTrack = TrackRecordFactory.build();
+            const shorterTrackSections = TrackSectionRecordFactory.buildList(
+                4,
+                undefined,
+                {
+                    associations: { track_id: shorterTrack.id },
+                }
+            );
+
+            const result = fillWithPlaceholders(
+                List.of(...longestTrackSections, ...shorterTrackSections)
+            );
+
+            expect(result).toBeOrderedByIndex(
+                (trackSection) => trackSection.track_id === longestTrack.id
+            );
+            expect(result).toBeOrderedByIndex(
+                (trackSection) => trackSection.track_id === shorterTrack.id
+            );
+        });
     });
 
     describe("getMaxCountByTrackId", () => {
