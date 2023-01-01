@@ -30,11 +30,9 @@ class TrackRecordFactory extends BaseFactory<TrackRecord> {
         const { count } = options;
 
         const track = this.build();
-        const trackSections = TrackSectionRecordFactory.buildList(
-            count,
-            undefined,
-            { associations: { track_id: track.id } }
-        );
+        const trackSections = TrackSectionRecordFactory.trackId(
+            track.id
+        ).buildList(count);
 
         return { track, trackSections };
     }
@@ -46,14 +44,16 @@ class TrackRecordFactory extends BaseFactory<TrackRecord> {
 
         const tracks = this.buildList(count);
         const trackSections = tracks.flatMap((track) =>
-            TrackSectionRecordFactory.rewind().buildList(
-                trackSectionCount,
-                undefined,
-                { associations: { track_id: track.id } }
-            )
+            TrackSectionRecordFactory.rewind()
+                .trackId(track.id)
+                .buildList(trackSectionCount)
         );
 
         return { tracks, trackSections };
+    }
+
+    projectId(projectId: string): this {
+        return this.associations({ project_id: projectId });
     }
 }
 

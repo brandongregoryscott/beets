@@ -11,28 +11,20 @@ const WorkstationStateRecordFactory = new BaseFactory<WorkstationStateRecord>(
 
         const tracks =
             associations.tracks?.toArray() ??
-            TrackRecordFactory.buildList(2, undefined, {
-                associations: { project_id: project.id },
-            });
+            TrackRecordFactory.projectId(project.id).buildList(2);
 
         const trackSections =
             associations.trackSections?.toArray() ??
             tracks.flatMap((track) =>
-                TrackSectionRecordFactory.buildList(2, undefined, {
-                    associations: { track_id: track.id },
-                })
+                TrackSectionRecordFactory.trackId(track.id).buildList(2)
             );
 
         const trackSectionSteps =
             associations.trackSectionSteps?.toArray() ??
             trackSections.flatMap((trackSection) =>
-                TrackSectionStepRecordFactory.buildList(
-                    trackSection.step_count,
-                    undefined,
-                    {
-                        associations: { track_section_id: trackSection.id },
-                    }
-                )
+                TrackSectionStepRecordFactory.trackSectionId(
+                    trackSection.id
+                ).buildList(trackSection.step_count)
             );
 
         return new WorkstationStateRecord({

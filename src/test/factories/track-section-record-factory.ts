@@ -2,7 +2,13 @@ import { TrackSectionRecord } from "models/track-section-record";
 import { faker } from "@faker-js/faker/locale/en";
 import { BaseFactory } from "test/factories/base-factory";
 
-const TrackSectionRecordFactory = new BaseFactory<TrackSectionRecord>(
+class TrackSectionRecordFactory extends BaseFactory<TrackSectionRecord> {
+    trackId(trackId: string): this {
+        return this.associations({ track_id: trackId });
+    }
+}
+
+const TrackSectionRecordFactorySingleton = new TrackSectionRecordFactory(
     ({ sequence }) => {
         return new TrackSectionRecord({
             index: sequence - 1,
@@ -15,4 +21,4 @@ const TrackSectionRecordFactory = new BaseFactory<TrackSectionRecord>(
     }
 );
 
-export { TrackSectionRecordFactory };
+export { TrackSectionRecordFactorySingleton as TrackSectionRecordFactory };

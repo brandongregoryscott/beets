@@ -1,4 +1,6 @@
+import { faker } from "@faker-js/faker/locale/en";
 import { List } from "immutable";
+import { sum } from "lodash";
 import { TrackRecordFactory } from "test/factories/track-record-factory";
 import { TrackSectionRecordFactory } from "test/factories/track-section-record-factory";
 import {
@@ -56,6 +58,48 @@ describe("TrackSectionUtils", () => {
             expect(result).toBeOrderedByIndex(
                 (trackSection) => trackSection.track_id === shortTrack.id
             );
+        });
+
+        it("backfills smaller lists to match stepCount of longest Track", () => {
+            const longerTrack = TrackRecordFactory.build();
+            const longerTrackSections = TrackSectionRecordFactory.trackId(
+                longerTrack.id
+            ).buildList(4, {
+                step_count: faker.datatype.number({ min: 8, max: 16 }),
+            });
+
+            const shorterTrack = TrackRecordFactory.build();
+            const shorterTrackSections = TrackSectionRecordFactory.trackId(
+                shorterTrack.id
+            ).buildList(2, {
+                step_count: faker.datatype.number({ min: 1, max: 4 }),
+            });
+
+            const result = fillWithPlaceholders([
+                ...shorterTrackSections,
+                ...longerTrackSections,
+            ]);
+
+            const longerTrackStepCount = sum(
+                result
+                    .filter(
+                        (trackSection) =>
+                            trackSection.track_id === longerTrack.id
+                    )
+                    .map((trackSection) => trackSection.step_count)
+                    .toArray()
+            );
+            const shorterTrackStepCount = sum(
+                result
+                    .filter(
+                        (trackSection) =>
+                            trackSection.track_id === shorterTrack.id
+                    )
+                    .map((trackSection) => trackSection.step_count)
+                    .toArray()
+            );
+
+            expect(shorterTrackStepCount).toBe(longerTrackStepCount);
         });
     });
 
