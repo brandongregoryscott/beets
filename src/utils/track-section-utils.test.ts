@@ -10,19 +10,14 @@ import {
 describe("TrackSectionUtils", () => {
     describe("fillWithPlaceholders", () => {
         it("backfills smaller lists to match size of longest Track", () => {
-            const longestTrack = TrackRecordFactory.build();
-            const longestTrackSections = TrackSectionRecordFactory.buildList(
-                5,
-                undefined,
-                { associations: { track_id: longestTrack.id } }
-            );
-            TrackSectionRecordFactory.rewindSequence();
-            const shorterTracks = TrackRecordFactory.buildList(2);
-            const shorterTrackSections = shorterTracks.flatMap((track) => {
-                TrackSectionRecordFactory.rewindSequence();
-                return TrackSectionRecordFactory.buildList(4, undefined, {
-                    associations: { track_id: track.id },
-                });
+            const { track: longestTrack, trackSections: longestTrackSections } =
+                TrackRecordFactory.buildWithTrackSections({ count: 5 });
+            const {
+                tracks: shorterTracks,
+                trackSections: shorterTrackSections,
+            } = TrackRecordFactory.buildListWithTrackSections({
+                count: 2,
+                trackSectionCount: 4,
             });
 
             const result = fillWithPlaceholders(
@@ -44,50 +39,38 @@ describe("TrackSectionUtils", () => {
         });
 
         it("maintains index order", () => {
-            const longestTrack = TrackRecordFactory.build();
-            const longestTrackSections = TrackSectionRecordFactory.buildList(
-                5,
-                undefined,
-                { associations: { track_id: longestTrack.id } }
-            );
+            const { track: longTrack, trackSections: longTrackSections } =
+                TrackRecordFactory.buildWithTrackSections({ count: 5 });
+
             TrackSectionRecordFactory.rewindSequence();
-            const shorterTrack = TrackRecordFactory.build();
-            const shorterTrackSections = TrackSectionRecordFactory.buildList(
-                4,
-                undefined,
-                {
-                    associations: { track_id: shorterTrack.id },
-                }
-            );
+            const { track: shortTrack, trackSections: shortTrackSections } =
+                TrackRecordFactory.buildWithTrackSections({ count: 4 });
 
             const result = fillWithPlaceholders(
-                List.of(...longestTrackSections, ...shorterTrackSections)
+                List.of(...longTrackSections, ...shortTrackSections)
             );
 
             expect(result).toBeOrderedByIndex(
-                (trackSection) => trackSection.track_id === longestTrack.id
+                (trackSection) => trackSection.track_id === longTrack.id
             );
             expect(result).toBeOrderedByIndex(
-                (trackSection) => trackSection.track_id === shorterTrack.id
+                (trackSection) => trackSection.track_id === shortTrack.id
             );
         });
     });
 
     describe("getMaxCountByTrackId", () => {
         it("should return count by trackId", () => {
-            const tracks = TrackRecordFactory.buildList(2);
-            const trackSections = List(
-                tracks.flatMap((track, index) =>
-                    TrackSectionRecordFactory.buildList(
-                        index % 2 === 0 ? 3 : 1,
-                        undefined,
-                        { associations: { track_id: track.id } }
-                    )
-                )
-            );
+            const { track: longTrack, trackSections: longTrackSections } =
+                TrackRecordFactory.buildWithTrackSections({ count: 3 });
+            const { track: shortTrack, trackSections: shortTrackSections } =
+                TrackRecordFactory.buildWithTrackSections({ count: 1 });
 
-            const results = tracks.map((track) =>
-                getCountByTrackId(trackSections, track.id)
+            const results = [longTrack, shortTrack].map((track) =>
+                getCountByTrackId(
+                    List([...longTrackSections, ...shortTrackSections]),
+                    track.id
+                )
             );
 
             expect(results[0]).toBe(3);

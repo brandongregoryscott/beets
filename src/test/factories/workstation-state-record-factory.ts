@@ -1,12 +1,12 @@
-import { Factory } from "fishery";
 import { faker } from "@faker-js/faker/locale/en";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { ProjectRecordFactory } from "test/factories/project-record-factory";
 import { TrackRecordFactory } from "test/factories/track-record-factory";
 import { TrackSectionRecordFactory } from "test/factories/track-section-record-factory";
 import { TrackSectionStepRecordFactory } from "test/factories/track-section-step-record-factory";
+import { BaseFactory } from "test/factories/base-factory";
 
-const WorkstationStateRecordFactory = Factory.define<WorkstationStateRecord>(
+const WorkstationStateRecordFactory = new BaseFactory<WorkstationStateRecord>(
     ({ afterBuild, associations, sequence }) => {
         faker.seed(sequence);
 

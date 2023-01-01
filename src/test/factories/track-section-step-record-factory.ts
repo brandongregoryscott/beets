@@ -1,8 +1,8 @@
-import { Factory } from "fishery";
 import { faker } from "@faker-js/faker/locale/en";
 import { TrackSectionStepRecord } from "models/track-section-step-record";
+import { BaseFactory } from "test/factories/base-factory";
 
-const TrackSectionStepRecordFactory = Factory.define<TrackSectionStepRecord>(
+const TrackSectionStepRecordFactory = new BaseFactory<TrackSectionStepRecord>(
     ({ afterBuild, sequence }) => {
         faker.seed(sequence);
 

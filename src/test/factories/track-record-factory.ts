@@ -1,8 +1,63 @@
-import { Factory } from "fishery";
 import { faker } from "@faker-js/faker/locale/en";
 import { TrackRecord } from "models/track-record";
+import type { TrackSectionRecord } from "models/track-section-record";
+import { TrackSectionRecordFactory } from "test/factories/track-section-record-factory";
+import { BaseFactory } from "test/factories/base-factory";
 
-const TrackRecordFactory = Factory.define<TrackRecord>(
+interface BuildWithTrackSectionsOptions {
+    count: number;
+}
+
+interface BuildWithTrackSectionsResult {
+    track: TrackRecord;
+    trackSections: TrackSectionRecord[];
+}
+
+interface BuildListWithTrackSectionsOptions {
+    count: number;
+    trackSectionCount: number;
+}
+
+interface BuildListWithTrackSectionsResult {
+    tracks: TrackRecord[];
+    trackSections: TrackSectionRecord[];
+}
+
+class TrackRecordFactory extends BaseFactory<TrackRecord> {
+    buildWithTrackSections(
+        options: BuildWithTrackSectionsOptions
+    ): BuildWithTrackSectionsResult {
+        const { count } = options;
+
+        const track = this.build();
+        const trackSections = TrackSectionRecordFactory.buildList(
+            count,
+            undefined,
+            { associations: { track_id: track.id } }
+        );
+
+        return { track, trackSections };
+    }
+
+    buildListWithTrackSections(
+        options: BuildListWithTrackSectionsOptions
+    ): BuildListWithTrackSectionsResult {
+        const { count, trackSectionCount } = options;
+
+        const tracks = this.buildList(count);
+        const trackSections = tracks.flatMap((track) =>
+            TrackSectionRecordFactory.rewind().buildList(
+                trackSectionCount,
+                undefined,
+                { associations: { track_id: track.id } }
+            )
+        );
+
+        return { tracks, trackSections };
+    }
+}
+
+const TrackRecordFactorySingleton = new TrackRecordFactory(
     ({ afterBuild, sequence }) => {
         faker.seed(sequence);
 
@@ -19,4 +74,4 @@ const TrackRecordFactory = Factory.define<TrackRecord>(
     }
 );
 
-export { TrackRecordFactory };
+export { TrackRecordFactorySingleton as TrackRecordFactory };

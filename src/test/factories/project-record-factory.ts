@@ -1,8 +1,8 @@
-import { Factory } from "fishery";
 import { faker } from "@faker-js/faker/locale/en";
 import { ProjectRecord } from "models/project-record";
+import { BaseFactory } from "test/factories/base-factory";
 
-const ProjectRecordFactory = Factory.define<ProjectRecord>(
+const ProjectRecordFactory = new BaseFactory<ProjectRecord>(
     ({ afterBuild, sequence }) => {
         faker.seed(sequence);
 
