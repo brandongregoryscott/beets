@@ -3,11 +3,7 @@ import { faker } from "@faker-js/faker/locale/en";
 import { BaseFactory } from "test/factories/base-factory";
 
 const TrackSectionRecordFactory = new BaseFactory<TrackSectionRecord>(
-    ({ afterBuild, sequence }) => {
-        faker.seed(sequence);
-
-        afterBuild((trackSection) => trackSection.asImmutable());
-
+    ({ sequence }) => {
         return new TrackSectionRecord({
             index: sequence - 1,
             id: faker.datatype.uuid(),

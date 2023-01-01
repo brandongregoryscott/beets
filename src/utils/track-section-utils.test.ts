@@ -42,7 +42,7 @@ describe("TrackSectionUtils", () => {
             const { track: longTrack, trackSections: longTrackSections } =
                 TrackRecordFactory.buildWithTrackSections({ count: 5 });
 
-            TrackSectionRecordFactory.rewindSequence();
+            TrackSectionRecordFactory.rewind();
             const { track: shortTrack, trackSections: shortTrackSections } =
                 TrackRecordFactory.buildWithTrackSections({ count: 4 });
 
@@ -65,16 +65,22 @@ describe("TrackSectionUtils", () => {
                 TrackRecordFactory.buildWithTrackSections({ count: 3 });
             const { track: shortTrack, trackSections: shortTrackSections } =
                 TrackRecordFactory.buildWithTrackSections({ count: 1 });
-
-            const results = [longTrack, shortTrack].map((track) =>
-                getCountByTrackId(
-                    List([...longTrackSections, ...shortTrackSections]),
-                    track.id
-                )
+            const trackSections = List.of(
+                ...longTrackSections,
+                ...shortTrackSections
             );
 
-            expect(results[0]).toBe(3);
-            expect(results[1]).toBe(1);
+            const longTrackResult = getCountByTrackId(
+                trackSections,
+                longTrack.id
+            );
+            const shortTrackResult = getCountByTrackId(
+                trackSections,
+                shortTrack.id
+            );
+
+            expect(longTrackResult).toBe(longTrackSections.length);
+            expect(shortTrackResult).toBe(shortTrackSections.length);
         });
     });
 

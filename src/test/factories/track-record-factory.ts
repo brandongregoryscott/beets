@@ -57,21 +57,15 @@ class TrackRecordFactory extends BaseFactory<TrackRecord> {
     }
 }
 
-const TrackRecordFactorySingleton = new TrackRecordFactory(
-    ({ afterBuild, sequence }) => {
-        faker.seed(sequence);
-
-        afterBuild((trackSection) => trackSection.asImmutable());
-
-        return new TrackRecord({
-            index: sequence - 1,
-            name: `Track ${sequence + 1}`,
-            project_id: faker.datatype.uuid(),
-            id: faker.datatype.uuid(),
-            // Factory-created Records need to be mutable for params/overrides to be set
-            // Immutability is reset in the afterBuild hook
-        }).asMutable();
-    }
-);
+const TrackRecordFactorySingleton = new TrackRecordFactory(({ sequence }) => {
+    return new TrackRecord({
+        index: sequence - 1,
+        name: `Track ${sequence + 1}`,
+        project_id: faker.datatype.uuid(),
+        id: faker.datatype.uuid(),
+        // Factory-created Records need to be mutable for params/overrides to be set
+        // Immutability is reset in the afterBuild hook
+    }).asMutable();
+});
 
 export { TrackRecordFactorySingleton as TrackRecordFactory };

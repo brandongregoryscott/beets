@@ -3,11 +3,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { BaseFactory } from "test/factories/base-factory";
 
 const TrackSectionStepRecordFactory = new BaseFactory<TrackSectionStepRecord>(
-    ({ afterBuild, sequence }) => {
-        faker.seed(sequence);
-
-        afterBuild((trackSection) => trackSection.asImmutable());
-
+    ({ sequence }) => {
         return new TrackSectionStepRecord({
             index: sequence - 1,
             id: faker.datatype.uuid(),

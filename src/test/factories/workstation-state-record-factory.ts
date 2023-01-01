@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker/locale/en";
 import { WorkstationStateRecord } from "models/workstation-state-record";
 import { ProjectRecordFactory } from "test/factories/project-record-factory";
 import { TrackRecordFactory } from "test/factories/track-record-factory";
@@ -7,11 +6,7 @@ import { TrackSectionStepRecordFactory } from "test/factories/track-section-step
 import { BaseFactory } from "test/factories/base-factory";
 
 const WorkstationStateRecordFactory = new BaseFactory<WorkstationStateRecord>(
-    ({ afterBuild, associations, sequence }) => {
-        faker.seed(sequence);
-
-        afterBuild((workstation) => workstation.asImmutable());
-
+    ({ associations }) => {
         const project = associations.project ?? ProjectRecordFactory.build();
 
         const tracks =
