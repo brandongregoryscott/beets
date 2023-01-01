@@ -6,6 +6,7 @@ import { TrackSectionRecordFactory } from "test/factories/track-section-record-f
 import {
     fillWithPlaceholders,
     getCountByTrackId,
+    getMaxStepCountByTrackId,
     getStepCountOffset,
 } from "utils/track-section-utils";
 
@@ -125,6 +126,26 @@ describe("TrackSectionUtils", () => {
 
             expect(longTrackResult).toBe(longTrackSections.length);
             expect(shortTrackResult).toBe(shortTrackSections.length);
+        });
+    });
+
+    describe("getMaxStepCountByTrackId", () => {
+        it("returns maximum sum of stepCount values for any Track", () => {
+            const trackSections = List.of(
+                TrackSectionRecordFactory.build({
+                    step_count: 8,
+                }),
+                TrackSectionRecordFactory.build({
+                    step_count: 4,
+                }),
+                TrackSectionRecordFactory.build({
+                    step_count: 12,
+                })
+            );
+
+            const result = getMaxStepCountByTrackId(trackSections);
+
+            expect(result).toBe(12);
         });
     });
 

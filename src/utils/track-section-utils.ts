@@ -74,6 +74,16 @@ const getMaxCountByTrackId = (
 ): number =>
     trackSections.countBy((trackSection) => trackSection.track_id).max() ?? 0;
 
+const getMaxStepCountByTrackId = (
+    trackSections: List<TrackSectionRecord>
+): number =>
+    trackSections
+        .groupBy((trackSection) => trackSection.track_id)
+        .map((trackSectionsByTrackId) =>
+            getTotalStepCount(trackSectionsByTrackId.toList())
+        )
+        .max() ?? 0;
+
 const getStepCountOffset = (
     trackSections: List<TrackSectionRecord>,
     index: number
@@ -90,4 +100,5 @@ export {
     getCountByTrackId,
     getMaxCountByTrackId,
     getTotalStepCount,
+    getMaxStepCountByTrackId,
 };
