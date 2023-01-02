@@ -24,6 +24,7 @@ import {
 import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
 import { generatePath } from "utils/route-utils";
+import { debounce } from "lodash";
 
 enum ConfirmationAction {
     NewProject,
@@ -158,10 +159,10 @@ const FileTab: React.FC = () => {
 
     const { label } = useKeyboardShortcut(
         `${Key.Control}+s`,
-        () => {
+        debounce(() => {
             trackProjectSavedFromKeyboardShortcut(project);
             handleSave()();
-        },
+        }, 500),
         [handleSave, project]
     );
 
