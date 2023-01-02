@@ -19,7 +19,7 @@ interface UseTrackSectionsStateResult {
     add: () => void;
     get: (id: string) => TrackSectionRecord | undefined;
     initialState: List<TrackSectionRecord>;
-    insert: (index: number) => void;
+    insert: (index: number, stepCount?: number) => void;
     remove: (trackSection: TrackSectionRecord) => void;
     setState: (update: SetStateAction<List<TrackSectionRecord>>) => void;
     state: List<TrackSectionRecord>;
@@ -64,11 +64,15 @@ const useTrackSectionsState = (
     );
 
     const insert = useCallback(
-        (index: number) =>
+        (index: number, stepCount?: number) =>
             setState((prev) =>
                 prev.set(
                     index,
-                    new TrackSectionRecord({ track_id: trackId, index })
+                    new TrackSectionRecord({
+                        track_id: trackId,
+                        index,
+                        step_count: stepCount,
+                    })
                 )
             ),
         [setState, trackId]

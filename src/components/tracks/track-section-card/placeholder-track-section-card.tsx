@@ -13,12 +13,13 @@ const PlaceholderTrackSectionCard: React.FC<
     PlaceholderTrackSectionCardProps
 > = (props: PlaceholderTrackSectionCardProps) => {
     const { trackSection } = props;
+    const { index, track_id, step_count } = trackSection;
     const { insert } = useTrackSectionsState({
-        trackId: trackSection.track_id,
+        trackId: track_id,
     });
     const handleInsertClick = useCallback(() => {
-        insert(trackSection.index);
-    }, [insert, trackSection.index]);
+        insert(index, step_count);
+    }, [index, insert, step_count]);
     return (
         <Flex.Row
             alignItems="center"
