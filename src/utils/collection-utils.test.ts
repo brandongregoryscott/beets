@@ -111,6 +111,15 @@ describe("CollectionUtils", () => {
 
             expect(result).toStrictEqual(expected);
         });
+
+        it("should return 0 (falsy value)", () => {
+            const input: number[] = [1, 2, 3, 4];
+            const expected = [0];
+
+            const result = findMissingIndices(input, 5);
+
+            expect(result).toStrictEqual(expected);
+        });
     });
 
     describe("groupBy", () => {

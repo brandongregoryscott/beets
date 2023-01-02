@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker/locale/en";
 import type { GeneratorFnOptions, HookFn } from "fishery";
 import { Factory } from "fishery";
 import Immutable from "immutable";
@@ -6,8 +5,6 @@ import Immutable from "immutable";
 class BaseFactory<T, I = any, C = T> extends Factory<T, I, C> {
     constructor(generator: (opts: GeneratorFnOptions<T, I, C>) => T) {
         super(generator);
-
-        faker.seed(this.sequence());
     }
 
     afterBuild(afterBuildFn: HookFn<T>): this {

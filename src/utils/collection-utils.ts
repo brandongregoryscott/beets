@@ -4,7 +4,7 @@ import type { OrderableEntity } from "interfaces/orderable-entity";
 import _, { compact } from "lodash";
 import type { Grouping } from "types/grouping";
 import { isPersisted } from "utils/auditable-utils";
-import { isEqual, isNilOrEmpty } from "utils/core-utils";
+import { isEqual, isNilOrEmpty, isNotNilOrEmpty } from "utils/core-utils";
 
 const diffDeletedEntities = <T extends Auditable>(
     initialValues: List<T>,
@@ -48,11 +48,10 @@ const findMissingIndices = (
     indices: Array<number> | List<number>,
     expectedSize: number
 ): number[] =>
-    compact(
-        Range(0, expectedSize)
-            .map((index) => (indices.includes(index) ? undefined : index))
-            .toArray()
-    );
+    Range(0, expectedSize)
+        .map((index) => (indices.includes(index) ? undefined : index))
+        .filter(isNotNilOrEmpty)
+        .toArray();
 
 /**
  * Groups two collections of entities by the provided comparator. For sorting purposes, the left

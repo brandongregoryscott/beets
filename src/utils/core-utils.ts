@@ -2,7 +2,12 @@ import type { BorderPropsOptions } from "interfaces/border-props-options";
 import type { BorderProps } from "interfaces/border-props";
 import type { RequiredOrNil } from "types/required-or-nil";
 import { List, Record } from "immutable";
-import { isEqual as lodashIsEqual, pick as lodashPick } from "lodash";
+import {
+    isEqual as lodashIsEqual,
+    pick as lodashPick,
+    range,
+    sum,
+} from "lodash";
 import type { Constructor } from "types/constructor";
 import type { Range } from "types/range";
 
@@ -91,6 +96,30 @@ const isNotNilOrEmpty = <T = any[] | List<any> | string>(
 const makeDefaultValues = <T>(defaultValues: RequiredOrNil<T>): T =>
     defaultValues as T;
 
+/**
+ * Partitions the value into roughly equal values to the desired number of slices
+ */
+const partitionValueToArray = (value: number, slices: number): number[] => {
+    if (value % slices === 0) {
+        return range(0, slices).map(() => value / slices);
+    }
+
+    const partitions: number[] = [];
+
+    range(0, slices).forEach(() => {
+        const slice = Math.ceil(value / slices);
+        const accumulated = sum(partitions);
+        const remainder = value - accumulated;
+
+        // Determine if the ceiling slice would overflow the desired value
+        const useRemainder = accumulated + slice > value;
+
+        partitions.push(useRemainder ? remainder : slice);
+    });
+
+    return partitions;
+};
+
 const pick = <T extends object, K extends keyof T = keyof T>(
     object: T,
     ...values: Array<K>
@@ -121,6 +150,7 @@ const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
 export {
+    partitionValueToArray,
     getBorderYProps,
     getBorderXProps,
     isEqual,

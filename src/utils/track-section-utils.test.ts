@@ -70,11 +70,11 @@ describe("TrackSectionUtils", () => {
             });
 
             const shorterTrack = TrackRecordFactory.build();
-            const shorterTrackSections = TrackSectionRecordFactory.trackId(
-                shorterTrack.id
-            ).buildList(2, {
-                step_count: faker.datatype.number({ min: 1, max: 4 }),
-            });
+            const shorterTrackSections = TrackSectionRecordFactory.rewind()
+                .trackId(shorterTrack.id)
+                .buildList(2, {
+                    step_count: faker.datatype.number({ min: 1, max: 4 }),
+                });
 
             const result = fillWithPlaceholders([
                 ...shorterTrackSections,

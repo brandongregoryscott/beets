@@ -2,6 +2,7 @@ import { List } from "immutable";
 import { sumBy } from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
 import { findMissingIndices } from "utils/collection-utils";
+import { partitionValueToArray } from "utils/core-utils";
 
 const fillWithPlaceholders = (
     trackSections: Array<TrackSectionRecord> | List<TrackSectionRecord>
@@ -39,19 +40,34 @@ const fillWithPlaceholdersByTrackId = (
         return trackSectionsByTrackId;
     }
 
-    const placeholderTrackSections = findMissingIndices(
-        trackSectionsByTrackId.map((trackSection) => trackSection.index),
-        maxTrackSectionCount
-    ).map((index) =>
-        new TrackSectionRecord({
-            index,
-            track_id: trackId,
-        }).setIsPlaceholder()
+    const maxStepCount = getMaxStepCountByTrackId(trackSections);
+    const trackStepCount = getTotalStepCount(trackSectionsByTrackId);
+    const stepCountDifference = maxStepCount - trackStepCount;
+
+    const stepCounts = partitionValueToArray(
+        stepCountDifference,
+        missingTrackSectionCount
     );
 
-    return trackSectionsByTrackId
+    const missingIndices = findMissingIndices(
+        trackSectionsByTrackId.map((trackSection) => trackSection.index),
+        maxTrackSectionCount
+    );
+
+    const placeholderTrackSections = missingIndices.map(
+        (missingIndex, iteratorIndex) =>
+            new TrackSectionRecord({
+                index: missingIndex,
+                track_id: trackId,
+                step_count: stepCounts[iteratorIndex],
+            }).setIsPlaceholder()
+    );
+
+    const filledTrackSections = trackSectionsByTrackId
         .concat(placeholderTrackSections)
         .sortBy((trackSection) => trackSection.index);
+
+    return filledTrackSections;
 };
 
 const getByTrackId = (
