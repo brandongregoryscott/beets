@@ -10,6 +10,7 @@ import {
 } from "atoms/track-sections-atom";
 import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
 import { rebaseIndexes } from "utils/collection-utils";
+import { fillWithPlaceholders } from "utils/track-section-utils";
 
 interface UseTrackSectionsStateOptions {
     trackId: string;
@@ -131,12 +132,15 @@ const useTrackSectionsState = (
     );
 
     const initialState = useMemo(
-        () => _initialState.filter(filterByTrackId(trackId)),
+        () =>
+            fillWithPlaceholders(_initialState).filter(
+                filterByTrackId(trackId)
+            ),
         [_initialState, trackId]
     );
 
     const state = useMemo(
-        () => _state.filter(filterByTrackId(trackId)),
+        () => fillWithPlaceholders(_state).filter(filterByTrackId(trackId)),
         [trackId, _state]
     );
 
