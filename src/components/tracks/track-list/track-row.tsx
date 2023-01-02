@@ -7,7 +7,12 @@ import { useDraggable } from "hooks/use-draggable";
 import { useTrackSectionsState } from "hooks/use-track-sections-state";
 import type { TrackRecord } from "models/track-record";
 import type { TrackSectionRecord } from "models/track-section-record";
-import type { ForwardedRef, ForwardRefRenderFunction } from "react";
+import type {
+    ForwardedRef,
+    MutableRefObject,
+    ForwardRefRenderFunction,
+} from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { forwardRef, useCallback, useMemo } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -16,6 +21,7 @@ import { VariableSizeList } from "react-window";
 import { useDebouncedValue, useWindowSize } from "rooks";
 import type { SelectorMap } from "ui-box";
 import { calcFrom100 } from "utils/theme-utils";
+import { getTotalStepCount } from "utils/track-section-utils";
 
 interface TrackRowProps {
     onScroll: (props: ListOnScrollProps) => void;
@@ -58,6 +64,7 @@ const _TrackRow: ForwardRefRenderFunction<
     const [isTrackDragDisabled, setIsTrackDragDisabled] =
         useState<boolean>(true);
 
+    const totalStepCount = useMemo(() => getTotalStepCount(state), [state]);
     const trackSections = useMemo(() => state.toArray(), [state]);
 
     const getItemSize = useCallback(
@@ -71,6 +78,10 @@ const _TrackRow: ForwardRefRenderFunction<
         },
         [trackSections]
     );
+
+    useEffect(() => {
+        (ref as MutableRefObject<VariableSizeList>).current.resetAfterIndex(0);
+    }, [ref, totalStepCount]);
 
     const variableListHeight = showScrollbar ? majorScale(12) : majorScale(10);
     const variableListStyle = showScrollbar ? undefined : hiddenScrollbarStyle;
