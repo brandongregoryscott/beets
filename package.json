@@ -33,7 +33,7 @@
         "react-markdown": "8.0.2",
         "react-query": "3.39.2",
         "react-router": "6.3.0",
-        "react-router-dom": "6.3.0",
+        "react-router-dom": "6.6.2",
         "react-scripts": "5.0.1",
         "react-snowfall": "1.2.1",
         "rehype-autolink-headings": "6.1.1",
