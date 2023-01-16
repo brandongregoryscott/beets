@@ -21,7 +21,6 @@ import {
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
 import { isUuid } from "utils/id-utils";
-import { fillWithPlaceholders } from "utils/track-section-utils";
 import { getMaxStepCount } from "utils/track-utils";
 
 interface WorkstationStateDiff {
@@ -183,10 +182,8 @@ class WorkstationStateRecord
 
         if (values.trackSections != null) {
             values.trackSections = sortBy(
-                fillWithPlaceholders(
-                    values.trackSections.map(
-                        (trackSection) => new TrackSectionRecord(trackSection)
-                    )
+                values.trackSections.map(
+                    (trackSection) => new TrackSectionRecord(trackSection)
                 ),
                 ["track_id", "index"]
             );
