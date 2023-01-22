@@ -13,6 +13,7 @@ import { Sitemap } from "sitemap";
 import { useLogout } from "hooks/supabase/use-logout";
 import { useGlobalState } from "hooks/use-global-state";
 import { useTheme } from "hooks/use-theme";
+import { isJanuaryOrDecember } from "utils/date-utils";
 
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;
@@ -24,7 +25,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
     const { onAboutDialogClick, onHelpDialogClick, onClose } = props;
     const { isAuthenticated, globalState, setGlobalState } = useGlobalState();
     const { colors } = useTheme();
-    const handleLogoutsettled = useCallback(
+    const handleLogoutSettled = useCallback(
         () =>
             setGlobalState((prev) =>
                 prev.merge({
@@ -34,7 +35,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
             ),
         [setGlobalState]
     );
-    const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
+    const { mutate: logout } = useLogout({ onSettled: handleLogoutSettled });
     const { navigate } = useRouter();
 
     const handleAboutDialogClick = useCallback(() => {
@@ -78,11 +79,14 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
 
     return (
         <Menu>
-            <Menu.Item
-                icon={<SnowflakeIcon color={snowflakeIconColor} />}
-                onSelect={handleToggleHolidayMode}>
-                Holiday Mode
-            </Menu.Item>
+            {isJanuaryOrDecember() && (
+                <Menu.Item
+                    icon={<SnowflakeIcon color={snowflakeIconColor} />}
+                    onSelect={handleToggleHolidayMode}>
+                    Holiday Mode
+                </Menu.Item>
+            )}
+
             <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>
