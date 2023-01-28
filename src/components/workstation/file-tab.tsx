@@ -23,6 +23,7 @@ import {
 } from "utils/analytics-utils";
 import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
+import { generatePath } from "utils/route-utils";
 
 enum ConfirmationAction {
     NewProject,
@@ -122,7 +123,21 @@ const FileTab: React.FC = () => {
             const newProjectHasName =
                 !state.isDemo() && isNotNilOrEmpty(project.name);
             if (isAuthenticated && (projectIsPersisted || newProjectHasName)) {
-                sync(state);
+                const handleSuccess = (workstation: WorkstationStateRecord) => {
+                    if (projectIsPersisted) {
+                        return;
+                    }
+
+                    navigate(
+                        generatePath(Sitemap.root.project, {
+                            projectId: workstation.project.id,
+                        })
+                    );
+                };
+
+                sync(state, {
+                    onSuccess: handleSuccess,
+                });
                 closePopover?.();
                 return;
             }
@@ -133,6 +148,7 @@ const FileTab: React.FC = () => {
         [
             handleOpenSaveProjectDialog,
             isAuthenticated,
+            navigate,
             project.name,
             projectIsPersisted,
             state,
