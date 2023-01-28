@@ -1,8 +1,8 @@
 import { TrackSectionRecord } from "models/track-section-record";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
-import type { UseQueryResult } from "utils/hooks/use-query";
-import { useQuery } from "utils/hooks/use-query";
+import type { UseQueryResult } from "hooks/use-query";
+import { useQuery } from "hooks/use-query";
 
 interface UseGetTrackSectionOptions {
     enabled?: boolean;

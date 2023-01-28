@@ -4,11 +4,13 @@ import { pick } from "utils/core-utils";
 import { isPersisted } from "utils/auditable-utils";
 import { errorToString } from "utils/error-utils";
 import type { ApiError } from "@supabase/supabase-js";
-import { isError } from "lodash";
+import { debounce, isError } from "lodash";
+import type { FeedbackCategory } from "components/feedback-dialog";
 
 const { analytics } = window;
 
 enum EventName {
+    FeedbackSubmitted = "Feedback Submitted",
     LoginFailed = "Login Failed",
     PasswordResetRequested = "Password Reset Requested",
     ProjectCreated = "Project Created",
@@ -23,8 +25,21 @@ enum ProjectSaveLocation {
     KeyboardShortcut = "Keyboard Shortcut",
 }
 
+interface TrackFeedbackSubmittedOptions {
+    category: FeedbackCategory;
+    consentToResponse: boolean;
+    email?: string;
+    feedback: string;
+}
+
 const identifyUser = (user: SupabaseUser): void => {
     analytics.identify(user.id, pick(user, "email"));
+};
+
+const trackFeedbackSubmitted = (
+    options: TrackFeedbackSubmittedOptions
+): void => {
+    analytics.track(EventName.FeedbackSubmitted, options);
 };
 
 const trackLoginFailed = (email: string, error: ApiError | Error): void => {
@@ -34,9 +49,9 @@ const trackLoginFailed = (email: string, error: ApiError | Error): void => {
     });
 };
 
-const trackPage = (): void => {
+const trackPage = debounce((): void => {
     analytics.page();
-};
+}, 25);
 
 const trackUserCreated = (user: SupabaseUser): void => {
     analytics.track(EventName.UserCreated, pick(user, "id", "email"));
@@ -109,6 +124,7 @@ export {
     identifyUser,
     trackPage,
     trackProjectSavedFromFileMenu,
+    trackFeedbackSubmitted,
     trackProjectSavedFromKeyboardShortcut,
     trackPasswordResetRequested,
     trackUserCreated,

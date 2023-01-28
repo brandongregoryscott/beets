@@ -4,40 +4,45 @@ import {
 } from "components/workstation/song-controls";
 import {
     AddIcon,
-    IconButton,
     majorScale,
     Pane,
     Spinner,
     Tooltip,
+    Text,
+    Strong,
+    ProjectsIcon,
 } from "evergreen-ui";
-import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCallback, useEffect, useState } from "react";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { useListWorkstations } from "utils/hooks/use-list-workstations";
-import type { RouteProps } from "interfaces/route-props";
-import { useCurrentUser } from "utils/hooks/use-current-user";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import { ChooseOrCreateInstrumentDialog } from "components/instruments/choose-or-create-instrument-dialog";
 import React from "react";
 import type { SelectMenuItem } from "components/select-menu/select-menu";
 import { SelectMenu } from "components/select-menu/select-menu";
 import { TrackRecord } from "models/track-record";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useTracksState } from "utils/hooks/use-tracks-state";
+import { useGlobalState } from "hooks/use-global-state";
+import { useTracksState } from "hooks/use-tracks-state";
 import type { InstrumentRecord } from "models/instrument-record";
-import { useDialog } from "utils/hooks/use-dialog";
-import { useProjectState } from "utils/hooks/use-project-state";
+import { useDialog } from "hooks/use-dialog";
+import { useProjectState } from "hooks/use-project-state";
 import { DraggableTrackList } from "components/tracks/track-list/draggable-track-list";
-import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
+import { useListInstruments } from "hooks/domain/instruments/use-list-instruments";
 import { List } from "immutable";
 import { SidebarNavigationWidth } from "components/sidebar/sidebar-navigation";
 import { WorkstationTabsHeight } from "components/workstation/workstation-tabs";
 import { calcFrom100 } from "utils/theme-utils";
 import { TrackSectionRecord } from "models/track-section-record";
 import type { Track } from "generated/interfaces/track";
-import { useTimeoutRender } from "utils/hooks/use-timeout-render";
-
-interface WorkstationPageProps extends RouteProps {}
+import { matchPath } from "react-router";
+import { useGetWorkstationByProjectId } from "hooks/use-get-workstation-by-project-id";
+import { EmptyState } from "components/empty-state";
+import { isInvalidUuidError, isNotFoundError } from "utils/error-utils";
+import { Sitemap } from "sitemap";
+import { useRouter } from "hooks/use-router";
+import { WorkstationStateRecord } from "models/workstation-state-record";
+import { useCurrentUser } from "hooks/use-current-user";
+import { useTimeoutRender } from "hooks/use-timeout-render";
+import { IconButton } from "components/icon-button";
 
 const options: Array<SelectMenuItem<boolean>> = [
     {
@@ -54,10 +59,11 @@ const options: Array<SelectMenuItem<boolean>> = [
 
 const margin = majorScale(2);
 
-const WorkstationPage: React.FC<WorkstationPageProps> = (
-    props: WorkstationPageProps
-) => {
-    const { user } = useCurrentUser();
+const WorkstationPage: React.FC = () => {
+    const { location, params } = useRouter();
+    const { projectId } = params;
+    const [isStateInitialized, setIsStateInitialized] =
+        useState<boolean>(false);
     const { setState } = useWorkstationState();
     const { state: project } = useProjectState();
     const { state: tracks, add: addTrack } = useTracksState();
@@ -67,67 +73,53 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
         handleCloseInstrumentDialog,
     ] = useDialog();
     const { globalState } = useGlobalState();
+    const { user } = useCurrentUser();
     const { resultObject: files = List(), isLoading: isLoadingFiles } =
         useListFiles();
     const {
         resultObject: instruments = List(),
         isLoading: isLoadingInstruments,
     } = useListInstruments({ files });
-
-    const { resultObject: workstations, isLoading: isLoadingWorkstations } =
-        useListWorkstations();
-    const [hasInitialized, setHasInitialized] = useState<boolean>(false);
+    const {
+        isLoading: isLoadingWorkstation,
+        refetch,
+        error,
+    } = useGetWorkstationByProjectId({
+        projectId,
+        onSuccess: setState,
+    });
 
     // Unfortunate hack to prevent infinite loading issue for initial render when a staleTime
     // is set: https://github.com/tannerlinsley/react-query/issues/1657
-    useTimeoutRender({
-        onTimeout: () => {
-            // If we're still seeing a loading state for either of these after 1s, assume react-query
-            // is stuck and set state manually
-            if (isLoadingFiles || isLoadingWorkstations) {
-                setState(new WorkstationStateRecord());
-            }
-        },
-    });
+    useTimeoutRender();
 
     useEffect(() => {
-        if (
-            hasInitialized ||
-            isLoadingFiles ||
-            isLoadingWorkstations ||
-            (project.isPersisted() && user != null) ||
-            (project.isDemo() && user == null)
-        ) {
+        if (isStateInitialized || isLoadingFiles) {
             return;
         }
 
-        setHasInitialized(true);
-
-        if (user == null) {
-            setState(
-                files?.isEmpty()
-                    ? new WorkstationStateRecord()
-                    : WorkstationStateRecord.demo(files)
-            );
+        if (matchPath(Sitemap.root.newProject, location.pathname) == null) {
             return;
         }
 
-        if (workstations?.isEmpty() === true) {
-            setState(new WorkstationStateRecord());
-            return;
-        }
-
-        setState(workstations?.first()!);
+        setIsStateInitialized(true);
+        const workstation =
+            user == null
+                ? WorkstationStateRecord.demo(files)
+                : new WorkstationStateRecord();
+        setState(workstation);
     }, [
         files,
-        hasInitialized,
         isLoadingFiles,
-        isLoadingWorkstations,
-        project,
+        isStateInitialized,
+        location.pathname,
         setState,
         user,
-        workstations,
     ]);
+
+    useEffect(() => {
+        setIsStateInitialized(false);
+    }, [user]);
 
     const addTrackWithTrackSection = useCallback(
         (overrides?: Partial<Track>) => {
@@ -176,8 +168,11 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
     );
 
     const renderSpinner =
-        isLoadingFiles || isLoadingWorkstations || isLoadingInstruments;
-    const renderControls = !renderSpinner;
+        isLoadingFiles || isLoadingWorkstation || isLoadingInstruments;
+    const renderNotFoundError =
+        isNotFoundError(error) || isInvalidUuidError(error);
+    const renderGenericError = error != null && !renderNotFoundError;
+    const renderControls = !renderNotFoundError && !renderSpinner;
 
     return (
         <Pane height="100%" marginTop={margin} width="100%">
@@ -232,6 +227,31 @@ const WorkstationPage: React.FC<WorkstationPageProps> = (
                         )}
                     </Pane>
                 </Pane>
+            )}
+            {renderGenericError && (
+                <EmptyState
+                    description="There was an error retrieving the requested Project."
+                    icon={<ProjectsIcon />}
+                    primaryCta={
+                        <EmptyState.PrimaryButton onClick={refetch}>
+                            Retry
+                        </EmptyState.PrimaryButton>
+                    }
+                    title="Error Retrieving Project"
+                />
+            )}
+            {renderNotFoundError && (
+                <EmptyState
+                    description={
+                        <Text>
+                            {"The requested Project with id "}
+                            <Strong>{projectId}</Strong>
+                            {" was not found."}
+                        </Text>
+                    }
+                    icon={<ProjectsIcon />}
+                    title="Project Not Found"
+                />
             )}
         </Pane>
     );

@@ -1,11 +1,8 @@
 import { Pane, Paragraph, Spinner } from "evergreen-ui";
-import type { RouteProps } from "interfaces/route-props";
 import { useEffect } from "react";
-import { useLogout } from "utils/hooks/supabase/use-logout";
+import { useLogout } from "hooks/supabase/use-logout";
 
-interface LogoutPageProps extends RouteProps {}
-
-const LogoutPage: React.FC<LogoutPageProps> = (props: LogoutPageProps) => {
+const LogoutPage: React.FC = () => {
     const { mutate: logout } = useLogout();
     useEffect(() => {
         setTimeout(logout, 1500);

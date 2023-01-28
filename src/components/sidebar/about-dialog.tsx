@@ -11,7 +11,7 @@ import {
 } from "evergreen-ui";
 import React from "react";
 import { formatUpdatedOn } from "utils/date-utils";
-import { useLatestRelease } from "utils/hooks/use-latest-release";
+import { useLatestRelease } from "hooks/use-latest-release";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
 import {
@@ -43,6 +43,9 @@ const components: MarkdownComponentMap = {
             </Link>
         );
     },
+    h1: (props) => (
+        <Heading {...omitProps(props)} marginY={majorScale(2)} size={500} />
+    ),
     h2: (props) => (
         <Heading {...omitProps(props)} marginY={majorScale(2)} size={700} />
     ),

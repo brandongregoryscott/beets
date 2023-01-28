@@ -4,7 +4,6 @@ import {
     Card,
     DeleteIcon,
     DragHandleHorizontalIcon,
-    IconButton,
     majorScale,
     minorScale,
     Pane,
@@ -16,22 +15,23 @@ import {
 } from "evergreen-ui";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { TrackRecord } from "models/track-record";
-import { useTheme } from "utils/hooks/use-theme";
-import { useTracksState } from "utils/hooks/use-tracks-state";
-import { useTrackSectionsState } from "utils/hooks/use-track-sections-state";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
+import { useTheme } from "hooks/use-theme";
+import { useTracksState } from "hooks/use-tracks-state";
+import { useTrackSectionsState } from "hooks/use-track-sections-state";
+import { useListFiles } from "hooks/domain/files/use-list-files";
 import { getFileById } from "utils/file-utils";
 import { isNotNilOrEmpty } from "utils/core-utils";
-import { useGetInstrument } from "utils/hooks/domain/instruments/use-get-instrument";
+import { useGetInstrument } from "hooks/domain/instruments/use-get-instrument";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { TrackSectionList } from "components/tracks/track-section-list/track-section-list";
-import { useDraggable } from "utils/hooks/use-draggable";
+import { useDraggable } from "hooks/use-draggable";
 import { ContextualIconButton } from "components/contextual-icon-button";
 import { css, select } from "glamor";
 import { TrackTime } from "components/tracks/track-time/track-time";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
+import { useWorkstationState } from "hooks/use-workstation-state";
 import { Flex } from "components/flex";
 import { Slider } from "components/mantine/slider";
+import { IconButton } from "components/icon-button";
 
 interface TrackCardProps {
     track: TrackRecord;

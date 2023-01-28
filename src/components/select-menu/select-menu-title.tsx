@@ -1,5 +1,6 @@
 import { Flex } from "components/flex";
-import { CrossIcon, IconButton, majorScale, Text } from "evergreen-ui";
+import { IconButton } from "components/icon-button";
+import { CrossIcon, majorScale, Text } from "evergreen-ui";
 import { isFunction } from "lodash";
 
 interface SelectMenuTitleProps {

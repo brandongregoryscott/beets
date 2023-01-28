@@ -2,8 +2,8 @@ import { TrackRecord } from "models/track-record";
 import type { Track } from "generated/interfaces/track";
 import { Tables } from "generated/enums/tables";
 import { SupabaseClient } from "generated/supabase-client";
-import type { UseQueryResult } from "utils/hooks/use-query";
-import { useQuery } from "utils/hooks/use-query";
+import type { UseQueryResult } from "hooks/use-query";
+import { useQuery } from "hooks/use-query";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { SortOptions } from "interfaces/sort-options";
 

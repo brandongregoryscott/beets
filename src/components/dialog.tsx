@@ -2,9 +2,9 @@ import { Flex } from "components/flex";
 import type { DialogProps as EvergreenDialogProps } from "evergreen-ui";
 import {
     CrossIcon,
+    // eslint-disable-next-line no-restricted-imports
     Dialog as EvergreenDialog,
     Heading,
-    IconButton,
     majorScale,
     MaximizeIcon,
     MinimizeIcon,
@@ -12,7 +12,8 @@ import {
 import { isFunction } from "lodash";
 import React, { useCallback } from "react";
 import { attachEventSource } from "utils/event-utils";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
+import { IconButton } from "components/icon-button";
 
 interface DialogProps extends Omit<EvergreenDialogProps, "isShown"> {
     allowFullscreen?: boolean;

@@ -5,6 +5,7 @@ import type {
 import {
     majorScale,
     minorScale,
+    // eslint-disable-next-line no-restricted-imports
     SelectMenu as EvergreenSelectMenu,
 } from "evergreen-ui";
 import { List } from "immutable";

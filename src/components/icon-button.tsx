@@ -1,4 +1,5 @@
 import type { IconButtonProps as EvergreenIconButtonProps } from "evergreen-ui";
+// eslint-disable-next-line no-restricted-imports
 import { IconButton as EvergreenIconButton, Spinner } from "evergreen-ui";
 import type { ForwardedRef } from "react";
 import { forwardRef } from "react";

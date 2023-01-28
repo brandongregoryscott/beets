@@ -1,4 +1,5 @@
 import type { MenuItemProps as EvergreenMenuItemProps } from "evergreen-ui";
+// eslint-disable-next-line no-restricted-imports
 import { Menu } from "evergreen-ui";
 import type { PropsWithChildren } from "react";
 

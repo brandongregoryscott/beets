@@ -5,7 +5,6 @@ import { SelectMenuTitle } from "components/select-menu/select-menu-title";
 import type { PopoverProps } from "evergreen-ui";
 import {
     FilterIcon,
-    IconButton,
     majorScale,
     minorScale,
     Popover,
@@ -18,7 +17,8 @@ import {
 } from "evergreen-ui";
 import { isEqual } from "lodash";
 import React, { useCallback, useState } from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
+import { IconButton } from "components/icon-button";
 
 interface FileSelectMenuFilterPopoverProps
     extends Pick<PopoverProps, "onClose" | "onOpen"> {

@@ -3,26 +3,27 @@ import { OpenProjectDialog } from "components/workstation/open-project-dialog";
 import { SaveProjectDialog } from "components/workstation/save-project-dialog";
 import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
 import React, { useCallback, useState } from "react";
-import { useWorkstationState } from "utils/hooks/use-workstation-state";
-import { useSyncWorkstationState } from "utils/hooks/use-sync-workstation-state";
-import { useTheme } from "utils/hooks/use-theme";
+import { useWorkstationState } from "hooks/use-workstation-state";
+import { useSyncWorkstationState } from "hooks/use-sync-workstation-state";
+import { useTheme } from "hooks/use-theme";
 import { ConfirmationDialog } from "components/confirmation-dialog";
 import { WorkstationStateRecord } from "models/workstation-state-record";
-import { useGlobalState } from "utils/hooks/use-global-state";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useDialog } from "utils/hooks/use-dialog";
+import { useGlobalState } from "hooks/use-global-state";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useDialog } from "hooks/use-dialog";
 import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { ExportDialog } from "components/workstation/export-dialog";
-import { useKeyboardShortcut } from "utils/hooks/use-keyboard-shortcut";
+import { useKeyboardShortcut } from "hooks/use-keyboard-shortcut";
 import { Key } from "enums/key";
 import {
     trackProjectSavedFromFileMenu,
     trackProjectSavedFromKeyboardShortcut,
     trackProjectSyncFailed,
 } from "utils/analytics-utils";
-
-interface FileTabProps {}
+import { useRouter } from "hooks/use-router";
+import { Sitemap } from "sitemap";
+import { generatePath } from "utils/route-utils";
 
 enum ConfirmationAction {
     NewProject,
@@ -30,7 +31,8 @@ enum ConfirmationAction {
     RevertToSaved,
 }
 
-const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
+const FileTab: React.FC = () => {
+    const { navigate } = useRouter();
     const { initialState, isDirty, state, setCurrentState, setState } =
         useWorkstationState();
     const { isAuthenticated } = useGlobalState();
@@ -102,9 +104,10 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
             }
 
             setState(new WorkstationStateRecord());
+            navigate(Sitemap.root.newProject);
             closePopover();
         },
-        [handleOpenConfirmDialog, isDirty, setConfirmationAction, setState]
+        [handleOpenConfirmDialog, isDirty, navigate, setState]
     );
 
     const handleOpenClick = useCallback(
@@ -119,8 +122,22 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         (closePopover?: () => void) => () => {
             const newProjectHasName =
                 !state.isDemo() && isNotNilOrEmpty(project.name);
-            if (projectIsPersisted || newProjectHasName) {
-                sync(state);
+            if (isAuthenticated && (projectIsPersisted || newProjectHasName)) {
+                const handleSuccess = (workstation: WorkstationStateRecord) => {
+                    if (projectIsPersisted) {
+                        return;
+                    }
+
+                    navigate(
+                        generatePath(Sitemap.root.project, {
+                            projectId: workstation.project.id,
+                        })
+                    );
+                };
+
+                sync(state, {
+                    onSuccess: handleSuccess,
+                });
                 closePopover?.();
                 return;
             }
@@ -130,6 +147,8 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
         },
         [
             handleOpenSaveProjectDialog,
+            isAuthenticated,
+            navigate,
             project.name,
             projectIsPersisted,
             state,
@@ -165,22 +184,27 @@ const FileTab: React.FC<FileTabProps> = (props: FileTabProps) => {
     );
 
     const handleDirtyConfirm = useCallback(() => {
-        let update = () => setState(new WorkstationStateRecord());
         if (confirmationAction === ConfirmationAction.RevertToSaved) {
-            update = () => setCurrentState(initialState);
+            setCurrentState(initialState);
+            handleCloseConfirmDialog();
+            return;
         }
 
         if (confirmationAction === ConfirmationAction.RevertToDemo) {
-            update = () => setCurrentState(WorkstationStateRecord.demo(files));
+            setState(WorkstationStateRecord.demo(files));
+            handleCloseConfirmDialog();
+            return;
         }
 
-        update();
+        setState(new WorkstationStateRecord());
+        navigate(Sitemap.root.newProject);
         handleCloseConfirmDialog();
     }, [
         confirmationAction,
         files,
         handleCloseConfirmDialog,
         initialState,
+        navigate,
         setCurrentState,
         setState,
     ]);

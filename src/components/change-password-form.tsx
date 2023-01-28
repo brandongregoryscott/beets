@@ -12,11 +12,11 @@ import {
 import { isEmpty } from "lodash";
 import type { ChangeEvent } from "react";
 import { useCallback, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
-import { useChangePassword } from "utils/hooks/supabase/use-change-password";
-import { useInput } from "utils/hooks/use-input";
-import type { ResetPasswordQueryParams } from "utils/hooks/use-reset-password-route";
+import { useChangePassword } from "hooks/supabase/use-change-password";
+import { useInput } from "hooks/use-input";
+import type { ResetPasswordQueryParams } from "hooks/use-reset-password-route";
 
 interface ChangePasswordFormProps
     extends Pick<ResetPasswordQueryParams, "access_token"> {}
@@ -25,7 +25,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
     props: ChangePasswordFormProps
 ) => {
     const { access_token } = props;
-    const navigate = useNavigate();
+    const { navigate } = useRouter();
     const {
         value: password,
         onChange: onPasswordChange,
@@ -43,7 +43,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
 
     const handleChangePasswordSuccess = useCallback(() => {
         toaster.success("Password successfully updated!");
-        navigate(Sitemap.home);
+        navigate(Sitemap.root.root);
     }, [navigate]);
 
     const {

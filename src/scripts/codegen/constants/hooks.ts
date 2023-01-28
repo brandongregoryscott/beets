@@ -9,12 +9,12 @@ const Hooks = {
     [useMutation]: {
         name: useMutation,
         interfaceName: "UseMutationResult",
-        importPath: joinPaths("utils", hooks, toKebabCase(useMutation)),
+        importPath: joinPaths(hooks, toKebabCase(useMutation)),
     },
     [useQuery]: {
         name: useQuery,
         interfaceName: "UseQueryResult",
-        importPath: joinPaths("utils", hooks, toKebabCase(useQuery)),
+        importPath: joinPaths(hooks, toKebabCase(useQuery)),
     },
     [useQueryClient]: {
         name: useQueryClient,

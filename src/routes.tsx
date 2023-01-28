@@ -22,15 +22,14 @@ import { HelpResource } from "enums/help-resource";
 import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
 import { HelpPage } from "components/pages/help-page";
+import { generateHelpPath } from "utils/route-utils";
 
 interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
         children: {
             help: RouteDefinition & {
                 children: {
-                    contributing: RouteDefinition;
-                    howTo: RouteDefinition;
-                    overview: RouteDefinition;
+                    resource: RouteDefinition;
                 };
             };
             library: RouteDefinition & {
@@ -44,7 +43,8 @@ interface RouteMap extends GenericRouteMap {
             register: RouteDefinition;
             workstation: RouteDefinition & {
                 children: {
-                    workstation: RouteDefinition;
+                    newProject: RouteDefinition;
+                    project: RouteDefinition;
                 };
             };
         };
@@ -55,31 +55,23 @@ const Routes: RouteMap = {
     root: {
         element: <ApplicationLayout />,
         name: "ApplicationLayout",
-        path: Sitemap.home,
+        path: Sitemap.root.root,
         children: {
             help: {
                 element: <HelpLayout />,
                 icon: HelpIcon,
                 name: "Help",
-                path: Sitemap.help.home,
-                redirects: [{ to: Sitemap.help.overview }],
+                path: Sitemap.help.root,
+                redirects: [
+                    {
+                        to: generateHelpPath(HelpResource.Overview),
+                    },
+                ],
                 children: {
-                    contributing: {
-                        element: (
-                            <HelpPage resource={HelpResource.Contributing} />
-                        ),
-                        name: HelpResource.Contributing,
-                        path: Sitemap.help.contributing,
-                    },
-                    overview: {
-                        element: <HelpPage resource={HelpResource.Overview} />,
-                        name: HelpResource.Overview,
-                        path: Sitemap.help.overview,
-                    },
-                    howTo: {
-                        element: <HelpPage resource={HelpResource.HowTo} />,
-                        name: HelpResource.HowTo,
-                        path: Sitemap.help.howTo,
+                    resource: {
+                        element: <HelpPage />,
+                        name: "Help",
+                        path: Sitemap.help.resource,
                     },
                 },
             },
@@ -87,7 +79,7 @@ const Routes: RouteMap = {
                 element: <LibraryLayout />,
                 icon: MusicIcon,
                 name: "Library",
-                path: Sitemap.library.home,
+                path: Sitemap.library.root,
                 redirects: [
                     {
                         to: Sitemap.library.files,
@@ -132,14 +124,24 @@ const Routes: RouteMap = {
                 element: <WorkstationLayout />,
                 icon: HomeIcon,
                 name: "WorkstationLayout",
-                path: Sitemap.home,
+                path: Sitemap.root.root,
                 children: {
-                    workstation: {
+                    newProject: {
                         element: <WorkstationPage />,
-                        name: "Workstation",
-                        path: Sitemap.home,
+                        name: "New Project - Workstation",
+                        path: Sitemap.root.newProject,
+                    },
+                    project: {
+                        element: <WorkstationPage />,
+                        name: "Project - Workstation",
+                        path: Sitemap.root.project,
                     },
                 },
+                redirects: [
+                    {
+                        to: Sitemap.root.newProject,
+                    },
+                ],
             },
             notFound: {
                 element: <NotFoundPage />,

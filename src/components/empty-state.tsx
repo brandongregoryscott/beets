@@ -1,7 +1,8 @@
 import type { EmptyStateOwnProps as EvergreenEmptyStateProps } from "evergreen-ui";
+// eslint-disable-next-line no-restricted-imports
 import { EmptyState as EvergreenEmptyState } from "evergreen-ui";
 import React from "react";
-import { useTheme } from "utils/hooks/use-theme";
+import { useTheme } from "hooks/use-theme";
 
 interface EmptyStateProps
     extends Omit<EvergreenEmptyStateProps, "iconBgColor"> {
@@ -15,6 +16,7 @@ const EmptyState: React.FC<EmptyStateProps> & {
 } = (props: EmptyStateProps) => {
     const { colors } = useTheme();
     const {
+        background = "dark",
         icon,
         iconColor = colors.gray500,
         iconBgColor = colors.gray200,
@@ -22,9 +24,12 @@ const EmptyState: React.FC<EmptyStateProps> & {
     } = props;
     return (
         <EvergreenEmptyState
+            background={background}
             icon={
                 React.isValidElement(icon)
-                    ? React.cloneElement(icon, { color: iconColor })
+                    ? React.cloneElement(icon, {
+                          color: iconColor,
+                      })
                     : icon
             }
             iconBgColor={iconBgColor}

@@ -1,4 +1,5 @@
 import type { FormFieldProps as EvergreenFormFieldProps } from "evergreen-ui";
+// eslint-disable-next-line no-restricted-imports
 import { majorScale, FormField as EvergreenFormField } from "evergreen-ui";
 import type { PropsWithChildren } from "react";
 

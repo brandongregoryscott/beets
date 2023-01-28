@@ -1,9 +1,6 @@
-import type { ApiError } from "@supabase/supabase-js";
+import type { ApiError, PostgrestError } from "@supabase/supabase-js";
 import { ErrorMessages } from "constants/error-messages";
-import { isString } from "lodash";
-
-const isNotFoundError = (error?: Error | string | null): boolean =>
-    errorToString(error) === ErrorMessages.USER_NOT_FOUND;
+import { isEmpty, isString } from "lodash";
 
 const errorToString = (
     error?: ApiError | Error | string | null
@@ -19,4 +16,29 @@ const errorToString = (
     return error.message;
 };
 
-export { errorToString, isNotFoundError };
+const isInvalidUuidError = (
+    error?: Error | PostgrestError | null
+): error is PostgrestError =>
+    isPostgrestError(error) &&
+    error.message.includes("invalid input syntax for type uuid");
+
+const isPostgrestError = (
+    error?: Error | PostgrestError | null
+): error is PostgrestError => error != null && "details" in error;
+
+const isNotFoundError = (
+    error?: Error | PostgrestError | null
+): error is PostgrestError =>
+    isPostgrestError(error) &&
+    !isEmpty(error.details) &&
+    error.details.includes("Results contain 0 rows");
+
+const isUserNotFoundError = (error?: Error | string | null): boolean =>
+    errorToString(error) === ErrorMessages.USER_NOT_FOUND;
+
+export {
+    errorToString,
+    isInvalidUuidError,
+    isNotFoundError,
+    isUserNotFoundError,
+};

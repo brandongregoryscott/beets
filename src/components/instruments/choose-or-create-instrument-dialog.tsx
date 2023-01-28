@@ -1,21 +1,16 @@
 import { FormDialog } from "components/forms/form-dialog";
 import { InstrumentsTable } from "components/instruments/instruments-table";
 import type { DialogProps } from "evergreen-ui";
-import {
-    EmptyState,
-    majorScale,
-    StepChartIcon,
-    Tab,
-    Tablist,
-} from "evergreen-ui";
+import { majorScale, StepChartIcon, Tab, Tablist } from "evergreen-ui";
 import { InstrumentRecord } from "models/instrument-record";
 import React, { useCallback, useState } from "react";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { useGlobalState } from "hooks/use-global-state";
 import { InstrumentSettings } from "components/instruments/instrument-settings";
-import { useListInstruments } from "utils/hooks/domain/instruments/use-list-instruments";
-import { useListFiles } from "utils/hooks/domain/files/use-list-files";
-import { useTheme } from "utils/hooks/use-theme";
+import { useListInstruments } from "hooks/domain/instruments/use-list-instruments";
+import { useListFiles } from "hooks/domain/files/use-list-files";
+import { useTheme } from "hooks/use-theme";
 import { generateId } from "utils/id-utils";
+import { EmptyState } from "components/empty-state";
 
 interface ChooseOrCreateInstrumentDialogProps
     extends Pick<DialogProps, "onCloseComplete"> {
@@ -105,8 +100,7 @@ const ChooseOrCreateInstrumentDialog: React.FC<
                     emptyState={
                         <EmptyState
                             description="Save a new Instrument to begin"
-                            icon={<StepChartIcon color={colors.gray500} />}
-                            iconBgColor={colors.gray200}
+                            icon={<StepChartIcon />}
                             title="No Instruments Found"
                         />
                     }

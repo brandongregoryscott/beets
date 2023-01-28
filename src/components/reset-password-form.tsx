@@ -10,9 +10,9 @@ import {
 } from "evergreen-ui";
 import { isEmpty } from "lodash";
 import { useCallback } from "react";
-import { isNotFoundError } from "utils/error-utils";
-import { useRequestPasswordReset } from "utils/hooks/supabase/use-request-password-reset";
-import { useInput } from "utils/hooks/use-input";
+import { isUserNotFoundError } from "utils/error-utils";
+import { useRequestPasswordReset } from "hooks/supabase/use-request-password-reset";
+import { useInput } from "hooks/use-input";
 
 interface ResetPasswordFormProps {}
 
@@ -63,10 +63,10 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
                     Reset Password
                 </Button>
             </Form>
-            {error != null && !isNotFoundError(error) && (
+            {error != null && !isUserNotFoundError(error) && (
                 <ErrorAlert error={error} />
             )}
-            {(isSuccess || isNotFoundError(error)) && (
+            {(isSuccess || isUserNotFoundError(error)) && (
                 <Alert
                     intent="success"
                     marginTop={majorScale(2)}

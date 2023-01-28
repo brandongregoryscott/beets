@@ -1,6 +1,6 @@
 import { majorScale, TextInput } from "evergreen-ui";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useBoolean } from "utils/hooks/use-boolean";
+import { useBoolean } from "hooks/use-boolean";
 import { useOutsideClick, useKey } from "rooks";
 
 interface EditableParagraphProps {

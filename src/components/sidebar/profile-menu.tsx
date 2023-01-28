@@ -1,28 +1,40 @@
 import { Menu } from "components/menu/menu";
 import {
+    CommentIcon,
+    DocumentIcon,
     HelpIcon,
     InfoSignIcon,
     LogInIcon,
     LogOutIcon,
     NewPersonIcon,
+    SnowflakeIcon,
 } from "evergreen-ui";
 import React, { Fragment, useCallback } from "react";
-import { useNavigate } from "react-router";
+import { useRouter } from "hooks/use-router";
 import { Sitemap } from "sitemap";
-import { useLogout } from "utils/hooks/supabase/use-logout";
-import { useGlobalState } from "utils/hooks/use-global-state";
+import { useLogout } from "hooks/supabase/use-logout";
+import { useGlobalState } from "hooks/use-global-state";
+import { useTheme } from "hooks/use-theme";
+import { isJanuaryOrDecember } from "utils/date-utils";
 
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;
     onClose: () => void;
-    onHelpDialogClick: () => void;
+    onDocumentationDialogClick: () => void;
+    onFeedbackDialogClick: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
-    const { onAboutDialogClick, onHelpDialogClick, onClose } = props;
-    const { isAuthenticated, setGlobalState } = useGlobalState();
+    const {
+        onAboutDialogClick,
+        onDocumentationDialogClick,
+        onFeedbackDialogClick,
+        onClose,
+    } = props;
+    const { isAuthenticated, globalState, setGlobalState } = useGlobalState();
+    const { colors } = useTheme();
 
-    const handleLogoutsettled = useCallback(
+    const handleLogoutSettled = useCallback(
         () =>
             setGlobalState((prev) =>
                 prev.merge({
@@ -32,18 +44,23 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
             ),
         [setGlobalState]
     );
-    const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
-    const navigate = useNavigate();
+    const { mutate: logout } = useLogout({ onSettled: handleLogoutSettled });
+    const { navigate } = useRouter();
 
     const handleAboutDialogClick = useCallback(() => {
         onClose();
         onAboutDialogClick();
     }, [onAboutDialogClick, onClose]);
 
-    const handleHelpDialogClick = useCallback(() => {
+    const handleDocumentationDialogClick = useCallback(() => {
         onClose();
-        onHelpDialogClick();
-    }, [onClose, onHelpDialogClick]);
+        onDocumentationDialogClick();
+    }, [onClose, onDocumentationDialogClick]);
+
+    const handleFeedbackDialogClick = useCallback(() => {
+        onClose();
+        onFeedbackDialogClick();
+    }, [onClose, onFeedbackDialogClick]);
 
     const handleLogoutSelect = useCallback(() => {
         onClose();
@@ -60,13 +77,39 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         navigate(Sitemap.register);
     }, [navigate, onClose]);
 
+    const handleToggleHolidayMode = useCallback(() => {
+        // Slight delay to allow popover to close
+        setTimeout(
+            () => setGlobalState((prev) => prev.toggleHolidayMode()),
+            50
+        );
+
+        onClose();
+    }, [onClose, setGlobalState]);
+
+    const snowflakeIconColor = globalState.enableHolidayMode
+        ? colors.blue300
+        : colors.gray400;
+
     return (
         <Menu>
+            {isJanuaryOrDecember() && (
+                <Menu.Item
+                    icon={<SnowflakeIcon color={snowflakeIconColor} />}
+                    onSelect={handleToggleHolidayMode}>
+                    Holiday Mode
+                </Menu.Item>
+            )}
             <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>
-            <Menu.Item icon={HelpIcon} onSelect={handleHelpDialogClick}>
-                Help
+            <Menu.Item
+                icon={DocumentIcon}
+                onSelect={handleDocumentationDialogClick}>
+                Documentation
+            </Menu.Item>
+            <Menu.Item icon={CommentIcon} onClick={handleFeedbackDialogClick}>
+                Submit Feedback
             </Menu.Item>
             {isAuthenticated && (
                 <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>

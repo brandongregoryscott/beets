@@ -1,5 +1,5 @@
 import _ from "lodash";
-import type { UseQueryResult } from "utils/hooks/use-query";
+import type { UseQueryResult } from "hooks/use-query";
 
 const mergeUseQueryProperties = (
     first: UseQueryResult<unknown, Error>,

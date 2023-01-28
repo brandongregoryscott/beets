@@ -9,13 +9,11 @@ import {
     SquareIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
-import { useClipboardState } from "utils/hooks/use-clipboard-state";
-import { useKeyboardShortcut } from "utils/hooks/use-keyboard-shortcut";
-import { useToneControls } from "utils/hooks/use-tone-controls";
+import { useClipboardState } from "hooks/use-clipboard-state";
+import { useKeyboardShortcut } from "hooks/use-keyboard-shortcut";
+import { useToneControls } from "hooks/use-tone-controls";
 
-interface EditTabProps {}
-
-const EditTab: React.FC<EditTabProps> = (props: EditTabProps) => {
+const EditTab: React.FC = () => {
     const { selectedState, clearSelected, duplicateSelected } =
         useClipboardState();
     const { isPlaying } = useToneControls();

@@ -5,8 +5,10 @@ import { SupabaseUserRecord } from "models/supabase-user-record";
 import { UserRecord } from "models/user-record";
 import type { SupabaseUser } from "types/supabase-user";
 import { makeDefaultValues } from "utils/core-utils";
+import { isJanuaryOrDecember } from "utils/date-utils";
 
 const defaultValues = makeDefaultValues<GlobalState>({
+    enableHolidayMode: isJanuaryOrDecember(),
     supabaseUser: undefined,
     user: undefined,
 });
@@ -32,6 +34,10 @@ class GlobalStateRecord
             user: UserRecord.fromSupabaseUser(supabaseUser),
             supabaseUser: new SupabaseUserRecord(supabaseUser),
         });
+    }
+
+    public toggleHolidayMode(): GlobalStateRecord {
+        return this.merge({ enableHolidayMode: !this.enableHolidayMode });
     }
 }
 

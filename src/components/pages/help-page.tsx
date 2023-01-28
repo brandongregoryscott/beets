@@ -2,18 +2,16 @@ import { Markdown } from "components/markdown";
 import type { HelpResource } from "enums/help-resource";
 import { Spinner } from "evergreen-ui";
 import React from "react";
-import { useHelpDocs } from "utils/hooks/use-help-docs";
-import { useScrollToHash } from "utils/hooks/use-scroll-to-hash";
-import { useTimeoutRender } from "utils/hooks/use-timeout-render";
+import { useHelpDocs } from "hooks/use-help-docs";
+import { useRouter } from "hooks/use-router";
+import { useScrollToHash } from "hooks/use-scroll-to-hash";
+import { useTimeoutRender } from "hooks/use-timeout-render";
 
-interface HelpPageProps {
-    resource: HelpResource;
-}
-
-const HelpPage: React.FC<HelpPageProps> = (props: HelpPageProps) => {
-    const { resource } = props;
+const HelpPage: React.FC = () => {
+    const { params } = useRouter();
+    const { resource } = params;
     const { isLoading, content } = useHelpDocs({
-        resource,
+        resource: resource as HelpResource,
     });
     useTimeoutRender();
     useScrollToHash();

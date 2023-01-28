@@ -1,26 +1,22 @@
 import { ChangePasswordForm } from "components/change-password-form";
 import { Flex } from "components/flex";
 import { ResetPasswordForm } from "components/reset-password-form";
-import { EmptyState, ErrorIcon, majorScale } from "evergreen-ui";
-import type { RouteProps } from "interfaces/route-props";
+import { ErrorIcon, majorScale } from "evergreen-ui";
 import { isEmpty } from "lodash";
-import { isNotFoundError } from "utils/error-utils";
-import { useResetPasswordRoute } from "utils/hooks/use-reset-password-route";
-import { useTheme } from "utils/hooks/use-theme";
-
-interface ResetPasswordPageProps extends RouteProps {}
+import { isUserNotFoundError } from "utils/error-utils";
+import { useResetPasswordRoute } from "hooks/use-reset-password-route";
+import { useTheme } from "hooks/use-theme";
+import { EmptyState } from "components/empty-state";
 
 const RECOVERY_TYPE = "recovery";
 
-const ResetPasswordPage: React.FC<ResetPasswordPageProps> = (
-    props: ResetPasswordPageProps
-) => {
+const ResetPasswordPage: React.FC = () => {
     const { intents } = useTheme();
     const { access_token, error_description, clear, type } =
         useResetPasswordRoute();
     const showPasswordChangeForm =
         !isEmpty(access_token) && type === RECOVERY_TYPE;
-    const showExpiredToken = isNotFoundError(error_description);
+    const showExpiredToken = isUserNotFoundError(error_description);
     const showResetPasswordForm = !showPasswordChangeForm && !showExpiredToken;
 
     return (
@@ -31,10 +27,10 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = (
             {showExpiredToken && (
                 <Flex.Column alignItems="center" padding={majorScale(4)}>
                     <EmptyState
-                        background="dark"
                         description="The token is invalid or has expired. Request a new token to finish resetting your password."
-                        icon={<ErrorIcon color={intents.danger.icon} />}
+                        icon={<ErrorIcon />}
                         iconBgColor={intents.danger.background}
+                        iconColor={intents.danger.icon}
                         primaryCta={
                             <EmptyState.PrimaryButton onClick={clear}>
                                 Reset Password
