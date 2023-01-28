@@ -43,6 +43,9 @@ const components: MarkdownComponentMap = {
             </Link>
         );
     },
+    h1: (props) => (
+        <Heading {...omitProps(props)} marginY={majorScale(2)} size={500} />
+    ),
     h2: (props) => (
         <Heading {...omitProps(props)} marginY={majorScale(2)} size={700} />
     ),
