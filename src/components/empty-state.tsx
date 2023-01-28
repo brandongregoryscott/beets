@@ -1,4 +1,7 @@
-import type { EmptyStateOwnProps as EvergreenEmptyStateProps } from "evergreen-ui";
+import type {
+    EmptyStateOwnProps as EvergreenEmptyStateProps,
+    IconProps,
+} from "evergreen-ui";
 // eslint-disable-next-line no-restricted-imports
 import { EmptyState as EvergreenEmptyState } from "evergreen-ui";
 import React from "react";
@@ -26,7 +29,7 @@ const EmptyState: React.FC<EmptyStateProps> & {
         <EvergreenEmptyState
             background={background}
             icon={
-                React.isValidElement(icon)
+                React.isValidElement<IconProps>(icon)
                     ? React.cloneElement(icon, {
                           color: iconColor,
                       })

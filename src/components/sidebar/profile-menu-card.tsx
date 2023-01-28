@@ -20,6 +20,7 @@ import { matchRoutes } from "utils/route-utils";
 import { useGlobalState } from "hooks/use-global-state";
 import SantaHat from "assets/santa-hat.png";
 import { useRouter } from "hooks/use-router";
+import { FeedbackDialog } from "components/feedback-dialog";
 
 const ProfileMenuCard: React.FC = () => {
     const { colors } = useTheme();
@@ -31,8 +32,16 @@ const ProfileMenuCard: React.FC = () => {
     } = useBoolean(false);
     const [isAboutDialogOpen, handleOpenAboutDialog, handleCloseAboutDialog] =
         useDialog();
-    const [isHelpDialogOpen, handleOpenHelpDialog, handleCloseHelpDialog] =
-        useDialog();
+    const [
+        isDocumentationDialogOpen,
+        handleOpenDocumentationDialog,
+        handleCloseDocumentationDialog,
+    ] = useDialog();
+    const [
+        isFeedbackDialogOpen,
+        handleOpenFeedbackDialog,
+        handleCloseFeedbackDialog,
+    ] = useDialog();
 
     const { location } = useRouter();
     const isProfileRoute = hasValues(
@@ -57,7 +66,10 @@ const ProfileMenuCard: React.FC = () => {
                     <ProfileMenu
                         onAboutDialogClick={handleOpenAboutDialog}
                         onClose={handleClosePopover}
-                        onDocumentationDialogClick={handleOpenHelpDialog}
+                        onDocumentationDialogClick={
+                            handleOpenDocumentationDialog
+                        }
+                        onFeedbackDialogClick={handleOpenFeedbackDialog}
                     />
                 )}
                 onClose={handleClose}
@@ -84,8 +96,13 @@ const ProfileMenuCard: React.FC = () => {
             {isAboutDialogOpen && (
                 <AboutDialog onCloseComplete={handleCloseAboutDialog} />
             )}
-            {isHelpDialogOpen && (
-                <DocumentationDialog onCloseComplete={handleCloseHelpDialog} />
+            {isDocumentationDialogOpen && (
+                <DocumentationDialog
+                    onCloseComplete={handleCloseDocumentationDialog}
+                />
+            )}
+            {isFeedbackDialogOpen && (
+                <FeedbackDialog onCloseComplete={handleCloseFeedbackDialog} />
             )}
         </React.Fragment>
     );
