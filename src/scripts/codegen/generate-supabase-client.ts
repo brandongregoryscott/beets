@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { sortBy } from "lodash";
 import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "./log";
 import {
@@ -21,6 +21,7 @@ const generateSupabaseClient = (
     properties: PropertySignature[]
 ) => {
     const name = SupabaseClient;
+    properties = sortBy(properties, getInterfaceName);
 
     const file = project.createSourceFile(
         joinPaths(Paths.base, `${toKebabCase(name)}.ts`),
