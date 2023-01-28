@@ -1,5 +1,6 @@
 import { Menu } from "components/menu/menu";
 import {
+    CommentIcon,
     DocumentIcon,
     HelpIcon,
     InfoSignIcon,
@@ -20,12 +21,19 @@ interface ProfileMenuProps {
     onAboutDialogClick: () => void;
     onClose: () => void;
     onDocumentationDialogClick: () => void;
+    onFeedbackDialogClick: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
-    const { onAboutDialogClick, onDocumentationDialogClick, onClose } = props;
+    const {
+        onAboutDialogClick,
+        onDocumentationDialogClick,
+        onFeedbackDialogClick,
+        onClose,
+    } = props;
     const { isAuthenticated, globalState, setGlobalState } = useGlobalState();
     const { colors } = useTheme();
+
     const handleLogoutSettled = useCallback(
         () =>
             setGlobalState((prev) =>
@@ -48,6 +56,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         onClose();
         onDocumentationDialogClick();
     }, [onClose, onDocumentationDialogClick]);
+
+    const handleFeedbackDialogClick = useCallback(() => {
+        onClose();
+        onFeedbackDialogClick();
+    }, [onClose, onFeedbackDialogClick]);
 
     const handleLogoutSelect = useCallback(() => {
         onClose();
@@ -94,6 +107,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
                 icon={DocumentIcon}
                 onSelect={handleDocumentationDialogClick}>
                 Documentation
+            </Menu.Item>
+            <Menu.Item icon={CommentIcon} onClick={handleFeedbackDialogClick}>
+                Submit Feedback
             </Menu.Item>
             {isAuthenticated && (
                 <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>

@@ -1,18 +1,18 @@
 import { Menu } from "components/menu/menu";
 import {
-    AnnotationIcon,
     Button,
+    CommentIcon,
     DocumentIcon,
     HelpIcon,
     InfoSignIcon,
     Popover,
     Position,
-    SquareIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
 import { useDialog } from "hooks/use-dialog";
 import { DocumentationDialog } from "components/sidebar/documentation-dialog/documentation-dialog";
 import { AboutDialog } from "components/sidebar/about-dialog";
+import { FeedbackDialog } from "components/feedback-dialog";
 
 const HelpTab: React.FC = () => {
     const [isAboutDialogOpen, handleOpenAboutDialog, handleCloseAboutDialog] =
@@ -21,6 +21,11 @@ const HelpTab: React.FC = () => {
         isDocumentationDialogOpen,
         handleOpenDocumentationDialog,
         handleCloseDocumentationDialog,
+    ] = useDialog();
+    const [
+        isFeedbackDialogOpen,
+        handleOpenFeedbackDialog,
+        handleCloseFeedbackDialog,
     ] = useDialog();
 
     const handleClick = useCallback(
@@ -52,6 +57,14 @@ const HelpTab: React.FC = () => {
                             )}>
                             Documentation
                         </Menu.Item>
+                        <Menu.Item
+                            icon={CommentIcon}
+                            onClick={handleClick(
+                                closePopover,
+                                handleOpenFeedbackDialog
+                            )}>
+                            Submit Feedback
+                        </Menu.Item>
                     </Menu>
                 )}
                 position={Position.TOP_RIGHT}>
@@ -69,6 +82,9 @@ const HelpTab: React.FC = () => {
                 <DocumentationDialog
                     onCloseComplete={handleCloseDocumentationDialog}
                 />
+            )}
+            {isFeedbackDialogOpen && (
+                <FeedbackDialog onCloseComplete={handleCloseFeedbackDialog} />
             )}
         </React.Fragment>
     );
