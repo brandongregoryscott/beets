@@ -1,5 +1,5 @@
 import { AboutDialog } from "components/sidebar/about-dialog";
-import { HelpDialog } from "components/sidebar/help-dialog/help-dialog";
+import { DocumentationDialog } from "components/sidebar/documentation-dialog/documentation-dialog";
 import { ProfileMenu } from "components/sidebar/profile-menu";
 import {
     Card,
@@ -57,7 +57,7 @@ const ProfileMenuCard: React.FC = () => {
                     <ProfileMenu
                         onAboutDialogClick={handleOpenAboutDialog}
                         onClose={handleClosePopover}
-                        onHelpDialogClick={handleOpenHelpDialog}
+                        onDocumentationDialogClick={handleOpenHelpDialog}
                     />
                 )}
                 onClose={handleClose}
@@ -85,7 +85,7 @@ const ProfileMenuCard: React.FC = () => {
                 <AboutDialog onCloseComplete={handleCloseAboutDialog} />
             )}
             {isHelpDialogOpen && (
-                <HelpDialog onCloseComplete={handleCloseHelpDialog} />
+                <DocumentationDialog onCloseComplete={handleCloseHelpDialog} />
             )}
         </React.Fragment>
     );

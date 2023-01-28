@@ -14,7 +14,7 @@ import { omitProps } from "utils/markdown-utils";
 import { absolutePath, toPathCase } from "utils/route-utils";
 import { scrollToHash } from "utils/scroll-utils";
 
-interface HelpDialogLinkProps
+interface DocumentationDialogLinkProps
     extends PropsWithChildren<
         Pick<
             DetailedHTMLProps<
@@ -28,8 +28,8 @@ interface HelpDialogLinkProps
     setSelectedTab: (tab: HelpResource) => void;
 }
 
-const HelpDialogLink: React.FC<HelpDialogLinkProps> = (
-    props: HelpDialogLinkProps
+const DocumentationDialogLink: React.FC<DocumentationDialogLinkProps> = (
+    props: DocumentationDialogLinkProps
 ) => {
     const { href, setSelectedTab, ...rest } = props;
     const hash = href?.split("#")[1];
@@ -86,4 +86,4 @@ const toHelpResource = (path?: string): HelpResource | undefined => {
 const splitPath = (path?: string) =>
     path?.split(/(#|\/)/).filter((value) => !isEmpty(value)) ?? [];
 
-export { HelpDialogLink };
+export { DocumentationDialogLink };

@@ -1,5 +1,6 @@
 import { Menu } from "components/menu/menu";
 import {
+    DocumentIcon,
     HelpIcon,
     InfoSignIcon,
     LogInIcon,
@@ -18,11 +19,11 @@ import { isJanuaryOrDecember } from "utils/date-utils";
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;
     onClose: () => void;
-    onHelpDialogClick: () => void;
+    onDocumentationDialogClick: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
-    const { onAboutDialogClick, onHelpDialogClick, onClose } = props;
+    const { onAboutDialogClick, onDocumentationDialogClick, onClose } = props;
     const { isAuthenticated, globalState, setGlobalState } = useGlobalState();
     const { colors } = useTheme();
     const handleLogoutSettled = useCallback(
@@ -43,10 +44,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         onAboutDialogClick();
     }, [onAboutDialogClick, onClose]);
 
-    const handleHelpDialogClick = useCallback(() => {
+    const handleDocumentationDialogClick = useCallback(() => {
         onClose();
-        onHelpDialogClick();
-    }, [onClose, onHelpDialogClick]);
+        onDocumentationDialogClick();
+    }, [onClose, onDocumentationDialogClick]);
 
     const handleLogoutSelect = useCallback(() => {
         onClose();
@@ -86,12 +87,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
                     Holiday Mode
                 </Menu.Item>
             )}
-
             <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>
-            <Menu.Item icon={HelpIcon} onSelect={handleHelpDialogClick}>
-                Help
+            <Menu.Item
+                icon={DocumentIcon}
+                onSelect={handleDocumentationDialogClick}>
+                Documentation
             </Menu.Item>
             {isAuthenticated && (
                 <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>
