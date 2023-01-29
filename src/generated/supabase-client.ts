@@ -17,15 +17,20 @@ const client = createClient(
 
 const SupabaseClient = {
     ...client,
-    fromFiles: () => client.from<File>(Tables.Files),
-    fromInstruments: () => client.from<Instrument>(Tables.Instruments),
-    fromPgmigrations: () => client.from<Pgmigration>(Tables.Pgmigrations),
-    fromProjects: () => client.from<Project>(Tables.Projects),
-    fromTracks: () => client.from<Track>(Tables.Tracks),
-    fromTrackSections: () => client.from<TrackSection>(Tables.TrackSections),
+    fromFiles: () => client.from<Tables.Files, File>(Tables.Files),
+    fromInstruments: () =>
+        client.from<Tables.Instruments, Instrument>(Tables.Instruments),
+    fromPgmigrations: () =>
+        client.from<Tables.Pgmigrations, Pgmigration>(Tables.Pgmigrations),
+    fromProjects: () => client.from<Tables.Projects, Project>(Tables.Projects),
+    fromTracks: () => client.from<Tables.Tracks, Track>(Tables.Tracks),
+    fromTrackSections: () =>
+        client.from<Tables.TrackSections, TrackSection>(Tables.TrackSections),
     fromTrackSectionSteps: () =>
-        client.from<TrackSectionStep>(Tables.TrackSectionSteps),
-    fromUsers: () => client.from<User>(Tables.Users),
+        client.from<Tables.TrackSectionSteps, TrackSectionStep>(
+            Tables.TrackSectionSteps
+        ),
+    fromUsers: () => client.from<Tables.Users, User>(Tables.Users),
 };
 
 export { SupabaseClient };

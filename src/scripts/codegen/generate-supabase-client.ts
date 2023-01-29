@@ -89,8 +89,10 @@ const SupabaseClientInitializer = (properties: PropertySignature[]) => `
         ${properties
             .map((property) => {
                 const fromFunction = getFromFunctionName(property);
-                const fromTyped = `from<${getInterfaceName(property)}>`;
                 const tableEnum = `${Tables}.${getTableName(property)}`;
+                const fromTyped = `from<${tableEnum}, ${getInterfaceName(
+                    property
+                )}>`;
                 return `${fromFunction}: () => ${client}.${fromTyped}(${tableEnum})`;
             })
             .join(",")}

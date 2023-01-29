@@ -1,10 +1,8 @@
-import type { ApiError, PostgrestError } from "@supabase/supabase-js";
+import type { PostgrestError } from "@supabase/supabase-js";
 import { ErrorMessages } from "constants/error-messages";
 import { isEmpty, isString } from "lodash";
 
-const errorToString = (
-    error?: ApiError | Error | string | null
-): string | null => {
+const errorToString = (error?: Error | string | null): string | null => {
     if (error == null) {
         return null;
     }
