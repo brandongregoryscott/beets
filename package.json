@@ -127,6 +127,8 @@
         "prepare": "husky install",
         "semantic-release": "semantic-release",
         "start": "GENERATE_SOURCEMAP=false react-scripts start",
+        "supabase": "./node_modules/supabase/bin/supabase",
+        "supabase:generate": "source .env && ./node_modules/supabase/bin/supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/generated/database.ts",
         "test": "react-scripts test",
         "test:watch": "react-scripts test --watch"
     },
