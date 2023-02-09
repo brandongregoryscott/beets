@@ -2,6 +2,7 @@ import keyMirror from "keymirror";
 
 const Variables = keyMirror({
     Auditable: null,
+    Database: null,
     client: null,
     createOrUpdate: null,
     defaultFilter: null,

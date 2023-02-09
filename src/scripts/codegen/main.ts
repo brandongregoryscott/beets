@@ -1,15 +1,8 @@
 import { Project, SyntaxKind } from "ts-morph";
-import { isEmpty } from "lodash";
 import { log } from "./log";
-import { generateInterface } from "./generate-interface";
-import { generateTablesEnum } from "./generate-tables-enum";
-import { generateUseList } from "./hooks/generate-use-list";
-import { generateUseGet } from "./hooks/generate-use-get";
-import { generateUseDelete } from "./hooks/generate-use-delete";
-import { generateUseCreateOrUpdate } from "./hooks/generate-use-create-or-update";
-import { generateSupabaseClient } from "./generate-supabase-client";
-import { generateEnumsFromUnions } from "./generate-enums-from-unions";
 import { generateInterfaces } from "./generate-interfaces";
+import { generateSupabaseClient } from "./generate-supabase-client";
+import { generateTablesEnum } from "./generate-tables-enum";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -29,8 +22,10 @@ const main = async () => {
 
     generateInterfaces(project, tablesType);
 
+    const properties = tablesType.getProperties();
+
+    generateTablesEnum(project, properties);
     generateSupabaseClient(project, properties);
-    // generateTablesEnum(project, properties);
 
     // properties.forEach((property) => {
     //     const _interface = generateInterface(project, property);
