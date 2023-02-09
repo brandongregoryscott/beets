@@ -1,6 +1,9 @@
+import { titleCase } from "humanize-plus";
+import { isEmpty } from "lodash";
 import {
     Project,
     PropertySignature,
+    PropertySignatureStructure,
     SourceFile,
     SyntaxKind,
     TypeLiteralNode,
@@ -56,6 +59,9 @@ const generateInterfaces = (
             isTypeOnly: true,
         });
 
+        // Add missing imports to automatically import enums that were extracted in generateEnumsFromUnions
+        file.fixMissingImports();
+
         log.info(
             `Writing interfaces '${interfaceName}', '${createInterfaceName}' and '${updateInterfaceName}' to ${file.getBaseName()}...`
         );
@@ -85,7 +91,7 @@ const generateInterface = (
 
     const _interface = file.addInterface({
         name,
-        properties: properties.map((property) => property.getStructure()),
+        properties: properties.map(toPropertyStructure),
     });
 
     if (isAuditableType) {
@@ -94,6 +100,32 @@ const generateInterface = (
             isCreateOrUpdate ? `${Partial}<${Auditable}>` : Auditable
         );
     }
+};
+
+const toPropertyStructure = (
+    property: PropertySignature
+): PropertySignatureStructure => {
+    const structure = property.getStructure();
+
+    // This is the type that Supabase generates for type unions/enums. We extract and rename these
+    // to just the last part, i.e. Database["public"]["Enums"]["InstrumentCurve"] -> InstrumentCurve
+    const rawEnumType = `Database["public"]["Enums"]`;
+    const propertyText = property.getFullText();
+
+    const isEnumType = propertyText.includes(rawEnumType);
+    if (!isEnumType || isEmpty(structure.type)) {
+        return structure;
+    }
+
+    return {
+        ...structure,
+        type: titleCase(
+            (structure.type as string)
+                .replace(rawEnumType, "")
+                .replace(`["`, "")
+                .replace(`"]`, "")
+        ),
+    };
 };
 
 export { generateInterfaces };
