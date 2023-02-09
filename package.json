@@ -118,7 +118,7 @@
         "migrations:create": "node-pg-migrate --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts create",
         "migrations:down": "node-pg-migrate --migrations-dir src/scripts/migrations/dist down",
         "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist up",
-        "postcodegen": "npm run lint:fix || npm run format:fix",
+        "postcodegen": "npm run lint:fix && npm run format:fix",
         "prebuild:migrations": "npm run clean:migrations",
         "precodegen": "npm run clean:generated && npm run supabase:generate",
         "premigrations:create": "npm run build:migrations",
