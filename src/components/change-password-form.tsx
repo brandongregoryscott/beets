@@ -43,7 +43,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
 
     const handleChangePasswordSuccess = useCallback(() => {
         toaster.success("Password successfully updated!");
-        navigate(Sitemap.root.root);
+        navigate(Sitemap.login);
     }, [navigate]);
 
     const {
