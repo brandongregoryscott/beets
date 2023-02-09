@@ -6,6 +6,7 @@ import {
     TypeLiteralNode,
 } from "ts-morph";
 import { Variables } from "./constants/variables";
+import { log } from "./log";
 import {
     addImportDeclaration,
     getCreateInterfaceName,
@@ -54,6 +55,10 @@ const generateInterfaces = (
             ],
             isTypeOnly: true,
         });
+
+        log.info(
+            `Writing interfaces '${interfaceName}', '${createInterfaceName}' and '${updateInterfaceName}' to ${file.getBaseName()}...`
+        );
     });
 };
 

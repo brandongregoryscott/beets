@@ -29,7 +29,7 @@ const main = async () => {
 
     generateInterfaces(project, tablesType);
 
-    // generateSupabaseClient(project, properties);
+    generateSupabaseClient(project, properties);
     // generateTablesEnum(project, properties);
 
     // properties.forEach((property) => {
