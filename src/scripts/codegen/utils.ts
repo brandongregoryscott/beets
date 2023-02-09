@@ -1,15 +1,52 @@
 import _ from "lodash";
 import pluralize from "pluralize";
-import { Project, PropertySignature, SourceFile } from "ts-morph";
+import {
+    Project,
+    PropertySignature,
+    SourceFile,
+    TypeLiteralNode,
+} from "ts-morph";
+import { AuditableColumns } from "./constants/auditable-columns";
 import { Paths } from "./constants/paths";
 import { HookAction } from "./enums/hook-action";
 import { log } from "./log";
+
+/**
+ * Adds an ImportDeclaration to the file if it does not already exist
+ */
+const addImportDeclaration = (
+    file: SourceFile,
+    name: string,
+    moduleSpecifier: string
+): void => {
+    const hasImport =
+        file.getImportDeclaration((importDeclaration) =>
+            importDeclaration
+                .getNamedImports()
+                .some((importSpecifier) => importSpecifier.getName() === name)
+        ) != null;
+
+    if (hasImport) {
+        return;
+    }
+
+    file.addImportDeclaration({
+        namedImports: [name],
+        moduleSpecifier,
+    });
+};
 
 const getFromFunctionName = (property: PropertySignature): string =>
     `from${getTableName(property)}`;
 
 const getInterfaceName = (property: PropertySignature): string =>
     pluralize(snakeToTitleCase(property.getName()), 1);
+
+const getCreateInterfaceName = (property: PropertySignature): string =>
+    `Create${getInterfaceName(property)}Options`;
+
+const getUpdateInterfaceName = (property: PropertySignature): string =>
+    `Update${getInterfaceName(property)}Options`;
 
 const getInterfacePath = (property: PropertySignature): string =>
     joinPaths(
@@ -55,6 +92,16 @@ const getHookOptionsInterfaceName = (
     return `${hookName}Options`;
 };
 
+const getNonAuditableProperties = (
+    typeLiteral: TypeLiteralNode
+): PropertySignature[] =>
+    typeLiteral
+        .getProperties()
+        .filter(
+            (property) =>
+                !Object.keys(AuditableColumns).includes(property.getName())
+        );
+
 const getRecordImportPath = (property: PropertySignature): string =>
     joinPaths("models", removeExt(getRecordFileName(property)));
 
@@ -87,6 +134,18 @@ const getTablesEnumValue = (property: PropertySignature): string =>
 
 const getTableName = (property: PropertySignature): string =>
     pluralize(getInterfaceName(property), 2);
+
+const isAuditable = (typeLiteral: TypeLiteralNode): boolean => {
+    const propertyNames = typeLiteral
+        .getProperties()
+        .map((property) => property.getName());
+
+    const auditableKeys = Object.keys(AuditableColumns);
+
+    return auditableKeys.every((auditableKey) =>
+        propertyNames.includes(auditableKey)
+    );
+};
 
 const joinPaths = (...paths: string[]): string => paths.join("/");
 
@@ -123,6 +182,7 @@ const toKebabCase = (value: string) => {
 const withExt = (filename: string): string => `${filename}.ts`;
 
 export {
+    addImportDeclaration,
     getFromFunctionName,
     getInterfaceImportPath,
     getInterfaceName,
@@ -131,12 +191,16 @@ export {
     getHookName,
     getHookOptionsInterfaceName,
     getHookPath,
+    getNonAuditableProperties,
+    getCreateInterfaceName,
+    getUpdateInterfaceName,
     getRecordFileName,
     getRecordImportPath,
     getRecordName,
     getRecordSourceFile,
     getTablesEnumValue,
     getTableName,
+    isAuditable,
     joinPaths,
     stripQuotes,
     toKebabCase,

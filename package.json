@@ -120,7 +120,7 @@
         "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist up",
         "postcodegen": "npm run lint:fix || npm run format:fix",
         "prebuild:migrations": "npm run clean:migrations",
-        "precodegen": "npm run clean:generated",
+        "precodegen": "npm run clean:generated && npm run supabase:generate",
         "premigrations:create": "npm run build:migrations",
         "premigrations:down": "npm run build:migrations",
         "premigrations:up": "npm run build:migrations",
@@ -128,7 +128,7 @@
         "semantic-release": "semantic-release",
         "start": "GENERATE_SOURCEMAP=false react-scripts start",
         "supabase": "./node_modules/supabase/bin/supabase",
-        "supabase:generate": "source .env && ./node_modules/supabase/bin/supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/generated/database.ts",
+        "supabase:generate": "source .env && mkdir -p src/generated && touch src/generated/database.ts && ./node_modules/supabase/bin/supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/generated/database.ts",
         "test": "react-scripts test",
         "test:watch": "react-scripts test --watch"
     },

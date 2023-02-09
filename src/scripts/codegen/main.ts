@@ -1,8 +1,7 @@
-import { Project } from "ts-morph";
-import _ from "lodash";
+import { Project, SyntaxKind } from "ts-morph";
+import { isEmpty } from "lodash";
 import { log } from "./log";
 import { generateInterface } from "./generate-interface";
-import { generateSupabaseTypes } from "./generate-supabase-types";
 import { generateTablesEnum } from "./generate-tables-enum";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generateUseGet } from "./hooks/generate-use-get";
@@ -10,34 +9,37 @@ import { generateUseDelete } from "./hooks/generate-use-delete";
 import { generateUseCreateOrUpdate } from "./hooks/generate-use-create-or-update";
 import { generateSupabaseClient } from "./generate-supabase-client";
 import { generateEnumsFromUnions } from "./generate-enums-from-unions";
+import { generateInterfaces } from "./generate-interfaces";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
 });
 
 const main = async () => {
-    const supabaseTypesFile = await generateSupabaseTypes(project);
-    const properties =
-        supabaseTypesFile
-            ?.getInterfaceOrThrow("definitions")
-            ?.getProperties() ?? [];
+    const supabaseTypesFile = project.getSourceFileOrThrow("database.ts");
 
-    if (_.isEmpty(properties)) {
-        log.error("Found no properties on 'definitions' interface, exiting.");
-        process.exit(1);
-    }
+    const publicProperty = supabaseTypesFile
+        .getInterfaceOrThrow("Database")
+        .getPropertyOrThrow("public");
 
-    generateSupabaseClient(project, properties);
-    generateTablesEnum(project, properties);
+    const tablesType = publicProperty
+        .getFirstChildByKindOrThrow(SyntaxKind.TypeLiteral)
+        .getPropertyOrThrow("Tables")
+        .getFirstChildByKindOrThrow(SyntaxKind.TypeLiteral);
 
-    properties.forEach((property) => {
-        const _interface = generateInterface(project, property);
-        generateEnumsFromUnions(project, _interface);
-        generateUseList(project, property);
-        generateUseGet(project, property);
-        generateUseDelete(project, property);
-        generateUseCreateOrUpdate(project, property);
-    });
+    generateInterfaces(project, tablesType);
+
+    // generateSupabaseClient(project, properties);
+    // generateTablesEnum(project, properties);
+
+    // properties.forEach((property) => {
+    //     const _interface = generateInterface(project, property);
+    //     generateEnumsFromUnions(project, _interface);
+    //     generateUseList(project, property);
+    //     generateUseGet(project, property);
+    //     generateUseDelete(project, property);
+    //     generateUseCreateOrUpdate(project, property);
+    // });
 
     await project.save();
 
