@@ -135,6 +135,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
                     value={passwordConfirmation}
                 />
                 <Button
+                    appearance="primary"
                     disabled={
                         passwordValidation?.isInvalid === true ||
                         passwordConfirmationValidation.isInvalid
