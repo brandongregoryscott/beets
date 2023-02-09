@@ -2,10 +2,10 @@ import type { Auditable } from "interfaces/auditable";
 
 interface File extends Auditable {
     bucket_id: string;
-    description?: string;
+    description: string | null;
     name: string;
     path: string;
-    size?: number;
+    size: number | null;
     type: string;
 }
 

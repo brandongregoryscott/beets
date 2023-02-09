@@ -10,6 +10,7 @@ import { useGlobalState } from "hooks/use-global-state";
 import { useMutation } from "hooks/use-mutation";
 import { SupabaseClient } from "generated/supabase-client";
 import { Tables } from "generated/enums/tables";
+import type { Auditable } from "interfaces/auditable";
 
 interface UseCreateFileOptions {
     bucketName: BucketName;
@@ -27,7 +28,16 @@ const useCreateFile = (options: UseCreateFileOptions) => {
     const toFileEntity = (
         file: File,
         storageProviderFile: StorageProviderFile
-    ): Partial<FileEntity> => ({
+    ): Omit<
+        FileEntity,
+        | "created_by_id"
+        | "created_on"
+        | "deleted_by_id"
+        | "deleted_on"
+        | "description"
+        | "updated_by_id"
+        | "updated_on"
+    > => ({
         bucket_id: bucketName,
         name: storageProviderFile.name.replace(/[0-9]+-/, ""), // Strip the generated timestamp off
         path: storageProviderFile.name,

@@ -3,7 +3,6 @@ import type { Project } from "generated/interfaces/project";
 import { pick } from "utils/core-utils";
 import { isPersisted } from "utils/auditable-utils";
 import { errorToString } from "utils/error-utils";
-import type { ApiError } from "@supabase/supabase-js";
 import { debounce, isError } from "lodash";
 import type { FeedbackCategory } from "components/feedback-dialog";
 
@@ -42,7 +41,7 @@ const trackFeedbackSubmitted = (
     analytics.track(EventName.FeedbackSubmitted, options);
 };
 
-const trackLoginFailed = (email: string, error: ApiError | Error): void => {
+const trackLoginFailed = (email: string, error: Error): void => {
     analytics.track(EventName.LoginFailed, {
         email,
         ..._pickErrorProperties(error),
@@ -86,9 +85,7 @@ const trackProjectSyncFailed = (project: Project, error: Error): void => {
     });
 };
 
-const _pickErrorProperties = (
-    error?: ApiError | Error
-): Record<string, string | null> => {
+const _pickErrorProperties = (error?: Error): Record<string, string | null> => {
     if (error == null) {
         return {};
     }

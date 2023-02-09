@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Project, PropertySignature } from "ts-morph";
 import { log } from "./log";
 import { getTableName } from "./utils";

@@ -1,7 +1,7 @@
 import type { BucketName } from "enums/bucket-name";
 import type { SortOptions } from "interfaces/sort-options";
 import type { StorageProviderFile } from "interfaces/supabase/storage-provider-file";
-import _ from "lodash";
+import { merge } from "lodash";
 import { StorageProviderFileRecord } from "models/storage-provider-file-record";
 import { isNilOrEmpty, mapTo } from "utils/collection-utils";
 import type { UseQueryResult } from "hooks/use-query";
@@ -55,14 +55,20 @@ const useListStorageProviderFiles = (
 
             const signedUrlPromises = await Promise.all(
                 files.map(async (file) => {
-                    const { signedURL } = await bucket.createSignedUrl(
+                    const { data, error } = await bucket.createSignedUrl(
                         !isNilOrEmpty(path)
                             ? `${path}/${file.name}`
                             : file.name,
                         60 * 60 * 24
                     );
 
-                    return _.merge(file, { signedURL });
+                    if (error != null) {
+                        throw error;
+                    }
+
+                    const { signedUrl } = data!;
+
+                    return merge(file, { signedURL: signedUrl });
                 })
             );
 

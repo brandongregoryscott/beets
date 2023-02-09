@@ -5,19 +5,34 @@ import type { UseQueryResult } from "hooks/use-query";
 import { useQuery } from "hooks/use-query";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { SortOptions } from "interfaces/sort-options";
+import type { PublicSchema } from "generated/database";
 
 interface UseListPgmigrationsOptions {
     enabled?: boolean;
     filter?: (
-        query: PostgrestFilterBuilder<Pgmigration>
-    ) => PostgrestFilterBuilder<Pgmigration>;
+        query: PostgrestFilterBuilder<
+            PublicSchema,
+            Record<string, unknown>,
+            Pgmigration
+        >
+    ) => PostgrestFilterBuilder<
+        PublicSchema,
+        Record<string, unknown>,
+        Pgmigration
+    >;
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: Pgmigration[]) => void;
     sortBy?: SortOptions<Pgmigration>;
 }
 
-const defaultFilter = (query: PostgrestFilterBuilder<Pgmigration>) => query;
+const defaultFilter = (
+    query: PostgrestFilterBuilder<
+        PublicSchema,
+        Record<string, unknown>,
+        Pgmigration
+    >
+) => query;
 
 const useListPgmigrations = (
     options?: UseListPgmigrationsOptions

@@ -57,6 +57,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (
                     value={email}
                 />
                 <Button
+                    appearance="primary"
                     isLoading={isLoading}
                     onClick={handleSubmit}
                     width="100%">

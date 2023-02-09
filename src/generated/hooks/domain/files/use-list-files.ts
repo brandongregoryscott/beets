@@ -6,19 +6,26 @@ import type { UseQueryResult } from "hooks/use-query";
 import { useQuery } from "hooks/use-query";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { SortOptions } from "interfaces/sort-options";
+import type { PublicSchema } from "generated/database";
 
 interface UseListFilesOptions {
     enabled?: boolean;
     filter?: (
-        query: PostgrestFilterBuilder<File>
-    ) => PostgrestFilterBuilder<File>;
+        query: PostgrestFilterBuilder<
+            PublicSchema,
+            Record<string, unknown>,
+            File
+        >
+    ) => PostgrestFilterBuilder<PublicSchema, Record<string, unknown>, File>;
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: FileRecord[]) => void;
     sortBy?: SortOptions<File>;
 }
 
-const defaultFilter = (query: PostgrestFilterBuilder<File>) => query;
+const defaultFilter = (
+    query: PostgrestFilterBuilder<PublicSchema, Record<string, unknown>, File>
+) => query;
 
 const useListFiles = (
     options?: UseListFilesOptions

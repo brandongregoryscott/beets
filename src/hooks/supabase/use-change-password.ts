@@ -23,12 +23,9 @@ const useChangePassword = (
 
     const result = useMutation<void, Error, ChangePasswordOptions>({
         fn: async (options: ChangePasswordOptions) => {
-            const { access_token, password } = options;
-            const updateResult = await auth.api.updateUser(access_token!, {
-                password,
-            });
+            const { password } = options;
+            const { error } = await auth.updateUser({ password });
 
-            const { error } = updateResult;
             if (error != null) {
                 throw error;
             }

@@ -6,19 +6,26 @@ import type { UseQueryResult } from "hooks/use-query";
 import { useQuery } from "hooks/use-query";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { SortOptions } from "interfaces/sort-options";
+import type { PublicSchema } from "generated/database";
 
 interface UseListTracksOptions {
     enabled?: boolean;
     filter?: (
-        query: PostgrestFilterBuilder<Track>
-    ) => PostgrestFilterBuilder<Track>;
+        query: PostgrestFilterBuilder<
+            PublicSchema,
+            Record<string, unknown>,
+            Track
+        >
+    ) => PostgrestFilterBuilder<PublicSchema, Record<string, unknown>, Track>;
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackRecord[]) => void;
     sortBy?: SortOptions<Track>;
 }
 
-const defaultFilter = (query: PostgrestFilterBuilder<Track>) => query;
+const defaultFilter = (
+    query: PostgrestFilterBuilder<PublicSchema, Record<string, unknown>, Track>
+) => query;
 
 const useListTracks = (
     options?: UseListTracksOptions

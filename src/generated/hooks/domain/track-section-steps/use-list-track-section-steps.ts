@@ -6,20 +6,34 @@ import type { UseQueryResult } from "hooks/use-query";
 import { useQuery } from "hooks/use-query";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { SortOptions } from "interfaces/sort-options";
+import type { PublicSchema } from "generated/database";
 
 interface UseListTrackSectionStepsOptions {
     enabled?: boolean;
     filter?: (
-        query: PostgrestFilterBuilder<TrackSectionStep>
-    ) => PostgrestFilterBuilder<TrackSectionStep>;
+        query: PostgrestFilterBuilder<
+            PublicSchema,
+            Record<string, unknown>,
+            TrackSectionStep
+        >
+    ) => PostgrestFilterBuilder<
+        PublicSchema,
+        Record<string, unknown>,
+        TrackSectionStep
+    >;
     key?: any[];
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: TrackSectionStepRecord[]) => void;
     sortBy?: SortOptions<TrackSectionStep>;
 }
 
-const defaultFilter = (query: PostgrestFilterBuilder<TrackSectionStep>) =>
-    query;
+const defaultFilter = (
+    query: PostgrestFilterBuilder<
+        PublicSchema,
+        Record<string, unknown>,
+        TrackSectionStep
+    >
+) => query;
 
 const useListTrackSectionSteps = (
     options?: UseListTrackSectionStepsOptions
