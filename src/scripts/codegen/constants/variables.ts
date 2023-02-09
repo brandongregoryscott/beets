@@ -19,6 +19,7 @@ const Variables = keyMirror({
     onSettled: null,
     onSuccess: null,
     Partial: null,
+    PublicSchema: null,
     resultObject: null,
     sortBy: null,
     Row: null,

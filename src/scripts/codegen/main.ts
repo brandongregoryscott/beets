@@ -4,6 +4,8 @@ import { generateInterfaces } from "./generate-interfaces";
 import { generateSupabaseClient } from "./generate-supabase-client";
 import { generateTablesEnum } from "./generate-tables-enum";
 import { generateEnumsFromUnions } from "./generate-enums-from-unions";
+import { generateUseList } from "./hooks/generate-use-list";
+import { generatePublicSchemaType } from "./generate-public-schema-type";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -11,6 +13,8 @@ const project = new Project({
 
 const main = async () => {
     const supabaseTypesFile = project.getSourceFileOrThrow("database.ts");
+
+    generatePublicSchemaType(supabaseTypesFile);
 
     const publicProperty = supabaseTypesFile
         .getInterfaceOrThrow("Database")
@@ -35,12 +39,12 @@ const main = async () => {
     generateTablesEnum(project, properties);
     generateSupabaseClient(project, properties);
 
-    // properties.forEach((property) => {
-    //     generateUseList(project, property);
-    //     generateUseGet(project, property);
-    //     generateUseDelete(project, property);
-    //     generateUseCreateOrUpdate(project, property);
-    // });
+    properties.forEach((property) => {
+        generateUseList(project, property);
+        //     generateUseGet(project, property);
+        //     generateUseDelete(project, property);
+        //     generateUseCreateOrUpdate(project, property);
+    });
 
     await project.save();
 
