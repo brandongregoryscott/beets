@@ -15,7 +15,7 @@
         "@mantine/core": "4.2.1",
         "@mantine/hooks": "4.2.1",
         "@octokit/rest": "18.12.0",
-        "@supabase/supabase-js": "2.5.0",
+        "@supabase/supabase-js": "2.7.1",
         "date-fns": "2.29.3",
         "evergreen-ui": "6.13.2",
         "glamor": "2.20.40",
