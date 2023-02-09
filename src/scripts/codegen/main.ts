@@ -6,6 +6,7 @@ import { generateTablesEnum } from "./generate-tables-enum";
 import { generateEnumsFromUnions } from "./generate-enums-from-unions";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generatePublicSchemaType } from "./generate-public-schema-type";
+import { generateUseGet } from "./hooks/generate-use-get";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -41,7 +42,7 @@ const main = async () => {
 
     properties.forEach((property) => {
         generateUseList(project, property);
-        //     generateUseGet(project, property);
+        generateUseGet(project, property);
         //     generateUseDelete(project, property);
         //     generateUseCreateOrUpdate(project, property);
     });
