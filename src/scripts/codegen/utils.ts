@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { capitalize } from "lodash";
 import pluralize from "pluralize";
 import {
     Project,
@@ -153,10 +153,10 @@ const removeExt = (filename: string) => filename.replace(".ts", "");
 
 const snakeToTitleCase = (value: string) => {
     if (!value.includes("_")) {
-        return _.capitalize(value);
+        return capitalize(value);
     }
 
-    return value.split("_").map(_.capitalize).join("");
+    return value.split("_").map(capitalize).join("");
 };
 
 const stripQuotes = (value: string): string => value.replace(/"/g, "");

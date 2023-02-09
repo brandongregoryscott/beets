@@ -3,6 +3,7 @@ import { log } from "./log";
 import { generateInterfaces } from "./generate-interfaces";
 import { generateSupabaseClient } from "./generate-supabase-client";
 import { generateTablesEnum } from "./generate-tables-enum";
+import { generateEnumsFromUnions } from "./generate-enums-from-unions";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -20,6 +21,13 @@ const main = async () => {
         .getPropertyOrThrow("Tables")
         .getFirstChildByKindOrThrow(SyntaxKind.TypeLiteral);
 
+    const enumsType = publicProperty
+        .getFirstChildByKindOrThrow(SyntaxKind.TypeLiteral)
+        .getPropertyOrThrow("Enums")
+        .getFirstChildByKindOrThrow(SyntaxKind.TypeLiteral);
+
+    generateEnumsFromUnions(project, enumsType);
+
     generateInterfaces(project, tablesType);
 
     const properties = tablesType.getProperties();
@@ -28,8 +36,6 @@ const main = async () => {
     generateSupabaseClient(project, properties);
 
     // properties.forEach((property) => {
-    //     const _interface = generateInterface(project, property);
-    //     generateEnumsFromUnions(project, _interface);
     //     generateUseList(project, property);
     //     generateUseGet(project, property);
     //     generateUseDelete(project, property);

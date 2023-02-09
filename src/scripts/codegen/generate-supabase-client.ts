@@ -3,7 +3,6 @@ import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "./log";
 import {
     getInterfaceName,
-    getInterfaceImportPath,
     getFromFunctionName,
     getTableName,
     toKebabCase,

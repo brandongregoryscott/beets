@@ -1,26 +1,30 @@
-import _, { capitalize, isEmpty } from "lodash";
-import { InterfaceDeclaration, Project } from "ts-morph";
+import { titleCase } from "humanize-plus";
+import { capitalize } from "lodash";
+import { Project, TypeLiteralNode } from "ts-morph";
+import { Paths } from "./constants/paths";
 import { log } from "./log";
 import { joinPaths, stripQuotes, toKebabCase, withExt } from "./utils";
-import { Paths } from "./constants/paths";
 
 const generateEnumsFromUnions = (
     project: Project,
-    _interface: InterfaceDeclaration
+    enumsType: TypeLiteralNode
 ) => {
-    const properties = _interface.getProperties();
+    const properties = enumsType.getProperties();
 
-    const unionTypeProperty = properties.filter((property) => {
-        const type = property.getType();
-        return !type.isBoolean() && type.getNonNullableType().isUnion();
-    });
+    properties.forEach((property) => {
+        const name = titleCase(property.getName());
 
-    if (isEmpty(unionTypeProperty)) {
-        return;
-    }
-
-    unionTypeProperty.forEach((property) => {
-        const name = `${_interface.getName()}${capitalize(property.getName())}`;
+        const file = project.createSourceFile(
+            joinPaths(
+                Paths.base,
+                "enums",
+                withExt(toKebabCase(property.getName()))
+            ),
+            undefined,
+            {
+                overwrite: true,
+            }
+        );
 
         // Reference: https://ts-morph.com/details/types
         const values = property
@@ -28,25 +32,6 @@ const generateEnumsFromUnions = (
             .getNonNullableType()
             .getUnionTypes()
             .map((type) => type.getText());
-
-        const file = project.createSourceFile(
-            joinPaths(Paths.base, "enums", withExt(toKebabCase(name))),
-            undefined,
-            {
-                overwrite: true,
-            }
-        );
-
-        // Replace original union with enum
-        property.setType(name);
-        _interface.getSourceFile().addImportDeclaration({
-            namedImports: [name],
-            moduleSpecifier: joinPaths(
-                Paths.baseImport,
-                "enums",
-                toKebabCase(name)
-            ),
-        });
 
         file.addEnum({
             name,
