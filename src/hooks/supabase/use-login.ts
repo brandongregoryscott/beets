@@ -16,13 +16,14 @@ const useLogin = (options?: UseLoginOptions) => {
 
     const result = useMutation<SupabaseUser, Error, UserCredentials>({
         fn: async (credentials: UserCredentials) => {
-            const { email, password, redirectTo } = credentials;
-            const loginResult = await auth.signIn(
-                { email, password },
-                { redirectTo }
-            );
+            const { email, password } = credentials;
+            const loginResult = await auth.signInWithPassword({
+                email,
+                password,
+            });
 
-            const { error, user } = loginResult;
+            const { error, data } = loginResult;
+            const { user } = data;
             if (error != null) {
                 trackLoginFailed(email, error);
             }

@@ -11,7 +11,6 @@ const Variables = keyMirror({
     filter: null,
     id: null,
     isNilOrEmpty: null,
-    Insert: null,
     key: null,
     mutateAsync: null,
     onConflict: null,
@@ -25,7 +24,6 @@ const Variables = keyMirror({
     Row: null,
     SortOptions: null,
     SupabaseClient: null,
-    Update: null,
 });
 
 export { Variables };

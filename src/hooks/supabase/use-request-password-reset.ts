@@ -15,7 +15,7 @@ const useRequestPasswordReset = (): UseRequestPasswordResetResult => {
         fn: async (email: string) => {
             trackPasswordResetRequested(email);
 
-            const resetResult = await auth.api.resetPasswordForEmail(email, {
+            const resetResult = await auth.resetPasswordForEmail(email, {
                 redirectTo: joinPaths(
                     window.location.origin,
                     Sitemap.resetPassword

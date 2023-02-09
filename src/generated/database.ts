@@ -334,7 +334,11 @@ export interface Database {
         };
         Enums: {
             InstrumentCurve: "exponential" | "linear";
-            tracktype: "sequencer" | "instrument";
+        };
+        CompositeTypes: {
+            [_ in never]: never;
         };
     };
 }
+
+export type PublicSchema = Database["public"];

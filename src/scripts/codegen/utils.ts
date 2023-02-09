@@ -42,12 +42,6 @@ const getFromFunctionName = (property: PropertySignature): string =>
 const getInterfaceName = (property: PropertySignature): string =>
     pluralize(snakeToTitleCase(property.getName()), 1);
 
-const getCreateInterfaceName = (property: PropertySignature): string =>
-    `Create${getInterfaceName(property)}Options`;
-
-const getUpdateInterfaceName = (property: PropertySignature): string =>
-    `Update${getInterfaceName(property)}Options`;
-
 const getInterfacePath = (property: PropertySignature): string =>
     joinPaths(
         Paths.base,
@@ -192,8 +186,6 @@ export {
     getHookOptionsInterfaceName,
     getHookPath,
     getNonAuditableProperties,
-    getCreateInterfaceName,
-    getUpdateInterfaceName,
     getRecordFileName,
     getRecordImportPath,
     getRecordName,

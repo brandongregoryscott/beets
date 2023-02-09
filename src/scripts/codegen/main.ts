@@ -3,10 +3,12 @@ import { log } from "./log";
 import { generateInterfaces } from "./generate-interfaces";
 import { generateSupabaseClient } from "./generate-supabase-client";
 import { generateTablesEnum } from "./generate-tables-enum";
-import { generateEnumsFromUnions } from "./generate-enums-from-unions";
+import { generateTypeUnions } from "./generate-type-unions";
 import { generateUseList } from "./hooks/generate-use-list";
 import { generatePublicSchemaType } from "./generate-public-schema-type";
 import { generateUseGet } from "./hooks/generate-use-get";
+import { generateUseDelete } from "./hooks/generate-use-delete";
+import { generateUseCreateOrUpdate } from "./hooks/generate-use-create-or-update";
 
 const project = new Project({
     tsConfigFilePath: "tsconfig.json",
@@ -31,7 +33,7 @@ const main = async () => {
         .getPropertyOrThrow("Enums")
         .getFirstChildByKindOrThrow(SyntaxKind.TypeLiteral);
 
-    generateEnumsFromUnions(project, enumsType);
+    generateTypeUnions(project, enumsType);
 
     generateInterfaces(project, tablesType);
 
@@ -43,8 +45,8 @@ const main = async () => {
     properties.forEach((property) => {
         generateUseList(project, property);
         generateUseGet(project, property);
-        //     generateUseDelete(project, property);
-        //     generateUseCreateOrUpdate(project, property);
+        generateUseDelete(project, property);
+        generateUseCreateOrUpdate(project, property);
     });
 
     await project.save();

@@ -12,15 +12,13 @@ import { Variables } from "./constants/variables";
 import { log } from "./log";
 import {
     addImportDeclaration,
-    getCreateInterfaceName,
     getInterfaceName,
     getInterfacePath,
     getNonAuditableProperties,
-    getUpdateInterfaceName,
     isAuditable,
 } from "./utils";
 
-const { Auditable, Row, Insert, Update, Partial } = Variables;
+const { Auditable, Row, Partial } = Variables;
 
 const generateInterfaces = (
     project: Project,
@@ -40,22 +38,8 @@ const generateInterfaces = (
 
         generateInterface(interfaceName, _interface, file);
 
-        const createInterface = getTypeLiteralByPropertyName(property, Insert);
-        const createInterfaceName = getCreateInterfaceName(property);
-
-        generateInterface(createInterfaceName, createInterface, file, true);
-
-        const updateInterface = getTypeLiteralByPropertyName(property, Update);
-        const updateInterfaceName = getUpdateInterfaceName(property);
-
-        generateInterface(updateInterfaceName, updateInterface, file, true);
-
         file.addExportDeclaration({
-            namedExports: [
-                interfaceName,
-                createInterfaceName,
-                updateInterfaceName,
-            ],
+            namedExports: [interfaceName],
             isTypeOnly: true,
         });
 
@@ -63,7 +47,7 @@ const generateInterfaces = (
         file.fixMissingImports();
 
         log.info(
-            `Writing interfaces '${interfaceName}', '${createInterfaceName}' and '${updateInterfaceName}' to ${file.getBaseName()}...`
+            `Writing interface '${interfaceName}' to ${file.getBaseName()}...`
         );
     });
 };

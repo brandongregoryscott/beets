@@ -9,13 +9,22 @@ import { useGlobalState } from "hooks/use-global-state";
 import { buildDemoInstruments } from "utils/build-demo-instruments";
 import { stubUseQueryResult } from "utils/use-query-utils";
 import { useMemo } from "react";
+import type { PublicSchema } from "generated/database";
 
 interface UseListInstrumentsOptions {
     enabled?: boolean;
     files?: List<FileRecord>;
     filter?: (
-        query: PostgrestFilterBuilder<Instrument>
-    ) => PostgrestFilterBuilder<Instrument>;
+        query: PostgrestFilterBuilder<
+            PublicSchema,
+            Record<string, unknown>,
+            Instrument
+        >
+    ) => PostgrestFilterBuilder<
+        PublicSchema,
+        Record<string, unknown>,
+        Instrument
+    >;
     onError?: (error: Error) => void;
     onSuccess?: (resultObjects: InstrumentRecord[]) => void;
 }
