@@ -17,6 +17,7 @@ import { Sitemap } from "sitemap";
 import { useChangePassword } from "hooks/supabase/use-change-password";
 import { useInput } from "hooks/use-input";
 import type { ResetPasswordQueryParams } from "hooks/use-reset-password-route";
+import { absolutePath } from "utils/route-utils";
 
 interface ChangePasswordFormProps
     extends Pick<ResetPasswordQueryParams, "access_token"> {}
@@ -43,7 +44,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = (
 
     const handleChangePasswordSuccess = useCallback(() => {
         toaster.success("Password successfully updated!");
-        navigate(Sitemap.login);
+        navigate(absolutePath(Sitemap.login));
     }, [navigate]);
 
     const {
