@@ -30,7 +30,7 @@ jobs:
                 os:
                     - ubuntu-latest
                 node:
-                    - 14.15.5
+                    - 14.18
         steps:
             - uses: actions/checkout@v2
 
@@ -40,7 +40,7 @@ jobs:
                   node-version: ${{matrix.node}}
 
             - name: npm install
-              run: npm install
+              run: npm i -g npm@9 && npm install --legacy-peer-deps
 
             - name: npm run format:check
               run: npm run format:check
