@@ -15,6 +15,7 @@ const defaultValues = makeDefaultValues<SupabaseUser>({
     email: undefined,
     email_change_sent_at: undefined,
     email_confirmed_at: undefined,
+    factors: undefined,
     id: "",
     identities: undefined,
     invited_at: undefined,

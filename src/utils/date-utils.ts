@@ -3,7 +3,7 @@ import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
 import getMonth from "date-fns/getMonth";
 
-const formatUpdatedOn = (updated_on?: string): string =>
+const formatUpdatedOn = (updated_on?: string | null): string =>
     isNilOrEmpty(updated_on)
         ? "--"
         : format(parseISO(updated_on), "E, d LLL u, p");

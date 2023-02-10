@@ -17,8 +17,6 @@ import React, {
 } from "react";
 import { InstrumentRecord } from "models/instrument-record";
 import type { ValidationState } from "interfaces/validation-state";
-import { InstrumentCurve } from "generated/enums/instrument-curve";
-import { enumToSelectMenuItems } from "utils/select-menu-utils";
 import type { FileRecord } from "models/file-record";
 import { getFileById } from "utils/file-utils";
 import { useBoolean } from "hooks/use-boolean";
@@ -39,6 +37,7 @@ import { TrackSectionStepRecord } from "models/track-section-step-record";
 import { List } from "immutable";
 import { useToneAudio } from "hooks/use-tone-audio";
 import { defaultNote } from "constants/midi-notes";
+import type { InstrumentCurve } from "generated/types/instrument-curve";
 
 interface InstrumentSettingsProps
     extends Pick<DialogFooterProps, "confirmLabel"> {
@@ -49,8 +48,14 @@ interface InstrumentSettingsProps
     onDelete?: () => void;
 }
 
-const curveOptions: Array<SelectMenuItem<InstrumentCurve>> =
-    enumToSelectMenuItems(InstrumentCurve);
+const curveOptions: Array<SelectMenuItem<InstrumentCurve>> = [
+    {
+        label: "Exponential",
+        value: "exponential",
+        id: "exponential",
+    },
+    { label: "Linear", value: "linear", id: "linear" },
+];
 
 const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     props: InstrumentSettingsProps
@@ -108,7 +113,8 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
     } = useNumberInput({
         initialValue:
             initialInstrument?.release ??
-            InstrumentRecord.defaultValues.release,
+            InstrumentRecord.defaultValues.release ??
+            undefined,
         allowFloating: true,
         min: 0,
         max: 1,
@@ -119,7 +125,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         onChange: onDurationChange,
         validation: durationValidation,
     } = useNumberInput({
-        initialValue: initialInstrument?.duration,
+        initialValue: initialInstrument?.duration ?? undefined,
         allowFloating: true,
         min: 0,
         max: 30,
@@ -132,7 +138,7 @@ const InstrumentSettings: React.FC<InstrumentSettingsProps> = (
         getFileById(initialInstrument?.file_id, files)
     );
     const [curve, setCurve] = useState<InstrumentCurve>(
-        initialInstrument?.curve ?? InstrumentCurve.Exponential
+        initialInstrument?.curve ?? "exponential"
     );
     const [rootNote, setRootNote] = useState<MidiNote>(
         (initialInstrument?.root_note as MidiNote) ?? defaultNote

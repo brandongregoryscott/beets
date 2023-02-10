@@ -28,7 +28,7 @@ I have not had much luck with running a local version of Supabase with Docker, b
 
 ### Prerequisites
 
--   [`npm`](https://www.npmjs.com/) v7 and [`node`](https://nodejs.org/) v14.18 installed
+-   [`npm`](https://www.npmjs.com/) v9 and [`node`](https://nodejs.org/) v19 installed
 -   [Supabase](https://supabase.com/) account
 
 ### Fork and Clone

@@ -2,6 +2,7 @@ import keyMirror from "keymirror";
 
 const Variables = keyMirror({
     Auditable: null,
+    Database: null,
     client: null,
     createOrUpdate: null,
     defaultFilter: null,
@@ -16,8 +17,11 @@ const Variables = keyMirror({
     onError: null,
     onSettled: null,
     onSuccess: null,
+    Partial: null,
+    PublicSchema: null,
     resultObject: null,
     sortBy: null,
+    Row: null,
     SortOptions: null,
     SupabaseClient: null,
 });

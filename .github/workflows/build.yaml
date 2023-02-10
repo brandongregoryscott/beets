@@ -30,7 +30,7 @@ jobs:
                 os:
                     - ubuntu-latest
                 node:
-                    - 14.15.5
+                    - 19.6
         steps:
             - uses: actions/checkout@v2
 

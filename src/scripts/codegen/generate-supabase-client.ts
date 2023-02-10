@@ -3,7 +3,6 @@ import { Project, PropertySignature, VariableDeclarationKind } from "ts-morph";
 import { log } from "./log";
 import {
     getInterfaceName,
-    getInterfaceImportPath,
     getFromFunctionName,
     getTableName,
     toKebabCase,
@@ -13,7 +12,7 @@ import { Enums } from "./constants/enums";
 import { Paths } from "./constants/paths";
 import { Variables } from "./constants/variables";
 
-const { client, env, SupabaseClient } = Variables;
+const { client, env, SupabaseClient, Database } = Variables;
 const { name: Tables } = Enums.Tables;
 
 const generateSupabaseClient = (
@@ -31,12 +30,10 @@ const generateSupabaseClient = (
         }
     );
 
-    file.addImportDeclarations(
-        properties.map((property) => ({
-            namedImports: [getInterfaceName(property)],
-            moduleSpecifier: getInterfaceImportPath(property),
-        }))
-    );
+    file.addImportDeclaration({
+        namedImports: [Database],
+        moduleSpecifier: "generated/database",
+    });
 
     file.addImportDeclaration({
         namedImports: [Enums.Tables.name],
@@ -58,7 +55,7 @@ const generateSupabaseClient = (
         declarations: [
             {
                 name: client,
-                initializer: `createClient(
+                initializer: `createClient<${Database}>(
                     ${env}.REACT_APP_SUPABASE_URL!,
                     ${env}.REACT_APP_SUPABASE_ANON_KEY!
                 )
@@ -89,9 +86,8 @@ const SupabaseClientInitializer = (properties: PropertySignature[]) => `
         ${properties
             .map((property) => {
                 const fromFunction = getFromFunctionName(property);
-                const fromTyped = `from<${getInterfaceName(property)}>`;
                 const tableEnum = `${Tables}.${getTableName(property)}`;
-                return `${fromFunction}: () => ${client}.${fromTyped}(${tableEnum})`;
+                return `${fromFunction}: () => ${client}.from(${tableEnum})`;
             })
             .join(",")}
     }`;

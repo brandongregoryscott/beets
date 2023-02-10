@@ -50,8 +50,9 @@ const listWorkstations = async (): Promise<List<WorkstationStateRecord>> => {
         trackSectionSteps
     );
 
-    return sortBy(workstations, (workstationState) =>
-        workstationState.project.getUpdatedOn()
+    return sortBy(
+        workstations,
+        (workstationState) => workstationState.project.getUpdatedOn() ?? ""
     ).reverse();
 };
 

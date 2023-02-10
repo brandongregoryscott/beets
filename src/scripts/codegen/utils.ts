@@ -1,9 +1,40 @@
-import _ from "lodash";
+import { capitalize } from "lodash";
 import pluralize from "pluralize";
-import { Project, PropertySignature, SourceFile } from "ts-morph";
+import {
+    Project,
+    PropertySignature,
+    SourceFile,
+    TypeLiteralNode,
+} from "ts-morph";
+import { AuditableColumns } from "./constants/auditable-columns";
 import { Paths } from "./constants/paths";
 import { HookAction } from "./enums/hook-action";
 import { log } from "./log";
+
+/**
+ * Adds an ImportDeclaration to the file if it does not already exist
+ */
+const addImportDeclaration = (
+    file: SourceFile,
+    name: string,
+    moduleSpecifier: string
+): void => {
+    const hasImport =
+        file.getImportDeclaration((importDeclaration) =>
+            importDeclaration
+                .getNamedImports()
+                .some((importSpecifier) => importSpecifier.getName() === name)
+        ) != null;
+
+    if (hasImport) {
+        return;
+    }
+
+    file.addImportDeclaration({
+        namedImports: [name],
+        moduleSpecifier,
+    });
+};
 
 const getFromFunctionName = (property: PropertySignature): string =>
     `from${getTableName(property)}`;
@@ -55,6 +86,16 @@ const getHookOptionsInterfaceName = (
     return `${hookName}Options`;
 };
 
+const getNonAuditableProperties = (
+    typeLiteral: TypeLiteralNode
+): PropertySignature[] =>
+    typeLiteral
+        .getProperties()
+        .filter(
+            (property) =>
+                !Object.keys(AuditableColumns).includes(property.getName())
+        );
+
 const getRecordImportPath = (property: PropertySignature): string =>
     joinPaths("models", removeExt(getRecordFileName(property)));
 
@@ -88,16 +129,28 @@ const getTablesEnumValue = (property: PropertySignature): string =>
 const getTableName = (property: PropertySignature): string =>
     pluralize(getInterfaceName(property), 2);
 
+const isAuditable = (typeLiteral: TypeLiteralNode): boolean => {
+    const propertyNames = typeLiteral
+        .getProperties()
+        .map((property) => property.getName());
+
+    const auditableKeys = Object.keys(AuditableColumns);
+
+    return auditableKeys.every((auditableKey) =>
+        propertyNames.includes(auditableKey)
+    );
+};
+
 const joinPaths = (...paths: string[]): string => paths.join("/");
 
 const removeExt = (filename: string) => filename.replace(".ts", "");
 
 const snakeToTitleCase = (value: string) => {
     if (!value.includes("_")) {
-        return _.capitalize(value);
+        return capitalize(value);
     }
 
-    return value.split("_").map(_.capitalize).join("");
+    return value.split("_").map(capitalize).join("");
 };
 
 const stripQuotes = (value: string): string => value.replace(/"/g, "");
@@ -123,6 +176,7 @@ const toKebabCase = (value: string) => {
 const withExt = (filename: string): string => `${filename}.ts`;
 
 export {
+    addImportDeclaration,
     getFromFunctionName,
     getInterfaceImportPath,
     getInterfaceName,
@@ -131,12 +185,14 @@ export {
     getHookName,
     getHookOptionsInterfaceName,
     getHookPath,
+    getNonAuditableProperties,
     getRecordFileName,
     getRecordImportPath,
     getRecordName,
     getRecordSourceFile,
     getTablesEnumValue,
     getTableName,
+    isAuditable,
     joinPaths,
     stripQuotes,
     toKebabCase,
