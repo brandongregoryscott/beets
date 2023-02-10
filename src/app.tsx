@@ -6,6 +6,7 @@ import { Routes } from "routes";
 import { useCurrentUser } from "hooks/use-current-user";
 import { useGlobalState } from "hooks/use-global-state";
 import Snowfall from "react-snowfall";
+import { isJanuaryOrDecember } from "utils/date-utils";
 
 const App: React.FC = () => {
     const queryClient = useQueryClient();
@@ -16,7 +17,9 @@ const App: React.FC = () => {
     return (
         <BrowserRouter>
             <NestedRoutes routes={Routes} />
-            {globalState.enableHolidayMode && <Snowfall />}
+            {globalState.enableHolidayMode && isJanuaryOrDecember() && (
+                <Snowfall />
+            )}
         </BrowserRouter>
     );
 };
