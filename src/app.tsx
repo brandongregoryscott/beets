@@ -16,7 +16,7 @@ const App: React.FC = () => {
     return (
         <BrowserRouter>
             <NestedRoutes routes={Routes} />
-            {globalState.enableHolidayMode && <Snowfall />}
+            {globalState.isHolidayModeEnabled() && <Snowfall />}
         </BrowserRouter>
     );
 };

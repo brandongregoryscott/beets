@@ -21,6 +21,10 @@ class GlobalStateRecord
         return this.supabaseUser != null && this.user != null;
     }
 
+    public isHolidayModeEnabled(): boolean {
+        return this.enableHolidayMode && isJanuaryOrDecember();
+    }
+
     public userId(): string | undefined {
         return this.supabaseUser?.id ?? this.user?.id;
     }

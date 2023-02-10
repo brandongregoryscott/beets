@@ -80,7 +80,7 @@ const ProfileMenuCard: React.FC = () => {
                     borderRadius={minorScale(2)}
                     cursor="pointer"
                     padding={majorScale(2)}>
-                    {globalState.enableHolidayMode && (
+                    {globalState.isHolidayModeEnabled() && (
                         <Image
                             bottom={28}
                             height={14}

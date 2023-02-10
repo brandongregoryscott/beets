@@ -87,7 +87,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         onClose();
     }, [onClose, setGlobalState]);
 
-    const snowflakeIconColor = globalState.enableHolidayMode
+    const snowflakeIconColor = globalState.isHolidayModeEnabled()
         ? colors.blue300
         : colors.gray400;
 
