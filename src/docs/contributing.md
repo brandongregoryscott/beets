@@ -28,7 +28,7 @@ I have not had much luck with running a local version of Supabase with Docker, b
 
 ### Prerequisites
 
--   [`npm`](https://www.npmjs.com/) v9 and [`node`](https://nodejs.org/) v14.18 installed
+-   [`npm`](https://www.npmjs.com/) v9 and [`node`](https://nodejs.org/) v19 installed
 -   [Supabase](https://supabase.com/) account
 
 ### Fork and Clone
@@ -54,10 +54,8 @@ Generally speaking, for building out new features or fixing bugs, you should bra
 Install the app's dependencies using `npm`:
 
 ```
-npm install --legacy-peer-deps
+npm install
 ```
-
-> The `--legacy-peer-deps` flag is necessary due to npm v8+'s stricter peer dependency resolution.
 
 ### Env File
 
