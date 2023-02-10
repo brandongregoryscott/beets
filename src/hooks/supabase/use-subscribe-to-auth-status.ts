@@ -6,10 +6,12 @@ import { useGlobalState } from "hooks/use-global-state";
 import { toaster } from "evergreen-ui";
 import { identifyUser } from "utils/analytics-utils";
 import { useRouter } from "hooks/use-router";
+import { useWorkstationState } from "hooks/use-workstation-state";
 
 const useSubscribeToAuthStatus = () => {
     const auth = useAuth();
     const { setGlobalState } = useGlobalState();
+    const { clearState: clearWorkstationState } = useWorkstationState();
 
     const { navigate } = useRouter();
 
@@ -29,10 +31,11 @@ const useSubscribeToAuthStatus = () => {
 
             toaster.notify("You were signed out.");
             setGlobalState((prev) => prev.setUser(undefined));
+            clearWorkstationState();
             navigate(Sitemap.login);
             return;
         },
-        [navigate, setGlobalState]
+        [clearWorkstationState, navigate, setGlobalState]
     );
 
     useEffect(() => {

@@ -6,7 +6,6 @@ import { Routes } from "routes";
 import { useCurrentUser } from "hooks/use-current-user";
 import { useGlobalState } from "hooks/use-global-state";
 import Snowfall from "react-snowfall";
-import { isJanuaryOrDecember } from "utils/date-utils";
 
 const App: React.FC = () => {
     const queryClient = useQueryClient();
