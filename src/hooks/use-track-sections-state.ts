@@ -66,7 +66,7 @@ const useTrackSectionsState = (
     const insert = useCallback(
         (index: number, stepCount?: number) =>
             setState((prev) =>
-                prev.set(
+                prev.insert(
                     index,
                     new TrackSectionRecord({
                         track_id: trackId,
