@@ -156,6 +156,7 @@ const LoginOrRegisterForm: React.FC<LoginOrRegisterFormProps> = (
                     value={password}
                 />
                 <Button
+                    appearance="primary"
                     isLoading={
                         showRegister ? isRegisterLoading : isLoginLoading
                     }

@@ -24,6 +24,9 @@ const generateSupabaseTypes = async (
         return project.addSourceFileAtPath(joinPaths(Paths.base, filename));
     }
 
+    log.info("REACT_APP_SUPABASE_URL", env.REACT_APP_SUPABASE_URL);
+    log.info("REACT_APP_SUPABASE_ANON_KEY", env.REACT_APP_SUPABASE_ANON_KEY);
+
     const output = await openapi(
         `${env.REACT_APP_SUPABASE_URL}/rest/v1/?apikey=${env.REACT_APP_SUPABASE_ANON_KEY}`
     );

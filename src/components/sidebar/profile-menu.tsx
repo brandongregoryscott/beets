@@ -1,5 +1,7 @@
 import { Menu } from "components/menu/menu";
 import {
+    CommentIcon,
+    DocumentIcon,
     HelpIcon,
     InfoSignIcon,
     LogInIcon,
@@ -13,18 +15,26 @@ import { Sitemap } from "sitemap";
 import { useLogout } from "hooks/supabase/use-logout";
 import { useGlobalState } from "hooks/use-global-state";
 import { useTheme } from "hooks/use-theme";
+import { isJanuaryOrDecember } from "utils/date-utils";
 
 interface ProfileMenuProps {
     onAboutDialogClick: () => void;
     onClose: () => void;
-    onHelpDialogClick: () => void;
+    onDocumentationDialogClick: () => void;
+    onFeedbackDialogClick: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
-    const { onAboutDialogClick, onHelpDialogClick, onClose } = props;
+    const {
+        onAboutDialogClick,
+        onDocumentationDialogClick,
+        onFeedbackDialogClick,
+        onClose,
+    } = props;
     const { isAuthenticated, globalState, setGlobalState } = useGlobalState();
     const { colors } = useTheme();
-    const handleLogoutsettled = useCallback(
+
+    const handleLogoutSettled = useCallback(
         () =>
             setGlobalState((prev) =>
                 prev.merge({
@@ -34,7 +44,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
             ),
         [setGlobalState]
     );
-    const { mutate: logout } = useLogout({ onSettled: handleLogoutsettled });
+    const { mutate: logout } = useLogout({ onSettled: handleLogoutSettled });
     const { navigate } = useRouter();
 
     const handleAboutDialogClick = useCallback(() => {
@@ -42,10 +52,15 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         onAboutDialogClick();
     }, [onAboutDialogClick, onClose]);
 
-    const handleHelpDialogClick = useCallback(() => {
+    const handleDocumentationDialogClick = useCallback(() => {
         onClose();
-        onHelpDialogClick();
-    }, [onClose, onHelpDialogClick]);
+        onDocumentationDialogClick();
+    }, [onClose, onDocumentationDialogClick]);
+
+    const handleFeedbackDialogClick = useCallback(() => {
+        onClose();
+        onFeedbackDialogClick();
+    }, [onClose, onFeedbackDialogClick]);
 
     const handleLogoutSelect = useCallback(() => {
         onClose();
@@ -78,16 +93,23 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
 
     return (
         <Menu>
-            <Menu.Item
-                icon={<SnowflakeIcon color={snowflakeIconColor} />}
-                onSelect={handleToggleHolidayMode}>
-                Holiday Mode
-            </Menu.Item>
+            {isJanuaryOrDecember() && (
+                <Menu.Item
+                    icon={<SnowflakeIcon color={snowflakeIconColor} />}
+                    onSelect={handleToggleHolidayMode}>
+                    Holiday Mode
+                </Menu.Item>
+            )}
             <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
             </Menu.Item>
-            <Menu.Item icon={HelpIcon} onSelect={handleHelpDialogClick}>
-                Help
+            <Menu.Item
+                icon={DocumentIcon}
+                onSelect={handleDocumentationDialogClick}>
+                Documentation
+            </Menu.Item>
+            <Menu.Item icon={CommentIcon} onClick={handleFeedbackDialogClick}>
+                Submit Feedback
             </Menu.Item>
             {isAuthenticated && (
                 <Menu.Item icon={LogOutIcon} onSelect={handleLogoutSelect}>

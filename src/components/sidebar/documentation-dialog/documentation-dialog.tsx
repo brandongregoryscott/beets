@@ -24,16 +24,19 @@ import {
     joinPaths,
     toPathCase,
 } from "utils/route-utils";
-import { HelpDialogLink } from "components/sidebar/help-dialog/help-dialog-link";
+import { DocumentationDialogLink } from "components/sidebar/documentation-dialog/documentation-dialog-link";
 import { omitProps } from "utils/markdown-utils";
 import { CopyableHeading } from "components/copyable-heading";
 import { HelpResourceTabs } from "constants/help-resource-tabs";
 import { useTheme } from "hooks/use-theme";
 import { IconButton } from "components/icon-button";
 
-interface HelpDialogProps extends Pick<DialogProps, "onCloseComplete"> {}
+interface DocumentationDialogProps
+    extends Pick<DialogProps, "onCloseComplete"> {}
 
-const HelpDialog: React.FC<HelpDialogProps> = (props: HelpDialogProps) => {
+const DocumentationDialog: React.FC<DocumentationDialogProps> = (
+    props: DocumentationDialogProps
+) => {
     const { onCloseComplete } = props;
     const { colors } = useTheme();
     const contentContainerRef = useRef<HTMLDivElement | null>(null);
@@ -120,7 +123,9 @@ const getComponentMap = (
     selectedTab: HelpResource,
     setSelectedTab: (tab: HelpResource) => void
 ): MarkdownComponentMap => ({
-    a: (props) => <HelpDialogLink {...props} setSelectedTab={setSelectedTab} />,
+    a: (props) => (
+        <DocumentationDialogLink {...props} setSelectedTab={setSelectedTab} />
+    ),
     h2: (props) => (
         <CopyableHeading
             {...omitProps(props)}
@@ -160,4 +165,4 @@ const transformLinkUri = (selectedTab: HelpResource) => (href: string) => {
     return joinPaths(absolutePath(Sitemap.help.root), path);
 };
 
-export { HelpDialog };
+export { DocumentationDialog };

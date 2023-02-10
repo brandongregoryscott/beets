@@ -1,13 +1,23 @@
-import { DateTime } from "luxon";
 import { isNilOrEmpty } from "utils/collection-utils";
-
-const getCurrentTime = () => new Date().toISOString();
+import format from "date-fns/format";
+import parseISO from "date-fns/parseISO";
+import getMonth from "date-fns/getMonth";
 
 const formatUpdatedOn = (updated_on?: string): string =>
     isNilOrEmpty(updated_on)
         ? "--"
-        : DateTime.fromISO(updated_on!).toLocaleString(
-              DateTime.DATETIME_MED_WITH_WEEKDAY
-          );
+        : format(parseISO(updated_on), "E, d LLL u, p");
 
-export { getCurrentTime, formatUpdatedOn };
+const getCurrentTime = () => new Date().toISOString();
+
+const isJanuaryOrDecember = (): boolean => {
+    const currentMonth = getMonth(new Date());
+
+    // Months in the Date constructor are index-based
+    const december = getMonth(new Date(2023, 11, 1));
+    const january = getMonth(new Date(2023, 0, 1));
+
+    return currentMonth === december || currentMonth === january;
+};
+
+export { formatUpdatedOn, getCurrentTime, isJanuaryOrDecember };

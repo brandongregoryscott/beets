@@ -9,8 +9,11 @@ interface UseInputOptions {
 }
 
 interface useInputResult {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => void;
     setValidation: (validation?: ValidationState) => void;
+    setValueRequiredState: () => void;
     validation: ValidationState;
     value?: string;
 }
@@ -33,15 +36,21 @@ const useInput = (input?: UseInputOptions): useInputResult => {
     );
 
     const handleChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) =>
+        (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
             handleValueChange(event.target.value),
         [handleValueChange]
+    );
+
+    const setValueRequiredState = useCallback(
+        () => setValidation(ValueRequiredState),
+        []
     );
 
     return {
         validation: validation ?? {},
         onChange: handleChange,
         setValidation,
+        setValueRequiredState,
         value,
     };
 };
