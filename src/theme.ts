@@ -4,18 +4,22 @@ const theme = mergeTheme(defaultTheme, {
     components: {
         Button: {
             baseStyle: {
-                _disabled: {
-                    cursor: "not-allowed",
-                    pointerEvents: "auto",
+                selectors: {
+                    _disabled: {
+                        cursor: "not-allowed",
+                        pointerEvents: "auto",
+                    },
                 },
             },
             appearances: {
                 tab: {
-                    _active: {
-                        backgroundColor: defaultTheme.colors.gray300,
-                    },
-                    _hover: {
-                        backgroundColor: defaultTheme.colors.gray300,
+                    selectors: {
+                        _active: {
+                            backgroundColor: defaultTheme.colors.gray300,
+                        },
+                        _hover: {
+                            backgroundColor: defaultTheme.colors.gray300,
+                        },
                     },
                     backgroundColor: defaultTheme.colors.gray100,
                     borderRadius: 0,
@@ -24,22 +28,26 @@ const theme = mergeTheme(defaultTheme, {
         },
         Link: {
             baseStyle: {
-                _hover: {
-                    cursor: "pointer",
+                selectors: {
+                    _hover: {
+                        cursor: "pointer",
+                    },
                 },
             },
         },
         MenuItem: {
             appearances: {
                 tab: {
-                    _disabled: {
-                        cursor: "not-allowed",
-                        pointerEvents: "auto",
-                        fontStyle: "italic",
-                        color: defaultTheme.colors.gray500,
-                    },
-                    _hover: {
-                        backgroundColor: defaultTheme.colors.gray300,
+                    selectors: {
+                        _disabled: {
+                            cursor: "not-allowed",
+                            pointerEvents: "auto",
+                            fontStyle: "italic",
+                            color: defaultTheme.colors.gray500,
+                        },
+                        _hover: {
+                            backgroundColor: defaultTheme.colors.gray300,
+                        },
                     },
                     backgroundColor: defaultTheme.colors.gray100,
                 },
@@ -51,8 +59,11 @@ const theme = mergeTheme(defaultTheme, {
                     border: `1px solid ${defaultTheme.colors.gray400}`,
                 },
                 editableParagraph: {
-                    "&:hover": {
-                        border: `1px solid ${defaultTheme.colors.gray500}`,
+                    selectors: {
+                        /* @ts-ignore */
+                        "&:hover": {
+                            border: `1px solid ${defaultTheme.colors.gray500}`,
+                        },
                     },
                     paddingLeft: minorScale(1),
                     paddingRight: minorScale(1),
