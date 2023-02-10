@@ -4,7 +4,7 @@ import type { RouteMatch, RouteObject } from "react-router";
 // eslint-disable-next-line no-restricted-imports
 import { generatePath as reactRouterGeneratePath } from "react-router";
 import { matchRoutes as reactRouterMatchRoutes } from "react-router";
-import { flatMap, isEmpty, toPath } from "lodash";
+import { flatMap, isEmpty } from "lodash";
 import type { HelpResource } from "enums/help-resource";
 import { Sitemap } from "sitemap";
 

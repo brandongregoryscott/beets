@@ -15,7 +15,7 @@
         "@mantine/core": "4.2.1",
         "@mantine/hooks": "4.2.1",
         "@octokit/rest": "18.12.0",
-        "@supabase/supabase-js": "1.35.4",
+        "@supabase/supabase-js": "2.7.1",
         "date-fns": "2.29.3",
         "evergreen-ui": "7.1.0",
         "glamor": "2.20.40",
@@ -86,12 +86,14 @@
         "prettier": "2.5.1",
         "react-error-overlay": "6.0.9",
         "semantic-release": "19.0.3",
+        "supabase": "1.37.1",
         "ts-morph": "17.0.1",
         "ts-node": "10.9.1",
         "typescript": "4.9.4"
     },
     "engines": {
-        "node": ">=14.18"
+        "node": ">=19",
+        "npm": ">=9"
     },
     "eslintConfig": {
         "extends": [
@@ -123,15 +125,17 @@
         "migrations:create": "node-pg-migrate --migrations-dir src/scripts/migrations --template-file-name src/scripts/migrations/utils/migration-template.ts create",
         "migrations:down": "node-pg-migrate --migrations-dir src/scripts/migrations/dist down",
         "migrations:up": "node-pg-migrate --migrations-dir src/scripts/migrations/dist up",
-        "postcodegen": "npm run lint:fix || npm run format:fix",
+        "postcodegen": "npm run lint:fix && npm run format:fix",
         "prebuild:migrations": "npm run clean:migrations",
-        "precodegen": "npm run clean:generated",
+        "precodegen": "npm run clean:generated && npm run supabase:generate",
         "premigrations:create": "npm run build:migrations",
         "premigrations:down": "npm run build:migrations",
         "premigrations:up": "npm run build:migrations",
         "prepare": "husky install",
         "semantic-release": "semantic-release",
         "start": "GENERATE_SOURCEMAP=false react-scripts start",
+        "supabase": "./node_modules/supabase/bin/supabase",
+        "supabase:generate": "source .env && mkdir -p src/generated && touch src/generated/database.ts && ./node_modules/supabase/bin/supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/generated/database.ts",
         "test": "react-scripts test",
         "test:watch": "react-scripts test --watch"
     },

@@ -2,7 +2,6 @@ import type { FileRecord } from "models/file-record";
 import { InstrumentRecord } from "models/instrument-record";
 import { List } from "immutable";
 import { findFileByName } from "utils/file-utils";
-import { InstrumentCurve } from "generated/enums/instrument-curve";
 
 const buildDemoInstruments = (
     files?: List<FileRecord>
@@ -27,7 +26,7 @@ const buildDemoInstruments = (
         id: "wavy-pad",
         name: "Wavy Pad",
         release: 1,
-        curve: InstrumentCurve.Exponential,
+        curve: "exponential",
         file_id: findFileByName("Pad-18", files)?.id,
         root_note: "E5",
     });

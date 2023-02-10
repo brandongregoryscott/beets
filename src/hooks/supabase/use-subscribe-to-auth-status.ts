@@ -39,7 +39,7 @@ const useSubscribeToAuthStatus = () => {
         const { data: authStateListener } = auth.onAuthStateChange(
             handleAuthStateChange
         );
-        return authStateListener?.unsubscribe;
+        return authStateListener?.subscription.unsubscribe;
     }, [auth, handleAuthStateChange, setGlobalState]);
 };
 

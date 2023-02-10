@@ -2,3 +2,4 @@ src/scripts/**/*
 *.js
 node_modules/**/*
 supabase-types.ts
+database.ts

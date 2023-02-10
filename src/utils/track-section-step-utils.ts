@@ -114,7 +114,7 @@ const toInstrumentStepTypes = (
             const midiNotes: ToneStep[] = stepsByIndex
                 .map((trackSectionStep) => ({
                     note: trackSectionStep.note as MidiNote,
-                    duration: instrument?.duration,
+                    duration: instrument?.duration ?? undefined,
                 }))
                 .toArray();
 

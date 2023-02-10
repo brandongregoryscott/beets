@@ -26,6 +26,7 @@ const {
     key,
     onError,
     onSuccess,
+    PublicSchema,
     sortBy,
     SortOptions,
     SupabaseClient,
@@ -85,6 +86,13 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         moduleSpecifier: `interfaces/${kebabCase(SortOptions)}`,
     });
 
+    file.addImportDeclaration({
+        namedImports: [PublicSchema],
+        moduleSpecifier: `generated/database`,
+    });
+
+    const postgrestFilterType = `${PostgrestFilterBuilder}<${PublicSchema}, Record<string, unknown>, ${interfaceName}>`;
+
     file.addInterface({
         name: getHookOptionsInterfaceName(property, HookAction.List),
         properties: [
@@ -96,7 +104,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
             {
                 name: filter,
                 hasQuestionToken: true,
-                type: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => ${PostgrestFilterBuilder}<${interfaceName}>`,
+                type: `(query: ${postgrestFilterType}) => ${postgrestFilterType}`,
             },
             {
                 name: key,
@@ -126,7 +134,7 @@ const generateUseList = (project: Project, property: PropertySignature) => {
         declarations: [
             {
                 name: defaultFilter,
-                initializer: `(query: ${PostgrestFilterBuilder}<${interfaceName}>) => query\n\n`,
+                initializer: `(query: ${postgrestFilterType}) => query\n\n`,
             },
         ],
     });

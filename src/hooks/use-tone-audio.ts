@@ -163,7 +163,7 @@ const useToneAudio = (options: UseToneAudioOptions): UseToneAudioResult => {
 
             sampler.set({
                 curve: instrument?.curve,
-                release: instrument?.release,
+                release: instrument?.release ?? undefined,
             });
 
             const sampleMapIsDirty =
