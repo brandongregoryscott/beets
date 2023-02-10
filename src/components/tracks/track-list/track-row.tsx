@@ -80,7 +80,12 @@ const _TrackRow: ForwardRefRenderFunction<
     );
 
     useEffect(() => {
-        (ref as MutableRefObject<VariableSizeList>).current.resetAfterIndex(0);
+        const variableSizeListRef = ref as MutableRefObject<VariableSizeList>;
+        if (variableSizeListRef?.current == null) {
+            return;
+        }
+
+        variableSizeListRef.current.resetAfterIndex(0);
     }, [ref, totalStepCount]);
 
     const variableListHeight = showScrollbar ? majorScale(12) : majorScale(10);
