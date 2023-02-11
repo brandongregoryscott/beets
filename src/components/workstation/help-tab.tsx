@@ -7,12 +7,14 @@ import {
     InfoSignIcon,
     Popover,
     Position,
+    VideoIcon,
 } from "evergreen-ui";
 import React, { useCallback } from "react";
 import { useDialog } from "hooks/use-dialog";
 import { DocumentationDialog } from "components/sidebar/documentation-dialog/documentation-dialog";
 import { AboutDialog } from "components/sidebar/about-dialog";
 import { FeedbackDialog } from "components/feedback-dialog";
+import { IntroVideoDialog } from "components/intro-video-dialog";
 
 const HelpTab: React.FC = () => {
     const [isAboutDialogOpen, handleOpenAboutDialog, handleCloseAboutDialog] =
@@ -26,6 +28,11 @@ const HelpTab: React.FC = () => {
         isFeedbackDialogOpen,
         handleOpenFeedbackDialog,
         handleCloseFeedbackDialog,
+    ] = useDialog();
+    const [
+        isIntroVideoDialogOpen,
+        handleOpenIntroVideoDialog,
+        handleCloseIntroVideoDialog,
     ] = useDialog();
 
     const handleClick = useCallback(
@@ -48,6 +55,14 @@ const HelpTab: React.FC = () => {
                                 handleOpenAboutDialog
                             )}>
                             About
+                        </Menu.Item>
+                        <Menu.Item
+                            icon={VideoIcon}
+                            onClick={handleClick(
+                                closePopover,
+                                handleOpenIntroVideoDialog
+                            )}>
+                            Introduction Video
                         </Menu.Item>
                         <Menu.Item
                             icon={DocumentIcon}
@@ -77,6 +92,11 @@ const HelpTab: React.FC = () => {
             </Popover>
             {isAboutDialogOpen && (
                 <AboutDialog onCloseComplete={handleCloseAboutDialog} />
+            )}
+            {isIntroVideoDialogOpen && (
+                <IntroVideoDialog
+                    onCloseComplete={handleCloseIntroVideoDialog}
+                />
             )}
             {isDocumentationDialogOpen && (
                 <DocumentationDialog

@@ -8,6 +8,7 @@ import {
     LogOutIcon,
     NewPersonIcon,
     SnowflakeIcon,
+    VideoIcon,
 } from "evergreen-ui";
 import React, { Fragment, useCallback } from "react";
 import { useRouter } from "hooks/use-router";
@@ -22,11 +23,13 @@ interface ProfileMenuProps {
     onClose: () => void;
     onDocumentationDialogClick: () => void;
     onFeedbackDialogClick: () => void;
+    onIntroVideoDialogClick: () => void;
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
     const {
         onAboutDialogClick,
+        onIntroVideoDialogClick,
         onDocumentationDialogClick,
         onFeedbackDialogClick,
         onClose,
@@ -61,6 +64,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
         onClose();
         onFeedbackDialogClick();
     }, [onClose, onFeedbackDialogClick]);
+
+    const handleIntroVideoDialogClick = useCallback(() => {
+        onClose();
+        onIntroVideoDialogClick();
+    }, [onClose, onIntroVideoDialogClick]);
 
     const handleLogoutSelect = useCallback(() => {
         onClose();
@@ -102,6 +110,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props: ProfileMenuProps) => {
             )}
             <Menu.Item icon={InfoSignIcon} onSelect={handleAboutDialogClick}>
                 About
+            </Menu.Item>
+            <Menu.Item icon={VideoIcon} onSelect={handleIntroVideoDialogClick}>
+                Introduction Video
             </Menu.Item>
             <Menu.Item
                 icon={DocumentIcon}

@@ -21,6 +21,7 @@ import { useGlobalState } from "hooks/use-global-state";
 import SantaHat from "assets/santa-hat.png";
 import { useRouter } from "hooks/use-router";
 import { FeedbackDialog } from "components/feedback-dialog";
+import { IntroVideoDialog } from "components/intro-video-dialog";
 
 const ProfileMenuCard: React.FC = () => {
     const { colors } = useTheme();
@@ -41,6 +42,11 @@ const ProfileMenuCard: React.FC = () => {
         isFeedbackDialogOpen,
         handleOpenFeedbackDialog,
         handleCloseFeedbackDialog,
+    ] = useDialog();
+    const [
+        isIntroVideoDialogOpen,
+        handleOpenIntroVideoDialog,
+        handleCloseIntroVideoDialog,
     ] = useDialog();
 
     const { location } = useRouter();
@@ -70,6 +76,7 @@ const ProfileMenuCard: React.FC = () => {
                             handleOpenDocumentationDialog
                         }
                         onFeedbackDialogClick={handleOpenFeedbackDialog}
+                        onIntroVideoDialogClick={handleOpenIntroVideoDialog}
                     />
                 )}
                 onClose={handleClose}
@@ -95,6 +102,11 @@ const ProfileMenuCard: React.FC = () => {
             </Popover>
             {isAboutDialogOpen && (
                 <AboutDialog onCloseComplete={handleCloseAboutDialog} />
+            )}
+            {isIntroVideoDialogOpen && (
+                <IntroVideoDialog
+                    onCloseComplete={handleCloseIntroVideoDialog}
+                />
             )}
             {isDocumentationDialogOpen && (
                 <DocumentationDialog
