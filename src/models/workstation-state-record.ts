@@ -2,7 +2,7 @@ import { defaultNote } from "constants/midi-notes";
 import { DemoInstrument } from "enums/demo-instrument";
 import { List, Record } from "immutable";
 import type { WorkstationState } from "interfaces/workstation-state";
-import _, { sumBy } from "lodash";
+import _, { sum, sumBy } from "lodash";
 import { BaseRecord } from "models/base-record";
 import type { FileRecord } from "models/file-record";
 import { ProjectRecord } from "models/project-record";
@@ -20,7 +20,8 @@ import {
 } from "utils/collection-utils";
 import { makeDefaultValues } from "utils/core-utils";
 import { findKick, findHat, findOpenHat, findSnare } from "utils/file-utils";
-import { getByTrack } from "utils/track-section-utils";
+import { isUuid } from "utils/id-utils";
+import { getMaxStepCount } from "utils/track-utils";
 
 interface WorkstationStateDiff {
     createdOrUpdatedProject?: ProjectRecord;
@@ -221,7 +222,7 @@ class WorkstationStateRecord
         diff.createdOrUpdatedTrackSections = diffUpdatedEntities(
             right.trackSections,
             this.trackSections
-        );
+        ).filter((trackSection) => isUuid(trackSection.id));
 
         diff.deletedTrackSections = diffDeletedEntities(
             this.trackSections,
@@ -242,23 +243,17 @@ class WorkstationStateRecord
     }
 
     public getLengthInMs(): number {
-        const stepCount = this.getStepCount();
+        const stepCount = this.getMaxStepCount();
         const { bpm } = this.project;
         // Increment the step count to account for tail audio
         return 1000 * ((60 / bpm) * ((stepCount + 4) / 2));
     }
 
-    public getStepCount(): number {
-        // Calculate sum of steps by track
-        const stepSums = this.tracks.map((track) => {
-            const trackSections = getByTrack(track, this.trackSections);
-            return sumBy(
-                trackSections.toArray(),
-                (trackSection) => trackSection.step_count
-            );
-        });
-
-        return stepSums.max()!;
+    /**
+     * Returns the maximum step count for a Track
+     */
+    public getMaxStepCount(): number {
+        return getMaxStepCount(this.tracks, this.trackSections);
     }
 
     public isDemo(): boolean {

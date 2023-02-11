@@ -1,15 +1,15 @@
 import { TrackRecord } from "models/track-record";
-import type { List } from "immutable";
+import { List } from "immutable";
 import type { SetStateAction } from "react";
 import { useCallback } from "react";
 import { isFunction } from "lodash";
 import { intersectionWith } from "utils/collection-utils";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { CurrentTracksAtom, InitialTracksAtom } from "atoms/tracks-atom";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { CurrentWorkstationStateAtom } from "atoms/workstation-atom";
 import { CurrentTrackSectionsAtom } from "atoms/track-sections-atom";
 import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
+import { TrackSectionRecord } from "models/track-section-record";
 
 interface UseTracksStateResult {
     add: (track?: TrackRecord) => void;
@@ -23,8 +23,8 @@ interface UseTracksStateResult {
 
 const useTracksState = (): UseTracksStateResult => {
     const workstationState = useAtomValue(CurrentWorkstationStateAtom);
-    const setTrackSections = useUpdateAtom(CurrentTrackSectionsAtom);
-    const setTrackSectionSteps = useUpdateAtom(CurrentTrackSectionStepsAtom);
+    const setTrackSections = useSetAtom(CurrentTrackSectionsAtom);
+    const setTrackSectionSteps = useSetAtom(CurrentTrackSectionStepsAtom);
     const initialState = useAtomValue(InitialTracksAtom);
     const [state, setState] = useAtom(CurrentTracksAtom);
 
@@ -71,6 +71,16 @@ const useTracksState = (): UseTracksStateResult => {
 
                     return updatedTrackSections;
                 });
+
+                if (updatedTracks.isEmpty()) {
+                    const track = new TrackRecord();
+                    setTrackSections((prev) =>
+                        prev.push(
+                            new TrackSectionRecord({ track_id: track.id })
+                        )
+                    );
+                    return List.of<TrackRecord>(track);
+                }
 
                 return updatedTracks;
             }),

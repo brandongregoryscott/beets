@@ -9,7 +9,7 @@ import { isUuid } from "utils/id-utils";
 interface UseGetWorkstationByProjectIdOptions
     extends Pick<
         UseQueryOptions<WorkstationStateRecord, PostgrestError>,
-        "onSuccess"
+        "enabled" | "onSuccess"
     > {
     projectId: string | undefined;
 }
@@ -17,9 +17,9 @@ interface UseGetWorkstationByProjectIdOptions
 const useGetWorkstationByProjectId = (
     options: UseGetWorkstationByProjectIdOptions
 ): UseQueryResult<WorkstationStateRecord, PostgrestError> => {
-    const { projectId, onSuccess } = options;
+    const { enabled = true, projectId, onSuccess } = options;
     const result = useQuery<WorkstationStateRecord, PostgrestError>({
-        enabled: isUuid(projectId),
+        enabled: enabled && isUuid(projectId),
         key: [
             projectId,
             Tables.Projects,

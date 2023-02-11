@@ -3,7 +3,11 @@ import { random } from "lodash";
 import { TrackRecord } from "models/track-record";
 import { TrackSectionRecord } from "models/track-section-record";
 import { getCurrentTime } from "utils/date-utils";
-import { diffUpdatedEntities, groupBy } from "./collection-utils";
+import {
+    diffUpdatedEntities,
+    findMissingIndices,
+    groupBy,
+} from "./collection-utils";
 
 describe("CollectionUtils", () => {
     describe("diffUpdatedEntities", () => {
@@ -95,6 +99,26 @@ describe("CollectionUtils", () => {
             expect(
                 result.find((record) => record.id === initialRecord.id)
             ).not.toBeNil();
+        });
+    });
+
+    describe("findMissingIndices", () => {
+        it("should return missing indices", () => {
+            const input = [0, 2, 4];
+            const expected = [1, 3];
+
+            const result = findMissingIndices(input, 5);
+
+            expect(result).toStrictEqual(expected);
+        });
+
+        it("should return 0 (falsy value)", () => {
+            const input: number[] = [1, 2, 3, 4];
+            const expected = [0];
+
+            const result = findMissingIndices(input, 5);
+
+            expect(result).toStrictEqual(expected);
         });
     });
 

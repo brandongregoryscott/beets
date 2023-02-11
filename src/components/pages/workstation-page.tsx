@@ -43,6 +43,7 @@ import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useCurrentUser } from "hooks/use-current-user";
 import { useTimeoutRender } from "hooks/use-timeout-render";
 import { IconButton } from "components/icon-button";
+import { Link } from "react-router-dom";
 
 const options: Array<SelectMenuItem<boolean>> = [
     {
@@ -62,10 +63,11 @@ const margin = majorScale(2);
 const WorkstationPage: React.FC = () => {
     const { location, params } = useRouter();
     const { projectId } = params;
-    const [isStateInitialized, setIsStateInitialized] =
-        useState<boolean>(false);
     const { setState } = useWorkstationState();
     const { state: project } = useProjectState();
+    const [isStateInitialized, setIsStateInitialized] = useState<boolean>(
+        project.id === projectId
+    );
     const { state: tracks, add: addTrack } = useTracksState();
     const [
         instrumentDialogOpen,
@@ -86,7 +88,11 @@ const WorkstationPage: React.FC = () => {
         error,
     } = useGetWorkstationByProjectId({
         projectId,
-        onSuccess: setState,
+        enabled: !isStateInitialized,
+        onSuccess: (workstation) => {
+            setState(workstation);
+            setIsStateInitialized(true);
+        },
     });
 
     // Unfortunate hack to prevent infinite loading issue for initial render when a staleTime
@@ -118,8 +124,12 @@ const WorkstationPage: React.FC = () => {
     ]);
 
     useEffect(() => {
+        if (project.id === projectId) {
+            return;
+        }
+
         setIsStateInitialized(false);
-    }, [user]);
+    }, [project.id, projectId]);
 
     const addTrackWithTrackSection = useCallback(
         (overrides?: Partial<Track>) => {
@@ -213,7 +223,7 @@ const WorkstationPage: React.FC = () => {
                                 <Tooltip content="Add Track">
                                     <IconButton
                                         icon={AddIcon}
-                                        marginTop={majorScale(2)}
+                                        marginTop={-majorScale(2)}
                                     />
                                 </Tooltip>
                             </SelectMenu>
@@ -250,6 +260,13 @@ const WorkstationPage: React.FC = () => {
                         </Text>
                     }
                     icon={<ProjectsIcon />}
+                    primaryCta={
+                        <EmptyState.PrimaryButton
+                            is={Link}
+                            to={Sitemap.root.newProject}>
+                            New Project
+                        </EmptyState.PrimaryButton>
+                    }
                     title="Project Not Found"
                 />
             )}

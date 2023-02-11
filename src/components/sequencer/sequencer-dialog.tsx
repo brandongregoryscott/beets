@@ -34,7 +34,7 @@ const SequencerDialog: React.FC<SequencerDialogProps> = (
     const [stepCount, setStepCount] = useState<number>(trackSection.step_count);
 
     const handleStepChange = useCallback(
-        (index, trackSectionSteps) =>
+        (index: number, trackSectionSteps: List<TrackSectionStepRecord>) =>
             setTrackSectionSteps((prev) =>
                 prev
                     .filter(

@@ -1,25 +1,25 @@
-import type { List } from "immutable";
+import { List } from "immutable";
 import type { SetStateAction } from "react";
 import { useCallback, useMemo } from "react";
 import { isFunction } from "lodash";
 import { TrackSectionRecord } from "models/track-section-record";
-import { rebaseIndexes } from "utils/collection-utils";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
     CurrentTrackSectionsAtom,
     InitialTrackSectionsAtom,
 } from "atoms/track-sections-atom";
-import { useAtomValue, useUpdateAtom } from "jotai/utils";
 import { CurrentTrackSectionStepsAtom } from "atoms/track-section-steps-atom";
+import { rebaseIndexes } from "utils/collection-utils";
 
 interface UseTrackSectionsStateOptions {
     trackId: string;
 }
 
 interface UseTrackSectionsStateResult {
-    add: (trackSection?: TrackSectionRecord) => void;
+    add: () => void;
     get: (id: string) => TrackSectionRecord | undefined;
     initialState: List<TrackSectionRecord>;
+    insert: (index: number, stepCount?: number) => void;
     remove: (trackSection: TrackSectionRecord) => void;
     setState: (update: SetStateAction<List<TrackSectionRecord>>) => void;
     state: List<TrackSectionRecord>;
@@ -30,24 +30,52 @@ const useTrackSectionsState = (
     options: UseTrackSectionsStateOptions
 ): UseTrackSectionsStateResult => {
     const { trackId } = options;
-    const setTrackSectionSteps = useUpdateAtom(CurrentTrackSectionStepsAtom);
+    const setTrackSectionSteps = useSetAtom(CurrentTrackSectionStepsAtom);
     const _initialState = useAtomValue(InitialTrackSectionsAtom);
     const [_state, _setState] = useAtom(CurrentTrackSectionsAtom);
 
-    const add = useCallback(
-        (trackSection?: TrackSectionRecord) =>
+    const setState = useCallback(
+        (update: SetStateAction<List<TrackSectionRecord>>) => {
             _setState((prev) => {
-                const updatedTrackSections = prev.push(
-                    trackSection?.merge({ track_id: trackId }) ??
-                        new TrackSectionRecord({ track_id: trackId })
-                );
-
-                return rebaseIndexes(
-                    updatedTrackSections,
+                const trackSectionsByTrack = prev.filter(
                     filterByTrackId(trackId)
                 );
-            }),
+
+                const value = rebaseIndexes(
+                    isFunction(update) ? update(trackSectionsByTrack) : update
+                );
+
+                const mergedTrackSections = prev
+                    .filterNot(filterByTrackId(trackId))
+                    .concat(value);
+
+                return mergedTrackSections;
+            });
+        },
         [_setState, trackId]
+    );
+
+    const add = useCallback(
+        () =>
+            setState((prev) =>
+                prev.push(new TrackSectionRecord({ track_id: trackId }))
+            ),
+        [setState, trackId]
+    );
+
+    const insert = useCallback(
+        (index: number, stepCount?: number) =>
+            setState((prev) =>
+                prev.insert(
+                    index,
+                    new TrackSectionRecord({
+                        track_id: trackId,
+                        index,
+                        step_count: stepCount,
+                    })
+                )
+            ),
+        [setState, trackId]
     );
 
     const get = useCallback(
@@ -57,15 +85,21 @@ const useTrackSectionsState = (
 
     const remove = useCallback(
         (trackSection: TrackSectionRecord) => {
-            _setState((prev) =>
-                rebaseIndexes(
-                    prev.filter(
-                        (existingTrackSection) =>
-                            existingTrackSection.id !== trackSection.id
-                    ),
-                    filterByTrackId(trackId)
-                )
-            );
+            setState((prev) => {
+                const updated = prev.filter(
+                    (existingTrackSection) =>
+                        existingTrackSection.id !== trackSection.id
+                );
+
+                // Ensure there's always one TrackSection
+                if (updated.isEmpty()) {
+                    return List.of<TrackSectionRecord>(
+                        new TrackSectionRecord({ track_id: trackId })
+                    );
+                }
+
+                return updated;
+            });
 
             // Additionally remove any TrackSectionSteps
             setTrackSectionSteps((prevTrackSectionSteps) =>
@@ -75,12 +109,12 @@ const useTrackSectionsState = (
                 )
             );
         },
-        [_setState, setTrackSectionSteps, trackId]
+        [setState, setTrackSectionSteps, trackId]
     );
 
     const update = useCallback(
         (id: string, update: SetStateAction<TrackSectionRecord>) =>
-            _setState((prev) => {
+            setState((prev) => {
                 const index = prev.findIndex(filterById(id));
 
                 if (index < 0) {
@@ -93,28 +127,7 @@ const useTrackSectionsState = (
 
                 return prev.set(index, value);
             }),
-        [_setState]
-    );
-
-    const setState = useCallback(
-        (update: SetStateAction<List<TrackSectionRecord>>) => {
-            _setState((prev) => {
-                const trackSectionsByTrack = prev.filter(
-                    filterByTrackId(trackId)
-                );
-
-                const value = isFunction(update)
-                    ? update(trackSectionsByTrack)
-                    : update;
-
-                const mergedTrackSections = prev
-                    .filterNot(filterByTrackId(trackId))
-                    .concat(value);
-
-                return mergedTrackSections;
-            });
-        },
-        [_setState, trackId]
+        [setState]
     );
 
     const initialState = useMemo(
@@ -130,6 +143,7 @@ const useTrackSectionsState = (
     return {
         add,
         get,
+        insert,
         initialState,
         remove,
         setState,

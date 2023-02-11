@@ -3,12 +3,11 @@ import type { SetStateAction } from "react";
 import { useCallback, useMemo } from "react";
 import { isFunction } from "lodash";
 import type { TrackSectionStepRecord } from "models/track-section-step-record";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import {
     CurrentTrackSectionStepsAtom,
     InitialTrackSectionStepsAtom,
 } from "atoms/track-section-steps-atom";
-import { useAtomValue } from "jotai/utils";
 
 interface UseTrackSectionStepsStateOptions {
     trackSectionId: string;

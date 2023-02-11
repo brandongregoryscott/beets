@@ -1,39 +1,42 @@
 import { TrackSectionStepRow } from "components/tracks/track-section-card/track-section-step-row";
-import { majorScale, Pane } from "evergreen-ui";
+import { majorScale } from "evergreen-ui";
 import type { List } from "immutable";
-import { range } from "lodash";
-import type { TrackSectionStepRecord } from "models/track-section-step-record";
+import { memo } from "react";
 
 interface TrackSectionStepColumnProps {
+    backgroundColors?: List<string | undefined>;
     index: number;
     stepCount: number;
     stepCountOffset: number;
-    trackSectionSteps: List<TrackSectionStepRecord>;
 }
 
 const TrackSectionStepColumnWidth = majorScale(2);
 
-const TrackSectionStepColumn: React.FC<TrackSectionStepColumnProps> = (
+const _TrackSectionStepColumn: React.FC<TrackSectionStepColumnProps> = (
     props: TrackSectionStepColumnProps
 ) => {
-    const { index, stepCountOffset, trackSectionSteps } = props;
+    const { index, backgroundColors, stepCountOffset } = props;
 
     return (
-        <Pane
+        <div
             data-index={index + stepCountOffset}
-            display="flex"
-            flexDirection="column"
-            minWidth={TrackSectionStepColumnWidth}
-            width={TrackSectionStepColumnWidth}>
-            {range(0, 4).map((row: number) => (
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                minWidth: TrackSectionStepColumnWidth,
+                width: TrackSectionStepColumnWidth,
+            }}>
+            {backgroundColors?.map((backgroundColor, index) => (
                 <TrackSectionStepRow
-                    index={row}
-                    key={`${TrackSectionStepRow.name}${row}`}
-                    trackSectionStep={trackSectionSteps.get(row)}
+                    backgroundColor={backgroundColor}
+                    key={index}
                 />
             ))}
-        </Pane>
+        </div>
     );
 };
+
+const TrackSectionStepColumn = memo(_TrackSectionStepColumn);
+TrackSectionStepColumn.displayName = "TrackSectionStepColumn";
 
 export { TrackSectionStepColumn, TrackSectionStepColumnWidth };
