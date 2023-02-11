@@ -44,6 +44,7 @@ import { useCurrentUser } from "hooks/use-current-user";
 import { useTimeoutRender } from "hooks/use-timeout-render";
 import { IconButton } from "components/icon-button";
 import { Link } from "react-router-dom";
+import { isEmpty } from "lodash";
 
 const options: Array<SelectMenuItem<boolean>> = [
     {
@@ -124,7 +125,9 @@ const WorkstationPage: React.FC = () => {
     ]);
 
     useEffect(() => {
-        if (project.id === projectId) {
+        // If projectId is empty, it means we're on a new project. Don't attempt to reset the initialization
+        // state which can cause an infinite setState loop
+        if (isEmpty(projectId) || project.id === projectId) {
             return;
         }
 
