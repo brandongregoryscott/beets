@@ -29,7 +29,7 @@ const ProjectsPage: React.FC = () => {
     }, []);
 
     return (
-        <Pane width="50%">
+        <Pane>
             <ProjectsTable
                 isLoading={isLoading}
                 isMultiSelect={true}

@@ -5,7 +5,7 @@ import { WorkstationStateRecord } from "models/workstation-state-record";
 import React, { useCallback, useState } from "react";
 import { useInput } from "rooks";
 import { isNilOrEmpty } from "utils/core-utils";
-import { useDeleteWorkstationState } from "hooks/use-delete-workstation-state";
+import { useDeleteWorkstation } from "hooks/use-delete-workstation";
 import { useProjectState } from "hooks/use-project-state";
 import { useWorkstationState } from "hooks/use-workstation-state";
 import type { DialogProps } from "components/dialog";
@@ -37,7 +37,7 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
     }, [onCloseComplete, setState]);
 
     const { mutate: deleteWorkstation, isLoading: isDeleting } =
-        useDeleteWorkstationState({
+        useDeleteWorkstation({
             onSuccess: handleDeleteSuccess,
         });
 

@@ -5,14 +5,12 @@ import { useDeleteTrack } from "generated/hooks/domain/tracks/use-delete-track";
 import type { WorkstationStateRecord } from "models/workstation-state-record";
 import { useMutation } from "hooks/use-mutation";
 
-interface UseDeleteWorkstationStateOptions {
+interface UseDeleteWorkstationOptions {
     onError?: (error: Error) => void;
     onSuccess?: () => void;
 }
 
-const useDeleteWorkstationState = (
-    options?: UseDeleteWorkstationStateOptions
-) => {
+const useDeleteWorkstation = (options?: UseDeleteWorkstationOptions) => {
     const { onError, onSuccess } = options ?? {};
     const { mutateAsync: deleteProject } = useDeleteProject();
     const { mutateAsync: deleteTrack } = useDeleteTrack();
@@ -46,4 +44,4 @@ const useDeleteWorkstationState = (
     return result;
 };
 
-export { useDeleteWorkstationState };
+export { useDeleteWorkstation };
