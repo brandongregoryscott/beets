@@ -23,6 +23,7 @@ import { ResetPasswordPage } from "./components/pages/reset-password-page";
 import { NotFoundPage } from "components/pages/not-found-page";
 import { HelpPage } from "components/pages/help-page";
 import { generateHelpPath } from "utils/route-utils";
+import { ProjectsPage } from "components/pages/projects-page";
 
 interface RouteMap extends GenericRouteMap {
     root: RouteDefinition & {
@@ -88,13 +89,18 @@ const Routes: RouteMap = {
                 children: {
                     files: {
                         element: <FilesPage />,
-                        name: "Files",
+                        name: "Files - Library",
                         path: Sitemap.library.files,
                     },
                     instruments: {
                         element: <InstrumentsPage />,
-                        name: "Instruments",
+                        name: "Instruments - Library",
                         path: Sitemap.library.instruments,
+                    },
+                    projects: {
+                        element: <ProjectsPage />,
+                        name: "Projects - Library",
+                        path: Sitemap.library.projects,
                     },
                 },
             },

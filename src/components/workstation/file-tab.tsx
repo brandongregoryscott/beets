@@ -1,6 +1,6 @@
 import { Menu } from "components/menu/menu";
-import { OpenProjectDialog } from "components/workstation/open-project-dialog";
-import { SaveProjectDialog } from "components/workstation/save-project-dialog";
+import { OpenProjectDialog } from "components/projects/open-project-dialog";
+import { SaveProjectDialog } from "components/projects/save-project-dialog";
 import { Button, DocumentIcon, Popover, Position, toaster } from "evergreen-ui";
 import React, { useCallback, useState } from "react";
 import { useWorkstationState } from "hooks/use-workstation-state";
@@ -11,7 +11,7 @@ import { WorkstationStateRecord } from "models/workstation-state-record";
 import { useGlobalState } from "hooks/use-global-state";
 import { useListFiles } from "hooks/domain/files/use-list-files";
 import { useDialog } from "hooks/use-dialog";
-import { ProjectSettingsDialog } from "components/workstation/project-settings-dialog";
+import { ProjectSettingsDialog } from "components/projects/project-settings-dialog";
 import { isNotNilOrEmpty } from "utils/core-utils";
 import { ExportDialog } from "components/workstation/export-dialog";
 import { useKeyboardShortcut } from "hooks/use-keyboard-shortcut";

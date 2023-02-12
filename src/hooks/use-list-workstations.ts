@@ -9,9 +9,11 @@ interface UseListWorkstationsOptions {
     enabled?: boolean;
 }
 
+type UseListWorkstationsResult = UseQueryResult<List<WorkstationStateRecord>>;
+
 const useListWorkstations = (
     options?: UseListWorkstationsOptions
-): UseQueryResult<List<WorkstationStateRecord>> => {
+): UseListWorkstationsResult => {
     const { enabled } = options ?? {};
     const result = useQuery<List<WorkstationStateRecord>, Error>({
         enabled,
@@ -27,4 +29,5 @@ const useListWorkstations = (
     return result;
 };
 
+export type { UseListWorkstationsResult };
 export { useListWorkstations };

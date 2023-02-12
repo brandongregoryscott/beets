@@ -3,22 +3,23 @@ import { Outlet } from "react-router";
 import { useCallback } from "react";
 import { useRouter } from "hooks/use-router";
 
-enum PageTab {
+enum LibraryTab {
     Files = "Files",
     Instruments = "Instruments",
+    Projects = "Projects",
 }
 
-const tabs = Object.values(PageTab);
+const tabs = Object.values(LibraryTab);
 
 const LibraryLayout: React.FC = () => {
     const { navigate, location } = useRouter();
     const isTabSelected = useCallback(
-        (tab: PageTab): boolean =>
+        (tab: LibraryTab): boolean =>
             location.pathname.endsWith(tab.toLowerCase()),
         [location]
     );
     const handleClick = useCallback(
-        (tab: PageTab) => () => {
+        (tab: LibraryTab) => () => {
             navigate(tab.toLowerCase());
         },
         [navigate]

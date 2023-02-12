@@ -12,6 +12,7 @@ const Sitemap = {
         root: "library",
         files: "/library/files",
         instruments: "/library/instruments",
+        projects: "/library/projects",
     },
     login: "login",
     logout: "logout",
