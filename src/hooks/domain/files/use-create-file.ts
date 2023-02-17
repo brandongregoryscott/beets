@@ -78,8 +78,9 @@ const useCreateFile = (options: UseCreateFileOptions) => {
             );
         }
 
-        const { data: fileEntity, error: fileEntityError } =
-            await fromFiles().insert(toFileEntity(file, storageProviderFile));
+        const { data: fileEntity, error: fileEntityError } = await fromFiles()
+            .insert(toFileEntity(file, storageProviderFile))
+            .select("*");
 
         if (fileEntityError != null) {
             throw fileEntityError;
