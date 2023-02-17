@@ -28,6 +28,7 @@ const useCreateOrUpdateInstrument = (
                     : instrument,
                 { onConflict }
             )
+            .select("*")
             .limit(1)
             .single();
 

@@ -28,6 +28,7 @@ const useCreateOrUpdateTrackSectionStep = (
                     : trackSectionStep,
                 { onConflict }
             )
+            .select("*")
             .limit(1)
             .single();
 

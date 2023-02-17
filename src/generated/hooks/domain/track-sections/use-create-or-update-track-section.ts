@@ -28,6 +28,7 @@ const useCreateOrUpdateTrackSection = (
                     : trackSection,
                 { onConflict }
             )
+            .select("*")
             .limit(1)
             .single();
 

@@ -25,6 +25,7 @@ const useCreateOrUpdateFile = (
             .upsert(file instanceof FileRecord ? file.toPOJO() : file, {
                 onConflict,
             })
+            .select("*")
             .limit(1)
             .single();
 

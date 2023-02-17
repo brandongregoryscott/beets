@@ -26,6 +26,7 @@ const useCreateOrUpdateProject = (
                 project instanceof ProjectRecord ? project.toPOJO() : project,
                 { onConflict }
             )
+            .select("*")
             .limit(1)
             .single();
 

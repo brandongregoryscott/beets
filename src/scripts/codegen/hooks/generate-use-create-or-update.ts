@@ -148,6 +148,7 @@ const getInitializer = (property: PropertySignature, useRecord: boolean) => {
         const ${createOrUpdate} = async (${variableName}: ${interfaceName}) => {
             const { data, error } = await ${fromTable}()
                 .upsert(${upsertValue}, { ${onConflict} })
+                .select("*")
                 .limit(1)
                 .single();
 

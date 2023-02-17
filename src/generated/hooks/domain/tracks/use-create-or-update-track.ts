@@ -25,6 +25,7 @@ const useCreateOrUpdateTrack = (
             .upsert(track instanceof TrackRecord ? track.toPOJO() : track, {
                 onConflict,
             })
+            .select("*")
             .limit(1)
             .single();
 

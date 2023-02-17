@@ -25,6 +25,7 @@ const useCreateOrUpdateUser = (
             .upsert(user instanceof UserRecord ? user.toPOJO() : user, {
                 onConflict,
             })
+            .select("*")
             .limit(1)
             .single();
 
