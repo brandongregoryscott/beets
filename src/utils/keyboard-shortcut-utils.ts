@@ -18,6 +18,7 @@ const keys = keyMirror({
     ctrl: null,
     control: null,
     option: null,
+    meta: null,
 });
 
 const keyMap = {
@@ -35,11 +36,12 @@ const keyLabelMap = {
     [keys.control]: capitalize(keys.ctrl),
     [keys.cmd]: "⌘",
     [keys.command]: "⌘",
+    [keys.meta]: "⌘",
     [keys.option]: "⌥",
 };
 
 const nonMacKeys = [keys.alt, keys.ctrl, keys.control];
-const macOsKeys = [keys.option, keys.cmd, keys.command];
+const macOsKeys = [keys.option, keys.cmd, keys.command, keys.meta];
 
 /**
  * Formats a sanitized keyboard shortcut string (comma-separated) based on the current OS
@@ -87,7 +89,12 @@ const remapShortcuts = (shortcut: string[] | string): string => {
         );
     });
 
-    return uniq(shortcuts).join(",");
+    return (
+        uniq(shortcuts)
+            .join(",")
+            // react-hotkeys-hook recently dropped support for 'cmd'/'command' - globally replace with 'meta' instead
+            .replace(new RegExp(keys.cmd, "g"), keys.meta)
+    );
 };
 
 /**

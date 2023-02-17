@@ -1,4 +1,3 @@
-import { castArray } from "lodash";
 import {
     getDisplayLabel,
     hasKey,
@@ -60,11 +59,11 @@ describe("KeyboardShortcutUtils", () => {
     describe("remapShortcuts", () => {
         test.each`
             shortcuts                       | expected
-            ${["ctrl+a", "ctrl+d"]}         | ${["ctrl+A", "ctrl+D", "cmd+A", "cmd+D"].join()}
+            ${["ctrl+a", "ctrl+d"]}         | ${["ctrl+A", "ctrl+D", "meta+A", "meta+D"].join()}
             ${["alt+a"]}                    | ${["alt+A", "option+A"].join()}
-            ${["cmd+a"]}                    | ${["cmd+A", "ctrl+A"].join()}
-            ${["cmd+a", "ctrl+a"]}          | ${["cmd+A", "ctrl+A"].join()}
-            ${["cmd+a", "ctrl+a", "cmd+a"]} | ${["cmd+A", "ctrl+A"].join()}
+            ${["cmd+a"]}                    | ${["meta+A", "ctrl+A"].join()}
+            ${["cmd+a", "ctrl+a"]}          | ${["meta+A", "ctrl+A"].join()}
+            ${["cmd+a", "ctrl+a", "cmd+a"]} | ${["meta+A", "ctrl+A"].join()}
         `(
             `should return '$expected' when shortcuts is '$shortcuts'`,
             ({ shortcuts, expected }) => {
