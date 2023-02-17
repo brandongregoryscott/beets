@@ -10,15 +10,19 @@ import { useProjectState } from "hooks/use-project-state";
 import { useWorkstationState } from "hooks/use-workstation-state";
 import type { DialogProps } from "components/dialog";
 import { Dialog } from "components/dialog";
+import { useRouter } from "hooks/use-router";
+import { Sitemap } from "sitemap";
 
 interface ProjectSettingsDialogProps
     extends Pick<DialogProps, "onCloseComplete"> {}
+
+const title = "Project Settings";
 
 const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
     props: ProjectSettingsDialogProps
 ) => {
     const { onCloseComplete } = props;
-    const title = "Project Settings";
+    const { navigate } = useRouter();
     const { state, setState } = useWorkstationState();
     const { state: project, setCurrentState: setCurrentProject } =
         useProjectState();
@@ -33,8 +37,9 @@ const ProjectSettingsDialog: React.FC<ProjectSettingsDialogProps> = (
         toaster.success("Project successfully deleted");
         const newState = new WorkstationStateRecord();
         setState(newState);
+        navigate(Sitemap.root.newProject);
         onCloseComplete?.();
-    }, [onCloseComplete, setState]);
+    }, [navigate, onCloseComplete, setState]);
 
     const { mutate: deleteWorkstation, isLoading: isDeleting } =
         useDeleteWorkstationState({
