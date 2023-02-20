@@ -12,4 +12,4 @@ const isMidiNote = (maybeNote?: number | string): maybeNote is MidiNote => {
 
 const isSharp = (note: MidiNote): boolean => note.includes("#");
 
-export { isSharp, isMidiNote };
+export { isMidiNote, isSharp };

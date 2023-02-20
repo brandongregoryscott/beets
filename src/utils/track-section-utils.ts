@@ -112,9 +112,9 @@ export {
     fillWithPlaceholders,
     fillWithPlaceholdersByTrackId,
     getByTrackId,
-    getStepCountOffset,
     getCountByTrackId,
     getMaxCountByTrackId,
-    getTotalStepCount,
     getMaxStepCountByTrackId,
+    getStepCountOffset,
+    getTotalStepCount,
 };

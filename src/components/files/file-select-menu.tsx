@@ -198,5 +198,5 @@ const getEmptyStateCta = (
     );
 };
 
-export type { FileSelectMenuProps, FileSelectMenuFilters };
-export { FileSelectMenu, defaultFilters };
+export type { FileSelectMenuFilters, FileSelectMenuProps };
+export { defaultFilters, FileSelectMenu };

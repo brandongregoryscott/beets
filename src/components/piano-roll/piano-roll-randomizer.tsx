@@ -272,5 +272,5 @@ const PianoRollRandomizer: React.FC<PianoRollRandomizerProps> = (
     );
 };
 
-export type { PianoRollRandomizerSettings, PianoRollRandomizerProps };
+export type { PianoRollRandomizerProps, PianoRollRandomizerSettings };
 export { PianoRollRandomizer };

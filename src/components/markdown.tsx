@@ -160,5 +160,5 @@ const Markdown: React.FC<MarkdownProps> = (props: MarkdownProps) => {
     );
 };
 
-export type { MarkdownProps, MarkdownComponentMap };
+export type { MarkdownComponentMap, MarkdownProps };
 export { defaultComponents, Markdown };

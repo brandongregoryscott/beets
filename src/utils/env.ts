@@ -41,8 +41,8 @@ const isDevelopment = () => env.NODE_ENV === "development";
 export type { Environment };
 export {
     env,
-    isDevelopment,
+    EnvironmentName,
     getCurrentEnvironment,
     getTargetBranch,
-    EnvironmentName,
+    isDevelopment,
 };

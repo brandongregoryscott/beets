@@ -150,16 +150,16 @@ const unixTime = (date?: Date): number =>
     Math.floor((date?.getTime() ?? new Date().getTime()) / 1000);
 
 export {
-    partitionValueToArray,
-    getBorderYProps,
     getBorderXProps,
+    getBorderYProps,
     isEqual,
     isInstanceOf,
     isNilOrEmpty,
-    pick,
     isNotNilOrEmpty,
     makeDefaultValues,
+    partitionValueToArray,
+    pick,
     randomInt,
-    unixTime,
     toList,
+    unixTime,
 };

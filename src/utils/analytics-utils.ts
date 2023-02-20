@@ -119,14 +119,14 @@ const _trackProjectSaved = (
 
 export {
     identifyUser,
-    trackPage,
-    trackProjectSavedFromFileMenu,
     trackFeedbackSubmitted,
-    trackProjectSavedFromKeyboardShortcut,
-    trackPasswordResetRequested,
-    trackUserCreated,
     trackLoginFailed,
-    trackUserCreationAttempted,
+    trackPage,
+    trackPasswordResetRequested,
     trackProjectCreated,
+    trackProjectSavedFromFileMenu,
+    trackProjectSavedFromKeyboardShortcut,
     trackProjectSyncFailed,
+    trackUserCreated,
+    trackUserCreationAttempted,
 };
