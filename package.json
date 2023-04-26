@@ -39,7 +39,7 @@
         "rehype-autolink-headings": "6.1.1",
         "rehype-slug": "5.0.1",
         "remark-gfm": "3.0.1",
-        "rooks": "7.4.2",
+        "rooks": "7.11.3",
         "scribbletune": "5.0.0-alpha.2",
         "slugify": "1.6.0",
         "tone": "14.7.77",
