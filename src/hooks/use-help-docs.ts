@@ -34,12 +34,12 @@ const resourceToModule = (
     | typeof ContributingMarkdown
     | typeof HowToMarkdown
     | typeof OverviewMarkdown => {
-    switch (resource) {
-        case HelpResource.Contributing:
+    switch (resource.toLowerCase()) {
+        case HelpResource.Contributing.toLowerCase():
             return ContributingMarkdown;
-        case HelpResource.HowTo:
+        case HelpResource.HowTo.toLowerCase():
             return HowToMarkdown;
-        case HelpResource.Overview:
+        case HelpResource.Overview.toLowerCase():
         default:
             return OverviewMarkdown;
     }
