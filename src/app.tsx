@@ -6,6 +6,8 @@ import { Routes } from "routes";
 import { useCurrentUser } from "hooks/use-current-user";
 import { useGlobalState } from "hooks/use-global-state";
 import Snowfall from "react-snowfall";
+import posthog from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
 
 const App: React.FC = () => {
     const queryClient = useQueryClient();
@@ -14,10 +16,12 @@ const App: React.FC = () => {
     useEffect(() => queryClient.clear(), [queryClient, user]);
 
     return (
-        <BrowserRouter>
-            <NestedRoutes routes={Routes} />
-            {globalState.isHolidayModeEnabled() && <Snowfall />}
-        </BrowserRouter>
+        <PostHogProvider client={posthog}>
+            <BrowserRouter>
+                <NestedRoutes routes={Routes} />
+                {globalState.isHolidayModeEnabled() && <Snowfall />}
+            </BrowserRouter>
+        </PostHogProvider>
     );
 };
 
