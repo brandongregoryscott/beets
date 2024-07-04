@@ -3,6 +3,7 @@ import OverviewMarkdown from "docs/overview.md";
 import ContributingMarkdown from "docs/contributing.md";
 import HowToMarkdown from "docs/how-to.md";
 import { HelpResource } from "enums/help-resource";
+import { kebabCase } from "lodash";
 
 interface UseHelpDocsOptions {
     resource?: HelpResource;
@@ -34,12 +35,12 @@ const resourceToModule = (
     | typeof ContributingMarkdown
     | typeof HowToMarkdown
     | typeof OverviewMarkdown => {
-    switch (resource.toLowerCase()) {
-        case HelpResource.Contributing.toLowerCase():
+    switch (kebabCase(resource)) {
+        case kebabCase(HelpResource.Contributing):
             return ContributingMarkdown;
-        case HelpResource.HowTo.toLowerCase():
+        case kebabCase(HelpResource.HowTo):
             return HowToMarkdown;
-        case HelpResource.Overview.toLowerCase():
+        case kebabCase(HelpResource.Overview):
         default:
             return OverviewMarkdown;
     }
