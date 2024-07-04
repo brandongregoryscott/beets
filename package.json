@@ -26,6 +26,7 @@
         "keymirror": "0.1.1",
         "lodash": "4.17.21",
         "opus-media-recorder": "0.8.0",
+        "posthog-js": "1.144.1",
         "react": "18.1.0",
         "react-beautiful-dnd": "13.1.0",
         "react-dom": "18.1.0",
@@ -49,7 +50,6 @@
     },
     "devDependencies": {
         "@faker-js/faker": "7.6.0",
-        "@segment/analytics-next": "1.39.2",
         "@simbathesailor/use-what-changed": "2.0.0",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/react": "13.4.0",

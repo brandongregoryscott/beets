@@ -1,12 +1,24 @@
 import type { SupabaseUser } from "types/supabase-user";
 import type { Project } from "generated/interfaces/project";
-import { pick } from "utils/core-utils";
+import { isNotNilOrEmpty, pick } from "utils/core-utils";
 import { isPersisted } from "utils/auditable-utils";
 import { errorToString } from "utils/error-utils";
 import { debounce, isError } from "lodash";
 import type { FeedbackCategory } from "components/feedback-dialog";
+import posthog from "posthog-js";
+import { env, isDevelopment } from "utils/env";
 
-const { analytics } = window;
+if (isNotNilOrEmpty(env.REACT_APP_POSTHOG_KEY)) {
+    posthog.init(env.REACT_APP_POSTHOG_KEY, {
+        api_host: "https://us.i.posthog.com",
+        person_profiles: "identified_only",
+        capture_pageview: false,
+    });
+
+    if (isDevelopment()) {
+        posthog.debug(true);
+    }
+}
 
 enum EventName {
     FeedbackSubmitted = "Feedback Submitted",
@@ -32,36 +44,36 @@ interface TrackFeedbackSubmittedOptions {
 }
 
 const identifyUser = (user: SupabaseUser): void => {
-    analytics.identify(user.id, pick(user, "email"));
+    posthog.identify(user.id, pick(user, "email"));
 };
 
 const trackFeedbackSubmitted = (
     options: TrackFeedbackSubmittedOptions
 ): void => {
-    analytics.track(EventName.FeedbackSubmitted, options);
+    posthog.capture(EventName.FeedbackSubmitted, options);
 };
 
 const trackLoginFailed = (email: string, error: Error): void => {
-    analytics.track(EventName.LoginFailed, {
+    posthog.capture(EventName.LoginFailed, {
         email,
         ..._pickErrorProperties(error),
     });
 };
 
 const trackPage = debounce((): void => {
-    analytics.page();
+    posthog.capture("$pageview");
 }, 25);
 
 const trackUserCreated = (user: SupabaseUser): void => {
-    analytics.track(EventName.UserCreated, pick(user, "id", "email"));
+    posthog.capture(EventName.UserCreated, pick(user, "id", "email"));
 };
 
 const trackUserCreationAttempted = (email: string): void => {
-    analytics.track(EventName.UserCreationAttempted, { email });
+    posthog.capture(EventName.UserCreationAttempted, { email });
 };
 
 const trackPasswordResetRequested = (email: string): void => {
-    analytics.track(EventName.PasswordResetRequested, { email });
+    posthog.capture(EventName.PasswordResetRequested, { email });
 };
 
 const trackProjectCreated = (project: Project): void => {
@@ -69,7 +81,7 @@ const trackProjectCreated = (project: Project): void => {
         return;
     }
 
-    analytics.track(EventName.ProjectCreated, _pickProjectProperties(project));
+    posthog.capture(EventName.ProjectCreated, _pickProjectProperties(project));
 };
 
 const trackProjectSavedFromFileMenu = (project: Project): void =>
@@ -79,7 +91,7 @@ const trackProjectSavedFromKeyboardShortcut = (project: Project): void =>
     _trackProjectSaved(project, ProjectSaveLocation.KeyboardShortcut);
 
 const trackProjectSyncFailed = (project: Project, error: Error): void => {
-    analytics.track(EventName.ProjectSyncFailed, {
+    posthog.capture(EventName.ProjectSyncFailed, {
         ..._pickProjectProperties(project),
         ...{ error: _pickErrorProperties(error) },
     });
@@ -111,7 +123,7 @@ const _trackProjectSaved = (
     project: Project,
     location: ProjectSaveLocation
 ): void => {
-    analytics.track(EventName.ProjectSaved, {
+    posthog.capture(EventName.ProjectSaved, {
         ..._pickProjectProperties(project),
         location,
     });
